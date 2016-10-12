@@ -25,7 +25,7 @@ our $database = "photos.db";
 	## People Table
 	our $peopleKeyColumn = "people_key";
 	our $personNameColumn = "person_name";
-	our $personPicasaID = "person_picasa_id";
+	# our $personPicasaID = "person_picasa_id";
 
 	## Linker Table
 	our $linkerPeopleColumn = "person";

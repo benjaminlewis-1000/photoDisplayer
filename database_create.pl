@@ -55,11 +55,12 @@ sub create_people_table{
 	
 	# Create the database table, where photo_key is the primary key and photo_file is the file name 
 	my $sql_quer = qq/CREATE TABLE $params::peopleTableName (
-	    $params::peopleKeyColumn       BIGINT PRIMARY KEY
+	    $params::peopleKeyColumn  INTEGER PRIMARY KEY AUTOINCREMENT
 	                            UNIQUE,
-	    $params::personNameColumn      STRING,
-	    $params::personPicasaID BIGINT
+	    $params::personNameColumn STRING
 	);/;
+
+	#,$params::personPicasaID BIGINT
 
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
@@ -68,8 +69,8 @@ sub create_people_table{
 # Create the linkage table
 sub create_linker_table{
 	my $sql_quer = qq/CREATE TABLE $params::linkerTableName (
-	    $params::linkerPhotoColumn  BIGINT REFERENCES $params::photoTableName ($params::photoKeyColumn),
-	    $params::linkerPeopleColumn BIGINT REFERENCES $params::peopleTableName ($params::peopleKeyColumn) 
+	    $params::linkerPhotoColumn  INTEGER REFERENCES $params::photoTableName ($params::photoKeyColumn),
+	    $params::linkerPeopleColumn INTEGER REFERENCES $params::peopleTableName ($params::peopleKeyColumn) 
 	);/;
 
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
