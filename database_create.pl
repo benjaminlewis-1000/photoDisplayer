@@ -10,26 +10,45 @@ use params;
 
 #TODO: Delete the old database file
 #TODO: Database file location better handled
-our $dbhandle = DBI->connect("dbi:SQLite:$params::database", "user" , "pass");
+our $dbhandle;
 
-# Clean out the old tables so we can create them afresh.
-my $dropPhotos = qq/DROP TABLE IF EXISTS $params::photoTableName/;
-my $query = $dbhandle->prepare($dropPhotos);
-$query->execute() or die $DBI::errstr;
+my $count_args = @ARGV ;
 
-my $dropPeople = qq/DROP TABLE IF EXISTS $params::peopleTableName/;
-$query = $dbhandle->prepare($dropPeople);
-$query->execute() or die $DBI::errstr;
+if ($count_args == 1) {
+	my $db = $ARGV[0];
+	if ($db =~ /db$/){
+		print "valid";
+		$params::database = $db;
+	}
+} 
 
-my $dropLinker = qq/DROP TABLE IF EXISTS $params::linkerTableName/;
-$query = $dbhandle->prepare($dropLinker);
-$query->execute() or die $DBI::errstr;
 
+dbConnect();
+dropTables();
 create_photo_table();
 create_people_table();
 create_linker_table();
 
 # End creation of tables.
+
+sub dbConnect{
+	$dbhandle = DBI->connect("dbi:SQLite:$params::database", "user" , "pass");
+}
+
+sub dropTables{
+	# Clean out the old tables so we can create them afresh.
+	my $dropPhotos = qq/DROP TABLE IF EXISTS $params::photoTableName/;
+	my $query = $dbhandle->prepare($dropPhotos);
+	$query->execute() or die $DBI::errstr;
+
+	my $dropPeople = qq/DROP TABLE IF EXISTS $params::peopleTableName/;
+	$query = $dbhandle->prepare($dropPeople);
+	$query->execute() or die $DBI::errstr;
+
+	my $dropLinker = qq/DROP TABLE IF EXISTS $params::linkerTableName/;
+	$query = $dbhandle->prepare($dropLinker);
+	$query->execute() or die $DBI::errstr;
+}
 
 ###############################################
 ########### subs for table creation ###########
