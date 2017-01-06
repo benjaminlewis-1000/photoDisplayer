@@ -2,6 +2,7 @@
 Thumbs.db
 ehthumbs.db
 *.db
+*.db-journal
 
 # Folder config file
 Desktop.ini

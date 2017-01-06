@@ -28,6 +28,7 @@ dropTables();
 create_photo_table();
 create_people_table();
 create_linker_table();
+create_root_dir_table();
 
 # End creation of tables.
 
@@ -48,6 +49,11 @@ sub dropTables{
 	my $dropLinker = qq/DROP TABLE IF EXISTS $params::linkerTableName/;
 	$query = $dbhandle->prepare($dropLinker);
 	$query->execute() or die $DBI::errstr;
+
+	my $dropRootDirs = qq/DROP TABLE IF EXISTS $params::rootTableName/;
+	$query = $dbhandle->prepare($dropRootDirs);
+	$query->execute() or die $DBI::errstr;
+	
 }
 
 ###############################################
@@ -61,10 +67,22 @@ sub create_photo_table{
 	    $params::photoKeyColumn  INTEGER PRIMARY KEY AUTOINCREMENT
 	                      UNIQUE,
 	    $params::photoFileColumn STRING,
-	    $params::photoDateColumn STRING
+	    $params::photoDateColumn STRING,
+	    $params::modifyDateColumn STRING,
+	    $params::rootDirNumColumn STRING
 	); /;
 
 	# Prepare and execute the statement
+	my $sub_state_handle = $dbhandle->prepare($sql_quer);
+	$sub_state_handle->execute() or die $DBI::errstr;
+}
+
+sub create_root_dir_table{
+	my $sql_quer = qq/CREATE TABLE $params::rootTableName (
+		$params::rootKeyColumn INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+		$params::rootDirPath STRING
+	); /;
+
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
 }

@@ -10,13 +10,24 @@ use params;
 
 require 'read_xmp.pl';
 
-my $file = 'D:\Pictures\Family Pictures\2011\2011 (7) July\DSC_0036.JPG';
+my $fileName = 'IM000201.JPG';
+my $root_dir = 'D:\Pictures\Family CDs\Ben Pics 5-03 to 1-04\2003-05 (May)\\';
+
+my $file = 'D:\Pictures\Summer 2013\hangout_snapshot_7 (3).png';
+$file = $root_dir . $fileName;
+
+print $file . "\n";
+$root_dir = '';
+
+my $rootDir_num = 1;
+
+# Instead of looking up the root directory every time, we should put it in a table. (Have the right length first, then read it in. )
 
 # my @ls = glob("'.pl || .txt' *");
 # print join(', ', @ls) . "\n";
 
 my %data = getImageData({
-	filename => $file,
+	filename => $root_dir . $file,
 	resX => 0,
 	resY => 0
 	});
@@ -43,16 +54,22 @@ if (!$data{'Status'} ){
 # print "Sec" . " : " . $data{'Second'} . "\n";
 # print "Status" . " : " . $data{'Status'} . "\n";
 # print "Modify date" . " : " . $data{'ModifyDate'} . "\n";
-# print join(";", @{$data{'NameList'}}) . "\n";
+print "Names: " . join(";", @{$data{'NameList'}}) . "\n";
 
 # With the file: 
+
+# ISO8601 strings ("YYYY-MM-DD HH:MM:SS.SSS")
+
+our $taken_date = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $data{'Year'}, $data{'Month'}, $data{'Day'}, $data{'Hour'}, $data{'Minute'}, $data{'Second'});
+
+print "Date is " . $taken_date . "\n";
 
 our %peopleToKeyHash;
 
 our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 # Insert the data about the photo (date and filename) into the appropriate table. 
-	my $insertIntoPhotoTable = qq/INSERT INTO $params::photoTableName ( $params::photoFileColumn, $params::photoDateColumn)  VALUES ("$file", "$data{'TakenDate'}")/;
+	my $insertIntoPhotoTable = qq/INSERT INTO $params::photoTableName ( $params::photoFileColumn, $params::photoDateColumn, $params::modifyDateColumn, $params::rootDirNumColumn)  VALUES ("$file", "$data{"TakenDate"}", "$data{"ModifyDate"}", $rootDir_num)/;
 	print $insertIntoPhotoTable . "\n ";
 
 	$dbhandle->do($insertIntoPhotoTable) or die $DBI::errstr;

@@ -70,9 +70,9 @@ sub getImageData{
 	print $elapsed . "\n";
 
 	foreach my $k (keys %infoHash){
-		# if ($k =~ m/Mod/){
-		# 	print $k . " : " . $infoHash{$k} . "\n";
-		# }
+		if ($k =~ m/Mod/){
+			print $k . " : " . $infoHash{$k} . "\n";
+		}
 	}
 
 	# Parse the XMP data. 
