@@ -8,6 +8,7 @@ use Tk;
 use File::Find;
 use Data::Dumper;
 require 'read_xmp.pl';
+require 'addImages.pl';
 
 # my $root_dir = Tk::MainWindow->new->chooseDirectory;
 # my $root_dir = 'D:\Pictures\2016';
@@ -47,7 +48,7 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 			# print $dirExistsQuery . "\n";
 			$query->execute() or die $DBI::errstr;
 			$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
-			exit();
+			# exit();
 	    }
 	}
 
@@ -153,23 +154,44 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	# We already have the directoryKeyVal from inserting the root directory (we can't get here if we didn't just add the directory.) We will also remove the $root_dir from the subdirectories that are remaining to give us a relative directory.
 	foreach my $val (@remainingSubdirs){
 		$val =~ s/$root_dir//g;
-		$dirNameNumHash{$val} = $directoryKeyVal;
+		# $dirNameNumHash{$val} = $directoryKeyVal;
 		$dirNameRelativeToRootHash{$val} = $root_dir;
 	}
 
-	print Dumper(%dirNameNumHash) . "\n";
+	# print Dumper(%dirNameNumHash) . "\n";
 	print Dumper(%dirNameRelativeToRootHash);
+
+	foreach my $localDir (@remainingSubdirs){
+		my @filesInDir;
+		my $odir = $root_dir . $localDir;
+		opendir my $dir, "$odir" or die "Can't open directory " . $odir . ": $!";
+		my @filesInDir = readdir $dir;
+		closedir $dir; 
+		# find(sub { push @filesInDir, $File::Find::name }, $root_dir . $val);
+		print $localDir . "\t: ";  # grep(!/$subdirectories[$i]/, @remainingSubdirs);
+		my @filesInDir =  grep(/\.JPE?G/i, @filesInDir);
+		print join(',  ', @filesInDir) . "\n\n";
+
+		readImages({
+			filelist => \@filesInDir,
+			baseDirNum => $directoryKeyVal,
+			localDir => $root_dir . $localDir
+		});	
+		# add_images(@filesInDir, $root_dir . $localDir, $directoryKeyVal)
+
+	}
+
+	# foreach my $val ()
 #TODO: Find if the subdirectories are already in the database. Then reject them from this list. 
 
 	# Get only files that have a JPG (case-insensitive) ending. JPG are the majority of my 
 	# pictures, and they have EXIF data.
-	@jpg_files = grep(/JPG/i, @file_list);
-	@file_list = @jpg_files;
+	# @file_list = @jpg_files;
 
-	# Use regex to take out the 
-	for( my $i = 0; $i < scalar @jpg_files; $i++){
-		$jpg_files[$i] =~ s{$root_dir}{}g;
-	}
+	# # Use regex to take out the 
+	# for( my $i = 0; $i < scalar @jpg_files; $i++){
+	# 	$jpg_files[$i] =~ s{$root_dir}{}g;
+	# }
 
 ##############
 

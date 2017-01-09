@@ -10,7 +10,6 @@ use params;
 
 sub getImageData{
 
-
 	my ($args) = @_;
 	my %returnData;
 	$returnData{'Status'} = 0;
