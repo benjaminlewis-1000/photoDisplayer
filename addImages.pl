@@ -2,6 +2,19 @@
 
 use params;
 require 'read_xmp.pl';
+my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
+	# Parameters for image size and face size. 
+	my $baseDirNum = $args->{baseDirNum};
+	my $localDir = $args->{localDir};
+
+my @filesInDir = {'canon pictures 018.JPG'}
+
+
+readImages({
+	filelist => \@filesInDir,
+	baseDirNum => $baseDirNum,
+	localDir => $root_dir . $localDir
+});	
 
 sub readImages{
 
@@ -24,10 +37,7 @@ sub readImages{
 	if (scalar (@filelist) == 0){
 		return;
 	}
-	# Parameters for image size and face size. 
-	my $baseDirNum = $args->{baseDirNum};
-	my $localDir = $args->{localDir};
-
+	
 	print $localDir . "  " . $baseDirNum . "  " . join(" ~ ", @filelist) . "\n";
 
 	foreach my $picture (@filelist){

@@ -68,7 +68,16 @@ sub create_photo_table{
 	                      UNIQUE,
 	    $params::photoFileColumn STRING,
 	    $params::photoDateColumn STRING,
+
+	    $params::photoYearColumn STRING,
+	    $params::photoMonthColumn STRING,
+	    $params::photoDayColumn STRING,
+	    $params::photoHourColumn STRING,
+	    $params::photoMinuteColumn STRING,
+	    $params::photoGMTColumn STRING,
+
 	    $params::modifyDateColumn STRING,
+	    $params::insertDateColumn STRING,
 	    $params::rootDirNumColumn STRING
 	); /;
 

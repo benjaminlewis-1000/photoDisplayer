@@ -48,7 +48,7 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 			# print $dirExistsQuery . "\n";
 			$query->execute() or die $DBI::errstr;
 			$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
-			# exit();
+			exit();
 	    }
 	}
 

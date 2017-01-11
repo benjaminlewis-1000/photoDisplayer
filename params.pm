@@ -11,6 +11,9 @@ our $bar = "This is the package's bar value!";
 
 our $database = "photos.db";
 
+our $debug = 1;
+# map {if (!$_) { ______ } } $params::debug;
+
 ## Table names
 	our $photoTableName = "Photos";
 	our $peopleTableName = "People";
@@ -22,8 +25,17 @@ our $database = "photos.db";
 	our $photoKeyColumn = "photo_key";
 	our $photoFileColumn = "photo_file";
 	our $photoDateColumn = "photo_date";
+
+	our $photoYearColumn = "taken_year";
+	our $photoMonthColumn = "taken_month";
+	our $photoDayColumn = "taken_day";
+	our $photoHourColumn = "taken_hour";
+	our $photoMinuteColumn = "taken_minute";
+	our $photoGMTColumn = "taken_timezone";
+
 	our $modifyDateColumn = "modification_date";
 	our $rootDirNumColumn = "root_dir_num";
+	our $insertDateColumn = "inserted_date";
 
 	## People Table
 	our $peopleKeyColumn = "people_key";

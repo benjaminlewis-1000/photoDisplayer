@@ -42,7 +42,7 @@ sub getImageData{
 	my $minResX = $args->{resX};
 	my $minResY = $args->{resY};
 
-	print "Min size is $minSize \n";
+	# print "Min size is $minSize \n";
 
 	my $t0 = [gettimeofday];
 
@@ -53,26 +53,26 @@ sub getImageData{
 	$im->read($args->{filename}) ;#or die "Cannot open '$args->{filename}': $!\n";
 
 	my $elapsed = tv_interval ( $t0 );
-	print $elapsed . "\n";
+	# print $elapsed . "\n";
 
 	my $exif = Image::ExifTool->new();
 	my $info = $exif->ImageInfo($file);
 	my %infoHash = %$info;
 
-	print ref( $exif->ImageInfo($file) ) . "\n\n";
+	# print ref( $exif->ImageInfo($file) ) . "\n\n";
 
 	use Data::Dumper;
 	delete $infoHash{"ThumbnailImage"};
 	# print Dumper %infoHash;
 
 	$elapsed = tv_interval ( $t0 );
-	print $elapsed . "\n";
+	# print $elapsed . "\n";
 
-	foreach my $k (keys %infoHash){
-		if ($k =~ m/Mod/){
-			print $k . " : " . $infoHash{$k} . "\n";
-		}
-	}
+	# foreach my $k (keys %infoHash){
+	# 	if ($k =~ m/Mod/){
+	# 		print $k . " : " . $infoHash{$k} . "\n";
+	# 	}
+	# }
 
 	# Parse the XMP data. 
 
@@ -87,7 +87,8 @@ sub getImageData{
 		my $time = str2time($takenDate);
 		($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
 		$year += 1900;
-		print $year . "\n";
+		$month += 1;
+		# print $year . "\n";
 	}
 
 	my $fileSize = %infoHash{'FileSize'};
@@ -101,14 +102,14 @@ sub getImageData{
 	}
 
 	$elapsed = tv_interval ( $t0 );
-	print $elapsed . "\n";
+	# print $elapsed . "\n";
 
 	# foreach my $k (keys %infoHash){
 	# 	print "$k\n";#; $infoHash{$k}\n";
 	# }
 
 	$elapsed = tv_interval ( $t0 );
-	print $elapsed . "\n";
+	# print $elapsed . "\n";
 
 	#print $namelist . "\n";
 	my @names = split(',', $namelist);
@@ -174,6 +175,12 @@ sub getImageData{
 	$returnData{'Width'} = $imWidth;
 	$returnData{'Height'} = $imHeight;
 
+	# Remove the time zone from the modify and taken dates. 
+	$modifyDate =~ s/[+-]\d\d:\d\d$//g;
+	$takenDate =~ s/[+-]\d\d:\d\d$//g;
+	$modifyDate =~ s/(.*?):(.*?):(.*?) /$1-$2-$3 /g;
+	$takenDate =~ s/(.*?):(.*?):(.*?) /$1-$2-$3 /g;
+
 	$returnData{'ModifyDate'} = $modifyDate;
 	$returnData{'TakenDate'} = $takenDate;
 
@@ -183,6 +190,7 @@ sub getImageData{
 	$returnData{'Hour'} = $hh;
 	$returnData{'Minute'} = $mm;
 	$returnData{'Second'} = $ss;
+	$returnData{'TimeZone'} = $zone / 3600;
 	$returnData{'Status'} = 1;
 
 	return %returnData;

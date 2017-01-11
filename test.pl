@@ -2,146 +2,252 @@
 
 use strict;
 use warnings;
-
 use DBI;
-use Config::INI::Reader;
 
 use params;
-
 require 'read_xmp.pl';
 
-my $fileName = 'IM000201.JPG';
-my $root_dir = 'D:\Pictures\Family CDs\Ben Pics 5-03 to 1-04\2003-05 (May)\\';
+my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
+	# Parameters for image size and face size. 
+my $baseDirNum = 1;
+my @filesInDir = ('canon pictures 018.JPG');
+my $localDir = '';
 
-my $file = 'D:\Pictures\Summer 2013\hangout_snapshot_7 (3).png';
-$file = $root_dir . $fileName;
+readImages({
+	filelist => \@filesInDir,
+	baseDirNum => $baseDirNum,
+	localDir => $localDir,
+	rootDirName => $root_dir
+});	
 
-print $file . "\n";
-$root_dir = '';
+sub readImages{
 
-my $rootDir_num = 1;
+	my ($args) = @_;
+	my $rootDirNum;
+	my $baseDirName;
+	my $localDir;
 
-# Instead of looking up the root directory every time, we should put it in a table. (Have the right length first, then read it in. )
-
-# my @ls = glob("'.pl || .txt' *");
-# print join(', ', @ls) . "\n";
-
-my %data = getImageData({
-	filename => $root_dir . $file,
-	resX => 0,
-	resY => 0
-	});
-
-if (!$data{'Status'} ){
-	print "$!\n";
-	exit;
-}
-
-# foreach my $k (keys %data){
-# 	print $k . ", ";
-# }
-# print "\n";
-
-# print "Year" . " : " . $data{'Year'} . "\n";
-# print "Size" . " : " . $data{'ImageSize'} . "\n";
-# print "Width" . " : " . $data{'Width'} . "\n";
-# print "Height" . " : " . $data{'Height'} . "\n";
-# print "Year" . " : " . $data{'Year'} . "\n";
-# print "Month" . " : " . $data{'Month'} . "\n";
-# print "Day" . " : " . $data{'Day'} . "\n";
-# print "Hour" . " : " . $data{'Hour'} . "\n";
-# print "Min" . " : " . $data{'Minute'} . "\n";
-# print "Sec" . " : " . $data{'Second'} . "\n";
-# print "Status" . " : " . $data{'Status'} . "\n";
-# print "Modify date" . " : " . $data{'ModifyDate'} . "\n";
-print "Names: " . join(";", @{$data{'NameList'}}) . "\n";
-
-# With the file: 
-
-# ISO8601 strings ("YYYY-MM-DD HH:MM:SS.SSS")
-
-our $taken_date = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $data{'Year'}, $data{'Month'}, $data{'Day'}, $data{'Hour'}, $data{'Minute'}, $data{'Second'});
-
-print "Date is " . $taken_date . "\n";
-
-our %peopleToKeyHash;
-
-our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-
-# Insert the data about the photo (date and filename) into the appropriate table. 
-	my $insertIntoPhotoTable = qq/INSERT INTO $params::photoTableName ( $params::photoFileColumn, $params::photoDateColumn, $params::modifyDateColumn, $params::rootDirNumColumn)  VALUES ("$file", "$data{"TakenDate"}", "$data{"ModifyDate"}", $rootDir_num)/;
-	print $insertIntoPhotoTable . "\n ";
-
-	$dbhandle->do($insertIntoPhotoTable) or die $DBI::errstr;
-
-# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
-	my $keyNumQuery = qq/SELECT last_insert_rowid()/;
-	my $query = $dbhandle->prepare($keyNumQuery);
-	$query->execute() or die $DBI::errstr;
-	my $photoKeyVal = @{$query->fetch()}[0];
-	print $photoKeyVal . "\n";
-
-# Now we need to tackle inserting names into the database. I want to have a hash with the names and check it. If the name
-# has already been encountered, we should read its public key from the hash. Else, we need to add it to the hash, add
-# it to the people database, and save the public key for future use. 
-
-foreach (@{$data{'NameList'}}){
-	our $peopleKeyVal = -1;
-	print $_ . " : " ;
-	if (exists($peopleToKeyHash{$_})){
-		print "$_ exists\n";
-		$peopleKeyVal = $peopleToKeyHash{$_};
+	if (! defined $args->{filelist}){
+		print "Error: File not passed\n";
 	}
-	else{
+	my @filelist = @{$args->{filelist}};
 
-		# Check if person exists in the database if they're not in the hash, for partial building purposes. 
+	if (defined $args->{baseDirNum}){
+		$rootDirNum = $args->{baseDirNum};
+	}
 
-		# SQL Query : Ask for the unique key for the person from the database, and store it in $peopleKeyVal if the peron exists. 
-		# If they do, then get their unique key and add it to the hash so that we don't have to find it ever again. 
-		my $personExistsQuery = qq/SELECT $params::peopleKeyColumn FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
+	if (defined $args->{localDir}){
+		$localDir = $args->{localDir};
+	}
 
-		my $query = $dbhandle->prepare($personExistsQuery);
+	if (defined $args->{rootDirName}){
+		$baseDirName = $args->{rootDirName};
+	}
+
+	if (scalar (@filelist) == 0){
+		return;
+	}
+
+	my $fileName = $filelist[0];
+
+	# print "File name is : " . $baseDirName . $fileName . "\n";
+
+	# for (my $i = 0 ; $i < 3; $i++ ){
+		# print "a = " . $i . "\n";
+	image_Foobar({
+		baseDirName => $baseDirName, 
+		fileName => $localDir . $fileName, 
+		rootDirNum => $rootDirNum
+	});
+	# }
+
+};
+	# $root_dir = '';
+
+	# Instead of looking up the root directory every time, we should put it in a table. (Have the right length first, then read it in. )
+
+	# my @ls = glob("'.pl || .txt' *");
+	# print join(', ', @ls) . "\n";
+
+sub image_Foobar{
+	my ($args) = @_;
+
+	my $baseDirName = $args->{baseDirName};
+	my $fileName = $args->{fileName};
+	my $rootDirNum = $args->{rootDirNum};
+
+	my %data = getImageData({
+		filename => $baseDirName . $fileName,
+		resX => 0,
+		resY => 0
+		});
+
+	if (!$data{'Status'} ){
+		print "$!\n";
+		exit;
+	}
+
+	my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+	$year += 1900;
+	$mon += 1;
+	my $dbInsertionDate = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
+
+	# foreach my $k (keys %data){
+	# 	print $k . ", ";
+	# }
+	# print "\n";
+
+	# print "Year" . " : " . $data{'Year'} . "\n";
+	# print "Size" . " : " . $data{'ImageSize'} . "\n";
+	# print "Width" . " : " . $data{'Width'} . "\n";
+	# print "Height" . " : " . $data{'Height'} . "\n";
+	# print "Year" . " : " . $data{'Year'} . "\n";
+	# print "Month" . " : " . $data{'Month'} . "\n";
+	# print "Day" . " : " . $data{'Day'} . "\n";
+	# print "Hour" . " : " . $data{'Hour'} . "\n";
+	# print "Min" . " : " . $data{'Minute'} . "\n";
+	# print "Sec" . " : " . $data{'Second'} . "\n";
+	# print "Status" . " : " . $data{'Status'} . "\n";
+	# print "Modify date" . " : " . $data{'ModifyDate'} . "\n";
+	print "Names: " . join(";", @{$data{'NameList'}}) . "\n";
+
+	# With the file: 
+
+	# ISO8601 strings ("YYYY-MM-DD HH:MM:SS.SSS")
+
+	# our $taken_date = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $data{'Year'}, $data{'Month'}, $data{'Day'}, $data{'Hour'}, $data{'Minute'}, $data{'Second'});
+
+	print $data{'TakenDate'} . "\n";
+
+	# print "Date is " . $taken_date . "\n";
+
+	our %peopleToKeyHash;
+
+	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+		my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+
+		my $query = $dbhandle->prepare($checkPhotoInTableQuery);
 		$query->execute() or die $DBI::errstr;
-		my $result = eval { $query->fetchrow_arrayref->[0] };
+		my $photoExists = eval { $query->fetchrow_arrayref->[0] };
+		# print $photoExists ? "Photo Exists\n" : "Photo doesn't exist\n";
 
-		# Find the number of people in the database with that name; should be only one. 
-		# TODO: Work out how to distinguish people. 
-		my $numQuery = qq/SELECT COUNT(*) FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
-		$query = $dbhandle->prepare($numQuery);
-		$query->execute() or die $DBI::errstr;
-		my $numPeopleWithName = eval { $query->fetchrow_arrayref->[0] };
-		print $numPeopleWithName . "\n";
+				# my $query = $dbhandle->prepare($dirExistsQuery);
+				# # print $dirExistsQuery . "\n";
+				# $query->execute() or die $DBI::errstr;
+				# $directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
-		if($result and $numPeopleWithName == 1){
-			$peopleKeyVal = $result;
-			$peopleToKeyHash{$_} = $result;
+		# print $checkPhotoInTableQuery . "\n";
+
+#TODO: Figure out how to return gracefully without killing function
+		if ($photoExists){
+			map {if (!$_) {  return; }else{print "Would be exiting here b/c photo exists\n";} } $params::debug;
 		}
 
-		# If we well and truly can't find the person in the database, insert their name in the database with a unique identifier and 
-		# add the identifier to the hash. 
-		else {
+	# Insert the data about the photo (date and filename) into the appropriate table. 
+		my $insertIntoPhotoTable = qq/INSERT INTO $params::photoTableName ( 
+			$params::photoFileColumn, 
+			$params::photoDateColumn, 
+			$params::modifyDateColumn, 
+			$params::rootDirNumColumn, 
+			$params::photoYearColumn,
+			$params::photoMonthColumn, 
+			$params::photoDayColumn, 
+			$params::photoHourColumn, 
+			$params::photoMinuteColumn, 
+			$params::photoGMTColumn,
+			$params::insertDateColumn)  
+			VALUES ("$fileName", 
+				"$data{'TakenDate'}", 
+				"$data{"ModifyDate"}", 
+				$rootDirNum,
+				$data{'Year'}, 
+				$data{'Month'}, 
+				$data{'Day'}, 
+				$data{'Hour'}, 
+				$data{'Minute'}, 
+				$data{'TimeZone'},
+				"$dbInsertionDate"
+			)/;
+		# print $insertIntoPhotoTable . "\n ";
 
-			if ($numPeopleWithName > 1){
-				die("Error! Getting more than one person with this name: $_.");
+		$dbhandle->do($insertIntoPhotoTable) or die $DBI::errstr;
+
+	# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
+		my $keyNumQuery = qq/SELECT last_insert_rowid()/;
+		$query = $dbhandle->prepare($keyNumQuery);
+		$query->execute() or die $DBI::errstr;
+		my $photoKeyVal = @{$query->fetch()}[0];
+		print $photoKeyVal . "\n";
+
+	# Now we need to tackle inserting names into the database. I want to have a hash with the names and check it. 
+	# If the name has already been encountered, we should read its public key from the hash. Else, we need to add 
+	# it to the hash, add it to the people database, and save the public key for future use. 
+
+	# I need to be able to pass in the $peopleToKeyHash effectively between pictures. Otherwise I will be putting
+	# it together for each photo, and that's not good. 
+
+	foreach (@{$data{'NameList'}}){
+		our $peopleKeyVal = -1;
+		print $_ . " : " ;
+		if (exists($peopleToKeyHash{$_})){
+			print "$_ exists\n";
+			$peopleKeyVal = $peopleToKeyHash{$_};
+		}
+		else{
+
+			# Check if person exists in the database if they're not in the hash, for partial building purposes. 
+
+			# SQL Query : Ask for the unique key for the person from the database, and store it in $peopleKeyVal if the peron exists. 
+			# If they do, then get their unique key and add it to the hash so that we don't have to find it ever again. 
+			my $personExistsQuery = qq/SELECT $params::peopleKeyColumn FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
+
+			my $query = $dbhandle->prepare($personExistsQuery);
+			$query->execute() or die $DBI::errstr;
+			my $result = eval { $query->fetchrow_arrayref->[0] };
+
+			# Find the number of people in the database with that name; should be only one. 
+			# TODO: Work out how to distinguish people. 
+			my $numQuery = qq/SELECT COUNT(*) FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
+			$query = $dbhandle->prepare($numQuery);
+			$query->execute() or die $DBI::errstr;
+			my $numPeopleWithName = eval { $query->fetchrow_arrayref->[0] };
+			print $numPeopleWithName . "\n";
+
+			if($result and $numPeopleWithName == 1){
+				$peopleKeyVal = $result;
+				$peopleToKeyHash{$_} = $result;
 			}
 
-			my $insertPersonInPersonTable = qq/INSERT INTO $params::peopleTableName ($params::personNameColumn) VALUES ("$_")/;
+			# If we well and truly can't find the person in the database, insert their name in the database with a unique identifier and 
+			# add the identifier to the hash. 
+			else {
 
-			$dbhandle->do($insertPersonInPersonTable) or die $DBI::errstr;
+				if ($numPeopleWithName > 1){
+					die("Error! Getting more than one person with this name: $_.");
+				}
 
-			my $keyNumQuery = qq/SELECT last_insert_rowid()/;
-			my $query = $dbhandle->prepare($keyNumQuery);
-			$query->execute() or die $DBI::errstr;
-			$peopleKeyVal = @{$query->fetch()}[0];
-			$peopleToKeyHash{$_} = $peopleKeyVal;
+				my $insertPersonInPersonTable = qq/INSERT INTO $params::peopleTableName ($params::personNameColumn) VALUES ("$_")/;
+
+				$dbhandle->do($insertPersonInPersonTable) or die $DBI::errstr;
+
+				my $keyNumQuery = qq/SELECT last_insert_rowid()/;
+				my $query = $dbhandle->prepare($keyNumQuery);
+				$query->execute() or die $DBI::errstr;
+				$peopleKeyVal = @{$query->fetch()}[0];
+				$peopleToKeyHash{$_} = $peopleKeyVal;
+			}
 		}
+
+		# Add to linker table: 
+
+		my $insertLinkInTable = qq/INSERT INTO $params::linkerTableName ($params::linkerPeopleColumn, $params::linkerPhotoColumn) VALUES ($peopleKeyVal, $photoKeyVal)/;
+		$dbhandle->do($insertLinkInTable);
+
 	}
 
-	# Add to linker table: 
+	# exit();
 
-	my $insertLinkInTable = qq/INSERT INTO $params::linkerTableName ($params::linkerPeopleColumn, $params::linkerPhotoColumn) VALUES ($peopleKeyVal, $photoKeyVal)/;
-	$dbhandle->do($insertLinkInTable);
+};
 
-}
-
-exit();
+1;
