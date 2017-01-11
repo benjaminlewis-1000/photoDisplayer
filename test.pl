@@ -1,5 +1,7 @@
 #! /usr/bin/perl
 
+# TODO: Get time from the internet/make sure time is set properly. Otherwise our modification dates are going to be out of whack. 
+
 use strict;
 use warnings;
 use DBI;
@@ -10,15 +12,23 @@ require 'read_xmp.pl';
 my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
 	# Parameters for image size and face size. 
 my $baseDirNum = 1;
-my @filesInDir = ('canon pictures 018.JPG');
+# my @filesInDir = ('canon pictures 018.JPG');
+my @filesInDir = ('CCI01052017.JPG');
 my $localDir = '';
+
+our %nameHash;
+
+$nameHash{'a'} = 'Ben';
 
 readImages({
 	filelist => \@filesInDir,
 	baseDirNum => $baseDirNum,
 	localDir => $localDir,
-	rootDirName => $root_dir
+	rootDirName => $root_dir,
+	nameHash => \%nameHash
 });	
+
+print Dumper(%nameHash);
 
 sub readImages{
 
@@ -26,11 +36,17 @@ sub readImages{
 	my $rootDirNum;
 	my $baseDirName;
 	my $localDir;
+	my @filelist;
 
 	if (! defined $args->{filelist}){
-		print "Error: File not passed\n";
+		die("Error: File not passed\n");
+	}else{
+		@filelist = @{$args->{filelist}};
 	}
-	my @filelist = @{$args->{filelist}};
+
+	if (! defined $args->{nameHash}){
+		die("Error: Hash of names not passed\n");
+	}
 
 	if (defined $args->{baseDirNum}){
 		$rootDirNum = $args->{baseDirNum};
@@ -57,7 +73,8 @@ sub readImages{
 	image_Foobar({
 		baseDirName => $baseDirName, 
 		fileName => $localDir . $fileName, 
-		rootDirNum => $rootDirNum
+		rootDirNum => $rootDirNum,
+		nameHash => $args->{nameHash}
 	});
 	# }
 
@@ -75,6 +92,9 @@ sub image_Foobar{
 	my $baseDirName = $args->{baseDirName};
 	my $fileName = $args->{fileName};
 	my $rootDirNum = $args->{rootDirNum};
+	my %nameHash = %{$args->{nameHash}};
+
+	print Dumper(%nameHash);
 
 	my %data = getImageData({
 		filename => $baseDirName . $fileName,
@@ -91,6 +111,13 @@ sub image_Foobar{
 	$year += 1900;
 	$mon += 1;
 	my $dbInsertionDate = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
+
+	# Quick check to make sure that the system time is set properly. I'm writing this code in 2017, 
+	# so this is fairly accurate right now. In the future, it may only catch systems that are set 
+	# to epoch time (1/1/1970ish), but we're looking for best effort right now. 
+	if ($year < 2017){
+		die("Your time zone is not correct. It must be correct for this function to work.\n");
+	}
 
 	# foreach my $k (keys %data){
 	# 	print $k . ", ";
@@ -125,11 +152,11 @@ sub image_Foobar{
 
 	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
-		my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+	my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
 
-		my $query = $dbhandle->prepare($checkPhotoInTableQuery);
-		$query->execute() or die $DBI::errstr;
-		my $photoExists = eval { $query->fetchrow_arrayref->[0] };
+	my $query = $dbhandle->prepare($checkPhotoInTableQuery);
+	$query->execute() or die $DBI::errstr;
+	my $photoExists = eval { $query->fetchrow_arrayref->[0] };
 		# print $photoExists ? "Photo Exists\n" : "Photo doesn't exist\n";
 
 				# my $query = $dbhandle->prepare($dirExistsQuery);
@@ -139,46 +166,61 @@ sub image_Foobar{
 
 		# print $checkPhotoInTableQuery . "\n";
 
-#TODO: Figure out how to return gracefully without killing function
-		if ($photoExists){
-			map {if (!$_) {  return; }else{print "Would be exiting here b/c photo exists\n";} } $params::debug;
+	our $upToDate = 0;
+
+	if ($photoExists){
+		# Get the date when the photo was inserted from the table. 
+		my $lastModifiedQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+		$query = $dbhandle->prepare($lastModifiedQuery);
+		$query->execute() or die $DBI::errstr;
+		my $lastModDate = eval {$query->fetchrow_arrayref->[0] };
+
+		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
+		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
+		if ($lastModDate gt $data{'ModifyDate'}) {
+			map {if ($_)
+				{print "We have inserted this in the table at a later date than the photo was modified.\n";} 
+			} $params::debug;
+			$upToDate = 1;
+		}else{
+			print "The photo has been modified since we inserted it in the table.\n";
 		}
 
+		# If we are debugging and are up to date, print the message; else, silently return.
+		map {if ($_){ # Get in this loop if we ARE debugging OR if we ARE NOT up to date.
+			if ($upToDate){ # Print this message if we ARE debugging AND ARE up to date. 
+				print "Would be exiting here b/c photo exists\n";}
+			} else{ # Return if we ARE NOT debugging AND we ARE up to date. 
+			  return; } 
+		} ($params::debug or !$upToDate);
+	}
+
 	# Insert the data about the photo (date and filename) into the appropriate table. 
-		my $insertIntoPhotoTable = qq/INSERT INTO $params::photoTableName ( 
-			$params::photoFileColumn, 
-			$params::photoDateColumn, 
-			$params::modifyDateColumn, 
-			$params::rootDirNumColumn, 
-			$params::photoYearColumn,
-			$params::photoMonthColumn, 
-			$params::photoDayColumn, 
-			$params::photoHourColumn, 
-			$params::photoMinuteColumn, 
-			$params::photoGMTColumn,
-			$params::insertDateColumn)  
-			VALUES ("$fileName", 
-				"$data{'TakenDate'}", 
-				"$data{"ModifyDate"}", 
-				$rootDirNum,
-				$data{'Year'}, 
-				$data{'Month'}, 
-				$data{'Day'}, 
-				$data{'Hour'}, 
-				$data{'Minute'}, 
-				$data{'TimeZone'},
-				"$dbInsertionDate"
-			)/;
+	my $insertIntoPhotoTable = qq/
+	INSERT INTO $params::photoTableName ( 
+		$params::photoFileColumn, $params::photoDateColumn, 
+		$params::modifyDateColumn, $params::rootDirNumColumn, 
+		$params::photoYearColumn, $params::photoMonthColumn, 
+		$params::photoDayColumn, $params::photoHourColumn, 
+		$params::photoMinuteColumn, $params::photoGMTColumn,
+		$params::insertDateColumn)  
+	VALUES ("$fileName", 
+		"$data{'TakenDate'}", "$data{"ModifyDate"}", 
+		$rootDirNum, $data{'Year'}, 
+		$data{'Month'}, $data{'Day'}, 
+		$data{'Hour'}, $data{'Minute'}, 
+		$data{'TimeZone'}, "$dbInsertionDate"
+	)/;
 		# print $insertIntoPhotoTable . "\n ";
 
-		$dbhandle->do($insertIntoPhotoTable) or die $DBI::errstr;
+	$dbhandle->do($insertIntoPhotoTable) or die $DBI::errstr;
 
 	# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
-		my $keyNumQuery = qq/SELECT last_insert_rowid()/;
-		$query = $dbhandle->prepare($keyNumQuery);
-		$query->execute() or die $DBI::errstr;
-		my $photoKeyVal = @{$query->fetch()}[0];
-		print $photoKeyVal . "\n";
+	my $keyNumQuery = qq/SELECT last_insert_rowid()/;
+	$query = $dbhandle->prepare($keyNumQuery);
+	$query->execute() or die $DBI::errstr;
+	my $photoKeyVal = @{$query->fetch()}[0];
+	# print $photoKeyVal . "\n";
 
 	# Now we need to tackle inserting names into the database. I want to have a hash with the names and check it. 
 	# If the name has already been encountered, we should read its public key from the hash. Else, we need to add 
@@ -190,6 +232,9 @@ sub image_Foobar{
 	foreach (@{$data{'NameList'}}){
 		our $peopleKeyVal = -1;
 		print $_ . " : " ;
+
+		# $_[0]->{'e'} = "tesing";
+		# print "\nFirst person: " . $args->{nameHash}->{'a'} . "\n";
 		if (exists($peopleToKeyHash{$_})){
 			print "$_ exists\n";
 			$peopleKeyVal = $peopleToKeyHash{$_};

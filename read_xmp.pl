@@ -178,6 +178,7 @@ sub getImageData{
 	# Remove the time zone from the modify and taken dates. 
 	$modifyDate =~ s/[+-]\d\d:\d\d$//g;
 	$takenDate =~ s/[+-]\d\d:\d\d$//g;
+	# Make the dates follow a YYYY-MM-DD hh:mm:ss pattern
 	$modifyDate =~ s/(.*?):(.*?):(.*?) /$1-$2-$3 /g;
 	$takenDate =~ s/(.*?):(.*?):(.*?) /$1-$2-$3 /g;
 
