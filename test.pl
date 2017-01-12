@@ -13,7 +13,7 @@ my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
 	# Parameters for image size and face size. 
 my $baseDirNum = 1;
 # my @filesInDir = ('canon pictures 018.JPG');
-my @filesInDir = ('CCI01052017.JPG');
+my @filesInDir = ('dirA\2013-11-05 19.43.48.jpg', 'canon pictures 012.JPG', 'canon pictures 018.JPG', 'dir with spaces and jpg/1235_58205421712_2635_n.jpg');
 my $localDir = '';
 
 our %nameHash;
@@ -70,13 +70,14 @@ sub readImages{
 
 	# for (my $i = 0 ; $i < 3; $i++ ){
 		# print "a = " . $i . "\n";
-	image_Foobar({
-		baseDirName => $baseDirName, 
-		fileName => $localDir . $fileName, 
-		rootDirNum => $rootDirNum,
-		nameHash => $args->{nameHash}
-	});
-	# }
+	foreach my $imageFile (@filelist){
+		image_Foobar({
+			baseDirName => $baseDirName, 
+			fileName => $localDir . $imageFile, 
+			rootDirNum => $rootDirNum,
+			nameHash => $args->{nameHash}
+		});
+	}
 
 };
 	# $root_dir = '';
@@ -92,7 +93,7 @@ sub image_Foobar{
 	my $baseDirName = $args->{baseDirName};
 	my $fileName = $args->{fileName};
 	my $rootDirNum = $args->{rootDirNum};
-	my %nameHash = %{$args->{nameHash}};
+	my $nameHashRef = $args->{nameHash};
 
 	print Dumper(%nameHash);
 
@@ -178,11 +179,13 @@ sub image_Foobar{
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 		if ($lastModDate gt $data{'ModifyDate'}) {
+			print $lastModDate . "   " . $data{'ModifyDate'}  . "\n\n";
 			map {if ($_)
 				{print "We have inserted this in the table at a later date than the photo was modified.\n";} 
 			} $params::debug;
 			$upToDate = 1;
 		}else{
+			print $lastModDate . "   " . $data{'ModifyDate'}  . "\n\n";
 			print "The photo has been modified since we inserted it in the table.\n";
 		}
 
@@ -229,30 +232,40 @@ sub image_Foobar{
 	# I need to be able to pass in the $peopleToKeyHash effectively between pictures. Otherwise I will be putting
 	# it together for each photo, and that's not good. 
 
+#### ## FAIRLY TESTED TO HERE ## #### 
+
 	foreach (@{$data{'NameList'}}){
 		our $peopleKeyVal = -1;
 		print $_ . " : " ;
 
 		# $_[0]->{'e'} = "tesing";
 		# print "\nFirst person: " . $args->{nameHash}->{'a'} . "\n";
-		if (exists($peopleToKeyHash{$_})){
+		# The name hash keeps a hash of people and their unique ID's. It is passed into the function
+		# by reference and should be initialized from scratch at the beginning of batch processing 
+		# (so that we know that the unique ID's are correct.) Reading from the database to initialize
+		# is acceptable. 
+		if (exists($nameHashRef->{$_})){
 			print "$_ exists\n";
-			$peopleKeyVal = $peopleToKeyHash{$_};
+			$peopleKeyVal = $nameHashRef->{$_};
 		}
 		else{
 
-			# Check if person exists in the database if they're not in the hash, for partial building purposes. 
+			# Check if person exists in the database if they're not in the hash. This is for redundancy
+			# in case the hash hasn't been initialized from the database. 
 
-			# SQL Query : Ask for the unique key for the person from the database, and store it in $peopleKeyVal if the peron exists. 
-			# If they do, then get their unique key and add it to the hash so that we don't have to find it ever again. 
+			# SQL Query : Ask for the unique key for the person from the database, and store it in 
+			# $peopleKeyVal if the peron exists. 
+			# If they do, then get their unique key and add it to the hash so that we don't have to find it 
+			# ever again. 
 			my $personExistsQuery = qq/SELECT $params::peopleKeyColumn FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
 
 			my $query = $dbhandle->prepare($personExistsQuery);
 			$query->execute() or die $DBI::errstr;
-			my $result = eval { $query->fetchrow_arrayref->[0] };
+			my $result = eval { $query->fetchrow_arrayref->[0] }; # Can be an uninitialized value. 
+							# The uninitialized value would mean that we haven't seen that person. 
 
 			# Find the number of people in the database with that name; should be only one. 
-			# TODO: Work out how to distinguish people. 
+			# TODO: Work out how to distinguish people with the exact same name... 
 			my $numQuery = qq/SELECT COUNT(*) FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
 			$query = $dbhandle->prepare($numQuery);
 			$query->execute() or die $DBI::errstr;
@@ -261,14 +274,14 @@ sub image_Foobar{
 
 			if($result and $numPeopleWithName == 1){
 				$peopleKeyVal = $result;
-				$peopleToKeyHash{$_} = $result;
+				$nameHashRef->{$_} = $result;
 			}
 
 			# If we well and truly can't find the person in the database, insert their name in the database with a unique identifier and 
 			# add the identifier to the hash. 
 			else {
 
-				if ($numPeopleWithName > 1){
+				if ($numPeopleWithName > 1){ # Handle this bug when we get there. 
 					die("Error! Getting more than one person with this name: $_.");
 				}
 
@@ -276,11 +289,12 @@ sub image_Foobar{
 
 				$dbhandle->do($insertPersonInPersonTable) or die $DBI::errstr;
 
+				# Get the unique ID of the person entered and place it in the hash by reference. 
 				my $keyNumQuery = qq/SELECT last_insert_rowid()/;
 				my $query = $dbhandle->prepare($keyNumQuery);
 				$query->execute() or die $DBI::errstr;
 				$peopleKeyVal = @{$query->fetch()}[0];
-				$peopleToKeyHash{$_} = $peopleKeyVal;
+				$nameHashRef->{$_} = $peopleKeyVal;
 			}
 		}
 
@@ -290,8 +304,6 @@ sub image_Foobar{
 		$dbhandle->do($insertLinkInTable);
 
 	}
-
-	# exit();
 
 };
 
