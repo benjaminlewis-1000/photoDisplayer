@@ -8,11 +8,11 @@ use Tk;
 use File::Find;
 use Data::Dumper;
 require 'read_xmp.pl';
-require 'addImages.pl';
+require 'readInImages.pl';
 
 # my $root_dir = Tk::MainWindow->new->chooseDirectory;
 # my $root_dir = 'D:\Pictures\2016';
-my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
+my $root_dir = 'D:\Pictures\2016\Lillian\\';
 
 # Remove any extraneous end-of-string slashes.
 $root_dir =~ s/\\$//g;
@@ -48,7 +48,9 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 			# print $dirExistsQuery . "\n";
 			$query->execute() or die $DBI::errstr;
 			$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
-			exit();
+			if ( ! ( $params::debug and $params::debugNewRoot )){
+				exit();
+			}
 	    }
 	}
 
@@ -159,27 +161,50 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	}
 
 	# print Dumper(%dirNameNumHash) . "\n";
-	print Dumper(%dirNameRelativeToRootHash);
+	# print Dumper(%dirNameRelativeToRootHash);
+
+	open OUTPUT,  ">unhandled_files.txt" or die $!;
 
 	foreach my $localDir (@remainingSubdirs){
 		my @filesInDir;
 		my $odir = $root_dir . $localDir;
-		opendir my $dir, "$odir" or die "Can't open directory " . $odir . ": $!";
+		if ( !($odir =~ m/\/$/ ) ) {
+			print OUTPUT "$odir isn't a valid directory. \n";
+		}
+		opendir my $dir, "$odir" or next; #print "$odir isn't a valid directory. \n";
+		# 	next;
+		# } #die "Can't open directory " . $odir . ": $!";
 		my @filesInDir = readdir $dir;
 		closedir $dir; 
 		# find(sub { push @filesInDir, $File::Find::name }, $root_dir . $val);
-		print $localDir . "\t: ";  # grep(!/$subdirectories[$i]/, @remainingSubdirs);
+		if ($params::debug and $params::debugNewRoot) { print $localDir . "\t: "; } # grep(!/$subdirectories[$i]/, @remainingSubdirs);
 		my @filesInDir =  grep(/\.JPE?G/i, @filesInDir);
-		print join(',  ', @filesInDir) . "\n\n";
+		if ($params::debug and $params::debugNewRoot) { print join(',  ', @filesInDir) . "\n\n"; }
+
+		if ($localDir ne "" ){
+			$localDir .= "/";
+		}
+
+		my %nameHash;
 
 		readImages({
 			filelist => \@filesInDir,
 			baseDirNum => $directoryKeyVal,
-			localDir => $root_dir . $localDir
+			localDir => $localDir,
+			rootDirName => $root_dir,
+			nameHash => \%nameHash
 		});	
+
+		# readImages({
+		# 	filelist => \@filesInDir,
+		# 	baseDirNum => $directoryKeyVal,
+		# 	localDir => $root_dir . $localDir
+		# });	
 		# add_images(@filesInDir, $root_dir . $localDir, $directoryKeyVal)
 
 	}
+
+	close OUTPUT;
 
 	# foreach my $val ()
 #TODO: Find if the subdirectories are already in the database. Then reject them from this list. 

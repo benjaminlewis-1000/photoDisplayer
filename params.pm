@@ -11,7 +11,11 @@ our $bar = "This is the package's bar value!";
 
 our $database = "photos.db";
 
-our $debug = 1;
+our $debug = 0;
+
+our $debug_readXMP = 0;
+our $debug_readIn = 0;
+our $debugNewRoot = 1;
 # map {if (!$_) { ______ } } $params::debug;
 
 ## Table names

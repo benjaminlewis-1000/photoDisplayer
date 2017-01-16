@@ -20,15 +20,15 @@ our %nameHash;
 
 $nameHash{'a'} = 'Ben';
 
-readImages({
-	filelist => \@filesInDir,
-	baseDirNum => $baseDirNum,
-	localDir => $localDir,
-	rootDirName => $root_dir,
-	nameHash => \%nameHash
-});	
+# readImages({
+# 	filelist => \@filesInDir,
+# 	baseDirNum => $baseDirNum,
+# 	localDir => $localDir,
+# 	rootDirName => $root_dir,
+# 	nameHash => \%nameHash
+# });	
 
-print Dumper(%nameHash);
+# print Dumper(%nameHash);
 
 sub readImages{
 
@@ -66,6 +66,7 @@ sub readImages{
 
 	my $fileName = $filelist[0];
 
+
 	# print "File name is : " . $baseDirName . $fileName . "\n";
 
 	# for (my $i = 0 ; $i < 3; $i++ ){
@@ -88,6 +89,7 @@ sub readImages{
 	# print join(', ', @ls) . "\n";
 
 sub image_Foobar{
+
 	my ($args) = @_;
 
 	my $baseDirName = $args->{baseDirName};
@@ -95,7 +97,8 @@ sub image_Foobar{
 	my $rootDirNum = $args->{rootDirNum};
 	my $nameHashRef = $args->{nameHash};
 
-	print Dumper(%nameHash);
+	# print Dumper(%nameHash);
+	print "Currently processing image: " . $baseDirName . $fileName  . "\n";
 
 	my %data = getImageData({
 		filename => $baseDirName . $fileName,
@@ -104,7 +107,7 @@ sub image_Foobar{
 		});
 
 	if (!$data{'Status'} ){
-		print "$!\n";
+		print "Read XMP has failed - $!\n";
 		exit;
 	}
 
@@ -137,7 +140,10 @@ sub image_Foobar{
 	# print "Sec" . " : " . $data{'Second'} . "\n";
 	# print "Status" . " : " . $data{'Status'} . "\n";
 	# print "Modify date" . " : " . $data{'ModifyDate'} . "\n";
-	print "Names: " . join(";", @{$data{'NameList'}}) . "\n";
+	if ($params::debug and $params::debug_readIn) { 
+		print "Names: " . join(";", @{$data{'NameList'}}) . "\n"; 
+		print $data{'TakenDate'} . "\n";
+	}
 
 	# With the file: 
 
@@ -145,7 +151,6 @@ sub image_Foobar{
 
 	# our $taken_date = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $data{'Year'}, $data{'Month'}, $data{'Day'}, $data{'Hour'}, $data{'Minute'}, $data{'Second'});
 
-	print $data{'TakenDate'} . "\n";
 
 	# print "Date is " . $taken_date . "\n";
 
@@ -179,9 +184,9 @@ sub image_Foobar{
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 		if ($lastModDate gt $data{'ModifyDate'}) {
-			print $lastModDate . "   " . $data{'ModifyDate'}  . "\n\n";
-			if ($params::debug){
-				{print "We have inserted this in the table at a later date than the photo was modified.\n";} 
+			if ($params::debug and $params::debug_readIn){
+				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n\n";
+				print "We have inserted this in the table at a later date than the photo was modified.\n";
 			}
 			$upToDate = 1;
 		}else{
@@ -203,9 +208,9 @@ sub image_Foobar{
 
 
 		}
-		
+
 		# If we are debugging and are up to date, print the message; else, silently return.
-		if ($params::debug or !$upToDate){ # Get in this loop if we ARE debugging OR if we ARE NOT up to date.
+		if ( ( $params::debug  and $params::debug_readIn ) or !$upToDate){ # Get in this loop if we ARE debugging OR if we ARE NOT up to date.
 			if ($upToDate){ # Print this message if we ARE debugging AND ARE up to date. 
 				print "Would be exiting here b/c photo exists\n";}
 			} else{ # Return if we ARE NOT debugging AND we ARE up to date. 
@@ -251,7 +256,7 @@ sub image_Foobar{
 
 	foreach (@{$data{'NameList'}}){
 		our $peopleKeyVal = -1;
-		print $_ . " : " ;
+		if ($params::debug and $params::debug_readIn) { print "Name is : " . $_ . " : " ; }
 
 		# $_[0]->{'e'} = "tesing";
 		# print "\nFirst person: " . $args->{nameHash}->{'a'} . "\n";
@@ -260,7 +265,7 @@ sub image_Foobar{
 		# (so that we know that the unique ID's are correct.) Reading from the database to initialize
 		# is acceptable. 
 		if (exists($nameHashRef->{$_})){
-			print "$_ exists\n";
+			if ($params::debug and $params::debug_readIn) { print "$_ exists\n"; }
 			$peopleKeyVal = $nameHashRef->{$_};
 		}
 		else{
@@ -285,7 +290,7 @@ sub image_Foobar{
 			$query = $dbhandle->prepare($numQuery);
 			$query->execute() or die $DBI::errstr;
 			my $numPeopleWithName = eval { $query->fetchrow_arrayref->[0] };
-			print $numPeopleWithName . "\n";
+			if ($params::debug and $params::debug_readIn) { print $numPeopleWithName . " people have that name.". "\n"; }
 
 			if($result and $numPeopleWithName == 1){
 				$peopleKeyVal = $result;

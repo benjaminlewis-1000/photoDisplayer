@@ -8,8 +8,13 @@ use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
 
-sub getImageData{
 
+# getImageData({
+# 	filename => "D:\\Pictures\\2016\\Chicago and Wicked\\wicked_south_bend (2).jpg",
+# 	debug => 0
+# 	});
+
+sub getImageData{
 	my ($args) = @_;
 	my %returnData;
 	$returnData{'Status'} = 0;
@@ -31,8 +36,17 @@ sub getImageData{
 		$args->{minSize} = 0.0;
 	}
 
+	if ( defined $args->{debug}){
+		if ($args->{debug}){
+			$params::debug = 1;
+			$params::debug_readXMP = 1;
+		}
+	}
+
+	if ($params::debug and $params::debug_readXMP ) { print "Minimum size is: " . $args->{minSize} . "\n"; }
+
 	if (! -e $args->{filename}){
-		print "File does not exist!\n";
+		print "File does not exist! $args->{filename}\n";
 		return %returnData;
 	}
 
@@ -130,10 +144,13 @@ sub getImageData{
 		trim($height);
 		my $area = $width * $height;
 
-		if (exists $seen{$name}){
+		if ($params::debug and $params::debug_readXMP) {print $name . "  " . $area . "\n"; }
+
+		if (exists $seenFaces{$name}){
 			# If the name is already in a hash, do this:
 			# 1) Evaluate if we've already found a region with this face that's larger
 			# than $minSize. If so, we're done. 
+			if ($params::debug and $params::debug_readXMP) {print "Seen in the hash" . "\n"; }
 			my $storedArea = $seen{$name};
 			if ($storedArea > $minSize){
 				# Do nothing; we've found a big enough area already. 
@@ -157,6 +174,7 @@ sub getImageData{
 			# If we haven't seen the name yet, add it to the hash. If 
 			# the area is large enough, push the name to the list 
 			# of acceptably-sized faces. 
+			if ($params::debug and $params::debug_readXMP) { print "Adding to the hash" . "\n"; }
 			$seen{$name} = $area;
 			if ($area > $minSize){
 				push(@namesWithLargeAreas, $name);
@@ -170,6 +188,8 @@ sub getImageData{
 	# Other info: Orientation
 
 	$returnData{'NameList'} = \@namesWithLargeAreas;
+
+	if ($params::debug and $params::debug_readXMP) {print join (",", @namesWithLargeAreas); }
 
 	$returnData{'ImageSize'} = $fileSize;
 	$returnData{'Width'} = $imWidth;
