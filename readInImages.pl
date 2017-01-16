@@ -161,7 +161,13 @@ sub image_Foobar{
 	my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
 
 	my $query = $dbhandle->prepare($checkPhotoInTableQuery);
-	$query->execute() or die $DBI::errstr;
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $checkPhotoInTableQuery\n";
+		sleep( 5 * 60 );
+    }# or die $DBI::errstr;
 	my $photoExists = eval { $query->fetchrow_arrayref->[0] };
 		# print $photoExists ? "Photo Exists\n" : "Photo doesn't exist\n";
 
@@ -178,7 +184,13 @@ sub image_Foobar{
 		# Get the date when the photo was inserted from the table. 
 		my $lastModifiedQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
 		$query = $dbhandle->prepare($lastModifiedQuery);
-		$query->execute() or die $DBI::errstr;
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $lastModifiedQuery\n";
+			sleep(5);
+		}# or die $DBI::errstr;
 		my $lastModDate = eval {$query->fetchrow_arrayref->[0] };
 
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
@@ -196,15 +208,33 @@ sub image_Foobar{
 			# Remove the old data from the table. 
 			my $photoKeyQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/ ;
 			$query = $dbhandle->prepare($photoKeyQuery);
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $photoKeyQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 			my $photoKeyNum = eval {$query->fetchrow_arrayref->[0] };
 
 			my $unlinkLinkerQuery = qq/DELETE FROM $params::linkerTableName WHERE $params::linkerPhotoColumn = $photoKeyNum/;
 			$query = $dbhandle->prepare($unlinkLinkerQuery);
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $unlinkLinkerQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 			my $deletePhotoQuery = qq/DELETE FROM $params::photoTableName WHERE $params::photoKeyColumn = $photoKeyNum/;
 			$query = $dbhandle->prepare($deletePhotoQuery);
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $deletePhotoQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 
 
 		}
@@ -241,7 +271,13 @@ sub image_Foobar{
 	# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
 	my $keyNumQuery = qq/SELECT last_insert_rowid()/;
 	$query = $dbhandle->prepare($keyNumQuery);
-	$query->execute() or die $DBI::errstr;
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $keyNumQuery\n";
+		sleep(5);
+	}# or die $DBI::errstr;
 	my $photoKeyVal = @{$query->fetch()}[0];
 	# print $photoKeyVal . "\n";
 
@@ -280,7 +316,13 @@ sub image_Foobar{
 			my $personExistsQuery = qq/SELECT $params::peopleKeyColumn FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
 
 			my $query = $dbhandle->prepare($personExistsQuery);
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $personExistsQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 			my $result = eval { $query->fetchrow_arrayref->[0] }; # Can be an uninitialized value. 
 							# The uninitialized value would mean that we haven't seen that person. 
 
@@ -288,7 +330,13 @@ sub image_Foobar{
 			# TODO: Work out how to distinguish people with the exact same name... 
 			my $numQuery = qq/SELECT COUNT(*) FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
 			$query = $dbhandle->prepare($numQuery);
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $numQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 			my $numPeopleWithName = eval { $query->fetchrow_arrayref->[0] };
 			if ($params::debug and $params::debug_readIn) { print $numPeopleWithName . " people have that name.". "\n"; }
 
@@ -312,7 +360,13 @@ sub image_Foobar{
 				# Get the unique ID of the person entered and place it in the hash by reference. 
 				my $keyNumQuery = qq/SELECT last_insert_rowid()/;
 				my $query = $dbhandle->prepare($keyNumQuery);
-				$query->execute() or die $DBI::errstr;
+				until(
+					$query->execute()
+				){
+					warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+					warn "Failed on the following query: $keyNumQuery\n";
+					sleep(5);
+				}# or die $DBI::errstr;
 				$peopleKeyVal = @{$query->fetch()}[0];
 				$nameHashRef->{$_} = $peopleKeyVal;
 			}

@@ -12,7 +12,7 @@ require 'readInImages.pl';
 
 # my $root_dir = Tk::MainWindow->new->chooseDirectory;
 # my $root_dir = 'D:\Pictures\2016';
-my $root_dir = 'D:\Pictures\2016\Lillian\\';
+my $root_dir = 'D:\Pictures\\';
 
 # Remove any extraneous end-of-string slashes.
 $root_dir =~ s/\\$//g;
@@ -31,7 +31,13 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	#  Check if a higher-up directory is already in the table. If so, we don't need to add this in. 
 	my $existingRootDirsQuery = qq/SELECT $params::rootDirPath FROM $params::rootTableName/;
 	my $query = $dbhandle->prepare($existingRootDirsQuery);
-	$query->execute() or die $DBI::errstr;
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $existingRootDirsQuery\n";
+		sleep(5);
+	}# or die $DBI::errstr;
 
 	my $higherDirectoryExists = 0;
 
@@ -46,7 +52,13 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	    	my $dirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$registeredRow"/;
 			my $query = $dbhandle->prepare($dirExistsQuery);
 			# print $dirExistsQuery . "\n";
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $dirExistsQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 			$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 			if ( ! ( $params::debug and $params::debugNewRoot )){
 				exit();
@@ -60,7 +72,13 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	if (!$higherDirectoryExists){
 		my $rootDirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$root_dir"/;
 		my $query = $dbhandle->prepare($rootDirExistsQuery);
-		$query->execute() or die $DBI::errstr;
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $rootDirExistsQuery\n";
+			sleep(5);
+		}# or die $DBI::errstr;
 		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
 		if ($directoryKeyVal eq "" ){
@@ -71,7 +89,14 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 			# Get the value of the autoincremented value for the table; this value is in $directoryKeyVal
 			my $keyNumQuery = qq/SELECT last_insert_rowid()/;
 			my $query = $dbhandle->prepare($keyNumQuery);
-			$query->execute() or die $DBI::errstr;
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $keyNumQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
+
 			$directoryKeyVal = @{$query->fetch()}[0];
 			print "Key val is " . $directoryKeyVal . "\n";
 		}else{
@@ -119,7 +144,13 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 		my $dirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$subdirectories[$i]\/"/;
 		my $query = $dbhandle->prepare($dirExistsQuery);
 
-		$query->execute() or die $DBI::errstr;
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $dirExistsQuery\n";
+			sleep(5);
+		}# or die $DBI::errstr;
 		my $directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
 		# Now, if the subdirectory is already accounted for, get its key number and base directory and add it to the appropriate hashes. Then remove it and all its subdirectories from the @remainingSubdirs list. 
