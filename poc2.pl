@@ -1,13 +1,7 @@
 
 use Data::Dumper;
+use accessQueries;
 
-sub runTest{
-	our $hash = $_[0];
-
-	# print Dumper(%{$hash});
-
-	$_[0]->{'e'} = "tesing";
-
-};
+print join(",", @accessQueries::accessQueriesList) . "\n";
 
 1;

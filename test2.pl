@@ -85,7 +85,6 @@ sub add{
 
 sub enableField{
 	print "got: ", shift, "\n";
-	print $self;
 	# TODO: Get the row number... 
 }
 
