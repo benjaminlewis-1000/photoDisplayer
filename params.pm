@@ -9,7 +9,7 @@ use warnings;
 
 our $bar = "This is the package's bar value!";
 
-our $database = "photos_master.db";
+our $database = "test.db";
 
 our $debug = 0;
 

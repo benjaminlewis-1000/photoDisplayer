@@ -12,7 +12,7 @@ require 'readInImages.pl';
 
 # my $root_dir = Tk::MainWindow->new->chooseDirectory;
 # my $root_dir = 'D:\Pictures\2016';
-my $root_dir = 'D:\Pictures\\';
+my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
 
 # Remove any extraneous end-of-string slashes.
 $root_dir =~ s/\\$//g;
