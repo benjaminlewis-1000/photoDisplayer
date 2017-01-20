@@ -10,7 +10,7 @@ use params;
 
 
 # getImageData({
-# 	filename => "D:\\Pictures\\2016\\Chicago and Wicked\\wicked_south_bend (2).jpg",
+# 	filename => "/home/lewis/gitRepos/photoDisplayer/base/canon pictures 018.JPG",
 # 	debug => 0
 # 	});
 
@@ -90,12 +90,12 @@ sub getImageData{
 
 	# Parse the XMP data. 
 
-	my $namelist = %infoHash{'RegionName'};
-	my $regionWidth = %infoHash{'RegionAreaW'};
-	my $regionHeight = %infoHash{'RegionAreaH'};
+	my $namelist = $infoHash{'RegionName'};
+	my $regionWidth = $infoHash{'RegionAreaW'};
+	my $regionHeight = $infoHash{'RegionAreaH'};
 
-	my $takenDate = %infoHash{'FileCreateDate'};
-	my $modifyDate = %infoHash{'FileModifyDate'};
+	my $takenDate = $infoHash{'FileCreateDate'};
+	my $modifyDate = $infoHash{'FileModifyDate'};
 
 	{ # Parse the date. 
 		my $time = str2time($takenDate);
@@ -105,8 +105,8 @@ sub getImageData{
 		# print $year . "\n";
 	}
 
-	my $fileSize = %infoHash{'FileSize'};
-	my $imWidth = %infoHash{'ImageWidth'};
+	my $fileSize = $infoHash{'FileSize'};
+	my $imWidth = $infoHash{'ImageWidth'};
 	my $imHeight = $infoHash{'ImageHeight'};
 
 	if ($imWidth < $minResX || $imHeight < $minResY){
