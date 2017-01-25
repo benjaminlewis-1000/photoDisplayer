@@ -29,6 +29,12 @@ create_photo_table();
 create_people_table();
 create_linker_table();
 create_root_dir_table();
+create_metadata_table();
+
+
+update_metadata();
+
+# $dbhandle->disconnect;
 
 # End creation of tables.
 
@@ -53,6 +59,11 @@ sub dropTables{
 	my $dropRootDirs = qq/DROP TABLE IF EXISTS $params::rootTableName/;
 	$query = $dbhandle->prepare($dropRootDirs);
 	$query->execute() or die $DBI::errstr;
+
+	my $dropMetadata = qq/DROP TABLE IF EXISTS $params::metadataTableName/;
+	$query = $dbhandle->prepare($dropMetadata);
+	$query->execute() or die $DBI::errstr;
+
 	
 }
 
@@ -121,5 +132,31 @@ sub create_linker_table{
 
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
+
+}
+
+sub create_metadata_table{
+	my $sql_quer = qq/CREATE TABLE $params::metadataTableName (
+		$params::metadataNameColumn  STRING,  
+		$params::metadataValueColumn STRING
+	);/;
+
+	my $metadata_handle = $dbhandle->prepare($sql_quer);
+	$metadata_handle->execute() or die $DBI::errstr;
+
+}
+
+sub update_metadata{
+
+	my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+	$year += 1900;
+	$mon += 1;
+
+	my $dateTime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
+
+	my $updatedValQuery = qq/INSERT INTO $params::metadataTableName VALUES ("$params::metadataLastEditedField", "$dateTime")/;
+	
+	my $metadata_handle = $dbhandle->prepare($updatedValQuery);
+	$metadata_handle->execute() or die $DBI::errstr;
 
 }

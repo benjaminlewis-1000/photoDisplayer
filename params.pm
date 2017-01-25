@@ -11,7 +11,7 @@ our $bar = "This is the package's bar value!";
 
 our $database = "test.db";
 
-our $debug = 0;
+our $debug = 1;
 
 our $debug_readXMP = 0;
 our $debug_readIn = 0;
@@ -23,20 +23,19 @@ our $debugNewRoot = 1;
 	our $peopleTableName = "People";
 	our $linkerTableName = "Linker";
 	our $rootTableName = "Root_Dirs";
+	our $metadataTableName = "Metadata";
 
 # Table column names 
 	## Photo table
 	our $photoKeyColumn = "photo_key";
 	our $photoFileColumn = "photo_file";
 	our $photoDateColumn = "photo_date";
-
 	our $photoYearColumn = "taken_year";
 	our $photoMonthColumn = "taken_month";
 	our $photoDayColumn = "taken_day";
 	our $photoHourColumn = "taken_hour";
 	our $photoMinuteColumn = "taken_minute";
 	our $photoGMTColumn = "taken_timezone";
-
 	our $modifyDateColumn = "modification_date";
 	our $rootDirNumColumn = "root_dir_num";
 	our $insertDateColumn = "inserted_date";
@@ -53,5 +52,12 @@ our $debugNewRoot = 1;
 	## Root Directory Table
 	our $rootKeyColumn = "directory_root_key";
 	our $rootDirPath = "root_path";
+
+	## Metadata Table
+	our $metadataNameColumn = "item_name";
+	our $metadataValueColumn = "item_value";
+
+	### Metadata fields
+		our $metadataLastEditedField = "last_edited_date";
 
 1;
