@@ -6,6 +6,7 @@ package params;
 
 use strict;
 use warnings;
+use Data::Dumper::Simple;
 
 our $bar = "This is the package's bar value!";
 
@@ -59,5 +60,10 @@ our $debugNewRoot = 1;
 
 	### Metadata fields
 		our $metadataLastEditedField = "last_edited_date";
+
+sub getVarName{
+	my $variable = $_[0];
+	return (split /=/, Dumper($variable))[0];
+}
 
 1;
