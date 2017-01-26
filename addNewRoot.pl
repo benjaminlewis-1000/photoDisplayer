@@ -6,26 +6,59 @@ use params;
 use DBI;
 use Tk;
 use File::Find;
+use File::HomeDir;
 use Data::Dumper;
 require 'read_xmp.pl';
 require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
 
-# my $root_dir = Tk::MainWindow->new->chooseDirectory;
+my $homedir = File::HomeDir->my_pictures;
+print $homedir . "\n";
+
+our $answerBool = true;
+my $mw = MainWindow->new;
+$mw->withdraw;  # Hide the main window.
+
+our @rootDirList;
+
 # my $root_dir = 'D:\Pictures\2016';
-my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
+# my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
 
-# Remove any extraneous end-of-string slashes.
-$root_dir =~ s/\\$//g;
-$root_dir =~ s/\/$//g;
+while ($answerBool) {
+	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>"/");
+	print $root_dir . "\n";
+	if ($root_dir ne "/" and $root_dir ne ""){
+		# Remove any extraneous end-of-string slashes.
+		$root_dir =~ s/\\$//g;
+		$root_dir =~ s/\/$//g;
 
-# Add a backslash to the end and replace back/forward slashes as necessary. 
-$root_dir = $root_dir . '/';
-$root_dir =~ s/\\/\//g;
-print $root_dir . "\n";
+		# Add a backslash to the end and replace back/forward slashes as necessary. 
+		$root_dir = $root_dir . '/';
+		$root_dir =~ s/\\/\//g;
+		push (@rootDirList, $root_dir);
+		print $root_dir . "\n";
+	}else{
+		last;
+	}
+	my $answer = $mw->messageBox(-title => 'Please Reply', 
+	     -message => 'Would you like to add more root directories?', 
+	     -type => 'YesNo', -icon => 'question', -default => 'yes');
+
+	$answerBool = (lc($answer) eq 'yes') ? 1 : 0;
+	# print $answerBool . "\n";
+	# body...
+}
+
+if (scalar @rootDirList == 0){
+	die "No directories were chosen to add; exiting.\n";
+}
+
+$mw->messageBox(-title => 'Warning', -message => 'Please be patient. Adding all pictures in these directories could take a while.', -type=>'OK');
 
 # Open the database
 our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+foreach my $root_dir (@rootDirList){
 
 ##############
 
@@ -47,7 +80,7 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	while (my @row = $query->fetchrow_array) { # retrieve one row
 	    my $registeredRow = join("", @row);
 	    if ( $root_dir =~ $registeredRow ){
-	    	print "I've put this in already at a higher level, at: $registeredRow. Exiting.\n";
+	    	print "I've put $root_dir in already at a higher level, at: $registeredRow. Exiting.\n";
 	    	$higherDirectoryExists = 1;
 
 	    	my $dirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$registeredRow"/;
@@ -139,9 +172,16 @@ our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 	my $dateTime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
 
-	my $updatedValQuery = qq/UPDATE $params::metadataTableName SET $params::metadataValueColumn = "$dateTime" WHERE "$params::metadataLastEditedField")/;
+	my $updatedValQuery = qq/UPDATE $params::metadataTableName SET $params::metadataValueColumn = "$dateTime" WHERE $params::metadataNameColumn = "$params::metadataLastEditedField"/;
 	
-	my $metadata_handle = $dbhandle->prepare($updatedValQuery);
-	$metadata_handle->execute() or die $DBI::errstr;
+	$query = $dbhandle->prepare($updatedValQuery);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $updatedValQuery\n";
+		sleep(5);
+	}
+}
 
-	$dbhandle->disconnect;
+$dbhandle->disconnect;

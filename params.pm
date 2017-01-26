@@ -11,7 +11,7 @@ our $bar = "This is the package's bar value!";
 
 our $database = "test.db";
 
-our $debug = 1;
+our $debug = 0;
 
 our $debug_readXMP = 0;
 our $debug_readIn = 0;

@@ -16,10 +16,6 @@ my $baseDirNum = 1;
 my @filesInDir = ('dirA\2013-11-05 19.43.48.jpg', 'canon pictures 012.JPG', 'canon pictures 018.JPG', 'dir with spaces and jpg/1235_58205421712_2635_n.jpg');
 my $localDir = '';
 
-our %nameHash;
-
-$nameHash{'a'} = 'Ben';
-
 # readImages({
 # 	filelist => \@filesInDir,
 # 	baseDirNum => $baseDirNum,
