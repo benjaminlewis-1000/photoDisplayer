@@ -106,7 +106,28 @@ sub addFilesInListOfSubdirs{
 	# createTmpTable();
 
 	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-	
+
+	our %insertedDateHash;
+
+	# Only selecting the keyVal that's relevant in this sub so as to avoid conflicts. 
+	my $tableHashQuery = qq/SELECT $params::photoFileColumn, $params::insertDateColumn FROM $params::photoTableName WHERE $params::rootDirNumColumn = $dirKeyVal/;
+	my $query = $tmpDBhandle->prepare($tableHashQuery);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $tableHashQuery\n";
+		sleep(5);
+	}
+
+	my ($fileName, $insertDate);
+	$query->bind_col(1, \$fileName);
+	$query->bind_col(2, \$insertDate);
+
+	while($query->fetch){
+		$insertedDateHash{$fileName} = $insertDate;
+	}
+
 	foreach my $localDir (@subdirectories){
 		my @filesInDir;
 		my $odir = $rootDirectory . $localDir;
@@ -128,19 +149,23 @@ sub addFilesInListOfSubdirs{
 		}
 
 		my %nameHash;
-
 		foreach my $imageFile (@filesInDir){
 			${$numPassed} += 1;
 			if (${$numPassed} % 500 == 0){
 				print "We have read ${$numPassed} files and processed them accordingly.\n";
 			}
+
+	my $sttime = [gettimeofday];
 			image_Foobar({
 				baseDirName => $rootDirectory, 
 				fileName => $localDir . $imageFile, 
-				rootDirNum => $dirKeyVal,
+				baseDirNum => $dirKeyVal,
 				nameHash => \%nameHash,
-				dbhandle => $tmpDBhandle
+				dbhandle => $tmpDBhandle,
+				insertedDateHash => \%insertedDateHash
 			});
+	my $elapse = tv_interval($sttime);
+	# print $elapse . "\n";
 		}
 		# readImages({
 		# 	filelist => \@filesInDir,
@@ -216,7 +241,7 @@ sub createTmpTable{
 
 	## VERIFIED: Doing this shaves access time from 0.04 seconds to 0.03 seconds - a 25% speedup. It's worth it
 	## for large (tens of thousands) datasets. 
-	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
 	my $query = $tmpDBhandle->prepare($tmpTableQuery);
@@ -252,7 +277,7 @@ sub createTmpTable{
 }
 
 sub destroyTmpTable{
-	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 	my $dropPeople = qq/DROP TABLE IF EXISTS $params::tempTableName/;
 	my $query = $tmpDBhandle->prepare($dropPeople);

@@ -16,6 +16,7 @@ my $baseDirNum = 1;
 # my @filesInDir = ('canon pictures 018.JPG');
 my @filesInDir = ('dirA\2013-11-05 19.43.48.jpg', 'canon pictures 012.JPG', 'canon pictures 018.JPG', 'dir with spaces and jpg/1235_58205421712_2635_n.jpg');
 my $localDir = '';
+my %nameHash;
 
 # readImages({
 # 	filelist => \@filesInDir,
@@ -27,106 +28,106 @@ my $localDir = '';
 
 # print Dumper(%nameHash);
 
-sub readImages{
+# sub readImages{
 
-	my ($args) = @_;
-	my $rootDirNum;
-	my $baseDirName;
-	my $localDir;
-	my @filelist;
-	my $numProcessed;
+# 	my ($args) = @_;
+# 	my $rootDirNum;
+# 	my $baseDirName;
+# 	my $localDir;
+# 	my @filelist;
+# 	my $numProcessed;
 
-	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+# 	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
-	if (! defined $args->{filelist}){
-		die("Error: File not passed\n");
-	}else{
-		@filelist = @{$args->{filelist}};
-	}
+# 	if (! defined $args->{filelist}){
+# 		die("Error: File not passed\n");
+# 	}else{
+# 		@filelist = @{$args->{filelist}};
+# 	}
 
-	if (! defined $args->{nameHash}){
-		die("Error: Hash of names not passed\n");
-	}
+# 	if (! defined $args->{nameHash}){
+# 		die("Error: Hash of names not passed\n");
+# 	}
 
-	if (defined $args->{baseDirNum}){
-		$rootDirNum = $args->{baseDirNum};
-	}
+# 	if (defined $args->{baseDirNum}){
+# 		$rootDirNum = $args->{baseDirNum};
+# 	}
 
-	if (defined $args->{localDir}){
-		$localDir = $args->{localDir};
-	}
+# 	if (defined $args->{localDir}){
+# 		$localDir = $args->{localDir};
+# 	}
 
-	if (defined $args->{rootDirName}){
-		$baseDirName = $args->{rootDirName};
-	}
+# 	if (defined $args->{rootDirName}){
+# 		$baseDirName = $args->{rootDirName};
+# 	}
 
-	if (scalar (@filelist) == 0){
-		return;
-	}
+# 	if (scalar (@filelist) == 0){
+# 		return;
+# 	}
 
-	our $dummy = 0;
-	if (! defined $args->{numProcessed}){
-		$numProcessed = \$dummy;
-	}else{
-		$numProcessed = $args->{numProcessed};
-	}
+# 	our $dummy = 0;
+# 	if (! defined $args->{numProcessed}){
+# 		$numProcessed = \$dummy;
+# 	}else{
+# 		$numProcessed = $args->{numProcessed};
+# 	}
 
-	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
-	# 	print "Temp table hasn't been made. We will now create that.";
-	# 	# We really want this table to be here. 
-	# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
-	# 	my $query = $dbhandle->prepare($tmpTableQuery);
-	# 	until(
-	# 		$query->execute()
-	# 	){
-	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-	# 		warn "Failed on the following query: $tmpTableQuery\n";
-	# 		sleep(5);
-	# 	}# or die $DBI::errstr;
+# 	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
+# 	# 	print "Temp table hasn't been made. We will now create that.";
+# 	# 	# We really want this table to be here. 
+# 	# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
+# 	# 	my $query = $dbhandle->prepare($tmpTableQuery);
+# 	# 	until(
+# 	# 		$query->execute()
+# 	# 	){
+# 	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 	# 		warn "Failed on the following query: $tmpTableQuery\n";
+# 	# 		sleep(5);
+# 	# 	}# or die $DBI::errstr;
 
-	# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
-	# 	$query = $dbhandle->prepare($populateQuery);
-	# 	until(
-	# 		$query->execute()
-	# 	){
-	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-	# 		warn "Failed on the following query: $populateQuery\n";
-	# 		sleep(5);
-	# 	}# or die $DBI::errstr;
+# 	# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
+# 	# 	$query = $dbhandle->prepare($populateQuery);
+# 	# 	until(
+# 	# 		$query->execute()
+# 	# 	){
+# 	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 	# 		warn "Failed on the following query: $populateQuery\n";
+# 	# 		sleep(5);
+# 	# 	}# or die $DBI::errstr;
 
-	# }
+# 	# }
 
 
-	foreach my $imageFile (@filelist){
-		${$numProcessed} += 1;
-		if (${$numProcessed} % 500 == 0){
-			print "We have read ${$numProcessed} files and processed them accordingly.\n";
-		}
-		image_Foobar({
-			baseDirName => $baseDirName, 
-			fileName => $localDir . $imageFile, 
-			rootDirNum => $rootDirNum,
-			nameHash => $args->{nameHash},
-			dbhandle => $dbhandle
-		});
-	}
+# 	foreach my $imageFile (@filelist){
+# 		${$numProcessed} += 1;
+# 		if (${$numProcessed} % 500 == 0){
+# 			print "We have read ${$numProcessed} files and processed them accordingly.\n";
+# 		}
+# 		image_Foobar({
+# 			baseDirName => $baseDirName, 
+# 			fileName => $localDir . $imageFile, 
+# 			rootDirNum => $rootDirNum,
+# 			nameHash => $args->{nameHash},
+# 			dbhandle => $dbhandle
+# 		});
+# 	}
 
-	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
+# 	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
 
-	# 	# Get rid of the temp table. 
-	# 	my $deleteTmpQuery = qq/DELETE TABLE $params::tempTableName/;
-	# 	my $query = $dbhandle->prepare($deleteTmpQuery);
-	# 	until(
-	# 		$query->execute()
-	# 	){
-	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-	# 		warn "Failed on the following query: $deleteTmpQuery\n";
-	# 		sleep(5);
-	# 	}# or die $DBI::errstr;
+# 	# 	# Get rid of the temp table. 
+# 	# 	my $deleteTmpQuery = qq/DELETE TABLE $params::tempTableName/;
+# 	# 	my $query = $dbhandle->prepare($deleteTmpQuery);
+# 	# 	until(
+# 	# 		$query->execute()
+# 	# 	){
+# 	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 	# 		warn "Failed on the following query: $deleteTmpQuery\n";
+# 	# 		sleep(5);
+# 	# 	}# or die $DBI::errstr;
 
-	# }
+# 	# }
 
-};
+# };
 	# $root_dir = '';
 
 	# Instead of looking up the root directory every time, we should put it in a table. (Have the right length first, then read it in. )
@@ -141,12 +142,8 @@ sub image_Foobar{
 
 	my ($args) = @_;
 
-	our $baseDirName;
-	our $fileName;
-	our $rootDirNum;
-	our $nameHashRef;
-	our $dbhandle;
-
+	our ($baseDirName, $fileName, $rootDirNum, $nameHashRef, $dbhandle);
+	our $insertedDateHashRef;
 
 	if (defined $args->{nameHash}){
 		$nameHashRef = $args->{nameHash};
@@ -155,7 +152,7 @@ sub image_Foobar{
 	if (! defined $args->{baseDirNum}){
 		print "Root directory number not passed in\n";
 		return;
-	else{
+	}else{
 		$rootDirNum = $args->{baseDirNum};
 	}
 
@@ -179,6 +176,13 @@ sub image_Foobar{
 		$baseDirName = $args->{baseDirName};
 	}
 
+	if (!defined $args->{insertedDateHash} ){
+		print "Inserted date hash isn't present.\n";
+		return;
+	}else{
+		$insertedDateHashRef = $args->{insertedDateHash};
+	}
+
 
 
 	# Get the last modified date. 
@@ -189,30 +193,35 @@ sub image_Foobar{
 		my $e_ts = (stat($fh))[9];
 		my $fileLastEditDate = strftime('%Y-%m-%d %H:%M:%S', localtime( $e_ts ) ) ;
 
-	$elapse = tv_interval($sttime);
-	print "Elapsed -1 is " . $elapse . "\n";
+	# $elapse = tv_interval($sttime);
+	# print "Elapsed -1 is " . $elapse . "\n";
 
 		# Query the database for the date on which the photo was last updated. 
-		my $editedInDBQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
-	$elapse = tv_interval($sttime);
-	print "Elapsed 0 is " . $elapse . "\n";
+		# my $editedInDBQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+	# $elapse = tv_interval($sttime);
+	# print "Elapsed 0 is " . $elapse . "\n";
+		my $dbInsertDate;
+		if (defined $insertedDateHashRef->{$fileName} ){
+			$dbInsertDate = $insertedDateHashRef->{$fileName};
+		}
 
-		my $query = $dbhandle->prepare($editedInDBQuery);
-		until(
-			$query->execute()
-		){
-			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-			warn "Failed on the following query: $editedInDBQuery\n";
-			sleep( 5 );
-	    }# or die $DBI::errstr;
-	$elapse = tv_interval($sttime);
-	print "Elapsed 0.5 is " . $elapse . "\n";
-		my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
+
+		# my $query = $dbhandle->prepare($editedInDBQuery);
+		# until(
+		# 	$query->execute()
+		# ){
+		# 	warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		# 	warn "Failed on the following query: $editedInDBQuery\n";
+		# 	sleep( 5 );
+	 #    }# or die $DBI::errstr;
+	# $elapse = tv_interval($sttime);
+	# print "Elapsed 0.5 is " . $elapse . "\n";
+		# my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
 
 		# print $dbInsertDate . "\n";
 		# my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
-	$elapse = tv_interval($sttime);
-	print "Elapsed 1 is " . $elapse . "\n";
+	# $elapse = tv_interval($sttime);
+	# print "Elapsed 1 is " . $elapse . "\n";
 
 		# If we have the photo in the database, compare the insertion date with the file's modification date.
 		# If we have inserted the photo after the last file modification, there is no need to continue. 
@@ -225,14 +234,14 @@ sub image_Foobar{
 				if ($params::debug and $params::debug_readIn) { 
 					print "Already in\n"; 
 				}
-	$elapse = tv_interval($sttime);
-	print "Elapsed 2 is " . $elapse . "\n";
+	# $elapse = tv_interval($sttime);
+	# print "Elapsed 2 is " . $elapse . "\n";
 
 				return;
 			}
 		}
-	$elapse = tv_interval($sttime);
-	print "Elapsed is " . $elapse . "\n";
+	# $elapse = tv_interval($sttime);
+	# print "Elapsed is " . $elapse . "\n";
 
 # my $stat_epoch = stat( '/home/lewisbp/test.pl' )->ctime;
 # print strftime('%Y-%m-%d %H:%M:%S', localtime( $stat_epoch ) );

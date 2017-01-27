@@ -14,8 +14,8 @@ our $database = "photos_master.db";
 our $debug = 0;
 
 our $debug_readXMP = 0;
-our $debug_readIn = 0;
-our $debugNewRoot = 1;
+our $debug_readIn = 1;
+our $debugNewRoot = 0;
 # map {if (!$_) { ______ } } $params::debug;
 
 ## Table names
