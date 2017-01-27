@@ -5,6 +5,7 @@
 use strict;
 use warnings;
 use DBI;
+use File::Stat;
 
 use params;
 require 'read_xmp.pl';
@@ -33,6 +34,9 @@ sub readImages{
 	my $baseDirName;
 	my $localDir;
 	my @filelist;
+	my $numProcessed;
+
+	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 	if (! defined $args->{filelist}){
 		die("Error: File not passed\n");
@@ -60,21 +64,67 @@ sub readImages{
 		return;
 	}
 
-	my $fileName = $filelist[0];
+	our $dummy = 0;
+	if (! defined $args->{numProcessed}){
+		$numProcessed = \$dummy;
+	}else{
+		$numProcessed = $args->{numProcessed};
+	}
+
+	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
+	# 	print "Temp table hasn't been made. We will now create that.";
+	# 	# We really want this table to be here. 
+	# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
+	# 	my $query = $dbhandle->prepare($tmpTableQuery);
+	# 	until(
+	# 		$query->execute()
+	# 	){
+	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+	# 		warn "Failed on the following query: $tmpTableQuery\n";
+	# 		sleep(5);
+	# 	}# or die $DBI::errstr;
+
+	# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
+	# 	$query = $dbhandle->prepare($populateQuery);
+	# 	until(
+	# 		$query->execute()
+	# 	){
+	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+	# 		warn "Failed on the following query: $populateQuery\n";
+	# 		sleep(5);
+	# 	}# or die $DBI::errstr;
+
+	# }
 
 
-	# print "File name is : " . $baseDirName . $fileName . "\n";
-
-	# for (my $i = 0 ; $i < 3; $i++ ){
-		# print "a = " . $i . "\n";
 	foreach my $imageFile (@filelist){
+		${$numProcessed} += 1;
+		if (${$numProcessed} % 500 == 0){
+			print "We have read ${$numProcessed} files and processed them accordingly.\n";
+		}
 		image_Foobar({
 			baseDirName => $baseDirName, 
 			fileName => $localDir . $imageFile, 
 			rootDirNum => $rootDirNum,
-			nameHash => $args->{nameHash}
+			nameHash => $args->{nameHash},
+			dbhandle => $dbhandle
 		});
 	}
+
+	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
+
+	# 	# Get rid of the temp table. 
+	# 	my $deleteTmpQuery = qq/DELETE TABLE $params::tempTableName/;
+	# 	my $query = $dbhandle->prepare($deleteTmpQuery);
+	# 	until(
+	# 		$query->execute()
+	# 	){
+	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+	# 		warn "Failed on the following query: $deleteTmpQuery\n";
+	# 		sleep(5);
+	# 	}# or die $DBI::errstr;
+
+	# }
 
 };
 	# $root_dir = '';
@@ -86,21 +136,123 @@ sub readImages{
 
 sub image_Foobar{
 
+	use Time::HiRes qw( usleep gettimeofday tv_interval  );
+	use POSIX qw(strftime);
+
 	my ($args) = @_;
 
-	my $baseDirName = $args->{baseDirName};
-	my $fileName = $args->{fileName};
-	my $rootDirNum = $args->{rootDirNum};
-	my $nameHashRef = $args->{nameHash};
+	our $baseDirName;
+	our $fileName;
+	our $rootDirNum;
+	our $nameHashRef;
+	our $dbhandle;
+
+
+	if (defined $args->{nameHash}){
+		$nameHashRef = $args->{nameHash};
+	}
+
+	if (! defined $args->{baseDirNum}){
+		print "Root directory number not passed in\n";
+		return;
+	else{
+		$rootDirNum = $args->{baseDirNum};
+	}
+
+	if (! defined $args->{fileName} ){
+		print "Filename not passed\n";
+		return;
+	}else{
+		$fileName = $args->{fileName};
+	}
+
+	if (! defined $args->{dbhandle}){
+		$dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+	}else{
+		$dbhandle = $args->{dbhandle};
+	}
+
+	if (! defined  $args->{baseDirName}){
+		print "Base dir not passed\n";
+		return;
+	}else{
+		$baseDirName = $args->{baseDirName};
+	}
+
+
+
+	# Get the last modified date. 
+	if ( open (my $fh, "<", $baseDirName . $fileName) ){
+		# Get the modification date of the file, and format it in ISO 8601 (ish) standard 
+	my $sttime = [gettimeofday];
+	my $elapse = tv_interval($sttime);
+		my $e_ts = (stat($fh))[9];
+		my $fileLastEditDate = strftime('%Y-%m-%d %H:%M:%S', localtime( $e_ts ) ) ;
+
+	$elapse = tv_interval($sttime);
+	print "Elapsed -1 is " . $elapse . "\n";
+
+		# Query the database for the date on which the photo was last updated. 
+		my $editedInDBQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+	$elapse = tv_interval($sttime);
+	print "Elapsed 0 is " . $elapse . "\n";
+
+		my $query = $dbhandle->prepare($editedInDBQuery);
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $editedInDBQuery\n";
+			sleep( 5 );
+	    }# or die $DBI::errstr;
+	$elapse = tv_interval($sttime);
+	print "Elapsed 0.5 is " . $elapse . "\n";
+		my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
+
+		# print $dbInsertDate . "\n";
+		# my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
+	$elapse = tv_interval($sttime);
+	print "Elapsed 1 is " . $elapse . "\n";
+
+		# If we have the photo in the database, compare the insertion date with the file's modification date.
+		# If we have inserted the photo after the last file modification, there is no need to continue. 
+		if (defined $dbInsertDate ){
+			if ($params::debug and $params::debug_readIn) { 
+				print "DB Last edit date: " . $dbInsertDate . "\n";
+			}
+
+			if ($dbInsertDate gt $fileLastEditDate){
+				if ($params::debug and $params::debug_readIn) { 
+					print "Already in\n"; 
+				}
+	$elapse = tv_interval($sttime);
+	print "Elapsed 2 is " . $elapse . "\n";
+
+				return;
+			}
+		}
+	$elapse = tv_interval($sttime);
+	print "Elapsed is " . $elapse . "\n";
+
+# my $stat_epoch = stat( '/home/lewisbp/test.pl' )->ctime;
+# print strftime('%Y-%m-%d %H:%M:%S', localtime( $stat_epoch ) );
+	}
 
 	# print Dumper(%nameHash);
 	print "Currently processing image: " . $baseDirName . $fileName  . "\n";
+
+	my $sttime = [gettimeofday];
 
 	my %data = getImageData({
 		filename => $baseDirName . $fileName,
 		resX => 0,
 		resY => 0
 		});
+
+	if ($params::debug and $params::debug_readIn) { 
+		my $elapse = tv_interval($sttime);
+		print "Elapsed is " . $elapse . "\n";
+	}
 
 	if (!$data{'Status'} ){
 		print "Read XMP has failed - $!\n";
@@ -119,23 +271,6 @@ sub image_Foobar{
 		die("Your time zone is not correct. It must be correct for this function to work.\n");
 	}
 
-	# foreach my $k (keys %data){
-	# 	print $k . ", ";
-	# }
-	# print "\n";
-
-	# print "Year" . " : " . $data{'Year'} . "\n";
-	# print "Size" . " : " . $data{'ImageSize'} . "\n";
-	# print "Width" . " : " . $data{'Width'} . "\n";
-	# print "Height" . " : " . $data{'Height'} . "\n";
-	# print "Year" . " : " . $data{'Year'} . "\n";
-	# print "Month" . " : " . $data{'Month'} . "\n";
-	# print "Day" . " : " . $data{'Day'} . "\n";
-	# print "Hour" . " : " . $data{'Hour'} . "\n";
-	# print "Min" . " : " . $data{'Minute'} . "\n";
-	# print "Sec" . " : " . $data{'Second'} . "\n";
-	# print "Status" . " : " . $data{'Status'} . "\n";
-	# print "Modify date" . " : " . $data{'ModifyDate'} . "\n";
 	if ($params::debug and $params::debug_readIn) { 
 		print "Names: " . join(";", @{$data{'NameList'}}) . "\n"; 
 		print $data{'TakenDate'} . "\n";
@@ -151,8 +286,6 @@ sub image_Foobar{
 	# print "Date is " . $taken_date . "\n";
 
 	our %peopleToKeyHash;
-
-	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 	my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
 
@@ -193,13 +326,15 @@ sub image_Foobar{
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 		if ($lastModDate gt $data{'ModifyDate'}) {
 			if ($params::debug and $params::debug_readIn){
-				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n\n";
+				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n";
 				print "We have inserted this in the table at a later date than the photo was modified.\n";
 			}
 			$upToDate = 1;
 		}else{
-			print $lastModDate . "   " . $data{'ModifyDate'}  . "\n\n";
-			print "The photo has been modified since we inserted it in the table.\n";
+			if ($params::debug and $params::debug_readIn){
+				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n";
+				print "The photo has been modified since we inserted it in the table.\n";
+			}
 
 			# Remove the old data from the table. 
 			my $photoKeyQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/ ;
@@ -378,3 +513,23 @@ sub image_Foobar{
 };
 
 1;
+
+
+
+	# foreach my $k (keys %data){
+	# 	print $k . ", ";
+	# }
+	# print "\n";
+
+	# print "Year" . " : " . $data{'Year'} . "\n";
+	# print "Size" . " : " . $data{'ImageSize'} . "\n";
+	# print "Width" . " : " . $data{'Width'} . "\n";
+	# print "Height" . " : " . $data{'Height'} . "\n";
+	# print "Year" . " : " . $data{'Year'} . "\n";
+	# print "Month" . " : " . $data{'Month'} . "\n";
+	# print "Day" . " : " . $data{'Day'} . "\n";
+	# print "Hour" . " : " . $data{'Hour'} . "\n";
+	# print "Min" . " : " . $data{'Minute'} . "\n";
+	# print "Sec" . " : " . $data{'Second'} . "\n";
+	# print "Status" . " : " . $data{'Status'} . "\n";
+	# print "Modify date" . " : " . $data{'ModifyDate'} . "\n";

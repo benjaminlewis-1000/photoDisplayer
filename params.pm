@@ -6,11 +6,10 @@ package params;
 
 use strict;
 use warnings;
-use Data::Dumper::Simple;
 
 our $bar = "This is the package's bar value!";
 
-our $database = "test.db";
+our $database = "photos_master.db";
 
 our $debug = 0;
 
@@ -25,6 +24,7 @@ our $debugNewRoot = 1;
 	our $linkerTableName = "Linker";
 	our $rootTableName = "Root_Dirs";
 	our $metadataTableName = "Metadata";
+	our $tempTableName = "TmpPhotoTable";
 
 # Table column names 
 	## Photo table
@@ -61,9 +61,11 @@ our $debugNewRoot = 1;
 	### Metadata fields
 		our $metadataLastEditedField = "last_edited_date";
 
-sub getVarName{
-	my $variable = $_[0];
-	return (split /=/, Dumper($variable))[0];
-}
+# DOESN'T WORK.
+# use Data::Dumper::Simple;
+# sub getVarName{
+# 	my $variable = $_[0];
+# 	return (split /=/, Dumper($variable))[0];
+# }
 
 1;

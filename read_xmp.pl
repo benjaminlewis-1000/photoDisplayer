@@ -8,6 +8,9 @@ use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
 
+use warnings;
+use strict; 
+
 
 # getImageData({
 # 	filename => "/home/lewis/gitRepos/photoDisplayer/base/canon pictures 018.JPG",
@@ -16,7 +19,7 @@ use params;
 
 sub getImageData{
 	my ($args) = @_;
-	my %returnData;
+	our %returnData;
 	$returnData{'Status'} = 0;
 
 	if (! defined $args->{filename}){
@@ -97,13 +100,15 @@ sub getImageData{
 	my $takenDate = $infoHash{'FileCreateDate'};
 	my $modifyDate = $infoHash{'FileModifyDate'};
 
-	{ # Parse the date. 
-		my $time = str2time($takenDate);
-		($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
-		$year += 1900;
-		$month += 1;
-		# print $year . "\n";
-	}
+	our ($ss, $mm, $hh, $day, $month, $year, $zone);
+
+	# Parse the date. 
+	my $time = str2time($takenDate);
+	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
+	$year += 1900;
+	$month += 1;
+	# print $year . "\n";
+	
 
 	my $fileSize = $infoHash{'FileSize'};
 	my $imWidth = $infoHash{'ImageWidth'};
@@ -112,7 +117,7 @@ sub getImageData{
 	if ($imWidth < $minResX || $imHeight < $minResY){
 		print "Insufficient Resolution!\n";
 		# exit;
-		return $returnData;
+		return %returnData;
 	}
 
 	$elapsed = tv_interval ( $t0 );
@@ -123,12 +128,13 @@ sub getImageData{
 	# }
 
 	$elapsed = tv_interval ( $t0 );
-	# print $elapsed . "\n";
 
-	#print $namelist . "\n";
-	my @names = split(',', $namelist);
-	my @widths = split(',', $regionWidth);
-	my @heights = split(',', $regionHeight);
+	my (@names, @widths, @heights);
+	if (defined $namelist){
+		@names = split(',', $namelist);
+		@widths = split(',', $regionWidth);
+		@heights = split(',', $regionHeight);
+	}
 
 	my %seenFaces; # Hash for de-duplication.
 	my @namesWithLargeAreas; 
@@ -146,10 +152,13 @@ sub getImageData{
 
 		if ($params::debug and $params::debug_readXMP) {print $name . "  " . $area . "\n"; }
 
+		my %seen;
+
 		if (exists $seenFaces{$name}){
 			# If the name is already in a hash, do this:
 			# 1) Evaluate if we've already found a region with this face that's larger
 			# than $minSize. If so, we're done. 
+
 			if ($params::debug and $params::debug_readXMP) {print "Seen in the hash" . "\n"; }
 			my $storedArea = $seen{$name};
 			if ($storedArea > $minSize){

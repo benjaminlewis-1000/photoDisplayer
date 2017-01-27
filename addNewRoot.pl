@@ -8,6 +8,10 @@ use Tk;
 use File::Find;
 use File::HomeDir;
 use Data::Dumper;
+
+use warnings;
+use strict; 
+
 require 'read_xmp.pl';
 require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
@@ -15,7 +19,6 @@ require 'filesFromBaseFinder.pl';
 my $homedir = File::HomeDir->my_pictures;
 print $homedir . "\n";
 
-our $answerBool = true;
 my $mw = MainWindow->new;
 $mw->withdraw;  # Hide the main window.
 
@@ -23,6 +26,20 @@ our @rootDirList;
 
 # my $root_dir = 'D:\Pictures\2016';
 # my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
+
+our $answerBool = 0;
+
+if (!$answerBool){
+	my $root_dir2 = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base';
+	$root_dir2 =~ s/\\$//g;
+	$root_dir2 =~ s/\/$//g;
+
+	# Add a backslash to the end and replace back/forward slashes as necessary. 
+	$root_dir2 = $root_dir2 . '/';
+	$root_dir2 =~ s/\\/\//g;
+	print $root_dir2 . "\n";
+	push(@rootDirList, $root_dir2);
+}
 
 while ($answerBool) {
 	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>"/");
@@ -150,7 +167,7 @@ foreach my $root_dir (@rootDirList){
 
  # $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	my $rootDirKeyValQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$root_dir"/;
-	my $query = $dbhandle->prepare($rootDirKeyValQuery);
+	$query = $dbhandle->prepare($rootDirKeyValQuery);
 	until(
 		$query->execute()
 	){
@@ -158,11 +175,12 @@ foreach my $root_dir (@rootDirList){
 		warn "Failed on the following query: $rootDirKeyValQuery\n";
 		sleep(5);
 	}	
-	my $directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
+	$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
+	our $numPassed = 0;
 	#####
 		open OUTPUT,  ">unhandled_files.txt" or die $!;
-		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir);
+		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed);
 		close OUTPUT;
 	#####
 

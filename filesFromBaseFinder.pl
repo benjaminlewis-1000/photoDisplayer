@@ -1,7 +1,11 @@
 #! /usr/bin/perl
 
 use params;
+use File::Find;
 require 'readInImages.pl';
+
+use warnings;
+use strict; 
 
 #############  REUSABLE METHODS  ##################################
 
@@ -42,6 +46,8 @@ sub getUniqueSubdirs{
 	# Copy the subdirectories into remainingSubdirs, which we can then remove from with impunity in a for loop. 
 	my @remainingSubdirs = @subdirectories;
 
+	my $directoryKeyVal;
+
 	for (my $i = 0; $i < scalar @subdirectories; $i++){
 		# Query the database to see if it has this specific subdirectory already. If so, get it's key value and put it in $directoryKeyVal.
 		# Remember that we've taken out this specific root directory, so we are in no danger of removing legitimate subdirectories. 
@@ -55,10 +61,10 @@ sub getUniqueSubdirs{
 			warn "Failed on the following query: $dirExistsQuery\n";
 			sleep(5);
 		}# or die $DBI::errstr;
-		my $directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
+		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
 		# Now, if the subdirectory is already accounted for, get its key number and base directory and add it to the appropriate hashes. Then remove it and all its subdirectories from the @remainingSubdirs list. 
-		if ($directoryKeyVal ne ""){
+		if (defined $directoryKeyVal and $directoryKeyVal ne "" ){
 
 			# The directory exists, and we need to do something about it.
 			# Remove this directory and its subdirectories from the list of remaining subdirectories. 
@@ -92,7 +98,15 @@ sub addFilesInListOfSubdirs{
 	my @subdirectories = @{$_[0]}; 
 	my $dirKeyVal = $_[1];
 	my $rootDirectory = $_[2];
+	my $numPassed = $_[3];
 
+	print ${$numPassed} . "\n";
+
+	# Create a tmp table with only necessary columns. Shows ~25% speedup. 
+	# createTmpTable();
+
+	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+	
 	foreach my $localDir (@subdirectories){
 		my @filesInDir;
 		my $odir = $rootDirectory . $localDir;
@@ -102,11 +116,11 @@ sub addFilesInListOfSubdirs{
 		opendir my $dir, "$odir" or next; #print "$odir isn't a valid directory. \n";
 		# 	next;
 		# } #die "Can't open directory " . $odir . ": $!";
-		my @filesInDir = readdir $dir;
+		@filesInDir = readdir $dir;
 		closedir $dir; 
 
 		if ($params::debug and $params::debugNewRoot) { print $localDir . "\t: "; } # grep(!/$subdirectories[$i]/, @subdirectories);
-		my @filesInDir =  grep(/\.JPE?G/i, @filesInDir);
+		@filesInDir =  grep(/\.JPE?G/i, @filesInDir);
 		if ($params::debug and $params::debugNewRoot) { print join(',  ', @filesInDir) . "\n\n"; }
 
 		if ($localDir ne "" ){
@@ -115,16 +129,136 @@ sub addFilesInListOfSubdirs{
 
 		my %nameHash;
 
-		readImages({
-			filelist => \@filesInDir,
-			baseDirNum => $dirKeyVal,
-			localDir => $localDir,
-			rootDirName => $rootDirectory,
-			nameHash => \%nameHash
-		});	
+		foreach my $imageFile (@filesInDir){
+			${$numPassed} += 1;
+			if (${$numPassed} % 500 == 0){
+				print "We have read ${$numPassed} files and processed them accordingly.\n";
+			}
+			image_Foobar({
+				baseDirName => $rootDirectory, 
+				fileName => $localDir . $imageFile, 
+				rootDirNum => $dirKeyVal,
+				nameHash => \%nameHash,
+				dbhandle => $tmpDBhandle
+			});
+		}
+		# readImages({
+		# 	filelist => \@filesInDir,
+		# 	baseDirNum => $dirKeyVal,
+		# 	localDir => $localDir,
+		# 	rootDirName => $rootDirectory,
+		# 	nameHash => \%nameHash,
+		# 	numProcessed => $numPassed,
+		# 	tmpTableMade => 1
+		# });	
 
 	}
 
+	# Get rid of the temp table. 
+	# destroyTmpTable();
+
+
+}
+
+# sub checkIfFilesExist{
+# #### Find a list of the files that are in each subdirectory. Call the readImages method on each of the files. 
+
+# 	my @subdirectories = @{$_[0]}; 
+# 	my $dirKeyVal = $_[1];
+# 	my $rootDirectory = $_[2];
+
+# 	foreach my $localDir (@subdirectories){
+# 		my @filesInDir;
+# 		my $odir = $rootDirectory . $localDir;
+# 		if ( !($odir =~ m/\/$/ ) ) {
+# 			print OUTPUT "$odir isn't a valid directory. \n";
+# 		}
+# 		opendir my $dir, "$odir" or next; #print "$odir isn't a valid directory. \n";
+# 		# 	next;
+# 		# } #die "Can't open directory " . $odir . ": $!";
+# 		@filesInDir = readdir $dir;
+# 		closedir $dir; 
+
+# 		if ($params::debug and $params::debugNewRoot) { print $localDir . "\t: "; } # grep(!/$subdirectories[$i]/, @subdirectories);
+# 		@filesInDir =  grep(/\.JPE?G/i, @filesInDir);
+# 		if ($params::debug and $params::debugNewRoot) { print join(',  ', @filesInDir) . "\n\n"; }
+
+# 		if ($localDir ne "" ){
+# 			$localDir .= "/";
+# 		}
+
+# 		foreach my $imageFile (@filesInDir){
+# 			print $rootDirectory . $localDir . $imageFile . "\n";
+# 			# image_Foobar({
+# 			# 	baseDirName => $baseDirName, 
+# 			# 	fileName => $localDir . $imageFile, 
+# 			# 	rootDirNum => $rootDirNum,
+# 			# 	nameHash => $args->{nameHash},
+# 			# 	dbhandle => $dbhandle
+# 			# });
+# 		}
+# 		# readImages({
+# 		# 	filelist => \@filesInDir,
+# 		# 	baseDirNum => $dirKeyVal,
+# 		# 	localDir => $localDir,
+# 		# 	rootDirName => $rootDirectory,
+# 		# 	nameHash => \%nameHash
+# 		# });	
+
+# 	}
+
+# }
+
+sub createTmpTable{
+	
+	# Make a smaller, temporary table for reading when the files were last inserted in the database.
+	# This table *should* be faster to read from. 
+
+	## VERIFIED: Doing this shaves access time from 0.04 seconds to 0.03 seconds - a 25% speedup. It's worth it
+	## for large (tens of thousands) datasets. 
+	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
+	my $query = $tmpDBhandle->prepare($tmpTableQuery);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $tmpTableQuery\n";
+		sleep(5);
+	}# or die $DBI::errstr;
+
+	my $clearTable = qq/DELETE FROM $params::tempTableName/;
+	$query = $tmpDBhandle->prepare($clearTable);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $clearTable\n";
+		sleep(5);
+	}# or die $DBI::errstr;
+
+	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
+	$query = $tmpDBhandle->prepare($populateQuery);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $populateQuery\n";
+		sleep(5);
+	}# or die $DBI::errstr;
+
+	$tmpDBhandle->disconnect;
+}
+
+sub destroyTmpTable{
+	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+	my $dropPeople = qq/DROP TABLE IF EXISTS $params::tempTableName/;
+	my $query = $tmpDBhandle->prepare($dropPeople);
+	$query->execute() or die $DBI::errstr;
+
+	$tmpDBhandle->disconnect;
 }
 
 1;
