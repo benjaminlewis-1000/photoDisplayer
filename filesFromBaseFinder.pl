@@ -165,7 +165,7 @@ sub addFilesInListOfSubdirs{
 				insertedDateHash => \%insertedDateHash
 			});
 	my $elapse = tv_interval($sttime);
-	# print $elapse . "\n";
+	# print "Total elapse: " . $elapse . "\n\n";
 		}
 		# readImages({
 		# 	filelist => \@filesInDir,

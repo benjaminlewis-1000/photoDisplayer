@@ -78,6 +78,7 @@ sub readOneImage{
 
 	if (! defined $args->{dbhandle}){
 		$dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+		print "DB connecting..." . "\n";
 	}else{
 		$dbhandle = $args->{dbhandle};
 	}
@@ -98,12 +99,21 @@ sub readOneImage{
 
 
 	# Get the last modified date. Opens the file. 
-	if ( open (my $fh, "<", $baseDirName . $fileName) ){
+	if ( -e $baseDirName . $fileName ){
 		# Get the modification date of the file, and format it in ISO 8601 (ish) standard 
+
 		my $sttime = [gettimeofday];
 
-		my $e_ts = (stat($fh))[9];
-		my $fileLastEditDate = strftime('%Y-%m-%d %H:%M:%S', localtime( $e_ts ) ) ;
+		my $file = $baseDirName . $fileName;
+		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", localtime(  ( stat $file )[9] ) );
+
+		### For comparison
+		# open (my $fh, "<", $baseDirName . $fileName) ;
+		# my $e_ts = (stat($fh))[9];
+		# my $ed2 = strftime('%Y-%m-%d %H:%M:%S', localtime( $e_ts ) ) ;
+
+		# print $ed2 . " | " . $fileLastEditDate . "\n";
+		# # print $fileLastEditDate . "\n";
 
 		# Using the hash that was passed by reference, find the date of the last time it was inserted into the 
 		# database. Use this for comparison with the file's modification date, and see if it's been modifiec
@@ -124,6 +134,8 @@ sub readOneImage{
 				if ($params::debug and $params::debug_readIn) { 
 					print "Already in\n"; 
 				}
+				# my $elapsed = tv_interval($sttime);
+				# print "Elapsed: " . $elapsed . "\n";
 
 				return;
 			}
