@@ -10,132 +10,45 @@ use File::Stat;
 use params;
 require 'read_xmp.pl';
 
-my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
-	# Parameters for image size and face size. 
-my $baseDirNum = 1;
-# my @filesInDir = ('canon pictures 018.JPG');
-my @filesInDir = ('dirA\2013-11-05 19.43.48.jpg', 'canon pictures 012.JPG', 'canon pictures 018.JPG', 'dir with spaces and jpg/1235_58205421712_2635_n.jpg');
-my $localDir = '';
-my %nameHash;
-
-# readImages({
-# 	filelist => \@filesInDir,
-# 	baseDirNum => $baseDirNum,
-# 	localDir => $localDir,
-# 	rootDirName => $root_dir,
-# 	nameHash => \%nameHash
-# });	
-
-# print Dumper(%nameHash);
-
-# sub readImages{
-
-# 	my ($args) = @_;
-# 	my $rootDirNum;
-# 	my $baseDirName;
-# 	my $localDir;
-# 	my @filelist;
-# 	my $numProcessed;
-
-# 	our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-
-# 	if (! defined $args->{filelist}){
-# 		die("Error: File not passed\n");
-# 	}else{
-# 		@filelist = @{$args->{filelist}};
-# 	}
-
-# 	if (! defined $args->{nameHash}){
-# 		die("Error: Hash of names not passed\n");
-# 	}
-
-# 	if (defined $args->{baseDirNum}){
-# 		$rootDirNum = $args->{baseDirNum};
-# 	}
-
-# 	if (defined $args->{localDir}){
-# 		$localDir = $args->{localDir};
-# 	}
-
-# 	if (defined $args->{rootDirName}){
-# 		$baseDirName = $args->{rootDirName};
-# 	}
-
-# 	if (scalar (@filelist) == 0){
-# 		return;
-# 	}
-
-# 	our $dummy = 0;
-# 	if (! defined $args->{numProcessed}){
-# 		$numProcessed = \$dummy;
-# 	}else{
-# 		$numProcessed = $args->{numProcessed};
-# 	}
-
-# 	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
-# 	# 	print "Temp table hasn't been made. We will now create that.";
-# 	# 	# We really want this table to be here. 
-# 	# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
-# 	# 	my $query = $dbhandle->prepare($tmpTableQuery);
-# 	# 	until(
-# 	# 		$query->execute()
-# 	# 	){
-# 	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-# 	# 		warn "Failed on the following query: $tmpTableQuery\n";
-# 	# 		sleep(5);
-# 	# 	}# or die $DBI::errstr;
-
-# 	# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
-# 	# 	$query = $dbhandle->prepare($populateQuery);
-# 	# 	until(
-# 	# 		$query->execute()
-# 	# 	){
-# 	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-# 	# 		warn "Failed on the following query: $populateQuery\n";
-# 	# 		sleep(5);
-# 	# 	}# or die $DBI::errstr;
-
-# 	# }
+	# our $tmpDBhandle = DBI->connect("DBI:SQLite:test.db", "user" , "pass");
+	
+	# our %insertedDateHash;
+	# our %nameHash;
+	# my $rootDirectory = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
+	# my $localDir = '';
+	# my $imageFile = 'canon pictures 012.JPG';
+	# my $dirKeyVal = 1;
 
 
-# 	foreach my $imageFile (@filelist){
-# 		${$numProcessed} += 1;
-# 		if (${$numProcessed} % 500 == 0){
-# 			print "We have read ${$numProcessed} files and processed them accordingly.\n";
-# 		}
-# 		image_Foobar({
-# 			baseDirName => $baseDirName, 
-# 			fileName => $localDir . $imageFile, 
-# 			rootDirNum => $rootDirNum,
-# 			nameHash => $args->{nameHash},
-# 			dbhandle => $dbhandle
-# 		});
-# 	}
+	# # Only selecting the keyVal that's relevant in this sub so as to avoid conflicts. 
+	# my $tableHashQuery = qq/SELECT $params::photoFileColumn, $params::insertDateColumn FROM $params::photoTableName WHERE $params::rootDirNumColumn = $dirKeyVal/;
+	# my $query = $tmpDBhandle->prepare($tableHashQuery);
+	# until(
+	# 	$query->execute()
+	# ){
+	# 	warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+	# 	warn "Failed on the following query: $tableHashQuery\n";
+	# 	sleep(5);
+	# }
 
-# 	# if (! defined $args->{tmpTableMade} or $args->{tmpTableMade} == 0){
+	# my ($fileName, $insertDate);
+	# $query->bind_col(1, \$fileName);
+	# $query->bind_col(2, \$insertDate);
 
-# 	# 	# Get rid of the temp table. 
-# 	# 	my $deleteTmpQuery = qq/DELETE TABLE $params::tempTableName/;
-# 	# 	my $query = $dbhandle->prepare($deleteTmpQuery);
-# 	# 	until(
-# 	# 		$query->execute()
-# 	# 	){
-# 	# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-# 	# 		warn "Failed on the following query: $deleteTmpQuery\n";
-# 	# 		sleep(5);
-# 	# 	}# or die $DBI::errstr;
+	# while($query->fetch){
+	# 	$insertedDateHash{$fileName} = $insertDate;
+	# }
 
-# 	# }
+	# readOneImage({
+	# 	baseDirName => $rootDirectory, 
+	# 	fileName => $localDir . $imageFile, 
+	# 	baseDirNum => $dirKeyVal,
+	# 	nameHash => \%nameHash,
+	# 	dbhandle => $tmpDBhandle,
+	# 	insertedDateHash => \%insertedDateHash
+	# });
 
-# };
-	# $root_dir = '';
-
-	# Instead of looking up the root directory every time, we should put it in a table. (Have the right length first, then read it in. )
-
-	# my @ls = glob("'.pl || .txt' *");
-	# print join(', ', @ls) . "\n";
-
-sub image_Foobar{
+sub readOneImage{
 
 	use Time::HiRes qw( usleep gettimeofday tv_interval  );
 	use POSIX qw(strftime);
@@ -184,44 +97,21 @@ sub image_Foobar{
 	}
 
 
-
-	# Get the last modified date. 
+	# Get the last modified date. Opens the file. 
 	if ( open (my $fh, "<", $baseDirName . $fileName) ){
 		# Get the modification date of the file, and format it in ISO 8601 (ish) standard 
-	my $sttime = [gettimeofday];
-	my $elapse = tv_interval($sttime);
+		my $sttime = [gettimeofday];
+
 		my $e_ts = (stat($fh))[9];
 		my $fileLastEditDate = strftime('%Y-%m-%d %H:%M:%S', localtime( $e_ts ) ) ;
 
-	# $elapse = tv_interval($sttime);
-	# print "Elapsed -1 is " . $elapse . "\n";
-
-		# Query the database for the date on which the photo was last updated. 
-		# my $editedInDBQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
-	# $elapse = tv_interval($sttime);
-	# print "Elapsed 0 is " . $elapse . "\n";
+		# Using the hash that was passed by reference, find the date of the last time it was inserted into the 
+		# database. Use this for comparison with the file's modification date, and see if it's been modifiec
+		# since then.
 		my $dbInsertDate;
 		if (defined $insertedDateHashRef->{$fileName} ){
 			$dbInsertDate = $insertedDateHashRef->{$fileName};
 		}
-
-
-		# my $query = $dbhandle->prepare($editedInDBQuery);
-		# until(
-		# 	$query->execute()
-		# ){
-		# 	warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-		# 	warn "Failed on the following query: $editedInDBQuery\n";
-		# 	sleep( 5 );
-	 #    }# or die $DBI::errstr;
-	# $elapse = tv_interval($sttime);
-	# print "Elapsed 0.5 is " . $elapse . "\n";
-		# my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
-
-		# print $dbInsertDate . "\n";
-		# my $dbInsertDate = eval { $query->fetchrow_arrayref->[0] };
-	# $elapse = tv_interval($sttime);
-	# print "Elapsed 1 is " . $elapse . "\n";
 
 		# If we have the photo in the database, compare the insertion date with the file's modification date.
 		# If we have inserted the photo after the last file modification, there is no need to continue. 
@@ -234,17 +124,13 @@ sub image_Foobar{
 				if ($params::debug and $params::debug_readIn) { 
 					print "Already in\n"; 
 				}
-	# $elapse = tv_interval($sttime);
-	# print "Elapsed 2 is " . $elapse . "\n";
 
 				return;
 			}
 		}
-	# $elapse = tv_interval($sttime);
-	# print "Elapsed is " . $elapse . "\n";
-
-# my $stat_epoch = stat( '/home/lewisbp/test.pl' )->ctime;
-# print strftime('%Y-%m-%d %H:%M:%S', localtime( $stat_epoch ) );
+	}else{
+		# Shouldn't ever get here because I just barely read the file to pass in here, but I'm covering my bases. 
+		return;
 	}
 
 	# print Dumper(%nameHash);

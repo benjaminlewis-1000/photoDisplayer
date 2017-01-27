@@ -156,7 +156,7 @@ sub addFilesInListOfSubdirs{
 			}
 
 	my $sttime = [gettimeofday];
-			image_Foobar({
+			readOneImage({
 				baseDirName => $rootDirectory, 
 				fileName => $localDir . $imageFile, 
 				baseDirNum => $dirKeyVal,
