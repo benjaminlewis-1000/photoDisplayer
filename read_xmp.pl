@@ -3,21 +3,27 @@
 # Read the XMP data from a file.
 
 use Image::Magick;
-use Image::ExifTool;
+use Image::ExifTool qw(ImageInfo);
 use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
 
+use Image::EXIF;
+
 use warnings;
 use strict; 
 
-
-# getImageData({
-# 	filename => "/home/lewis/gitRepos/photoDisplayer/base/canon pictures 018.JPG",
-# 	debug => 0
-# 	});
+getImageData({
+# 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
+	filename => "D:\\Pictures\\2016\\Wedding Time\\Wedding\\B+J-1wedding.jpg",
+	debug => 0
+	});
 
 sub getImageData{
+	my $d = 0;
+
+	my $sttime = [gettimeofday];
+
 	my ($args) = @_;
 	our %returnData;
 	$returnData{'Status'} = 0;
@@ -59,21 +65,21 @@ sub getImageData{
 	my $minResX = $args->{resX};
 	my $minResY = $args->{resY};
 
+
+
+
 	# print "Min size is $minSize \n";
 
-	my $t0 = [gettimeofday];
-
-	#my $file = 'D:\Pictures\Picasa\Collages\New folder.jpg';
-	# $file = 'D:\Pictures\Family Pictures\2011\2011 (10) October\DSC_0138.JPG';
-
-	my $im = Image::Magick->new();
-	$im->read($args->{filename}) ;#or die "Cannot open '$args->{filename}': $!\n";
-
-	my $elapsed = tv_interval ( $t0 );
-	# print $elapsed . "\n";
+	# $elapsed = tv_interval($sttime);
+	# print "Elapsed adgh" . $d++ . ": " . $elapsed . "\n";
 
 	my $exif = Image::ExifTool->new();
-	my $info = $exif->ImageInfo($file);
+	# $elapsed = tv_interval($sttime);
+	# print "Elapsed asd " . $d++ . ": " . $elapsed . "\n";
+
+	my $info = ImageInfo($file);
+	# $elapsed = tv_interval($sttime);
+	# print "Elapsed adhjfsef " . $d++ . ": " . $elapsed . "\n";
 	my %infoHash = %$info;
 
 	# print ref( $exif->ImageInfo($file) ) . "\n\n";
@@ -82,7 +88,6 @@ sub getImageData{
 	delete $infoHash{"ThumbnailImage"};
 	# print Dumper %infoHash;
 
-	$elapsed = tv_interval ( $t0 );
 	# print $elapsed . "\n";
 
 	# foreach my $k (keys %infoHash){
@@ -102,6 +107,9 @@ sub getImageData{
 
 	our ($ss, $mm, $hh, $day, $month, $year, $zone);
 
+	# my $elapsed = tv_interval($sttime);
+	# print "Elapsed " . $d++ . ": " . $elapsed . "\n";
+
 	# Parse the date. 
 	my $time = str2time($takenDate);
 	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
@@ -114,20 +122,21 @@ sub getImageData{
 	my $imWidth = $infoHash{'ImageWidth'};
 	my $imHeight = $infoHash{'ImageHeight'};
 
+	# $elapsed = tv_interval($sttime);
+	# print "Elapsed " . $d++ . ": " . $elapsed . "\n";
+
 	if ($imWidth < $minResX || $imHeight < $minResY){
 		print "Insufficient Resolution!\n";
 		# exit;
 		return %returnData;
 	}
 
-	$elapsed = tv_interval ( $t0 );
 	# print $elapsed . "\n";
 
 	# foreach my $k (keys %infoHash){
 	# 	print "$k\n";#; $infoHash{$k}\n";
 	# }
 
-	$elapsed = tv_interval ( $t0 );
 
 	my (@names, @widths, @heights);
 	if (defined $namelist){
@@ -198,6 +207,8 @@ sub getImageData{
 
 	$returnData{'NameList'} = \@namesWithLargeAreas;
 
+	print Dumper(@namesWithLargeAreas) . "\n";
+
 	if ($params::debug and $params::debug_readXMP) {print join (",", @namesWithLargeAreas); }
 
 	$returnData{'ImageSize'} = $fileSize;
@@ -222,6 +233,10 @@ sub getImageData{
 	$returnData{'Second'} = $ss;
 	$returnData{'TimeZone'} = $zone / 3600;
 	$returnData{'Status'} = 1;
+
+
+	# $elapsed = tv_interval($sttime);
+	# print "Elapsed: " . $elapsed . "\n";
 
 	return %returnData;
 

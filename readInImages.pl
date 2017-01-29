@@ -107,7 +107,7 @@ sub readOneImage{
 		my $file = $baseDirName . $fileName;
 		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", localtime(  ( stat $file )[9] ) );
 
-		### For comparison
+		### For comparison - this was the old method. 
 		# open (my $fh, "<", $baseDirName . $fileName) ;
 		# my $e_ts = (stat($fh))[9];
 		# my $ed2 = strftime('%Y-%m-%d %H:%M:%S', localtime( $e_ts ) ) ;
