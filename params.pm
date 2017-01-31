@@ -80,11 +80,24 @@ our $debugNewRoot = 0;
 	### Metadata fields
 		our $metadataLastEditedField = "last_edited_date";
 
-# DOESN'T WORK.
-# use Data::Dumper::Simple;
-# sub getVarName{
-# 	my $variable = $_[0];
-# 	return (split /=/, Dumper($variable))[0];
-# }
+sub getLocalModTime{
+
+	if (moduleIsLoaded('File::stat')){
+		print "File::stat is loaded, which severely compromises the system. Die-ing!\n";
+		return -1;
+	}
+
+	my $file = $_[0];
+	return  localtime(  ( stat $file )[9] );
+}
+
+
+sub moduleIsLoaded {
+    my ($pkg) = @_;
+    (my $file = $pkg) =~ s/::/\//g;
+    $file .= '.pm';
+    my @loaded = grep { $_ eq $file } keys %INC;
+    return @loaded;
+}
 
 1;
