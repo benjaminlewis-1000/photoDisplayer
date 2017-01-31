@@ -175,18 +175,18 @@ sub checkOSFolder{
 
 	my ($args) = @_;
 
-	our $winRootDir = $args->{winRootDir};
-	our $linRootDir = $args->{linRootDir};
-	our $dbhandle = $args->{dbhandle};
-	our $root_dir;
+	my $winRootDir = $args->{winRootDir};
+	my $linRootDir = $args->{linRootDir};
+	my $dbhandle = $args->{dbhandle};
+	my $root_dir;
 
 	if ($params::OS_type == $params::windowsType){
 
-		if ($winRootDir eq ""){
+		if ($winRootDir eq "" or !-e $winRootDir){
 			my $mw = MainWindow->new;
 			$mw->withdraw;  # Hide the main window.
 			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Windows) is unpopulated. Please select the correct directory. The corresponding Linux directory is $linRootDir.", -type=>'OK');
-			while (!defined $winRootDir or $winRootDir eq ""){
+			while (!defined $winRootDir or $winRootDir eq "" or !-e $winRootDir){
 				$winRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $linRootDir.", -initialdir=>"/");
 			}
 
@@ -210,11 +210,11 @@ sub checkOSFolder{
 		}
 		$root_dir = $winRootDir ;
 	}else{
-		if ($linRootDir eq ""){
+		if ($linRootDir eq "" or !-e $linRootDir){
 			my $mw = MainWindow->new;
 			$mw->withdraw;  # Hide the main window.
 			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Linux) is unpopulated. Please select the correct directory. The corresponding Linux directory is $winRootDir.", -type=>'OK');
-			while (!defined $linRootDir or $linRootDir eq ""){
+			while (!defined $linRootDir or $linRootDir eq "" or !-e $linRootDir){
 				$linRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $winRootDir.", -initialdir=>"/");
 			}
 
