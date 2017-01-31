@@ -9,7 +9,6 @@ use strict;
 
 #############  REUSABLE METHODS  ##################################
 
-
 sub getUniqueSubdirs{
 ##############
 # Next step: Get a list of all files in the directory and its subdirectories. This will exclude directories that are under other root directories. We will populate two hashes: a %dirNameNumHash, which will give us the root directory's key number for each directory, and a %dirNameRelativeToHash, which gives us the subdirectory relative to the root directory.
@@ -167,123 +166,130 @@ sub addFilesInListOfSubdirs{
 	my $elapse = tv_interval($sttime);
 	# print "Total elapse: " . $elapse . "\n\n";
 		}
-		# readImages({
-		# 	filelist => \@filesInDir,
-		# 	baseDirNum => $dirKeyVal,
-		# 	localDir => $localDir,
-		# 	rootDirName => $rootDirectory,
-		# 	nameHash => \%nameHash,
-		# 	numProcessed => $numPassed,
-		# 	tmpTableMade => 1
-		# });	
 
 	}
 
-	# Get rid of the temp table. 
-	# destroyTmpTable();
-
-
 }
 
-# sub checkIfFilesExist{
-# #### Find a list of the files that are in each subdirectory. Call the readImages method on each of the files. 
+sub checkOSFolder{
 
-# 	my @subdirectories = @{$_[0]}; 
-# 	my $dirKeyVal = $_[1];
-# 	my $rootDirectory = $_[2];
+	my ($args) = @_;
 
-# 	foreach my $localDir (@subdirectories){
-# 		my @filesInDir;
-# 		my $odir = $rootDirectory . $localDir;
-# 		if ( !($odir =~ m/\/$/ ) ) {
-# 			print OUTPUT "$odir isn't a valid directory. \n";
-# 		}
-# 		opendir my $dir, "$odir" or next; #print "$odir isn't a valid directory. \n";
-# 		# 	next;
-# 		# } #die "Can't open directory " . $odir . ": $!";
-# 		@filesInDir = readdir $dir;
-# 		closedir $dir; 
+	our $winRootDir = $args->{winRootDir};
+	our $linRootDir = $args->{linRootDir};
+	our $dbhandle = $args->{dbhandle};
+	our $root_dir;
 
-# 		if ($params::debug and $params::debugNewRoot) { print $localDir . "\t: "; } # grep(!/$subdirectories[$i]/, @subdirectories);
-# 		@filesInDir =  grep(/\.JPE?G/i, @filesInDir);
-# 		if ($params::debug and $params::debugNewRoot) { print join(',  ', @filesInDir) . "\n\n"; }
+	if ($params::OS_type == $params::windowsType){
 
-# 		if ($localDir ne "" ){
-# 			$localDir .= "/";
-# 		}
+		if ($winRootDir eq ""){
+			my $mw = MainWindow->new;
+			$mw->withdraw;  # Hide the main window.
+			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Windows) is unpopulated. Please select the correct directory. The corresponding Linux directory is $linRootDir.", -type=>'OK');
+			while (!defined $winRootDir or $winRootDir eq ""){
+				$winRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $linRootDir.", -initialdir=>"/");
+			}
 
-# 		foreach my $imageFile (@filesInDir){
-# 			print $rootDirectory . $localDir . $imageFile . "\n";
-# 			# image_Foobar({
-# 			# 	baseDirName => $baseDirName, 
-# 			# 	fileName => $localDir . $imageFile, 
-# 			# 	rootDirNum => $rootDirNum,
-# 			# 	nameHash => $args->{nameHash},
-# 			# 	dbhandle => $dbhandle
-# 			# });
-# 		}
-# 		# readImages({
-# 		# 	filelist => \@filesInDir,
-# 		# 	baseDirNum => $dirKeyVal,
-# 		# 	localDir => $localDir,
-# 		# 	rootDirName => $rootDirectory,
-# 		# 	nameHash => \%nameHash
-# 		# });	
+			$winRootDir .= '/';
 
-# 	}
+			print $winRootDir . "\n";
 
+			# Add to database.
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::windowsRootPath = "$winRootDir"/;
+			my $query = $dbhandle->prepare($update_query);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $update_query\n";
+				sleep(5);
+			}# or die $DBI::errstr;
+
+			print "Updated" . "\n";
+			
+		}
+		$root_dir = $winRootDir ;
+	}else{
+		if ($linRootDir eq ""){
+			my $mw = MainWindow->new;
+			$mw->withdraw;  # Hide the main window.
+			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Linux) is unpopulated. Please select the correct directory. The corresponding Linux directory is $winRootDir.", -type=>'OK');
+			while (!defined $linRootDir or $linRootDir eq ""){
+				$linRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $winRootDir.", -initialdir=>"/");
+			}
+
+			$linRootDir .= '/';
+
+			# Add to database.
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::linuxRootPath = "$linRootDir"/;
+			my $query = $dbhandle->prepare($update_query);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $update_query\n";
+				sleep(5);
+			}# or die $DBI::errstr;
+
+			print "Updated" . "\n";
+		}
+		$root_dir = $linRootDir;
+	}
+
+	$root_dir .= '/';
+	return $root_dir ;
+}
+
+# sub createTmpTable{
+	
+# 	# Make a smaller, temporary table for reading when the files were last inserted in the database.
+# 	# This table *should* be faster to read from. 
+
+# 	## VERIFIED: Doing this shaves access time from 0.04 seconds to 0.03 seconds - a 25% speedup. It's worth it
+# 	## for large (tens of thousands) datasets. 
+# 	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
+# 	my $query = $tmpDBhandle->prepare($tmpTableQuery);
+# 	until(
+# 		$query->execute()
+# 	){
+# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 		warn "Failed on the following query: $tmpTableQuery\n";
+# 		sleep(5);
+# 	}# or die $DBI::errstr;
+
+# 	my $clearTable = qq/DELETE FROM $params::tempTableName/;
+# 	$query = $tmpDBhandle->prepare($clearTable);
+# 	until(
+# 		$query->execute()
+# 	){
+# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 		warn "Failed on the following query: $clearTable\n";
+# 		sleep(5);
+# 	}# or die $DBI::errstr;
+
+# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
+# 	$query = $tmpDBhandle->prepare($populateQuery);
+# 	until(
+# 		$query->execute()
+# 	){
+# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 		warn "Failed on the following query: $populateQuery\n";
+# 		sleep(5);
+# 	}# or die $DBI::errstr;
+
+# 	$tmpDBhandle->disconnect;
 # }
 
-sub createTmpTable{
-	
-	# Make a smaller, temporary table for reading when the files were last inserted in the database.
-	# This table *should* be faster to read from. 
+# sub destroyTmpTable{
+# 	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
-	## VERIFIED: Doing this shaves access time from 0.04 seconds to 0.03 seconds - a 25% speedup. It's worth it
-	## for large (tens of thousands) datasets. 
-	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+# 	my $dropPeople = qq/DROP TABLE IF EXISTS $params::tempTableName/;
+# 	my $query = $tmpDBhandle->prepare($dropPeople);
+# 	$query->execute() or die $DBI::errstr;
 
-	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
-	my $query = $tmpDBhandle->prepare($tmpTableQuery);
-	until(
-		$query->execute()
-	){
-		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-		warn "Failed on the following query: $tmpTableQuery\n";
-		sleep(5);
-	}# or die $DBI::errstr;
-
-	my $clearTable = qq/DELETE FROM $params::tempTableName/;
-	$query = $tmpDBhandle->prepare($clearTable);
-	until(
-		$query->execute()
-	){
-		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-		warn "Failed on the following query: $clearTable\n";
-		sleep(5);
-	}# or die $DBI::errstr;
-
-	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
-	$query = $tmpDBhandle->prepare($populateQuery);
-	until(
-		$query->execute()
-	){
-		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-		warn "Failed on the following query: $populateQuery\n";
-		sleep(5);
-	}# or die $DBI::errstr;
-
-	$tmpDBhandle->disconnect;
-}
-
-sub destroyTmpTable{
-	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-
-	my $dropPeople = qq/DROP TABLE IF EXISTS $params::tempTableName/;
-	my $query = $tmpDBhandle->prepare($dropPeople);
-	$query->execute() or die $DBI::errstr;
-
-	$tmpDBhandle->disconnect;
-}
+# 	$tmpDBhandle->disconnect;
+# }
 
 1;

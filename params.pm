@@ -7,14 +7,26 @@ package params;
 use strict;
 use warnings;
 
-our $bar = "This is the package's bar value!";
+my $osname = $^O;
+our $OS_type;
 
-our $database = "photos_master.db";
+our $windowsType = 1;
+our $linuxType = 0;
+
+if ($osname =~ m/win/i){
+	$OS_type = $windowsType;
+}elsif($osname =~ m/linux/i){
+	$OS_type = $linuxType;
+}else{
+	die "OS is not defined. ";
+}
+
+our $database = "test.db";
 
 our $debug = 0;
 
 our $debug_readXMP = 0;
-our $debug_readIn = 1;
+our $debug_readIn = 0;
 our $debugNewRoot = 0;
 # map {if (!$_) { ______ } } $params::debug;
 
@@ -51,8 +63,15 @@ our $debugNewRoot = 0;
 	our $linkerPhotoColumn = "photo";
 
 	## Root Directory Table
+	our $rootDirPath;
 	our $rootKeyColumn = "directory_root_key";
-	our $rootDirPath = "root_path";
+		our $windowsRootPath = "root_path_windows";
+		our $linuxRootPath = "root_path_linux";
+	if ($OS_type == $windowsType){
+		$rootDirPath = $windowsRootPath;
+	}else{
+		$rootDirPath = $linuxRootPath;
+	}
 
 	## Metadata Table
 	our $metadataNameColumn = "item_name";

@@ -100,7 +100,8 @@ sub create_photo_table{
 sub create_root_dir_table{
 	my $sql_quer = qq/CREATE TABLE $params::rootTableName (
 		$params::rootKeyColumn INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-		$params::rootDirPath STRING
+		$params::windowsRootPath STRING,
+		$params::linuxRootPath STRING
 	); /;
 
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);

@@ -302,9 +302,16 @@ sub readOneImage{
 		$data{'Hour'}, $data{'Minute'}, 
 		$data{'TimeZone'}, "$dbInsertionDate"
 	)/;
-		# print $insertIntoPhotoTable . "\n ";
 
-	$dbhandle->do($insertIntoPhotoTable) or die $DBI::errstr;
+	$query = $dbhandle->prepare($insertIntoPhotoTable);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $insertIntoPhotoTable\n";
+		sleep(5);
+	}# or die $DBI::errstr;
+
 
 	# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
 	my $keyNumQuery = qq/SELECT last_insert_rowid()/;
@@ -317,7 +324,6 @@ sub readOneImage{
 		sleep(5);
 	}# or die $DBI::errstr;
 	my $photoKeyVal = @{$query->fetch()}[0];
-	# print $photoKeyVal . "\n";
 
 	# Now we need to tackle inserting names into the database. I want to have a hash with the names and check it. 
 	# If the name has already been encountered, we should read its public key from the hash. Else, we need to add 

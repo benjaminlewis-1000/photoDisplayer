@@ -8,6 +8,7 @@
 
 use params;
 use DBI;
+use Tk;
 
 use warnings;
 use strict; 
@@ -25,7 +26,7 @@ our @rootDirList;
 our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 # Query the database for a list of all root directories in the database. 
-my $rootDirQuery = qq/SELECT $params::rootKeyColumn, $params::rootDirPath FROM $params::rootTableName/;
+my $rootDirQuery = qq/SELECT $params::rootKeyColumn, $params::windowsRootPath, $params::linuxRootPath FROM $params::rootTableName/;
 my $query = $dbhandle->prepare($rootDirQuery);
 until(
 	$query->execute()
@@ -36,18 +37,29 @@ until(
 }# or die $DBI::errstr;
 
 # Bind the results of the query.
-our ($rootKey, $root_dir);
+our ($rootKey, $winRootDir, $linRootDir);
 $query->bind_col(1, \$rootKey);
-$query->bind_col(2, \$root_dir);
+$query->bind_col(2, \$winRootDir);
+$query->bind_col(3, \$linRootDir);
 
 # For each root directory, get the unique subdirectories and call the add file method,
 # which will take care of adding or updating the images as necessary. Congrats, you're done!
 our $numPassed = 0;
 while ($query->fetch){
-	print $rootKey . "  " . $root_dir . "\n";
+
+	our $root_dir = checkOSFolder({
+			linRootDir => $linRootDir,
+			winRootDir => $winRootDir,
+			dbhandle => $dbhandle
+		});
+
+	print $root_dir . "\n";
+
+	# print $rootKey . "  " . $root_dir . "\n";
 	my @unq_subdirs = getUniqueSubdirs($root_dir);
 
 	print "Got a list of unique subdirectories." . "\n";
+	print join (", ", @unq_subdirs) . "\n";
 
 	open OUTPUT,  ">unhandled_files.txt" or die $!;
 	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed);

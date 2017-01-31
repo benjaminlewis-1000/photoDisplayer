@@ -207,7 +207,7 @@ sub getImageData{
 
 	$returnData{'NameList'} = \@namesWithLargeAreas;
 
-	print Dumper(@namesWithLargeAreas) . "\n";
+	# print Dumper(@namesWithLargeAreas) . "\n";
 
 	if ($params::debug and $params::debug_readXMP) {print join (",", @namesWithLargeAreas); }
 

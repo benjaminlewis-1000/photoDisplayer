@@ -27,7 +27,7 @@ our @rootDirList;
 # my $root_dir = 'D:\Pictures\2016';
 # my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
 
-our $answerBool = 0;
+our $answerBool = 1;
 
 if (!$answerBool){
 	my $root_dir2 = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base';
@@ -43,8 +43,7 @@ if (!$answerBool){
 
 while ($answerBool) {
 	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>"/");
-	print $root_dir . "\n";
-	if ($root_dir ne "/" and $root_dir ne ""){
+	if (defined $root_dir and $root_dir ne "/" and $root_dir ne ""){
 		# Remove any extraneous end-of-string slashes.
 		$root_dir =~ s/\\$//g;
 		$root_dir =~ s/\/$//g;
