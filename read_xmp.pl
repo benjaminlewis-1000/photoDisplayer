@@ -7,17 +7,18 @@ use Image::ExifTool qw(ImageInfo);
 use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
+use Data::Dumper;
 
 # use Image::EXIF;
 
 use warnings;
 use strict; 
 
-getImageData({
-# 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
-	filename => "D:\\Pictures\\2016\\Wedding Time\\Wedding\\B+J-1wedding.jpg",
-	debug => 0
-	});
+# getImageData({
+# # 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
+# 	filename => "D:\\Pictures\\2016\\Wedding Time\\Wedding\\B+J-1wedding.jpg",
+# 	debug => 0
+# 	});
 
 sub getImageData{
 	my $d = 0;
@@ -84,14 +85,13 @@ sub getImageData{
 
 	# print ref( $exif->ImageInfo($file) ) . "\n\n";
 
-	use Data::Dumper;
 	delete $infoHash{"ThumbnailImage"};
 	# print Dumper %infoHash;
 
 	# print $elapsed . "\n";
 
 	# foreach my $k (keys %infoHash){
-	# 	if ($k =~ m/Mod/){
+	# 	if ($k =~ m/date/i){
 	# 		print $k . " : " . $infoHash{$k} . "\n";
 	# 	}
 	# }
@@ -102,7 +102,12 @@ sub getImageData{
 	my $regionWidth = $infoHash{'RegionAreaW'};
 	my $regionHeight = $infoHash{'RegionAreaH'};
 
-	my $takenDate = $infoHash{'FileCreateDate'};
+    my $takenDate;
+    if ( $params::OS_type == $params::windowsType ){
+        $takenDate = $infoHash{'FileCreateDate'};
+    }else{
+        $takenDate = $infoHash{'CreateDate'}; # Because of course windows and linux have to do perl, which is system agnostic, differently. Actually, it's probably more of an underlying XMP representation problem.
+    }
 	my $modifyDate = $infoHash{'FileModifyDate'};
 
 	our ($ss, $mm, $hh, $day, $month, $year, $zone);
@@ -111,6 +116,8 @@ sub getImageData{
 	# print "Elapsed " . $d++ . ": " . $elapsed . "\n";
 
 	# Parse the date. 
+
+    # print "Taken on: " . $takenDate . "\n";
 	my $time = str2time($takenDate);
 	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
 	$year += 1900;
@@ -231,6 +238,9 @@ sub getImageData{
 	$returnData{'Hour'} = $hh;
 	$returnData{'Minute'} = $mm;
 	$returnData{'Second'} = $ss;
+    if (!defined $zone){
+        $zone = 0;
+    }
 	$returnData{'TimeZone'} = $zone / 3600;
 	$returnData{'Status'} = 1;
 
