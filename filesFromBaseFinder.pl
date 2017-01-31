@@ -99,6 +99,8 @@ sub addFilesInListOfSubdirs{
 	my $rootDirectory = $_[2];
 	my $numPassed = $_[3];
 
+	print ${$numPassed} . "\n";
+
 	# Create a tmp table with only necessary columns. Shows ~25% speedup. 
 	# createTmpTable();
 
@@ -234,6 +236,7 @@ sub checkOSFolder{
 		$root_dir = $linRootDir;
 	}
 
+	$root_dir .= '/';
 	return $root_dir ;
 }
 
