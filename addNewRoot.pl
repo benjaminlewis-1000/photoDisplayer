@@ -17,9 +17,7 @@ require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
 
 my $homedir = File::HomeDir->my_pictures;
-print "Home dir: " . $homedir . "\n";
-
-$homedir = "/home/lewis/Desktop/test";
+print $homedir . "\n";
 
 my $mw = MainWindow->new;
 $mw->withdraw;  # Hide the main window.
@@ -44,7 +42,7 @@ if (!$answerBool){
 }
 
 while ($answerBool) {
-	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>$homedir);
+	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>"/");
 	if (defined $root_dir and $root_dir ne "/" and $root_dir ne ""){
 		# Remove any extraneous end-of-string slashes.
 		$root_dir =~ s/\\$//g;
@@ -54,7 +52,7 @@ while ($answerBool) {
 		$root_dir = $root_dir . '/';
 		$root_dir =~ s/\\/\//g;
 		push (@rootDirList, $root_dir);
-		print "Added root directory is: " . $root_dir . "\n";
+		print $root_dir . "\n";
 	}else{
 		last;
 	}
@@ -133,7 +131,7 @@ foreach my $root_dir (@rootDirList){
 		}# or die $DBI::errstr;
 		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
-		if (!defined $directoryKeyVal or $directoryKeyVal eq "" ){
+		if ($directoryKeyVal eq "" ){
 			# If the directory doesn't exist, we then have to add it to the root directory table and get its unique key value (for use in adding all the pictures).
 			my $insertDirectory = qq/INSERT INTO $params::rootTableName ( $params::rootDirPath)  VALUES ("$root_dir")/;
 			$dbhandle->do($insertDirectory) or die $DBI::errstr;
