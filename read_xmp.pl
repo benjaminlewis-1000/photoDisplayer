@@ -8,7 +8,7 @@ use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
 
-use Image::EXIF;
+# use Image::EXIF;
 
 use warnings;
 use strict; 

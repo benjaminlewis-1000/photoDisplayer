@@ -5,7 +5,7 @@
 use strict;
 use warnings;
 use DBI;
-use File::Stat;
+use File::stat;
 
 use params;
 require 'read_xmp.pl';
