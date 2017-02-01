@@ -6,6 +6,8 @@ package params;
 
 use strict;
 use warnings;
+use Cwd;
+use File::Basename;
 
 my $osname = $^O;
 our $OS_type;
@@ -21,7 +23,12 @@ if ($osname =~ m/win/i){
 	die "OS is not defined. ";
 }
 
-our $database = "test.db";
+our $base_path = cwd();  # Get the directory of this module. 
+
+$base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
+$base_path = $1 . "/";  # Capture the output and put it in $base_path.
+
+our $database = $base_path . "databases/" . "test.db";
 
 our $debug = 0;
 
