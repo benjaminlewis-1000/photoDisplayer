@@ -131,7 +131,7 @@ foreach my $root_dir (@rootDirList){
 		}# or die $DBI::errstr;
 		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
-		if ($directoryKeyVal eq "" ){
+		if (!defined $directoryKeyVal or $directoryKeyVal eq "" ){
 			# If the directory doesn't exist, we then have to add it to the root directory table and get its unique key value (for use in adding all the pictures).
 			my $insertDirectory = qq/INSERT INTO $params::rootTableName ( $params::rootDirPath)  VALUES ("$root_dir")/;
 			$dbhandle->do($insertDirectory) or die $DBI::errstr;
