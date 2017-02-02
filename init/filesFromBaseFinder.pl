@@ -3,6 +3,7 @@
 use params;
 use File::Find;
 require 'readInImages.pl';
+use File::HomeDir;
 
 use warnings;
 use strict; 
@@ -185,7 +186,18 @@ sub checkOSFolder{
 			$mw->withdraw;  # Hide the main window.
 			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Windows) is unpopulated. Please select the correct directory. The corresponding Linux directory is $linRootDir.", -type=>'OK');
 			while (!defined $winRootDir or $winRootDir eq "" or !-e $winRootDir){
-				$winRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $linRootDir.", -initialdir=>"/");
+				$winRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $linRootDir.", -initialdir=>File::HomeDir->my_home);
+
+				if (!defined $winRootDir or $winRootDir eq "" or !-e $winRootDir){
+
+					my $answer = $mw->messageBox(-title => 'Please Reply', 
+					     -message => 'It looks like you want to exit the program. Would you like to do so?', 
+					     -type => 'YesNo', -icon => 'question', -default => 'yes');
+					my $answerBool = (lc($answer) eq 'yes') ? 1 : 0;
+					if ($answerBool){
+						exit();
+					}
+				}
 			}
 
 			$winRootDir .= '/';
@@ -213,7 +225,19 @@ sub checkOSFolder{
 			$mw->withdraw;  # Hide the main window.
 			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Linux) is unpopulated. Please select the correct directory. The corresponding Linux directory is $winRootDir.", -type=>'OK');
 			while (!defined $linRootDir or $linRootDir eq "" or !-e $linRootDir){
-				$linRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $winRootDir.", -initialdir=>"/");
+				$linRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $winRootDir.", -initialdir=>File::HomeDir->my_home);
+
+
+				if (!defined $linRootDir or $linRootDir eq "" or !-e $linRootDir){
+
+					my $answer = $mw->messageBox(-title => 'Please Reply', 
+					     -message => 'It looks like you want to exit the program. Would you like to do so?', 
+					     -type => 'YesNo', -icon => 'question', -default => 'yes');
+					my $answerBool = (lc($answer) eq 'yes') ? 1 : 0;
+					if ($answerBool){
+						exit();
+					}
+				}
 			}
 
 			$linRootDir .= '/';
