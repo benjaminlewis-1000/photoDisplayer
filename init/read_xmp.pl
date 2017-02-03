@@ -103,14 +103,21 @@ sub getImageData{
 	my $regionHeight = $infoHash{'RegionAreaH'};
 
     my $takenDate;
+    my $modifyDate;
     if ( $params::OS_type == $params::windowsType ){
         $takenDate = $infoHash{'FileCreateDate'};
+		$modifyDate = $infoHash{'FileModifyDate'};
     }else{
-        $takenDate = $infoHash{'CreateDate'}; # Because of course windows and linux have to do perl, which is system agnostic, differently. Actually, it's probably more of an underlying XMP representation problem.
+        $takenDate = $infoHash{'CreateDate'};
+        $modifyDate = $infoHash{'ModifyDate'};
+         # Because of course windows and linux have to do perl, which is system agnostic, differently. Actually, it's probably more of an underlying XMP representation problem.
+        
     }
-	my $modifyDate = $infoHash{'FileModifyDate'};
 
-	our ($ss, $mm, $hh, $day, $month, $year, $zone);
+    if (!defined $takenDate){
+    	$takenDate = "1969:01:01 00:00:00-00:00";
+    }
+
 
 	# my $elapsed = tv_interval($sttime);
 	# print "Elapsed " . $d++ . ": " . $elapsed . "\n";
@@ -118,6 +125,7 @@ sub getImageData{
 	# Parse the date. 
 
     # print "Taken on: " . $takenDate . "\n";
+	our ($ss, $mm, $hh, $day, $month, $year, $zone);
 	my $time = str2time($takenDate);
 	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
 	$year += 1900;

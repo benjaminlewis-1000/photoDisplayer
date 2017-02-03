@@ -8,12 +8,31 @@ use strict;
 use warnings;
 use Cwd;
 use File::Basename;
+use YAML::XS 'LoadFile';
+
+
+our $debug = 0;
+
+	our $debug_readXMP = 0;
+	our $debug_readIn = 0;
+	our $debugNewRoot = 0;
+
+
+our $base_path = cwd();  # Get the directory of this module. 
+$base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
+$base_path = $1 . "/";  # Capture the output and put it in $base_path.
+
+my $YAML_file = $base_path . "config/params.yaml";
+our $database = $base_path . "databases/" . "photos_master.db";
+
+my $config = LoadFile($YAML_file);  # YAML is more cross-language.
+
 
 my $osname = $^O;
 our $OS_type;
 
-our $windowsType = 1;
-our $linuxType = 0;
+our $windowsType = $config->{'windowsType'};
+our $linuxType = $config->{'linuxType'};
 
 if ($osname =~ m/win/i){
 	$OS_type = $windowsType;
@@ -23,57 +42,44 @@ if ($osname =~ m/win/i){
 	die "OS is not defined. ";
 }
 
-our $base_path = cwd();  # Get the directory of this module. 
-
-$base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
-$base_path = $1 . "/";  # Capture the output and put it in $base_path.
-
-our $database = $base_path . "databases/" . "test.db";
-
-our $debug = 0;
-
-our $debug_readXMP = 0;
-our $debug_readIn = 0;
-our $debugNewRoot = 0;
 # map {if (!$_) { ______ } } $params::debug;
 
 ## Table names
-	our $photoTableName = "Photos";
-	our $peopleTableName = "People";
-	our $linkerTableName = "Linker";
-	our $rootTableName = "Root_Dirs";
-	our $metadataTableName = "Metadata";
-	our $tempTableName = "TmpPhotoTable";
+	our $photoTableName = $config->{'photoTableName'};
+	our $peopleTableName = $config->{'peopleTableName'};
+	our $linkerTableName = $config->{'linkerTableName'};
+	our $rootTableName = $config->{'rootTableName'};
+	our $metadataTableName = $config->{'metadataTableName'};
 
 # Table column names 
 	## Photo table
-	our $photoKeyColumn = "photo_key";
-	our $photoFileColumn = "photo_file";
-	our $photoDateColumn = "photo_date";
-	our $photoYearColumn = "taken_year";
-	our $photoMonthColumn = "taken_month";
-	our $photoDayColumn = "taken_day";
-	our $photoHourColumn = "taken_hour";
-	our $photoMinuteColumn = "taken_minute";
-	our $photoGMTColumn = "taken_timezone";
-	our $modifyDateColumn = "modification_date";
-	our $rootDirNumColumn = "root_dir_num";
-	our $insertDateColumn = "inserted_date";
+	our $photoKeyColumn = $config->{'photoKeyColumn'};
+	our $photoFileColumn = $config->{'photoFileColumn'};
+	our $photoDateColumn = $config->{'photoDateColumn'};
+	our $photoYearColumn = $config->{'photoYearColumn'};
+	our $photoMonthColumn = $config->{'photoMonthColumn'};
+	our $photoDayColumn = $config->{'photoDayColumn'};
+	our $photoHourColumn = $config->{'photoHourColumn'};
+	our $photoMinuteColumn = $config->{'photoMinuteColumn'};
+	our $photoGMTColumn = $config->{'photoGMTColumn'};
+	our $modifyDateColumn = $config->{'modifyDateColumn'};
+	our $rootDirNumColumn = $config->{'rootDirNumColumn'};
+	our $insertDateColumn = $config->{'insertDateColumn'};
 
 	## People Table
-	our $peopleKeyColumn = "people_key";
-	our $personNameColumn = "person_name";
+	our $peopleKeyColumn = $config->{'peopleKeyColumn'};
+	our $personNameColumn = $config->{'personNameColumn'};
 	# our $personPicasaID = "person_picasa_id";
 
 	## Linker Table
-	our $linkerPeopleColumn = "person";
-	our $linkerPhotoColumn = "photo";
+	our $linkerPeopleColumn = $config->{'linkerPeopleColumn'};
+	our $linkerPhotoColumn = $config->{'linkerPhotoColumn'};
 
 	## Root Directory Table
 	our $rootDirPath;
-	our $rootKeyColumn = "directory_root_key";
-		our $windowsRootPath = "root_path_windows";
-		our $linuxRootPath = "root_path_linux";
+	our $rootKeyColumn = $config->{'rootKeyColumn'};
+		our $windowsRootPath = $config->{'windowsRootPath'};
+		our $linuxRootPath = $config->{'linuxRootPath'};
 	if ($OS_type == $windowsType){
 		$rootDirPath = $windowsRootPath;
 	}else{
@@ -81,11 +87,11 @@ our $debugNewRoot = 0;
 	}
 
 	## Metadata Table
-	our $metadataNameColumn = "item_name";
-	our $metadataValueColumn = "item_value";
+	our $metadataNameColumn = $config->{'metadataNameColumn'};
+	our $metadataValueColumn = $config->{'metadataValueColumn'};
 
 	### Metadata fields
-		our $metadataLastEditedField = "last_edited_date";
+		our $metadataLastEditedField = $config->{'metadataLastEditedField'};
 
 sub getLocalModTime{
 
