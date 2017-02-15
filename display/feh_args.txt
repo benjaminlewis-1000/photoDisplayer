@@ -1,0 +1,11 @@
+feh 
+-f <> (list of files)
+-F (fullscreen)
+-Y (hide pointer)
+-z (randomize)
+-D <int> (slideshow delay)
+--auto-rotate (read EXIF data to rotate image appropriately)
+-Z (autozoom - if the image is too small)
+-x (borderless window)
+-p (preload image - ?? essential for this I think, but it won't hold them in memory - rather, it will check unloadable. Has a long startup)
+-A "<action>" (%f is the filename, we could, for instance, echo the filename to a file or something. It corresponds to the press of a key, so I need to synthesize that.)

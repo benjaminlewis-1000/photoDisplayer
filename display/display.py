@@ -54,17 +54,33 @@ for row in c.execute(query):
 
 query = "SELECT " + params['photoFileColumn'] + ", " + params['rootDirNumColumn'] + ", " + params['photoDateColumn'] + " FROM " + params['photoTableName'] + " WHERE " + params['photoDayColumn'] + " = ?"
 val = (17,)
+print query
+f1=open('testfile', 'w+')
+f1.write('This is a test')
+# sleep(6)
+
 
 valid_photos = []
+photo_dates = []
 
 for row in c.execute(query, val):
     # print row
     filename = rootDirs[row[1]] + row[0]
     # print filename
+    # print row[2]
+    f1.write((row[2] + " " + filename + "\n"))
     valid_photos.append(filename)
+    photo_dates.append(row[2])
 
+# val = '/home/lewis/Pictures/Family Pictures/2015/Fall 2015/_DSC0714.JPG'
+# p1 = subprocess.Popen(["eog", "-w", val])
+
+
+# sleep(10)
 # print valid_photos    
-
+print
+print 
+arg_list =  ' '.join(valid_photos)
 prevPicNum = 0
 picNum = 0
 print valid_photos[0]
@@ -72,6 +88,7 @@ while 1:
     while (picNum == prevPicNum):
         picNum = random.randint(0, len(valid_photos) - 1)
     prevPicNum = picNum
-    p1 = subprocess.Popen(["eog", "-w", "-f", valid_photos[picNum]])
-    sleep(3)
-# print c.fetchone()
+    picture = valid_photos[picNum]
+    p1 = subprocess.Popen(["feh", "-F", valid_photos[picNum]])
+    print photo_dates[picNum] + " " + valid_photos[picNum]
+    sleep(5)
