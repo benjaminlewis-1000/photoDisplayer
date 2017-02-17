@@ -16,8 +16,8 @@ use strict;
 
 # getImageData({
 # # 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
-# 	filename => "D:\\Pictures\\2016\\Wedding Time\\Wedding\\B+J-1wedding.jpg",
-# 	debug => 0
+# 	filename => "/home/lewis/Pictures/Soph-Junior Years/theWard2.jpg",
+# 	debug => 1
 # 	});
 
 sub getImageData{
@@ -35,11 +35,11 @@ sub getImageData{
 	}
 
 	if (! defined $args->{resX}){
-		$args->{resX} = 1000;
+		$args->{resX} = 0;
 	}
 
 	if (! defined $args->{resY}){
-		$args->{resY} = 1000;
+		$args->{resY} = 0;
 	}
 
 	if (! defined $args->{minSize}){
@@ -53,7 +53,7 @@ sub getImageData{
 		}
 	}
 
-	if ($params::debug and $params::debug_readXMP ) { print "Minimum size is: " . $args->{minSize} . "\n"; }
+	if ($params::debug and $params::debug_readXMP ) { print "Minimum size is: " . $args->{minSize} . "\n"; print $args->{filename} . "\n"; }
 
 	if (! -e $args->{filename}){
 		print "File does not exist! $args->{filename}\n";
@@ -89,13 +89,13 @@ sub getImageData{
 	# print Dumper %infoHash;
 
 	# print $elapsed . "\n";
-
-	# foreach my $k (keys %infoHash){
-	# 	if ($k =~ m/date/i){
-	# 		print $k . " : " . $infoHash{$k} . "\n";
-	# 	}
-	# }
-
+	if ($params::debug and $params::debug_readXMP ) {
+		foreach my $k (keys %infoHash){
+			if ($k =~ m/date/i){
+				print $k . " : " . $infoHash{$k} . "\n";
+			}
+		}
+	}
 	# Parse the XMP data. 
 
 	my $namelist = $infoHash{'RegionName'};
@@ -109,7 +109,20 @@ sub getImageData{
 		$modifyDate = $infoHash{'FileModifyDate'};
     }else{
         $takenDate = $infoHash{'CreateDate'};
+        if (!defined $takenDate or  $infoHash{'CreateDate'} !~ m/\d/ ){  # No numeric
+        	undef $takenDate;
+        	if ( $infoHash{'CreateDate (1)'} ){  # Alt
+        		$takenDate = $infoHash{'CreateDate (1)'};
+        	}
+        }
         $modifyDate = $infoHash{'ModifyDate'};
+        if (!defined $modifyDate or $infoHash{'ModifyDate'} !~ m/\d/ ){  # No numeric
+        	undef $modifyDate;
+        	if ( $infoHash{'FileModifyDate'} ){  # Alt
+        		$modifyDate = $infoHash{'FileModifyDate'};
+        	}
+        }
+
          # Because of course windows and linux have to do perl, which is system agnostic, differently. Actually, it's probably more of an underlying XMP representation problem.
         
     }
@@ -130,7 +143,8 @@ sub getImageData{
 	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
 	$year += 1900;
 	$month += 1;
-	# print $year . "\n";
+	# print $takenDate . "\n";
+	# print $year . " , " .  $day . " , " . $month . "\n";
 	
 
 	my $fileSize = $infoHash{'FileSize'};
@@ -159,6 +173,7 @@ sub getImageData{
 		@widths = split(',', $regionWidth);
 		@heights = split(',', $regionHeight);
 	}
+
 
 	my %seenFaces; # Hash for de-duplication.
 	my @namesWithLargeAreas; 

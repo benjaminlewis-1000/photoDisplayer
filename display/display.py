@@ -31,6 +31,7 @@ else:
 
 # Connect to the database
 conn = sqlite3.connect(rootDir + "/databases/photos_master.db")
+conn.text_factory = str  # For UTF-8 compatibility
 
 c = conn.cursor()
 
@@ -52,9 +53,12 @@ for row in c.execute(query):
 
 # Get a simple batch of photos, say all from root_dir = 1
 
-query = "SELECT " + params['photoFileColumn'] + ", " + params['rootDirNumColumn'] + ", " + params['photoDateColumn'] + " FROM " + params['photoTableName'] + " WHERE " + params['photoDayColumn'] + " = ?"
-val = (17,)
+query = "SELECT " + params['photoFileColumn'] + ", " + params['rootDirNumColumn'] + ", " + params['photoDateColumn'] + " FROM " + params['photoTableName'] + " WHERE " + params['photoYearColumn'] + " = ?" + " AND " + params['photoMonthColumn'] + " = ?"
+val = (2016, 6)
+
+query = "SELECT photo_file, root_dir_num, photo_date from photos where photo_key in (SELECT photo from Linker where person = 1 OR person = ?)"
 print query
+val = (2,)
 f1=open('testfile', 'w+')
 f1.write('This is a test')
 # sleep(6)
@@ -62,6 +66,8 @@ f1.write('This is a test')
 
 valid_photos = []
 photo_dates = []
+
+photo_file = open('/tmp/photos.txt', 'w') # Overwrite the existing file at that location.
 
 for row in c.execute(query, val):
     # print row
@@ -71,24 +77,21 @@ for row in c.execute(query, val):
     f1.write((row[2] + " " + filename + "\n"))
     valid_photos.append(filename)
     photo_dates.append(row[2])
+    photo_file.write(filename + "\n")
 
-# val = '/home/lewis/Pictures/Family Pictures/2015/Fall 2015/_DSC0714.JPG'
-# p1 = subprocess.Popen(["eog", "-w", val])
+photo_file.close()
 
+p1 = subprocess.Popen(["feh", "-YFxZNz", "-D", "2", "--auto-rotate", "-d", "-f", "/tmp/photos.txt"])
 
-# sleep(10)
-# print valid_photos    
-print
-print 
-arg_list =  ' '.join(valid_photos)
-prevPicNum = 0
-picNum = 0
-print valid_photos[0]
-while 1:
-    while (picNum == prevPicNum):
-        picNum = random.randint(0, len(valid_photos) - 1)
-    prevPicNum = picNum
-    picture = valid_photos[picNum]
-    p1 = subprocess.Popen(["feh", "-F", valid_photos[picNum]])
-    print photo_dates[picNum] + " " + valid_photos[picNum]
-    sleep(5)
+# arg_list =  ' '.join(valid_photos)
+# prevPicNum = 0
+# picNum = 0
+# print valid_photos[0]
+# while 1:
+#     while (picNum == prevPicNum):
+#         picNum = random.randint(0, len(valid_photos) - 1)
+#     prevPicNum = picNum
+#     picture = valid_photos[picNum]
+#     p1 = subprocess.Popen(["feh", "-F", valid_photos[picNum]])
+#     print photo_dates[picNum] + " " + valid_photos[picNum]
+#     sleep(5)
