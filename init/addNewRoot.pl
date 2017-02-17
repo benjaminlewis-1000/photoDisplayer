@@ -16,7 +16,7 @@ require 'read_xmp.pl';
 require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
 
-my $homedir = File::HomeDir->my_pictures;
+my $homedir = File::HomeDir->my_home;
 print $homedir . "\n";
 
 my $mw = MainWindow->new;
@@ -42,7 +42,7 @@ if (!$answerBool){
 }
 
 while ($answerBool) {
-	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>"/");
+	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>$homedir);
 	if (defined $root_dir and $root_dir ne "/" and $root_dir ne ""){
 		# Remove any extraneous end-of-string slashes.
 		$root_dir =~ s/\\$//g;

@@ -35,14 +35,27 @@ sub getUniqueSubdirs{
 	my %dirNameRelativeToRootHash;
 	# I don't understand this following line; source is http://www.perlmonks.org/?node_id=677380. 
 	# The line gets the list of all images by relative directory from $base_directory. 
-	find(sub { push @file_list, $File::Find::name }, $base_directory);
+
+	my %subdirhash;
+	# find(sub { push @file_list, $File::Find::name }, $base_directory);
+
+	$File::Find::dont_use_nlink = 1; # Required to traverse network attached drives.
+	find({wanted=> sub{ dir_names(\%subdirhash, $base_directory) }}, $base_directory );
+
+# print Dumper(%hash);
+
+	my @subdirectories;
+	foreach my $directory (sort {lc $a cmp lc $b} keys %subdirhash) {
+	    # printf "%-8s\n", $directory;
+	    push @subdirectories, $directory;
+	}
 
 	# Get a list of subdirectories from this root directory, so we can see if they are already in the list. 
 	# The regex is looking for the opposite of any file that ends with a .*** extension.
-	my @subdirectories = grep(!/\.([a-zA-Z][^\.^\\]+$)/i, @file_list);
-	# Remove the root directory. We now have a list of all the subdirectories. This is to help the iteration.
-	@subdirectories = grep(/$base_directory/, @subdirectories);
-	chomp(@subdirectories);
+	# my @subdirectories = grep(!/\.([a-zA-Z][^\.^\\]+$)/i, @file_list);
+	# # Remove the root directory. We now have a list of all the subdirectories. This is to help the iteration.
+	# @subdirectories = grep(/$base_directory/, @subdirectories);
+	# chomp(@subdirectories);
 	# Copy the subdirectories into remainingSubdirs, which we can then remove from with impunity in a for loop. 
 	my @remainingSubdirs = @subdirectories;
 
@@ -92,6 +105,20 @@ sub getUniqueSubdirs{
 
 }
 
+
+sub dir_names {
+# print "$File::Find::dir\n" if(-f $File::Find::dir,'/');
+	my $base_directory = $_[1];
+	my $dir = $File::Find::dir;
+	$dir =~ s/$base_directory//;
+	$dir =~ s/^\\//;
+	$dir =~ s/^\///;
+	# print $dir . "\n";
+	if ($dir !~ m/\.git/ ){
+		$_[0]->{$dir} = 1;
+	}
+}
+
 sub addFilesInListOfSubdirs{
 #### Find a list of the files that are in each subdirectory. Call the readImages method on each of the files. 
 
@@ -129,6 +156,7 @@ sub addFilesInListOfSubdirs{
 	foreach my $localDir (@subdirectories){
 		my @filesInDir;
 		my $odir = $rootDirectory . $localDir;
+		print "dir is " . $odir . "\n";
 		if ( !($odir =~ m/\/$/ ) ) {
 			print OUTPUT "$odir isn't a valid directory. \n";
 		}
@@ -136,6 +164,7 @@ sub addFilesInListOfSubdirs{
 		# 	next;
 		# } #die "Can't open directory " . $odir . ": $!";
 		@filesInDir = readdir $dir;
+
 		closedir $dir; 
 
 		if ($params::debug and $params::debugNewRoot) { print $localDir . "\t: "; } # grep(!/$subdirectories[$i]/, @subdirectories);
