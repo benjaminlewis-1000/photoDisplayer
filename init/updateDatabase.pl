@@ -53,10 +53,13 @@ while ($query->fetch){
 			dbhandle => $dbhandle
 		});
 
-	print $root_dir . "\n";
+	print "Root dir, ud.pl: " . $root_dir . "\n";
 
 	# print $rootKey . "  " . $root_dir . "\n";
 	my @unq_subdirs = getUniqueSubdirs($root_dir);
+
+	# my @unq_subdirs;
+	# push @unq_subdirs, "Summer 2014 ABQ/Keep";
 
 	print "Got a list of unique subdirectories." . "\n";
 	print join (", ", @unq_subdirs) . "\n";

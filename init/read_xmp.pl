@@ -7,17 +7,18 @@ use Image::ExifTool qw(ImageInfo);
 use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
+use Data::Dumper;
 
 # use Image::EXIF;
 
 use warnings;
 use strict; 
 
-getImageData({
-# 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
-	filename => "D:\\Pictures\\2016\\Wedding Time\\Wedding\\B+J-1wedding.jpg",
-	debug => 0
-	});
+# getImageData({
+# # 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
+# 	filename => "/home/lewis/Pictures/Soph-Junior Years/theWard2.jpg",
+# 	debug => 1
+# 	});
 
 sub getImageData{
 	my $d = 0;
@@ -34,11 +35,11 @@ sub getImageData{
 	}
 
 	if (! defined $args->{resX}){
-		$args->{resX} = 1000;
+		$args->{resX} = 0;
 	}
 
 	if (! defined $args->{resY}){
-		$args->{resY} = 1000;
+		$args->{resY} = 0;
 	}
 
 	if (! defined $args->{minSize}){
@@ -52,7 +53,7 @@ sub getImageData{
 		}
 	}
 
-	if ($params::debug and $params::debug_readXMP ) { print "Minimum size is: " . $args->{minSize} . "\n"; }
+	if ($params::debug and $params::debug_readXMP ) { print "Minimum size is: " . $args->{minSize} . "\n"; print $args->{filename} . "\n"; }
 
 	if (! -e $args->{filename}){
 		print "File does not exist! $args->{filename}\n";
@@ -84,38 +85,66 @@ sub getImageData{
 
 	# print ref( $exif->ImageInfo($file) ) . "\n\n";
 
-	use Data::Dumper;
 	delete $infoHash{"ThumbnailImage"};
 	# print Dumper %infoHash;
 
 	# print $elapsed . "\n";
-
-	# foreach my $k (keys %infoHash){
-	# 	if ($k =~ m/Mod/){
-	# 		print $k . " : " . $infoHash{$k} . "\n";
-	# 	}
-	# }
-
+	if ($params::debug and $params::debug_readXMP ) {
+		foreach my $k (keys %infoHash){
+			if ($k =~ m/date/i){
+				print $k . " : " . $infoHash{$k} . "\n";
+			}
+		}
+	}
 	# Parse the XMP data. 
 
 	my $namelist = $infoHash{'RegionName'};
 	my $regionWidth = $infoHash{'RegionAreaW'};
 	my $regionHeight = $infoHash{'RegionAreaH'};
 
-	my $takenDate = $infoHash{'FileCreateDate'};
-	my $modifyDate = $infoHash{'FileModifyDate'};
+    my $takenDate;
+    my $modifyDate;
+    if ( $params::OS_type == $params::windowsType ){
+        $takenDate = $infoHash{'FileCreateDate'};
+		$modifyDate = $infoHash{'FileModifyDate'};
+    }else{
+        $takenDate = $infoHash{'CreateDate'};
+        if (!defined $takenDate or  $infoHash{'CreateDate'} !~ m/\d/ ){  # No numeric
+        	undef $takenDate;
+        	if ( $infoHash{'CreateDate (1)'} ){  # Alt
+        		$takenDate = $infoHash{'CreateDate (1)'};
+        	}
+        }
+        $modifyDate = $infoHash{'ModifyDate'};
+        if (!defined $modifyDate or $infoHash{'ModifyDate'} !~ m/\d/ ){  # No numeric
+        	undef $modifyDate;
+        	if ( $infoHash{'FileModifyDate'} ){  # Alt
+        		$modifyDate = $infoHash{'FileModifyDate'};
+        	}
+        }
 
-	our ($ss, $mm, $hh, $day, $month, $year, $zone);
+         # Because of course windows and linux have to do perl, which is system agnostic, differently. Actually, it's probably more of an underlying XMP representation problem.
+        
+    }
+
+    if (!defined $takenDate){
+    	$takenDate = "1969:01:01 00:00:00-00:00";
+    }
+
 
 	# my $elapsed = tv_interval($sttime);
 	# print "Elapsed " . $d++ . ": " . $elapsed . "\n";
 
 	# Parse the date. 
+
+    # print "Taken on: " . $takenDate . "\n";
+	our ($ss, $mm, $hh, $day, $month, $year, $zone);
 	my $time = str2time($takenDate);
 	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
 	$year += 1900;
 	$month += 1;
-	# print $year . "\n";
+	# print $takenDate . "\n";
+	# print $year . " , " .  $day . " , " . $month . "\n";
 	
 
 	my $fileSize = $infoHash{'FileSize'};
@@ -144,6 +173,7 @@ sub getImageData{
 		@widths = split(',', $regionWidth);
 		@heights = split(',', $regionHeight);
 	}
+
 
 	my %seenFaces; # Hash for de-duplication.
 	my @namesWithLargeAreas; 
@@ -231,6 +261,9 @@ sub getImageData{
 	$returnData{'Hour'} = $hh;
 	$returnData{'Minute'} = $mm;
 	$returnData{'Second'} = $ss;
+    if (!defined $zone){
+        $zone = 0;
+    }
 	$returnData{'TimeZone'} = $zone / 3600;
 	$returnData{'Status'} = 1;
 

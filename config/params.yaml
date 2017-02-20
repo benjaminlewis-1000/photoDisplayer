@@ -1,0 +1,49 @@
+
+windowsType: 1
+linuxType: 2
+
+database: "photos_master.db"
+
+# Table names:
+photoTableName: "Photos"
+peopleTableName: "People"
+linkerTableName: "Linker"
+rootTableName: "Root_Dirs"
+metadataTableName: "Metadata"
+tempTableName: "TmpPhotoTable"
+
+# Table column names 
+  ## Photo table
+photoKeyColumn: "photo_key"
+photoFileColumn: "photo_file"
+photoDateColumn: "photo_date"
+photoYearColumn: "taken_year"
+photoMonthColumn: "taken_month"
+photoDayColumn: "taken_day"
+photoHourColumn: "taken_hour"
+photoMinuteColumn: "taken_minute"
+photoGMTColumn: "taken_timezone"
+modifyDateColumn: "modification_date"
+rootDirNumColumn: "root_dir_num"
+insertDateColumn: "inserted_date"
+
+## People Table
+peopleKeyColumn: "people_key"
+personNameColumn: "person_name"
+
+## Linker Table
+linkerPeopleColumn: "person"
+linkerPhotoColumn: "photo"
+
+## Root Directory Table
+rootKeyColumn: "directory_root_key"
+windowsRootPath: "root_path_windows"
+linuxRootPath: "root_path_linux"
+
+## Metadata Table
+metadataNameColumn: "item_name"
+metadataValueColumn: "item_value"
+
+### Metadata fields
+metadataLastEditedField: "last_edited_date"
+

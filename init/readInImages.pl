@@ -5,7 +5,9 @@
 use strict;
 use warnings;
 use DBI;
-use File::stat;
+# use File::stat;  ## DO NOT USE File::stat!!
+use Time::HiRes qw( usleep gettimeofday tv_interval  );
+use POSIX qw(strftime);
 
 use params;
 require 'read_xmp.pl';
@@ -50,8 +52,6 @@ require 'read_xmp.pl';
 
 sub readOneImage{
 
-	use Time::HiRes qw( usleep gettimeofday tv_interval  );
-	use POSIX qw(strftime);
 
 	my ($args) = @_;
 
@@ -99,13 +99,14 @@ sub readOneImage{
 
 
 	# Get the last modified date. Opens the file. 
+	# print "processing file rii.pl: " . $baseDirName . $fileName . "\n";
 	if ( -e $baseDirName . $fileName ){
 		# Get the modification date of the file, and format it in ISO 8601 (ish) standard 
 
 		my $sttime = [gettimeofday];
 
 		my $file = $baseDirName . $fileName;
-		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", localtime(  ( stat $file )[9] ) );
+		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
 
 		### For comparison - this was the old method. 
 		# open (my $fh, "<", $baseDirName . $fileName) ;
@@ -166,7 +167,7 @@ sub readOneImage{
 		exit;
 	}
 
-	my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+	my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time); # This is OK.
 	$year += 1900;
 	$mon += 1;
 	my $dbInsertionDate = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
