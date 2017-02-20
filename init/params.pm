@@ -23,10 +23,10 @@ $base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
 $base_path = $1 . "/";  # Capture the output and put it in $base_path.
 
 my $YAML_file = $base_path . "config/params.yaml";
-our $database = $base_path . "databases/" . "photos_master.db";
 
 my $config = LoadFile($YAML_file);  # YAML is more cross-language.
 
+our $database = $base_path . "databases/" . $config->{'database'};
 
 my $osname = $^O;
 our $OS_type;

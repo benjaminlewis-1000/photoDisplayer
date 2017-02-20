@@ -16,21 +16,22 @@ params = yaml.load(stream)
 
 # if (sys.platform )
 print sys.platform
+# Get current OS
 osRegex = re.search('.*nux.?', sys.platform)
 # currentOS
-if (osRegex.group(0)):
-    # We're working on Linux
-    currentOS = params['linuxType']
-else:
-    osRegex = re.search('.*dows.?', sys.platform)
+if (osRegex == None): # Windows
+    osRegex = re.search('.*win.?', sys.platform)
     if (osRegex.group(0)):
         currentOS = params['windowsType']
     else:
         # MAC, not defined
         currentOS = 0
+else:
+    currentOS = params['linuxType']
+
 
 # Connect to the database
-conn = sqlite3.connect(rootDir + "/databases/photos_master.db")
+conn = sqlite3.connect(rootDir + "/databases/" + params['database'])
 conn.text_factory = str  # For UTF-8 compatibility
 
 c = conn.cursor()

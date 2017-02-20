@@ -2,6 +2,8 @@
 windowsType: 1
 linuxType: 2
 
+database: "photos_master.db"
+
 # Table names:
 photoTableName: "Photos"
 peopleTableName: "People"
