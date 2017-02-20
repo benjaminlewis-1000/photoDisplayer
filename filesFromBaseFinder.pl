@@ -1,0 +1,295 @@
+#! /usr/bin/perl
+
+use params;
+use File::Find;
+require 'readInImages.pl';
+
+use warnings;
+use strict; 
+
+#############  REUSABLE METHODS  ##################################
+
+sub getUniqueSubdirs{
+##############
+# Next step: Get a list of all files in the directory and its subdirectories. This will exclude directories that are under other root directories. We will populate two hashes: a %dirNameNumHash, which will give us the root directory's key number for each directory, and a %dirNameRelativeToHash, which gives us the subdirectory relative to the root directory.
+
+# For example, with a directory structure like:
+# /main
+# /main/testa
+# /main/testb
+# /main/testc
+#
+# where /main/testc is already included from a previous inclusion and we are currently adding /main,
+# we will get e.g. 2 for the /main directory number. Our directories that will be included are
+# /main/testa and /main/testb (but not /main/testc, because it's been seen already). Then, by grepping out the
+# root name, we will get dirNamesRelativeToRootHash of testa and testb. 
+
+	my $base_directory = $_[0];
+
+	our $localDBHandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+	my @file_list;
+
+	my %dirNameNumHash; 
+	my %dirNameRelativeToRootHash;
+	# I don't understand this following line; source is http://www.perlmonks.org/?node_id=677380. 
+	# The line gets the list of all images by relative directory from $base_directory. 
+	find(sub { push @file_list, $File::Find::name }, $base_directory);
+
+	# Get a list of subdirectories from this root directory, so we can see if they are already in the list. 
+	# The regex is looking for the opposite of any file that ends with a .*** extension.
+	my @subdirectories = grep(!/\.([a-zA-Z][^\.^\\]+$)/i, @file_list);
+	# Remove the root directory. We now have a list of all the subdirectories. This is to help the iteration.
+	@subdirectories = grep(/$base_directory/, @subdirectories);
+	chomp(@subdirectories);
+	# Copy the subdirectories into remainingSubdirs, which we can then remove from with impunity in a for loop. 
+	my @remainingSubdirs = @subdirectories;
+
+	my $directoryKeyVal;
+
+	for (my $i = 0; $i < scalar @subdirectories; $i++){
+		# Query the database to see if it has this specific subdirectory already. If so, get it's key value and put it in $directoryKeyVal.
+		# Remember that we've taken out this specific root directory, so we are in no danger of removing legitimate subdirectories. 
+		my $dirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$subdirectories[$i]\/"/;
+		my $query = $localDBHandle->prepare($dirExistsQuery);
+
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $dirExistsQuery\n";
+			sleep(5);
+		}# or die $DBI::errstr;
+		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
+
+		# Now, if the subdirectory is already accounted for, get its key number and base directory and add it to the appropriate hashes. Then remove it and all its subdirectories from the @remainingSubdirs list. 
+		if (defined $directoryKeyVal and $directoryKeyVal ne "" ){
+
+			# The directory exists, and we need to do something about it.
+			# Remove this directory and its subdirectories from the list of remaining subdirectories. 
+			# Because of the magic of grep, we will remove subdirectories of the root directory automatically.
+			@remainingSubdirs = grep(!/$subdirectories[$i]/, @remainingSubdirs);
+
+		}
+	}
+
+	# Output at this level: A list of all subdirectories of the added directory here, not including subdirectories of other included root directories. 
+
+	# Push the root directory back on the remaining directories.
+	push(@remainingSubdirs, $base_directory);
+
+	# We already have the directoryKeyVal from inserting the root directory (we can't get here if we didn't just add the directory.) We will also remove the $base_directory from the subdirectories that are remaining to give us a relative directory.
+	foreach my $val (@remainingSubdirs){
+		$val =~ s/$base_directory//g;
+		$dirNameNumHash{$val} = $directoryKeyVal;
+		$dirNameRelativeToRootHash{$val} = $base_directory;
+	}
+
+	$localDBHandle->disconnect;
+
+	return @remainingSubdirs;
+
+}
+
+sub addFilesInListOfSubdirs{
+#### Find a list of the files that are in each subdirectory. Call the readImages method on each of the files. 
+
+	my @subdirectories = @{$_[0]}; 
+	my $dirKeyVal = $_[1];
+	my $rootDirectory = $_[2];
+	my $numPassed = $_[3];
+
+	print ${$numPassed} . "\n";
+
+	# Create a tmp table with only necessary columns. Shows ~25% speedup. 
+	# createTmpTable();
+
+	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+	our %insertedDateHash;
+
+	# Only selecting the keyVal that's relevant in this sub so as to avoid conflicts. 
+	my $tableHashQuery = qq/SELECT $params::photoFileColumn, $params::insertDateColumn FROM $params::photoTableName WHERE $params::rootDirNumColumn = $dirKeyVal/;
+	my $query = $tmpDBhandle->prepare($tableHashQuery);
+	until(
+		$query->execute()
+	){
+		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+		warn "Failed on the following query: $tableHashQuery\n";
+		sleep(5);
+	}
+
+	my ($fileName, $insertDate);
+	$query->bind_col(1, \$fileName);
+	$query->bind_col(2, \$insertDate);
+
+	while($query->fetch){
+		$insertedDateHash{$fileName} = $insertDate;
+	}
+
+	foreach my $localDir (@subdirectories){
+		my @filesInDir;
+		my $odir = $rootDirectory . $localDir;
+		if ( !($odir =~ m/\/$/ ) ) {
+			print OUTPUT "$odir isn't a valid directory. \n";
+		}
+		opendir my $dir, "$odir" or next; #print "$odir isn't a valid directory. \n";
+		# 	next;
+		# } #die "Can't open directory " . $odir . ": $!";
+		@filesInDir = readdir $dir;
+		closedir $dir; 
+
+		if ($params::debug and $params::debugNewRoot) { print $localDir . "\t: "; } # grep(!/$subdirectories[$i]/, @subdirectories);
+		@filesInDir =  grep(/\.JPE?G/i, @filesInDir);
+		if ($params::debug and $params::debugNewRoot) { print join(',  ', @filesInDir) . "\n\n"; }
+
+		if ($localDir ne "" ){
+			$localDir .= "/";
+		}
+
+		my %nameHash;
+		foreach my $imageFile (@filesInDir){
+			${$numPassed} += 1;
+			if (${$numPassed} % 500 == 0){
+				print "We have read ${$numPassed} files and processed them accordingly.\n";
+			}
+
+	my $sttime = [gettimeofday];
+			readOneImage({
+				baseDirName => $rootDirectory, 
+				fileName => $localDir . $imageFile, 
+				baseDirNum => $dirKeyVal,
+				nameHash => \%nameHash,
+				dbhandle => $tmpDBhandle,
+				insertedDateHash => \%insertedDateHash
+			});
+	my $elapse = tv_interval($sttime);
+	# print "Total elapse: " . $elapse . "\n\n";
+		}
+
+	}
+
+}
+
+sub checkOSFolder{
+
+	my ($args) = @_;
+
+	my $winRootDir = $args->{winRootDir};
+	my $linRootDir = $args->{linRootDir};
+	my $dbhandle = $args->{dbhandle};
+	my $root_dir;
+
+	if ($params::OS_type == $params::windowsType){
+
+		if ($winRootDir eq "" or !-e $winRootDir){
+			my $mw = MainWindow->new;
+			$mw->withdraw;  # Hide the main window.
+			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Windows) is unpopulated. Please select the correct directory. The corresponding Linux directory is $linRootDir.", -type=>'OK');
+			while (!defined $winRootDir or $winRootDir eq "" or !-e $winRootDir){
+				$winRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $linRootDir.", -initialdir=>"/");
+			}
+
+			$winRootDir .= '/';
+
+			print $winRootDir . "\n";
+
+			# Add to database.
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::windowsRootPath = "$winRootDir"/;
+			my $query = $dbhandle->prepare($update_query);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $update_query\n";
+				sleep(5);
+			}# or die $DBI::errstr;
+
+			print "Updated" . "\n";
+			
+		}
+		$root_dir = $winRootDir ;
+	}else{
+		if ($linRootDir eq "" or !-e $linRootDir){
+			my $mw = MainWindow->new;
+			$mw->withdraw;  # Hide the main window.
+			$mw->messageBox(-title => 'Warning', -message => "The directory field for your OS (Linux) is unpopulated. Please select the correct directory. The corresponding Linux directory is $winRootDir.", -type=>'OK');
+			while (!defined $linRootDir or $linRootDir eq "" or !-e $linRootDir){
+				$linRootDir = $mw->chooseDirectory(-title=>"Directory corresponding to $winRootDir.", -initialdir=>"/");
+			}
+
+			$linRootDir .= '/';
+
+			# Add to database.
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::linuxRootPath = "$linRootDir"/;
+			my $query = $dbhandle->prepare($update_query);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $update_query\n";
+				sleep(5);
+			}# or die $DBI::errstr;
+
+			print "Updated" . "\n";
+		}
+		$root_dir = $linRootDir;
+	}
+
+	$root_dir .= '/';
+	return $root_dir ;
+}
+
+# sub createTmpTable{
+	
+# 	# Make a smaller, temporary table for reading when the files were last inserted in the database.
+# 	# This table *should* be faster to read from. 
+
+# 	## VERIFIED: Doing this shaves access time from 0.04 seconds to 0.03 seconds - a 25% speedup. It's worth it
+# 	## for large (tens of thousands) datasets. 
+# 	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
+# 	my $query = $tmpDBhandle->prepare($tmpTableQuery);
+# 	until(
+# 		$query->execute()
+# 	){
+# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 		warn "Failed on the following query: $tmpTableQuery\n";
+# 		sleep(5);
+# 	}# or die $DBI::errstr;
+
+# 	my $clearTable = qq/DELETE FROM $params::tempTableName/;
+# 	$query = $tmpDBhandle->prepare($clearTable);
+# 	until(
+# 		$query->execute()
+# 	){
+# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 		warn "Failed on the following query: $clearTable\n";
+# 		sleep(5);
+# 	}# or die $DBI::errstr;
+
+# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
+# 	$query = $tmpDBhandle->prepare($populateQuery);
+# 	until(
+# 		$query->execute()
+# 	){
+# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+# 		warn "Failed on the following query: $populateQuery\n";
+# 		sleep(5);
+# 	}# or die $DBI::errstr;
+
+# 	$tmpDBhandle->disconnect;
+# }
+
+# sub destroyTmpTable{
+# 	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+
+# 	my $dropPeople = qq/DROP TABLE IF EXISTS $params::tempTableName/;
+# 	my $query = $tmpDBhandle->prepare($dropPeople);
+# 	$query->execute() or die $DBI::errstr;
+
+# 	$tmpDBhandle->disconnect;
+# }
+
+1;
