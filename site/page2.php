@@ -111,7 +111,7 @@
 <!-- New criteria line script -->
 <script type="text/javascript">
 
-	function addCriteriaLine(){
+	function addCriteriaLine(divOfFields){
 		var div = document.createElement('div');
 		div.id = 'test';
 		div.className = "fieldParent";
@@ -135,7 +135,7 @@
 		var subdiv2 = document.createElement('div');
 
 			var select2 = document.createElement("select");
-			select2.options.add(new Option("m561", "AU", true, true));
+			select2.options.add(new Option("m23", "adfds", true, true));
 			select2.options.add(new Option("m562", "sdAU", true, true));
 			select2.options.add(new Option("m356", "A2U", true, true));
 
@@ -146,11 +146,54 @@
 
 			subdiv2.appendChild(select2);
 
+		var subdiv3 = document.createElement('div');
+		subdiv3.id = 'subdiv3';
+			var removeLineButton = document.createElement('BUTTON');
+			removeLineButton.id = 'button';
+			var t = document.createTextNode('Remove Criteria');
+			removeLineButton.appendChild(t);
+
+
+			removeLineButton.className = "fieldChild";
+			subdiv3.appendChild(removeLineButton);
+
+
+
 		div.appendChild(subdiv1);
 		div.appendChild(subdiv2);
-		document.body.appendChild(div);
+		div.appendChild(subdiv3);
+
+		console.log(subdiv3.parentNode.id);
+		console.log(subdiv3.id);
+		console.log(removeLineButton.parentNode.parentNode.id);
+/*		removeLineButton.onClick=removeElement(removeLineButton.parentNode.parentNode.id, removeLineButton.parentNode.id);
+*/
+/*
+		subdiv3.parentNode.removeChild(subdiv3);*/
+		criteriaFieldsDiv.appendChild(div);
+
 
 	}
+
+	function removeElement(parentDiv, childDiv){
+     if (childDiv == parentDiv) {
+          alert("The parent div cannot be removed.");
+     }
+     else if (document.getElementById(childDiv)) {     
+          var child = document.getElementById(childDiv);
+          var parent = document.getElementById(parentDiv);
+          parent.removeChild(child);
+     }
+     else {
+          alert("Child div has already been removed or does not exist.");
+          return false;
+     }
+
+
+
+  
+}
+
 </script>
 <!-- New criteria button formatting -->
 <style type="text/css">
@@ -246,8 +289,8 @@
   </div>
 </div> -->
 
-<div id=critBox>
-	<button id="newCriteria" onclick="addCriteriaLine()">New criteria</button>
+<div id=newCriteriaDiv>
+	<button id="newCriteria" onclick="addCriteriaLine('criteriaFieldsDiv')">New criteria</button>
 </div>
 
 <div id=fill>
@@ -258,6 +301,71 @@
 </style>
 </div>
 
+<div id=criteriaFieldsDiv>
+<style type="text/css">
+	#criteriaFieldsDiv{
+		background-color: #E3EBF7;
+		max-width: 1000;
+	}
+</style>
+</div>
+
+<!-- <button id="newCriteria" onclick="adddiv()">Add Div</button>
+<script type="text/javascript">
+	
+		function adddiv() {
+	  
+	   var divElement = document.createElement("div");  // private scope
+	   divElement.id = "myDiv";  
+	   divElement.style='width:100px;height:100px;border:1px solid black;'
+	   divElement.className = "myDivClass";  
+	   divElement.innerHTML = 'new div';  
+	   document.body.appendChild(divElement);
+	    var btn=document.getElementById('btn');
+	   btn.addEventListener('click',function(){  // if this function is defined outside it won't work because divElement will be out of its scope
+	         document.body.removeChild(divElement);
+	   });
+	   
+	}
+	window.addEventListener('load',adddiv);
+</script> -->
+
+<input type='button' value='remove' id='btn'>
+
+
+<form id="form1" name="form1" method="post" action="<?php echo $PHP_SELF; ?>">
+    <select Emp Name='NEW'>
+    <option value="">--- Select ---</option>
+    
+    <?php 
+
+	try{
+		$db = new SQLite3('photos_master.db');
+
+		$results = $db->query('SELECT person_name FROM people');
+		while ($row = $results->fetchArray()) {
+			if (!empty($row[0])){
+		   		echo "<option value=\"" . $row[0] . ">" . $row[0] . "</option>";
+			}
+		}
+	}catch(Exception $e){
+		die('connection_unsuccessful: ' . $e->getMessage());
+	}
+
+     ?>
+     
+    </select>
+    <input type="submit" name="Submit" value="Select" />
+</form>
+<!-- 
+<div id="parent" style="border: 1px solid red; padding: 10px;">
+     I am the parent div.
+     <div id="child" style="border: 1px solid green; padding: 10px;">
+           I am a child div within the parent div.
+     </div>
+</div>
+<p>&nbsp;</p>
+<input type="button" value="Remove Element" onClick="removeElement('parent','child');"> -->
 
 </body>
 </html>
