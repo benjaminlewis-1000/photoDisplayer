@@ -183,6 +183,12 @@ sub getImageData{
 		# a proportion of the image. 
 		my $name = $names[$i];
 		trim($name);
+
+		# Capitalize the first letter of each name, and preserve irish-type names like O'Whatever. Just because. 
+		$name =~ s/((?<!\')[a-zA-Z'\s,])/\L$1/g;
+		$name =~ s/([A-Za-z']+)/\u$1/g;
+		# print $name . "\n";
+
 		my $width = $widths[$i];
 		trim($width);
 		my $height = $heights[$i];

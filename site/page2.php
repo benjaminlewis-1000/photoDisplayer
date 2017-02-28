@@ -1,9 +1,15 @@
 <html>
+
+<input type="hidden" value="0" id="divNumID" />
+
 	<title>
 		Picture Perfect Pi Photo Phrame
 	</title>
 
 <head>
+
+<script src="jquery.js" type="text/javascript"></script>
+
 	<style>
 		/* Dropdown Button */
 		.dropbtn {
@@ -108,91 +114,316 @@
 	}
 </style>
 
+
+<!-- var text = jQuery.ajax({
+    type: "POST",
+    url: 'get_php.php',
+    dataType: 'text',
+    data: {functionname: 'add', arguments: [1, 2]},
+
+    success: function (obj, textstatus) {
+                  if( !('error' in obj) ) {
+                      yourVariable = obj.result;
+                  }
+                  else {
+                      console.log(obj.error);
+                  }
+            }
+
+            
+});
+
+var myData = "";
+
+function getData(response){
+	myData = response
+}
+
+$.ajaxSetup({async:false})
+$.post(
+	'get_php.php', {},
+	 function(data){
+	 	getData(data)
+	 	// Or here, I would create my field.
+	 }
+	)
+console.log(myData) -->
 <!-- New criteria line script -->
+
 <script type="text/javascript">
 
 	function addCriteriaLine(divOfFields){
-		var div = document.createElement('div');
-		div.id = 'test';
-		div.className = "fieldParent";
+
+
+		var mainDiv = document.getElementById(divOfFields);
+
+  		var num = (document.getElementById('divNumID').value -1)+ 2;
+  		document.getElementById('divNumID').value = num;
+
+		var lineDiv = document.createElement('div');
+		mainDiv.appendChild(lineDiv);
+
+		lineDiv.id = 'criteriaBox' + num;
+		lineDiv.className = "fieldParent";
+
+		console.log(name)
 
 		var subdiv1 = document.createElement('div');
+			lineDiv.appendChild(subdiv1);
+			subdiv1.id = 'typeBox' + num
+
 			var select = document.createElement("select");
 
-			var list = ["Date", "Person"];
+
+			var list = ["Date", "Person", "Year", "Month"]
 
 			for (var i = 0; i < list.length; i++){
 				select.options.add(new Option(list[i], list[i]));
 			}
 
 			select.className = "fieldChild";
-
-			var t = document.createTextNode("Click me!");
-			select.appendChild(t);
+			select.id = "selectCriteriaMenu" + num
 
 			subdiv1.appendChild(select);
 
-		var subdiv2 = document.createElement('div');
+			select.addEventListener("change", function(){
+				constructSelectionLine(num, lineDiv)
+			})
 
-			var select2 = document.createElement("select");
+
+		var subdiv2 = document.createElement('div')
+		subdiv2.id = 'binarySelect' + num
+		lineDiv.appendChild(subdiv2)
+
+				var binarySelect = document.createElement('select')
+				binarySelect.id = 'binarySelectValues' + num
+				subdiv2.appendChild(binarySelect)
+				binarySelect.className = "fieldChild"
+
+		var subdiv3 = document.createElement("div")
+		subdiv3.id = 'selectionValue' + num
+		lineDiv.appendChild(subdiv3)
+
+
+
+		constructSelectionLine(num, lineDiv)
+
+
+		var removeSubdiv = document.createElement('div');
+		lineDiv.appendChild(removeSubdiv);
+		removeSubdiv.id = 'removeSubdiv' + num;
+
+			var removeLineButton = document.createElement('BUTTON');
+			removeLineButton.id = 'button';
+			var t = document.createTextNode('Remove Criteria');
+			removeLineButton.appendChild(t);
+
+			removeLineButton.className = "fieldChild";
+			removeSubdiv.appendChild(removeLineButton);
+
+			var name = 'removeButton' + num
+			var re = /.?(\d+)$/
+
+			var num1 = re.exec(name)
+			var value = num1[1]
+			console.log(value)
+
+			removeLineButton.onclick = function() { removeElement(removeSubdiv.id);};//removeElement//(subdiv3.id)
+
+	}
+
+	function constructSelectionLine(divNumber, lineDiv){
+
+		//var lineDiv = document.getElementById('criteriaBox' + divNumber)
+		<?php 
+			try{
+				$db = new SQLite3('../databases/photos_master.db');
+
+				$results = $db->query('SELECT person_name FROM people');
+				$people = array();
+				while ($row = $results->fetchArray()) {
+					if (!empty($row[0])){
+						$people[] = $row[0];
+					}
+				}
+			}catch(Exception $e){
+				die('connection_unsuccessful: ' . $e->getMessage());
+			}
+			natcasesort ($people);
+
+			$personNames = array();
+			foreach ($people as $person){
+				$personNames[] = $person;
+			}
+
+			echo 'var personNames = ' . json_encode($personNames) . ';';
+		?>
+
+		subdiv1Select_ID = 'selectCriteriaMenu' + divNumber
+		selectionValue = document.getElementById(subdiv1Select_ID).value
+
+		console.log('Selection value is ' + selectionValue)
+		console.log()
+
+		switch(selectionValue){
+			case "Date":
+
+				var subdiv2 = document.getElementById('binarySelect' + divNumber)
+				var subdiv3 = document.getElementById('selectionValue' + divNumber)
+
+				while (subdiv2.firstChild) {
+				    subdiv2.removeChild(subdiv2.firstChild);
+				}
+				while (subdiv3.firstChild) {
+				    subdiv3.removeChild(subdiv3.firstChild);
+				}
+
+				var binarySelect = document.createElement('select')
+				binarySelect.id = 'binarySelectValues' + divNumber
+				subdiv2.appendChild(binarySelect)
+				binarySelect.className = "fieldChild"
+
+				binarySelect.options.add(new Option("is before", "is before", true, true));
+				binarySelect.options.add(new Option("is after", "is after", true, true));
+
+
+
+				break;
+			case "Person":
+				var subdiv2 = document.getElementById('binarySelect' + divNumber)
+				var subdiv3 = document.getElementById('selectionValue' + divNumber)
+
+				while (subdiv2.firstChild) {
+				    subdiv2.removeChild(subdiv2.firstChild);
+				}
+				while (subdiv3.firstChild) {
+				    subdiv3.removeChild(subdiv3.firstChild);
+				}
+				
+				var binarySelect = document.createElement('select')
+				binarySelect.id = 'binarySelectValues' + divNumber
+				subdiv2.appendChild(binarySelect)
+				binarySelect.className = "fieldChild"
+
+				binarySelect.options.add(new Option("is", "is", true, true));
+				binarySelect.options.add(new Option("is not", "is not", true, true));
+
+				var personSelect = document.createElement('select')
+				personSelect.id = 'personSelectValue' + divNumber
+				subdiv2.appendChild(personSelect)
+				personSelect.className = "fieldChild"
+
+				for (var i = 0; i < personNames.length; i++){
+					personSelect.options.add(new Option(personNames[i], personNames[i], true, true))
+				}
+
+
+				break;
+			case "Year":
+				var subdiv2 = document.getElementById('binarySelect' + divNumber)
+				var subdiv3 = document.getElementById('selectionValue' + divNumber)
+
+
+				while (subdiv2.firstChild) {
+				    subdiv2.removeChild(subdiv2.firstChild);
+				}
+				while (subdiv3.firstChild) {
+				    subdiv3.removeChild(subdiv3.firstChild);
+				}
+
+				var binarySelect = document.createElement('select')
+				binarySelect.id = 'binarySelectValues' + divNumber
+				subdiv2.appendChild(binarySelect)
+				binarySelect.className = "fieldChild"
+
+
+				var yearSelect = document.createElement('select')
+				yearSelect.id = 'selectionValue' + divNumber
+				lineDiv.appendChild(yearSelect)
+				yearSelect.className = "fieldChild"
+
+
+				break;
+			case "Month":
+				var subdiv2 = document.getElementById('binarySelect' + divNumber)
+				var subdiv3 = document.getElementById('selectionValue' + divNumber)
+
+				while (subdiv2.firstChild) {
+				    subdiv2.removeChild(subdiv2.firstChild);
+				}
+				while (subdiv3.firstChild) {
+				    subdiv3.removeChild(subdiv3.firstChild);
+				}
+
+				var binarySelect = document.createElement('select')
+				binarySelect.id = 'binarySelectValues' + divNumber
+				subdiv2.appendChild(binarySelect)
+				binarySelect.className = "fieldChild"
+
+
+				break;
+		}
+/*
+		var subdiv2 = document.createElement('div');
+		lineDiv.appendChild(subdiv2);
+
+			var select2 = document.createElement('select');
 			select2.options.add(new Option("m23", "adfds", true, true));
 			select2.options.add(new Option("m562", "sdAU", true, true));
 			select2.options.add(new Option("m356", "A2U", true, true));
 
 			select2.className = "fieldChild";
 
-			var t = document.createTextNode("Click me!");
-			select2.appendChild(t);
-
 			subdiv2.appendChild(select2);
 
-		var subdiv3 = document.createElement('div');
-		subdiv3.id = 'subdiv3';
-			var removeLineButton = document.createElement('BUTTON');
-			removeLineButton.id = 'button';
-			var t = document.createTextNode('Remove Criteria');
-			removeLineButton.appendChild(t);
-
-
-			removeLineButton.className = "fieldChild";
-			subdiv3.appendChild(removeLineButton);
-
-
-
-		div.appendChild(subdiv1);
-		div.appendChild(subdiv2);
-		div.appendChild(subdiv3);
-
-		console.log(subdiv3.parentNode.id);
-		console.log(subdiv3.id);
-		console.log(removeLineButton.parentNode.parentNode.id);
-/*		removeLineButton.onClick=removeElement(removeLineButton.parentNode.parentNode.id, removeLineButton.parentNode.id);
+			subdiv2.id = 'optionsBox' + divNumber
 */
-/*
-		subdiv3.parentNode.removeChild(subdiv3);*/
-		criteriaFieldsDiv.appendChild(div);
 
 
 	}
 
-	function removeElement(parentDiv, childDiv){
-     if (childDiv == parentDiv) {
-          alert("The parent div cannot be removed.");
-     }
-     else if (document.getElementById(childDiv)) {     
-          var child = document.getElementById(childDiv);
-          var parent = document.getElementById(parentDiv);
-          parent.removeChild(child);
-     }
-     else {
-          alert("Child div has already been removed or does not exist.");
-          return false;
-     }
+	function listenMetaCategory(subdivName){
+
+		var re = /.?(\d+)/ // Match the number at the end of the ID. 
+		var num1 = re.exec(subdivName)
+		var value = num1[1]
+
+		var newVal = document.getElementById("selectCriteriaMenu" + value).value
+
+		console.log(newVal)
+	}
+
+	function removeElement(boxIDName){
+
+		console.log(boxIDName)
+		var re = /.?(\d+)/ // Match the number at the end of the ID. 
+		var num1 = re.exec(boxIDName)
+		console.log(num1)
+		var value = num1[1]
+
+		parentName = 'criteriaBox' + value
+		console.log(parentName)
+		var parent = document.getElementById(parentName);
+		parent.remove();
+
+/*
+ if (childDiv == parentDiv) {
+      alert("The parent div cannot be removed.");
+ }
+ else if (document.getElementById(childDiv)) {     
+      var child = document.getElementById(childDiv);
+      var parent = document.getElementById(parentDiv);
+      parent.removeChild(child);
+ }
+ else {
+      alert("Child div has already been removed or does not exist.");
+      return false;
+ }*/
 
 
 
   
-}
+	}
 
 </script>
 <!-- New criteria button formatting -->
@@ -223,52 +454,6 @@
 
 
 </style>
-
-<!-- <script>
-	function myFunction() {
-    	document.getElementById("myDropdown").classList.toggle("show");
-	}
-
-
-	// Close the dropdown menu if the user clicks outside of it
-	window.onclick = function(event) {
-	  if (!event.target.matches('.dropbtn')) {
-
-	    var dropdowns = document.getElementsByClassName("dropdown-content");
-	    var i;
-	    for (i = 0; i < dropdowns.length; i++) {
-	      var openDropdown = dropdowns[i];
-	      if (openDropdown.classList.contains('show')) {
-	        openDropdown.classList.remove('show');
-	      }
-	    }
-	  }
-	}
-</script> -->
-
-<!-- <script type="text/javascript">
-	text="test";
-
-	function postData(input){
-		var jqXHR = $.ajax({
-			type: "POST",
-			url: "C:\\Users\\Benjamin\\Desktop\\site\\dbAccess.py",
-			data: {param: input},
-			success: callbackFunc
-		})
-	}
-
-	function callbackFunc(response){
-		console.log(response);
-	}
-
-	$('#submitbutton').click(function(){
-        datatosend = 'this is my matrix';
-        result = runPyScript(datatosend);
-        console.log('Got back ' + result);
-    });
-</script> -->
-
 
 <body>
 
@@ -330,7 +515,6 @@
 	window.addEventListener('load',adddiv);
 </script> -->
 
-<input type='button' value='remove' id='btn'>
 
 
 <form id="form1" name="form1" method="post" action="<?php echo $PHP_SELF; ?>">
@@ -343,29 +527,26 @@
 		$db = new SQLite3('photos_master.db');
 
 		$results = $db->query('SELECT person_name FROM people');
+		$people = array();
 		while ($row = $results->fetchArray()) {
 			if (!empty($row[0])){
-		   		echo "<option value=\"" . $row[0] . ">" . $row[0] . "</option>";
+				$people[] = $row[0];
 			}
 		}
 	}catch(Exception $e){
 		die('connection_unsuccessful: ' . $e->getMessage());
 	}
+	natcasesort ($people);
 
-     ?>
-     
+	foreach ($people as $person){
+		echo "<option value=\"" . $person . "\">" . $person . "</option>\n";
+	}
+
+    ?>
+
     </select>
     <input type="submit" name="Submit" value="Select" />
 </form>
-<!-- 
-<div id="parent" style="border: 1px solid red; padding: 10px;">
-     I am the parent div.
-     <div id="child" style="border: 1px solid green; padding: 10px;">
-           I am a child div within the parent div.
-     </div>
-</div>
-<p>&nbsp;</p>
-<input type="button" value="Remove Element" onClick="removeElement('parent','child');"> -->
 
 </body>
 </html>
