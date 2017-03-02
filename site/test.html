@@ -1,55 +1,222 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>
-		Hey there!
-	</title>
+<html class="gr__mattkruse_com"><head>
+	<title>JavaScript Toolbox - Calendar Popup To Select Date</title>
+<script language="JavaScript" src="combined/CalendarPopup.js"></script>
 
-	<style type="text/css">
-		
-		#main{
-			max-width: 1000px;
-			margin 20px auto;
-			padding: 10px;
-			border: invisible 5px;
-			--webkit-box-sizing: border-box;float: 
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
-		}
-		#test{
-			max-width: 1000px;
-			margin 20px auto;
-			padding: 10px;
-			border: solid blue 2px;
-			--webkit-box-sizing: border-box;float: 
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
-		}
+<!-- This javascript is only used for the show/hide source on my example page.
+     It is not used by the Calendar Popup script -->
+<script language="JavaScript" src="../common.js"></script>
 
-	</style>
+<!-- This prints out the default stylehseets used by the DIV style calendar.
+     Only needed if you are using the DIV style popup -->
+<script language="JavaScript">document.write(getCalendarStyles());</script><style>
+.cpYearNavigation,.cpMonthNavigation { background-color:#C0C0C0; text-align:center; vertical-align:center; text-decoration:none; color:#000000; font-weight:bold; }
+.cpDayColumnHeader, .cpYearNavigation,.cpMonthNavigation,.cpCurrentMonthDate,.cpCurrentMonthDateDisabled,.cpOtherMonthDate,.cpOtherMonthDateDisabled,.cpCurrentDate,.cpCurrentDateDisabled,.cpTodayText,.cpTodayTextDisabled,.cpText { font-family:arial; font-size:8pt; }
+TD.cpDayColumnHeader { text-align:right; border:solid thin #C0C0C0;border-width:0px 0px 1px 0px; }
+.cpCurrentMonthDate, .cpOtherMonthDate, .cpCurrentDate  { text-align:right; text-decoration:none; }
+.cpCurrentMonthDateDisabled, .cpOtherMonthDateDisabled, .cpCurrentDateDisabled { color:#D0D0D0; text-align:right; text-decoration:line-through; }
+.cpCurrentMonthDate, .cpCurrentDate { color:#000000; }
+.cpOtherMonthDate { color:#808080; }
+TD.cpCurrentDate { color:white; background-color: #C0C0C0; border-width:1px; border:solid thin #800000; }
+TD.cpCurrentDateDisabled { border-width:1px; border:solid thin #FFAAAA; }
+TD.cpTodayText, TD.cpTodayTextDisabled { border:solid thin #C0C0C0; border-width:1px 0px 0px 0px;}
+A.cpTodayText, SPAN.cpTodayTextDisabled { height:20px; }
+A.cpTodayText { color:black; }
+.cpTodayTextDisabled { color:#D0D0D0; }
+.cpBorder { border:solid thin #808080; }
+</style>
+
+
+<!-- These styles are here only as an example of how you can over-ride the default
+     styles that are included in the script itself. -->
+<style>
+	.TESTcpYearNavigation,
+	.TESTcpMonthNavigation
+			{
+			background-color:#6677DD;
+			text-align:center;
+			vertical-align:center;
+			text-decoration:none;
+			color:#FFFFFF;
+			font-weight:bold;
+			}
+	.TESTcpDayColumnHeader,
+	.TESTcpYearNavigation,
+	.TESTcpMonthNavigation,
+	.TESTcpCurrentMonthDate,
+	.TESTcpCurrentMonthDateDisabled,
+	.TESTcpOtherMonthDate,
+	.TESTcpOtherMonthDateDisabled,
+	.TESTcpCurrentDate,
+	.TESTcpCurrentDateDisabled,
+	.TESTcpTodayText,
+	.TESTcpTodayTextDisabled,
+	.TESTcpText
+			{
+			font-family:arial;
+			font-size:8pt;
+			}
+	TD.TESTcpDayColumnHeader
+			{
+			text-align:right;
+			border:solid thin #6677DD;
+			border-width:0 0 1 0;
+			}
+	.TESTcpCurrentMonthDate,
+	.TESTcpOtherMonthDate,
+	.TESTcpCurrentDate
+			{
+			text-align:right;
+			text-decoration:none;
+			}
+	.TESTcpCurrentMonthDateDisabled,
+	.TESTcpOtherMonthDateDisabled,
+	.TESTcpCurrentDateDisabled
+			{
+			color:#D0D0D0;
+			text-align:right;
+			text-decoration:line-through;
+			}
+	.TESTcpCurrentMonthDate
+			{
+			color:#6677DD;
+			font-weight:bold;
+			}
+	.TESTcpCurrentDate
+			{
+			color: #FFFFFF;
+			font-weight:bold;
+			}
+	.TESTcpOtherMonthDate
+			{
+			color:#808080;
+			}
+	TD.TESTcpCurrentDate
+			{
+			color:#FFFFFF;
+			background-color: #6677DD;
+			border-width:1;
+			border:solid thin #000000;
+			}
+	TD.TESTcpCurrentDateDisabled
+			{
+			border-width:1;
+			border:solid thin #FFAAAA;
+			}
+	TD.TESTcpTodayText,
+	TD.TESTcpTodayTextDisabled
+			{
+			border:solid thin #6677DD;
+			border-width:1 0 0 0;
+			}
+	A.TESTcpTodayText,
+	SPAN.TESTcpTodayTextDisabled
+			{
+			height:20px;
+			}
+	A.TESTcpTodayText
+			{
+			color:#6677DD;
+			font-weight:bold;
+			}
+	SPAN.TESTcpTodayTextDisabled
+			{
+			color:#D0D0D0;
+			}
+	.TESTcpBorder
+			{
+			border:solid thin #6677DD;
+			}
+</style>
 </head>
-
-<script type="text/javascript">
-	
-	function newDiv(){
-		var div = document.createElement('div');
-		document.body.appendChild(div);
-		div.id = 'test';
-	}
-
-</script>
-
-<body>
-
-I win!
-<button id="newButton" onclick="newDiv()">New criteria</button>
-
-<div id=main>
-	This is a div?
-	<span>Spanning</span>
-
+<body bgcolor="#FFFFFF" link="#00615F" vlink="#00615F" alink="#00615F" data-gr-c-s-loaded="true"><div id="StayFocusd-infobar" style="display: none; top: 100px;">
+    <img src="chrome-extension://laankejkbhbdhmipfmgcngdelahlfoji/common/img/eye_19x19_red.png">
+    <span id="StayFocusd-infobar-msg"></span>
+    <span id="StayFocusd-infobar-links">
+        <a id="StayFocusd-infobar-never-show">hide forever</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a id="StayFocusd-infobar-hide">hide once</a>
+    </span>
+</div>
+<div style="border:50px solid red;padding:10px;">
+<h1>JavascriptToolbox.com Now Available!</h1>
+Almost all of my javascript code has been moved over to its new home at <a href="http://www.JavascriptToolbox.com/">The Javascript Toolbox</a>. Please go there to find the latest scripts, information, etc. These pages will remain here for a while for historical purposes in case anyone needs a production copy of old code.
 </div>
 
+<table width="600" cellpadding="5">
+<tbody><tr>
+	<td><img src="../icon.gif" width="130" height="107" alt="" border="0"></td>
+	<td valign="MIDDLE">
+		<font size="+3">Calendar Popup</font>
+		<hr noshade="" width="300" align="LEFT" color="black">
+		[<a href="../">Javascript Toolbox</a>]&nbsp;&nbsp;[<span style="background-color:yellow;">Example</span>]&nbsp;&nbsp;[<a href="source.html">Source</a>]
+	</td>
+</tr>
+</tbody></table>
 
-</body>
-</html>
+<table width="100%" border="0"><tbody><tr><td width="100%" align="LEFT" valign="TOP">
+
+<u><b>Description:</b></u>
+<br>
+
+This script uses DHTML or Popup windows to display a calendar for the user to select a date. It was designed to look and behave like Microsoft Outlook.<br>
+It can be implemented in only a few lines of code, yet also provides customization options to make it work correctly in any country's display format, etc.
+<p>
+<b>Note:</b> Why are form elements or &lt;SELECT&gt; boxes showing
+over top of the DIV-style calendar popup? It's not a bug in the javascript -
+it's a bug/feature of browsers. See this
+<a href="http://www.webreference.com/dhtml/diner/seethru/">explanation</a>
+by WebReference.
+<br><br>
+<u><b>Example:</b></u>
+<br>
+Below are multiple examples of the CalendarPopup in use. Each is slightly different to show different capabilities of the script.
+<br>
+Click the "Show Source" links for each example to see how it was done, and hover over the "Select" links to see how they are coded. Or view the source of the entire page!
+<br>
+<br>
+
+I have also provided a <b><a href="simple.html" target="_blank">The Simplest Possible Implementation Of A Calendar Popup</a></b> in case you're overwhelmed by this page :)
+<br><br>
+</p><form lpformnum="1" _lpchecked="1">
+
+<!-- ================================================================================== --><hr>
+
+Default calendar.<br>
+<script language="JavaScript" id="js1">
+var cal1 = new CalendarPopup();
+</script>
+<!-- ================================================================================== --><hr>
+
+Default calendar using the DIV-style display, with navigation drop-downs enabled.<br>
+<script language="JavaScript" id="jscal1xx">
+var cal1xx = new CalendarPopup("testdiv1");
+cal1xx.showNavigationDropdowns();
+</script>
+<!-- The next line prints out the source in this example page. It should not be included when you actually use the calendar popup code -->
+<a style="font-family:arial; font-size:x-small; text-decoration:none;" href="#" onclick="var d=document.getElementById('jssourcejscal1xx').style; if(d.display=='block'){d.display='none';this.innerText='+ Show Source';}else{d.display='block';this.innerText='- Hide Source';} return false;">+ Show Source</a><br><span id="jssourcejscal1xx" style="display:none;background-color:#EEEEEE"><tt>var cal1xx = new CalendarPopup("testdiv1");<br>cal1xx.showNavigationDropdowns();<br><br></tt></span>
+<input type="text" name="date1xx" value="" size="25">
+<a href="#" onclick="cal1xx.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" title="cal1xx.select(document.forms[0].date1xx,'anchor1xx','MM/dd/yyyy'); return false;" name="anchor1xx" id="anchor1xx">select</a>
+
+<!-- ================================================================================== --><hr>
+
+</form>
+<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
+
+</td><td valign="TOP">
+<script type="text/javascript">
+google_ad_client = "pub-9155030588311591";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_color_border = "006666";
+google_color_bg = "FFFFFF";
+google_color_link = "006666";
+google_color_url = "006666";
+google_color_text = "000000";
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</td></tr></tbody></table>
+
+
+
+<script aria-hidden="true" type="application/x-lastpass" id="hiddenlpsubmitdiv" style="display: none;"></script><script>try{(function() { for(var lastpass_iter=0; lastpass_iter < document.forms.length; lastpass_iter++){ var lastpass_f = document.forms[lastpass_iter]; if(typeof(lastpass_f.lpsubmitorig2)=="undefined"){ lastpass_f.lpsubmitorig2 = lastpass_f.submit; if (typeof(lastpass_f.lpsubmitorig2)=='object'){ continue;}lastpass_f.submit = function(){ var form=this; var customEvent = document.createEvent("Event"); customEvent.initEvent("lpCustomEvent", true, true); var d = document.getElementById("hiddenlpsubmitdiv"); if (d) {for(var i = 0; i < document.forms.length; i++){ if(document.forms[i]==form){ if (typeof(d.innerText) != 'undefined') { d.innerText=i.toString(); } else { d.textContent=i.toString(); } } } d.dispatchEvent(customEvent); }form.lpsubmitorig2(); } } }})()}catch(e){}</script></body></html>

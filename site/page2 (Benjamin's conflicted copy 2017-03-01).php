@@ -8,9 +8,6 @@
 
 <head>
 
-<!-- Style sheet from the javascript toolbox library demo page, http://www.mattkruse.com/javascript/calendarpopup/index.html -->
-<link rel="stylesheet" type="text/css" href="css/cal_styles.css">
-
 <script src="js/jquery.js" type="text/javascript"></script>
 <script src="js/popupWindow.js"></script>
 
@@ -294,9 +291,10 @@ console.log(myData) -->
 				var cal1 = new CalendarPopup();
 				subdiv3.appendChild(cal1)*/
 
-				break
-
+	var tt = new CalendarPopup('selectionValue' + divNumber);
+				break;
 			case "Person":
+				
 				var binarySelect = document.createElement('select')
 				binarySelect.id = 'binarySelectValues' + divNumber
 				subdiv2.appendChild(binarySelect)
@@ -307,7 +305,7 @@ console.log(myData) -->
 				binarySelect.selectedIndex = 0
 
 				var personSelect = document.createElement('select')
-				personSelect.id = 'selectionValue' + divNumber
+				personSelect.id = 'personSelectValue' + divNumber
 				subdiv2.appendChild(personSelect)
 				personSelect.className = "fieldChild"
 
@@ -325,22 +323,20 @@ console.log(myData) -->
 				subdiv2.appendChild(binarySelect)
 				binarySelect.className = "fieldChild"
 
-				binarySelect.options.add(new Option("is", "is", true, true));
-				binarySelect.options.add(new Option("is not", "is not", true, true));
 				binarySelect.options.add(new Option("is before", "is before", true, true));
 				binarySelect.options.add(new Option("is after", "is after", true, true));
+				binarySelect.options.add(new Option("is", "is", true, true));
+				binarySelect.options.add(new Option("is not", "is not", true, true));
 
 				binarySelect.selectedIndex = 0
 
-				var yearSelect = document.createElement('input')
-				yearSelect.setAttribute("type", "text")
+				var yearSelect = document.createElement('select')
 				yearSelect.id = 'selectionValue' + divNumber
+				lineDiv.appendChild(yearSelect)
 				yearSelect.className = "fieldChild"
 
-				subdiv3.appendChild(yearSelect)
 
 				break;
-
 			case "Month":
 
 				var binarySelect = document.createElement('select')
@@ -352,17 +348,6 @@ console.log(myData) -->
 				binarySelect.options.add(new Option("is not", "is not", true, true));
 				binarySelect.selectedIndex = 0
 
-				var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-				var monthSelect = document.createElement('select')
-				monthSelect.id = 'selectionValue' + divNumber
-				subdiv2.appendChild(monthSelect)
-				monthSelect.className = "fieldChild"
-
-				for (var i = 0; i < months.length; i++){
-					monthSelect.options.add(new Option(months[i], months[i], true, true))
-				}
-				monthSelect.selectedIndex = 0
 
 
 				break;
@@ -523,10 +508,10 @@ console.log(myData) -->
 	<script type="text/javascript" src="js/AnchorPosition.js"></script>
 
 
+<div id=testt></div>
 	<script language="JavaScript">
-	var cal = new CalendarPopup("testdiv1");
+	var cal = new CalendarPopup();
 	cal.showNavigationDropdowns();
-cal.setCssPrefix("Test");
 	</script>
 <form name="example">
 (View Source of this page to see the example code)<br>
@@ -534,6 +519,5 @@ cal.setCssPrefix("Test");
 <a href="#" onclick="cal.select(document.forms['example'].date1,'anchor1','MM/dd/yyyy'); return false;" name="anchor1" id="anchor1">select</a>
 </form>
 
-<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
 </body>
 </html>
