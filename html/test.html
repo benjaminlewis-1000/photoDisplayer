@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Hey there!
+	</title>
+
+	<style type="text/css">
+		
+		#main{
+			max-width: 1000px;
+			margin 20px auto;
+			padding: 10px;
+			border: invisible 5px;
+			--webkit-box-sizing: border-box;float: 
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		#test{
+			max-width: 1000px;
+			margin 20px auto;
+			padding: 10px;
+			border: solid blue 2px;
+			--webkit-box-sizing: border-box;float: 
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+
+	</style>
+</head>
+
+<script type="text/javascript">
+	
+	function newDiv(){
+		var div = document.createElement('div');
+		document.body.appendChild(div);
+		div.id = 'test';
+	}
+
+</script>
+
+<body>
+
+I win!
+<button id="newButton" onclick="newDiv()">New criteria</button>
+
+<div id=main>
+	This is a div?
+	<span>Spanning</span>
+
+</div>
+
+
+</body>
+</html>

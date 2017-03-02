@@ -1,0 +1,24 @@
+<html>
+ <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="http://code.jquery.com/jquery 2.1.4.min.js"></script>  
+ </head>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+    <script type="text/javascript">
+
+    function runPyScript(input){
+         $.ajax({
+		  type: "POST",
+		  url: "http://localhost:8000/dbAccess.py"
+		})
+    }
+	</script>
+
+ <body>
+    <input id="submitbutton" onclick="runPyScript()" type="submit" value="Test Send Data">
+
+</body>
