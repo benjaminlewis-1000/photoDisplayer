@@ -77,21 +77,21 @@
 
 	.fieldParent{
 		position:relative;
-	    height: 70px;
+	    min-height: 70px;
 	    max-width: 1000px;
 	    /*border: 4px solid black;*/
 		margin 20px auto;
 		padding: 10px;
 		border: solid blue 2px;
-		--webkit-box-sizing: border-box;float: 
+		--webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
+		overflow: hidden
 	}
 
 	.fieldChild{
 	    background-color: #FFFCE0;
 	    color: #200954;
-	    padding: 16px;
 	    border: 20px;
 	    cursor: pointer;
 
@@ -101,11 +101,12 @@
 	    left: 20px;
 	    flex: 1;
 	    height: 50px;
-	    max-width: 200px;
 	    border-radius: 15px;
 
 	    margin-left: 10px;
 	    margin-right: 10px;
+	    /*margin-top: 10px;
+	    margin-bottom: 10px;*/
 
 	    transition: 1.5s ease;
 	    float:left;
@@ -113,20 +114,46 @@
 
 	.fieldChildColorless{
 	   /* padding: 16px;*/
-	    font-size: 20px;
-	    text-align: center;
 
 	    border: 20px;
 	    cursor: pointer;
 
+	    font-size: 20px;
+	    text-align: center;
+
 	    left: 20px;
 	    flex: 1;
 	    height: 50px;
-	    max-width: 200px;
 	    border-radius: 15px;
 
-	   /* margin-left: 10px;
-	    margin-right: 10px;*/
+	    margin-left: 10px;
+	    margin-right: 10px;
+	  /*  margin-top: 10px;
+	    margin-bottom: 10px;*/
+
+	    transition: 1.5s ease;
+	    float:left;
+	}
+
+	.calendarBox{
+	   /* padding: 16px;*/
+
+	    border: 20px;
+	    cursor: pointer;
+
+	    font-size: 20px;
+	    text-align: center;
+	    width:150px;
+
+	    left: 20px;
+	    flex: 1;
+	    height: 50px;
+	    border-radius: 15px;
+
+	    margin-left: 10px;
+	    margin-right: -10px;
+	    /*margin-top: 10px;
+	    margin-bottom: 10px;*/
 
 	    transition: 1.5s ease;
 	    float:left;
@@ -189,8 +216,6 @@ console.log(myData) -->
 		lineDiv.id = 'criteriaBox' + num;
 		lineDiv.className = "fieldParent";
 
-		console.log(name)
-
 		var subdiv1 = document.createElement('div');
 			lineDiv.appendChild(subdiv1);
 			subdiv1.id = 'typeBox' + num
@@ -198,7 +223,7 @@ console.log(myData) -->
 			var select = document.createElement("select");
 
 
-			var list = ["Date", "Person", "Year", "Month"]
+			var list = ["Date Range", "Person", "Year", "Month"]
 
 			for (var i = 0; i < list.length; i++){
 				select.options.add(new Option(list[i], list[i]));
@@ -224,9 +249,8 @@ console.log(myData) -->
 				binarySelect.className = "fieldChild"
 
 		var subdiv3 = document.createElement("div")
-		subdiv3.id = 'selectionValue' + num
+		subdiv3.id = 'selectionDiv' + num
 		lineDiv.appendChild(subdiv3)
-
 
 
 		constructSelectionLine(num, lineDiv)
@@ -249,7 +273,7 @@ console.log(myData) -->
 
 			var num1 = re.exec(name)
 			var value = num1[1]
-			console.log(value)
+			//console.log(value)
 
 			removeLineButton.onclick = function() { removeElement(removeSubdiv.id);};//removeElement//(subdiv3.id)
 
@@ -282,15 +306,11 @@ console.log(myData) -->
 			echo 'var personNames = ' . json_encode($personNames) . ';';
 		?>
 
-		subdiv1Select_ID = 'selectCriteriaMenu' + divNumber
-		selectionValue = document.getElementById(subdiv1Select_ID).value
-
-		console.log('Selection value is ' + selectionValue)
-		console.log()
-
+		criteriaTypeField = 'selectCriteriaMenu' + divNumber
+		selectionValue = document.getElementById(criteriaTypeField).value
 
 		var subdiv2 = document.getElementById('binarySelect' + divNumber)
-		var subdiv3 = document.getElementById('selectionValue' + divNumber)
+		var subdiv3 = document.getElementById('selectionDiv' + divNumber)
 
 		while (subdiv2.firstChild) {
 		    subdiv2.removeChild(subdiv2.firstChild);
@@ -300,47 +320,64 @@ console.log(myData) -->
 		}
 
 		switch(selectionValue){
-			case "Date":
-				var binarySelect = document.createElement('select')
-				binarySelect.id = 'binarySelectValues' + divNumber
-				subdiv2.appendChild(binarySelect)
-				binarySelect.className = "fieldChild"
+			case "Date Range":
+				/* Replace the traditional binary select with two calendars.  */
 
-				binarySelect.options.add(new Option("is before", "is before", true, true));
-				binarySelect.options.add(new Option("is after", "is after", true, true));
-				binarySelect.selectedIndex = 0
+				var startLabel = document.createElement('p')
+				var startText = document.createTextNode("From: ")
+				startLabel.appendChild(startText)
 
-				var calendarForm = document.createElement('form');
-				calendarForm.id = 'selectionValue' + divNumber
-				calendarForm.className = "fieldChildColorless"
+				/*Calendar #1*/
+				var i1 = document.createElement("input"); //input element, text
+				i1.setAttribute('type',"text");
+				i1.id = "binarySelectValues" + divNumber
+				i1.value = "<none>"
+				i1.className = "calendarBox"
+				//i1.setAttribute('size','25')
 
-				subdiv3.appendChild(calendarForm)
-/*
-				var cal2 = new CalendarPopup('selectionValue' + divNumber);
-				cal2.showNavigationDropdowns();
-				cal2.setCssPrefix("Test");
-				cal2.setYearSelectStartOffset(10);*/
+				var s1 = document.createElement('button'); //input element, Submit button
+				s1.id = "anchor1_" + divNumber
+				var linkText = document.createTextNode("select");
+				s1.appendChild(linkText)
+				s1.className = "fieldChild"
+				s1.setAttribute('type', 'button')
+				//s1.style.height="30px"
 
-					var i = document.createElement("input"); //input element, text
-					i.setAttribute('type',"text");
-					i.id = "date" + divNumber
-					i.className = "fieldChildColorless"
-					//i.setAttribute('size','25')
+				//subdiv2.appendChild(startLabel)
+				subdiv2.appendChild(i1);
+				subdiv2.appendChild(s1);
 
-					var s = document.createElement('button'); //input element, Submit button
-					s.id = "anchor" + divNumber
-					var linkText = document.createTextNode("select");
-					s.appendChild(linkText)
-					s.className = "fieldChild"
+				s1.onclick=function(){
+					cal.select(i1,'anchor1_'+ divNumber,'MM/dd/yyyy')
+				}
 
-					calendarForm.appendChild(i);
-					calendarForm.appendChild(s);
-					/*calendarForm.appendChild(s);*/
-					//calendarForm.id="example" + divNumber
+				var endLabel = document.createElement('p')
+				var endText = document.createTextNode("To: ")
+				endLabel.appendChild(endText)
 
-					s.onclick=function(){
-						cal.select(i,'anchor'+ divNumber,'MM/dd/yyyy')
-					}
+				/* Calendar #2 */
+				var i2 = document.createElement("input"); //input element, text
+				i2.setAttribute('type',"text");
+				i2.id = "selectionValue" + divNumber
+				i2.value = "<none>"
+				i2.className = "calendarBox"
+				//i2.setAttribute('size','25')
+
+				var s2 = document.createElement('button'); //input element, Submit button
+				s2.id = "anchor2_" + divNumber
+				var linkText = document.createTextNode("select");
+				s2.appendChild(linkText)
+				s2.className = "fieldChild"
+				s2.setAttribute('type', 'button')
+				//s2.style.height="30px"
+
+				//subdiv3.appendChild(endLabel)
+				subdiv3.appendChild(i2);
+				subdiv3.appendChild(s2);
+
+				s2.onclick=function(){
+					cal.select(i2,'anchor2_'+ divNumber,'MM/dd/yyyy')
+				}
 
 				break
 
@@ -416,27 +453,10 @@ console.log(myData) -->
 
 				break;
 		}
-/*
-		var subdiv2 = document.createElement('div');
-		lineDiv.appendChild(subdiv2);
-
-			var select2 = document.createElement('select');
-			select2.options.add(new Option("m23", "adfds", true, true));
-			select2.options.add(new Option("m562", "sdAU", true, true));
-			select2.options.add(new Option("m356", "A2U", true, true));
-
-			select2.className = "fieldChild";
-
-			subdiv2.appendChild(select2);
-
-			subdiv2.id = 'optionsBox' + divNumber
-*/
-
 
 	}
 
 	function validateNumbers(evt){
-		console.log('adl')
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
 		key = String.fromCharCode( key );
@@ -455,48 +475,47 @@ console.log(myData) -->
 
 		var newVal = document.getElementById("selectCriteriaMenu" + value).value
 
-		console.log(newVal)
 	}
 
 	function removeElement(boxIDName){
 
-		console.log(boxIDName)
+		//console.log(boxIDName)
 		var re = /.?(\d+)/ // Match the number at the end of the ID. 
 		var num1 = re.exec(boxIDName)
-		console.log(num1)
+		//console.log(num1)
 		var value = num1[1]
 
 		parentName = 'criteriaBox' + value
-		console.log(parentName)
+		//console.log(parentName)
 		var parent = document.getElementById(parentName);
 		parent.remove();
-
-/*
- if (childDiv == parentDiv) {
-      alert("The parent div cannot be removed.");
- }
- else if (document.getElementById(childDiv)) {     
-      var child = document.getElementById(childDiv);
-      var parent = document.getElementById(parentDiv);
-      parent.removeChild(child);
- }
- else {
-      alert("Child div has already been removed or does not exist.");
-      return false;
- }*/
-
-
-
   
 	}
 
 </script>
+
+<script type="text/javascript">
+	function saveCriteria(){
+		// Loop through and get all the data. 
+		var numElements = document.getElementById('divNumID').value + 1; // +1 so we have typical for loop indexing
+		for (var i = 0; i < numElements; i++){
+			criteriaTypeField = 'selectCriteriaMenu' + i
+			if ($("#" + criteriaTypeField).length > 0){
+				criteriaType = document.getElementById(criteriaTypeField).value
+				booleanValue = document.getElementById('binarySelectValues' + i).value
+				criteriaValue = document.getElementById('selectionValue' + i).value
+
+				console.log(criteriaType + " " + booleanValue + " " + criteriaValue)
+			}
+		}
+	}
+</script>
 <!-- New criteria button formatting -->
 <style type="text/css">
-	#newCriteria{
+	.taskButton{
 		position:relative;
 	    top: 3px;
-	    left: 2px;
+	    left: 20px;
 	    height: 50px;
 	    width: 200px;
 	    border-radius: 15px;
@@ -513,7 +532,7 @@ console.log(myData) -->
 	}
 
 	/* Dropdown button on hover & focus */
-	#newCriteria:hover/*, #newCriteria:focus*/ {
+	.taskButton:hover/*, #newCriteria:focus*/ {
 	    background-color: #5e8eff;
 	}
 
@@ -540,7 +559,8 @@ console.log(myData) -->
 </div> -->
 
 <div id=newCriteriaDiv>
-	<button id="newCriteria" onclick="addCriteriaLine('criteriaFieldsDiv')">New criteria</button>
+	<button id="newCriteria" class="taskButton" onclick="addCriteriaLine('criteriaFieldsDiv')">New criteria</button>
+	<button id="saveCriteria" class="taskButton" onclick="saveCriteria()">Save criteria</button>
 </div>
 
 <div id=fill>
