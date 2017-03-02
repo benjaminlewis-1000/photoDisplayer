@@ -92,7 +92,30 @@
 	    background-color: #FFFCE0;
 	    color: #200954;
 	    padding: 16px;
+	    border: 20px;
+	    cursor: pointer;
+
 	    font-size: 16px;
+	    text-align: center;
+
+	    left: 20px;
+	    flex: 1;
+	    height: 50px;
+	    max-width: 200px;
+	    border-radius: 15px;
+
+	    margin-left: 10px;
+	    margin-right: 10px;
+
+	    transition: 1.5s ease;
+	    float:left;
+	}
+
+	.fieldChildColorless{
+	   /* padding: 16px;*/
+	    font-size: 20px;
+	    text-align: center;
+
 	    border: 20px;
 	    cursor: pointer;
 
@@ -100,17 +123,13 @@
 	    flex: 1;
 	    height: 50px;
 	    max-width: 200px;
-	    float: left;
 	    border-radius: 15px;
 
-	    margin-left: 10px;
-	    margin-right: 10px;
+	   /* margin-left: 10px;
+	    margin-right: 10px;*/
 
 	    transition: 1.5s ease;
-	    padding: 16px;
-	    font-size: 16px;
-	    border: none;
-	    cursor: pointer;
+	    float:left;
 	}
 
 	.fieldChild:hover {
@@ -290,9 +309,38 @@ console.log(myData) -->
 				binarySelect.options.add(new Option("is before", "is before", true, true));
 				binarySelect.options.add(new Option("is after", "is after", true, true));
 				binarySelect.selectedIndex = 0
+
+				var calendarForm = document.createElement('form');
+				calendarForm.id = 'selectionValue' + divNumber
+				calendarForm.className = "fieldChildColorless"
+
+				subdiv3.appendChild(calendarForm)
 /*
-				var cal1 = new CalendarPopup();
-				subdiv3.appendChild(cal1)*/
+				var cal2 = new CalendarPopup('selectionValue' + divNumber);
+				cal2.showNavigationDropdowns();
+				cal2.setCssPrefix("Test");
+				cal2.setYearSelectStartOffset(10);*/
+
+					var i = document.createElement("input"); //input element, text
+					i.setAttribute('type',"text");
+					i.id = "date" + divNumber
+					i.className = "fieldChildColorless"
+					//i.setAttribute('size','25')
+
+					var s = document.createElement('button'); //input element, Submit button
+					s.id = "anchor" + divNumber
+					var linkText = document.createTextNode("select");
+					s.appendChild(linkText)
+					s.className = "fieldChild"
+
+					calendarForm.appendChild(i);
+					calendarForm.appendChild(s);
+					/*calendarForm.appendChild(s);*/
+					//calendarForm.id="example" + divNumber
+
+					s.onclick=function(){
+						cal.select(i,'anchor'+ divNumber,'MM/dd/yyyy')
+					}
 
 				break
 
@@ -308,7 +356,7 @@ console.log(myData) -->
 
 				var personSelect = document.createElement('select')
 				personSelect.id = 'selectionValue' + divNumber
-				subdiv2.appendChild(personSelect)
+				subdiv3.appendChild(personSelect)
 				personSelect.className = "fieldChild"
 
 				for (var i = 0; i < personNames.length; i++){
@@ -332,10 +380,11 @@ console.log(myData) -->
 
 				binarySelect.selectedIndex = 0
 
-				var yearSelect = document.createElement('input')
+				var yearSelect = document.createElement("INPUT")
 				yearSelect.setAttribute("type", "text")
 				yearSelect.id = 'selectionValue' + divNumber
-				yearSelect.className = "fieldChild"
+				yearSelect.className = "fieldChildColorless"
+				yearSelect.onkeypress=function(){validateNumbers(event)}
 
 				subdiv3.appendChild(yearSelect)
 
@@ -356,7 +405,7 @@ console.log(myData) -->
 
 				var monthSelect = document.createElement('select')
 				monthSelect.id = 'selectionValue' + divNumber
-				subdiv2.appendChild(monthSelect)
+				subdiv3.appendChild(monthSelect)
 				monthSelect.className = "fieldChild"
 
 				for (var i = 0; i < months.length; i++){
@@ -384,6 +433,18 @@ console.log(myData) -->
 */
 
 
+	}
+
+	function validateNumbers(evt){
+		console.log('adl')
+		var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		key = String.fromCharCode( key );
+		var regex = /[0-9]/;
+		if( !regex.test(key) ) {
+			theEvent.returnValue = false;
+		if(theEvent.preventDefault) theEvent.preventDefault();
+		}
 	}
 
 	function listenMetaCategory(subdivName){
@@ -523,17 +584,53 @@ console.log(myData) -->
 	<script type="text/javascript" src="js/AnchorPosition.js"></script>
 
 
-	<script language="JavaScript">
+<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
+<!-- <form name="example">
+<input type="text" name="date1" value="" size="25">
+<a href="#">Select</a>
+</form> -->
+<!-- <script>
 	var cal = new CalendarPopup("testdiv1");
-	cal.showNavigationDropdowns();
-cal.setCssPrefix("Test");
+		cal.showNavigationDropdowns();
+		cal.setCssPrefix("Test");
+		cal.setYearSelectStartOffset(10);
+</script> -->
+<!-- 
+	<script>
+	var f = document.createElement("form");
+
+	var i = document.createElement("input"); //input element, text
+	i.setAttribute('type',"text");
+	i.id="date1"
+	i.setAttribute('size','25')
+
+	var s = document.createElement('button'); //input element, Submit button
+	s.id="anchor3"
+	var linkText = document.createTextNode("select");
+	s.appendChild(linkText)
+
+	f.appendChild(i);
+	f.appendChild(s);
+	f.id="example3"
+	document.getElementsByTagName('body')[0].appendChild(f);
+
+	s.onclick=function(){
+		cal.select(document.forms['example3'].date1,'anchor3','MM/dd/yyyy')
+	}
+
+</script> -->
+
+	<script type="text/javascript">
+		var cal = new CalendarPopup("testdiv1");
+		cal.showNavigationDropdowns();
+		cal.setCssPrefix("Test");
+		cal.setYearSelectStartOffset(10);
 	</script>
-<form name="example">
-(View Source of this page to see the example code)<br>
+
+<!-- <form name="example">
 <input type="text" name="date1" value="" size="25">
 <a href="#" onclick="cal.select(document.forms['example'].date1,'anchor1','MM/dd/yyyy'); return false;" name="anchor1" id="anchor1">select</a>
 </form>
-
-<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
+ -->
 </body>
 </html>
