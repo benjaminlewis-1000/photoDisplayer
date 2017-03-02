@@ -12,7 +12,7 @@
 <p>&nbsp;</p>
 <p><a href="page2.php"> <button> Select Filter Options </button> </a></p>
 <p>&nbsp;</p>
-<p>So, here's the earth. It's "cron"-ically cool. I have a display here, it's so great! Hello, today is <?php echo date('l, F jS, Y'); ?>.</p>
+<p>So, here's the earth. It's "cron"-ically cool. What's that you say? I have a display here, it's so great! Hello, today is <?php echo date('l, F jS, Y'); ?>.</p>
 
 <p>&nbsp;</p>
 
