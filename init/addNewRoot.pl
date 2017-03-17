@@ -49,13 +49,14 @@ if (!$answerBool){
 }
 
 if ( ( -e "dirsWindows.txt" and $params::OS_type == $params::windowsType ) or ( -e "dirsLinux.txt" and $params::OS_type == $params::linuxType ) ){
-	my $fh;
+	my $fileName = "error.error";
 	if ($params::OS_type == $params::windowsType){
-		open (my $fh, 'dirsWindows.txt') or die "Couldn't open file\n";
+		$fileName = 'dirsWindows.txt';
 	}
 	if ($params::OS_type == $params::linuxType){
-		open (my $fh, 'dirsLinux.txt') or die "Couldn't open file\n";
+		$fileName = 'dirsLinux.txt';
 	}
+	open (my $fh, $fileName) or die "Couldn't open file\n";
 
 	while (my $row = <$fh>){
 		chomp $row;
