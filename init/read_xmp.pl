@@ -19,12 +19,12 @@ use strict;
 # my %data = getImageData({
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\romney.jpeg",
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
-#  	filename => 'D:\Pictures\2016\Wedding Time\Honeymoon San Fran\DSC_9012.JPG',
+#  	filename => 'D:\Pictures\Family CDs\Family pics 2005\2003-07-28\Randy picture 2.jpg',
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 012.JPG",
 # 	url  => "http://127.0.0.1:8000/RPC2",
 # 	debug => 1
 # 	});
-# # print Dumper %data;
+# print Dumper %data;
 
 sub getImageData{
 	my $d = 0;
@@ -346,9 +346,11 @@ sub getImageData{
 			my $keywords =  $infoHash{$field};
 			my @kwArray = split(', ', $keywords);
 			foreach my $kw (@kwArray){
-				$kw =~ s/^\s+//;
-				$kw =~ s/\s+$//;
-				$embeddedKeywords{$kw} = 1;
+				if (! ($kw =~ m/[\x00-\x1f]/) ){  # Try to get rid of any non-printable characters.  
+					$kw =~ s/^\s+//;
+					$kw =~ s/\s+$//;
+					$embeddedKeywords{$kw} = 1;
+				}
 			}
 		}
 	}
