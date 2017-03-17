@@ -162,6 +162,9 @@ foreach my $root_dir (@rootDirList){
 	}
 
 	print "We have inserted a new root directory, $root_dir. Its key value is $directoryKeyVal.\n";
+}
+
+foreach my $root_dir (@rootDirList){
 
 	#####
 		my @subdirectories = getUniqueSubdirs($root_dir);
@@ -171,7 +174,7 @@ foreach my $root_dir (@rootDirList){
 
  # $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 	my $rootDirKeyValQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$root_dir"/;
-	$query = $dbhandle->prepare($rootDirKeyValQuery);
+	my $query = $dbhandle->prepare($rootDirKeyValQuery);
 	until(
 		$query->execute()
 	){
@@ -179,7 +182,7 @@ foreach my $root_dir (@rootDirList){
 		warn "Failed on the following query: $rootDirKeyValQuery\n";
 		sleep(5);
 	}	
-	$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
+	my $directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
 	our $numPassed = 0;
 	#####
