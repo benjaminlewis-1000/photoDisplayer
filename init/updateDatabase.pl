@@ -9,6 +9,7 @@
 use params;
 use DBI;
 use Tk;
+use Proc::Background;
 
 use warnings;
 use strict; 
@@ -21,6 +22,10 @@ if (! -e 'trimDeletedFiles.pl'){
 }
 
 our @rootDirList;
+
+our $portNum = 8000;
+my $geoserverProc = Proc::Background->new("python geoServer.py");
+$geoserverProc->alive;
 
 # Open the database
 our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
@@ -65,8 +70,10 @@ while ($query->fetch){
 	print join (", ", @unq_subdirs) . "\n";
 
 	open OUTPUT,  ">unhandled_files.txt" or die $!;
-	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed);
+	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed, $portNum);
 	close OUTPUT;
 }
+
+$geoserverProc->die;
 
 require 'trimDeletedFiles.pl'; # Automatically runs the trim.

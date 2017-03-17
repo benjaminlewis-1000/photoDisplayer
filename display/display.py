@@ -1,4 +1,5 @@
 #! /usr/bin/python
+person = 16 
 
 import sqlite3
 import os
@@ -32,6 +33,7 @@ else:
 
 # Connect to the database
 conn = sqlite3.connect(rootDir + "/databases/" + params['database'])
+conn = sqlite3.connect("/home/lewis/Dropbox/Perl Code/photoDisplayer/databases/photos_test.db")
 conn.text_factory = str  # For UTF-8 compatibility
 
 c = conn.cursor()
@@ -45,21 +47,24 @@ print 'windows' if currentOS == 1 else 'linux' + ' is your OS'
     # params['rootTableName']
     # )
 # print columns
-query = "SELECT " + params['rootKeyColumn'] + ", " \
-    + params['linuxRootPath' if currentOS == params['linuxType'] else 'windowsRootPath'] \
-    +  " FROM " + params['rootTableName']
+#query = "SELECT " + params['rootKeyColumn'] + ", " \
+ #   + params['linuxRootPath' if currentOS == params['linuxType'] else 'windowsRootPath'] \
+ #   +  " FROM " + params['rootTableName']
+query = "Select directory_root_key, root_path_linux from root_dirs"
+print query
 for row in c.execute(query):
-    # print row
+    print row
     rootDirs[row[0]] = row[1]
+
 
 # Get a simple batch of photos, say all from root_dir = 1
 
 query = "SELECT " + params['photoFileColumn'] + ", " + params['rootDirNumColumn'] + ", " + params['photoDateColumn'] + " FROM " + params['photoTableName'] + " WHERE " + params['photoYearColumn'] + " = ?" + " AND " + params['photoMonthColumn'] + " = ?"
 val = (2016, 6)
 
-query = "SELECT photo_file, root_dir_num, photo_date from photos where photo_key in (SELECT photo from Linker where person = 1 OR person = ?)"
+query = "SELECT photo_file, root_dir_num, photo_date from photos where photo_key in (SELECT photo from Linker where person = ? )"
 print query
-val = (2,)
+val = (person,)
 f1=open('testfile', 'w+')
 f1.write('This is a test')
 # sleep(6)
@@ -71,7 +76,7 @@ photo_dates = []
 photo_file = open('/tmp/photos.txt', 'w') # Overwrite the existing file at that location.
 
 for row in c.execute(query, val):
-    # print row
+#    print row
     filename = rootDirs[row[1]] + row[0]
     # print filename
     # print row[2]
@@ -82,7 +87,7 @@ for row in c.execute(query, val):
 
 photo_file.close()
 
-p1 = subprocess.Popen(["feh", "-YFxZNz", "-D", "2", "--auto-rotate", "-d", "-f", "/tmp/photos.txt"])
+p1 = subprocess.Popen(["feh", "-YFxZNz", "-D", "5", "--auto-rotate", "-d", "-f", "/tmp/photos.txt"])
 
 # arg_list =  ' '.join(valid_photos)
 # prevPicNum = 0

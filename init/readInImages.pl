@@ -55,7 +55,7 @@ sub readOneImage{
 
 	my ($args) = @_;
 
-	our ($baseDirName, $fileName, $rootDirNum, $nameHashRef, $dbhandle);
+	our ($baseDirName, $fileName, $rootDirNum, $nameHashRef, $dbhandle, $serverPortNum);
 	our $insertedDateHashRef;
 
 	if (defined $args->{nameHash}){
@@ -96,6 +96,15 @@ sub readOneImage{
 	}else{
 		$insertedDateHashRef = $args->{insertedDateHash};
 	}
+
+	if (!defined $args->{portNum} ){
+		print "RPC Server port number not given.\n";
+		$serverPortNum = 8000;
+	}else{
+		$serverPortNum = $args->{portNum};
+	}
+
+	my $serverName = "http://127.0.0.1:$serverPortNum/RPC2";
 
 
 	# Get the last modified date. Opens the file. 
@@ -154,7 +163,8 @@ sub readOneImage{
 	my %data = getImageData({
 		filename => $baseDirName . $fileName,
 		resX => 0,
-		resY => 0
+		resY => 0,
+		url => $serverName
 		});
 
 	if ($params::debug and $params::debug_readIn) { 
@@ -164,7 +174,7 @@ sub readOneImage{
 
 	if (!$data{'Status'} ){
 		print "Read XMP has failed - $!\n";
-		exit;
+		return;
 	}
 
 	my ($sec,$min,$hour,$mday,$mon,$year) = localtime(time); # This is OK.
@@ -257,6 +267,8 @@ sub readOneImage{
 			my $photoKeyNum = eval {$query->fetchrow_arrayref->[0] };
 
 			my $unlinkLinkerQuery = qq/DELETE FROM $params::linkerTableName WHERE $params::linkerPhotoColumn = $photoKeyNum/;
+			my $unlinkCommentLinkerQuery = qq/DELETE FROM $params::commentLinkerTableName WHERE $params::commentLinkerPhotoColumn = $photoKeyNum/;
+
 			$query = $dbhandle->prepare($unlinkLinkerQuery);
 			until(
 				$query->execute()
@@ -264,7 +276,18 @@ sub readOneImage{
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $unlinkLinkerQuery\n";
 				sleep(5);
-			}# or die $DBI::errstr;
+			}
+
+			$query = $dbhandle->prepare($unlinkCommentLinkerQuery);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $unlinkCommentLinkerQuery\n";
+				sleep(5);
+			}
+
+
 			my $deletePhotoQuery = qq/DELETE FROM $params::photoTableName WHERE $params::photoKeyColumn = $photoKeyNum/;
 			$query = $dbhandle->prepare($deletePhotoQuery);
 			until(
@@ -295,13 +318,23 @@ sub readOneImage{
 		$params::photoYearColumn, $params::photoMonthColumn, 
 		$params::photoDayColumn, $params::photoHourColumn, 
 		$params::photoMinuteColumn, $params::photoGMTColumn,
-		$params::insertDateColumn)  
+		$params::insertDateColumn, 
+		$params::houseNumColumn, $params::streetColumn, 
+		$params::cityColumn, $params::stateColumn, 
+		$params::postcodeCoulumn, $params::countryColumn, 
+		$params::latColumn, $params::longColumn
+
+		)  
 	VALUES ("$fileName", 
 		"$data{'TakenDate'}", "$data{"ModifyDate"}", 
 		$rootDirNum, $data{'Year'}, 
 		$data{'Month'}, $data{'Day'}, 
 		$data{'Hour'}, $data{'Minute'}, 
-		$data{'TimeZone'}, "$dbInsertionDate"
+		$data{'TimeZone'}, "$dbInsertionDate",
+		"$data{'house_number'}", "$data{'road'}",
+		"$data{'city'}", "$data{'state'}",
+		"$data{'postcode'}", "$data{'country'}",
+		"$data{'Latitude'}", "$data{'Longitude'}"
 	)/;
 
 	$query = $dbhandle->prepare($insertIntoPhotoTable);
@@ -421,6 +454,25 @@ sub readOneImage{
 
 		my $insertLinkInTable = qq/INSERT INTO $params::linkerTableName ($params::linkerPeopleColumn, $params::linkerPhotoColumn) VALUES ($peopleKeyVal, $photoKeyVal)/;
 		$dbhandle->do($insertLinkInTable);
+
+	}
+
+	our %keywordsInImage = %{$data{'keywordsHash'}};
+	foreach my $kw (keys %keywordsInImage){
+		my $insertPhotoCommentLinkerQuery = qq/
+			INSERT INTO $params::commentLinkerTableName ( 
+				$params::commentLinkerPhotoColumn, $params::commentLinkerTagColumn, 
+				$params::commentLinkerTagProbabilityColumn		)  
+			VALUES ($photoKeyVal, "$kw", $keywordsInImage{$kw}	)/;
+
+			$query = $dbhandle->prepare($insertPhotoCommentLinkerQuery);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $insertPhotoCommentLinkerQuery\n";
+				sleep(5);
+			}# or die $DBI::errstr;
 
 	}
 

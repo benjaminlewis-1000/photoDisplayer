@@ -50,6 +50,7 @@ if ($osname =~ m/win/i){
 	our $linkerTableName = $config->{'linkerTableName'};
 	our $rootTableName = $config->{'rootTableName'};
 	our $metadataTableName = $config->{'metadataTableName'};
+	our $commentLinkerTableName = $config->{'commentLinkerTableName'};
 
 # Table column names 
 	## Photo table
@@ -66,14 +67,29 @@ if ($osname =~ m/win/i){
 	our $rootDirNumColumn = $config->{'rootDirNumColumn'};
 	our $insertDateColumn = $config->{'insertDateColumn'};
 
+
+	our $houseNumColumn = $config->{'houseNumColumn'};
+	our $streetColumn = $config->{'streetColumn'};
+	our $cityColumn = $config->{'cityColumn'};
+	our $stateColumn = $config->{'stateColumn'};
+	our $postcodeCoulumn = $config->{'postcodeCoulumn'};
+	our $countryColumn = $config->{'countryColumn'};
+	our $latColumn = $config->{'latColumn'};
+	our $longColumn = $config->{'longColumn'};
+
 	## People Table
 	our $peopleKeyColumn = $config->{'peopleKeyColumn'};
 	our $personNameColumn = $config->{'personNameColumn'};
 	# our $personPicasaID = "person_picasa_id";
 
-	## Linker Table
+	## Photo Linker Table
 	our $linkerPeopleColumn = $config->{'linkerPeopleColumn'};
 	our $linkerPhotoColumn = $config->{'linkerPhotoColumn'};
+
+	## Comment Linker Table
+	our $commentLinkerPhotoColumn = $config->{'commentLinkerPhotoColumn'};
+	our $commentLinkerTagColumn = $config->{'commentLinkerTagColumn'};
+	our $commentLinkerTagProbabilityColumn = $config->{'commentLinkerTagProbabilityColumn'};
 
 	## Root Directory Table
 	our $rootDirPath;

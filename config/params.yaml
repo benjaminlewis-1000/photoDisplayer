@@ -7,10 +7,11 @@ database: "photos_master.db"
 # Table names:
 photoTableName: "Photos"
 peopleTableName: "People"
-linkerTableName: "Linker"
-rootTableName: "Root_Dirs"
+linkerTableName: "PhotoLinker"
+rootTableName: "RootDirs"
 metadataTableName: "Metadata"
-tempTableName: "TmpPhotoTable"
+commentLinkerTableName: "CommentLinker"
+
 
 # Table column names 
   ## Photo table
@@ -26,6 +27,21 @@ photoGMTColumn: "taken_timezone"
 modifyDateColumn: "modification_date"
 rootDirNumColumn: "root_dir_num"
 insertDateColumn: "inserted_date"
+
+# Picture geolocation data in photo table
+houseNumColumn: "geoHouseNum" 
+streetColumn: "geoStreetName" 
+cityColumn: "geoCityName" 
+stateColumn: "geoStateName" 
+postcodeCoulumn: "geoPostcode" 
+countryColumn: "geoCountryName"
+latColumn: "picLatitude"
+longColumn: "picLongitude" 
+
+## Comment Linker Table
+commentLinkerPhotoColumn: "photo_number"
+commentLinkerTagColumn: "tag"
+commentLinkerTagProbabilityColumn: "tag_probability"
 
 ## People Table
 peopleKeyColumn: "people_key"

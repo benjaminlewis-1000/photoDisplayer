@@ -126,6 +126,7 @@ sub addFilesInListOfSubdirs{
 	my $dirKeyVal = $_[1];
 	my $rootDirectory = $_[2];
 	my $numPassed = $_[3];
+	my $portNum = $_[4];
 
 	# Create a tmp table with only necessary columns. Shows ~25% speedup. 
 	# createTmpTable();
@@ -182,17 +183,18 @@ sub addFilesInListOfSubdirs{
 				print "We have read ${$numPassed} files and processed them accordingly.\n";
 			}
 
-	my $sttime = [gettimeofday];
+			my $sttime = [gettimeofday];
 			readOneImage({
 				baseDirName => $rootDirectory, 
 				fileName => $localDir . $imageFile, 
 				baseDirNum => $dirKeyVal,
 				nameHash => \%nameHash,
 				dbhandle => $tmpDBhandle,
-				insertedDateHash => \%insertedDateHash
+				insertedDateHash => \%insertedDateHash,
+				portNum => $portNum
 			});
-	my $elapse = tv_interval($sttime);
-	# print "Total elapse: " . $elapse . "\n\n";
+			my $elapse = tv_interval($sttime);
+			
 		}
 
 	}

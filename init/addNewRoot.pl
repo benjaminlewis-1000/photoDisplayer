@@ -8,6 +8,7 @@ use Tk;
 use File::Find;
 use File::HomeDir;
 use Data::Dumper;
+use Proc::Background;
 
 use warnings;
 use strict; 
@@ -28,6 +29,10 @@ our @rootDirList;
 # my $root_dir = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
 
 our $answerBool = 1;
+
+our $portNum = 8000;
+my $geoserverProc = Proc::Background->new("python geoServer.py");
+$geoserverProc->alive;
 
 if (!$answerBool){
 	my $root_dir2 = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base';
@@ -179,7 +184,7 @@ foreach my $root_dir (@rootDirList){
 	our $numPassed = 0;
 	#####
 		open OUTPUT,  ">unhandled_files.txt" or die $!;
-		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed);
+		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed, $portNum);
 		close OUTPUT;
 	#####
 
@@ -200,5 +205,8 @@ foreach my $root_dir (@rootDirList){
 		sleep(5);
 	}
 }
+
+
+$geoserverProc->die;
 
 $dbhandle->disconnect;

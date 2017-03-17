@@ -8,17 +8,22 @@ use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use Date::Parse;
 use params;
 use Data::Dumper;
+use Frontier::Client;
+use JSON::Parse 'parse_json';
 
 # use Image::EXIF;
 
 use warnings;
 use strict; 
 
-# getImageData({
-# # 	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
-# 	filename => "/home/lewis/Pictures/Soph-Junior Years/theWard2.jpg",
+# my %data = getImageData({
+#  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\romney.jpeg",
+#  	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
+#  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 012.JPG",
+# 	url  => "http://127.0.0.1:8000/RPC2",
 # 	debug => 1
 # 	});
+# # print Dumper %data;
 
 sub getImageData{
 	my $d = 0;
@@ -27,11 +32,18 @@ sub getImageData{
 
 	my ($args) = @_;
 	our %returnData;
+	my $url;
 	$returnData{'Status'} = 0;
 
 	if (! defined $args->{filename}){
 		print "Error: File not passed\n";
 		return %returnData;
+	}
+
+	if (! defined $args->{url}){
+		print "Error: URL for server not passed\n";
+	}else{
+		$url = $args->{url};
 	}
 
 	if (! defined $args->{resX}){
@@ -81,21 +93,26 @@ sub getImageData{
 	my $info = ImageInfo($file);
 	# $elapsed = tv_interval($sttime);
 	# print "Elapsed adhjfsef " . $d++ . ": " . $elapsed . "\n";
-	my %infoHash = %$info;
+	our %infoHash = %$info;
 
 	# print ref( $exif->ImageInfo($file) ) . "\n\n";
 
 	delete $infoHash{"ThumbnailImage"};
 	# print Dumper %infoHash;
 
+	# foreach my $k (keys %infoHash){
+	# 	print "$k\n";#; $infoHash{$k}\n";
+	# }
 	# print $elapsed . "\n";
-	if ($params::debug and $params::debug_readXMP ) {
-		foreach my $k (keys %infoHash){
-			if ($k =~ m/date/i){
-				print $k . " : " . $infoHash{$k} . "\n";
-			}
-		}
-	}
+	# if ($params::debug and $params::debug_readXMP ) {
+	# 	foreach my $k (keys %infoHash){
+	# 		if ($k =~ m/comm/i){
+	# 			print $k . " : " . $infoHash{$k} . "\n";
+	# 		}
+	# 	}
+	# }
+
+
 	# Parse the XMP data. 
 
 	my $namelist = $infoHash{'RegionName'};
@@ -151,6 +168,91 @@ sub getImageData{
 	my $imWidth = $infoHash{'ImageWidth'};
 	my $imHeight = $infoHash{'ImageHeight'};
 
+	# Latitude and Longitude
+	if ( $infoHash{'GPSLatitude'} ){
+		my $latitude = $infoHash{'GPSLatitude'};
+		my $longitude = $infoHash{'GPSLongitude'};
+
+		my ($decLatitude, $decLongitude);
+		if ($latitude =~ m/\w/g){
+
+			$latitude =~ m/(\d+) deg (\d+)\' (\d+\.\d+)\"\s+?(.)/;
+			$decLatitude = $1 + $2 / 60 + $3 / 3600;
+			if ($4 ne "N"){
+				$decLatitude *= -1;
+			}
+			# print $decLatitude . "\n";
+		}else{
+			$decLatitude = $latitude;
+		}
+
+		if ($longitude =~ m/\w/g){
+			$longitude =~ m/(\d+) deg (\d+)\' (\d+\.\d+)\"\s+?(.)/;
+			$decLongitude = $1 + $2 / 60 + $3 / 3600;
+			if ($4 ne "E"){
+				$decLongitude *= -1;
+			}
+		}else{
+			$decLongitude = $longitude;
+		}
+
+		$returnData{'Latitude'} = $decLatitude;
+		$returnData{'Longitude'} = $decLongitude;
+		# print $decLongitude . "\n";
+
+		my $result = "bang";
+		if ( defined $args->{url}){
+			my @args = ($decLatitude, $decLongitude);
+			 
+			my $client = Frontier::Client->new( url   => $url,
+			                     debug => 0,
+			                   );
+			my $i = 0;
+			for ($i = 0; $i < 10; $i++){
+
+					# print "effort: $i\n";
+				if ($result =~ 'bang'){
+					eval{
+						$result = $client->call('geoLookup', @args) ;
+					};
+				}else{
+					last;
+				}
+				sleep (1);
+
+			}
+			if ($i == 9){
+				$returnData{'Status'} = 0;
+				return %returnData;
+			}
+		}
+
+		# print $result . "\n";
+
+		if ($result =~ m/house_number/){
+			my $jsonData = parse_json($result);
+			$returnData{'house_number'} = $jsonData->{'house_number'};
+			$returnData{'road'} = $jsonData->{'road'};
+			$returnData{'city'} = $jsonData->{'city'};
+			$returnData{'state'} = $jsonData->{'state'};
+			$jsonData->{'postcode'} =~ m/(\d+)/g;
+			my $postcode = $1;
+			$returnData{'postcode'} = $postcode;
+			$returnData{'country'} = $jsonData->{'country'};
+
+		}
+
+	}else{
+		$returnData{'Latitude'} = "-";
+		$returnData{'Longitude'} = "-";
+		$returnData{'house_number'} = "-";
+		$returnData{'road'} = "-";
+		$returnData{'city'} = "-";
+		$returnData{'state'} = "-";
+		$returnData{'postcode'} = "-";
+		$returnData{'country'} = "-";
+	}
+
 	# $elapsed = tv_interval($sttime);
 	# print "Elapsed " . $d++ . ": " . $elapsed . "\n";
 
@@ -159,13 +261,6 @@ sub getImageData{
 		# exit;
 		return %returnData;
 	}
-
-	# print $elapsed . "\n";
-
-	# foreach my $k (keys %infoHash){
-	# 	print "$k\n";#; $infoHash{$k}\n";
-	# }
-
 
 	my (@names, @widths, @heights);
 	if (defined $namelist){
@@ -239,7 +334,25 @@ sub getImageData{
 		# with a size above $minSize. 
 	}
 
-	# Other info: Orientation
+
+
+	my %embeddedKeywords;
+
+	my @kw_fields = ('UserComment','Keywords','XPKeywords','LastKeywordXMP');
+	
+	foreach my $field (@kw_fields){
+		if (defined $infoHash{$field}){
+			my $keywords =  $infoHash{$field};
+			my @kwArray = split(', ', $keywords);
+			foreach my $kw (@kwArray){
+				$kw =~ s/^\s+//;
+				$kw =~ s/\s+$//;
+				$embeddedKeywords{$kw} = 1;
+			}
+		}
+	}
+
+	$returnData{'keywordsHash'} = \%embeddedKeywords;
 
 	$returnData{'NameList'} = \@namesWithLargeAreas;
 

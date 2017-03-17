@@ -30,7 +30,7 @@ create_people_table();
 create_linker_table();
 create_root_dir_table();
 create_metadata_table();
-
+create_comments_table();
 
 update_metadata();
 
@@ -64,6 +64,10 @@ sub dropTables{
 	$query = $dbhandle->prepare($dropMetadata);
 	$query->execute() or die $DBI::errstr;
 
+	my $dropCommentLinker = qq/DROP TABLE IF EXISTS $params::commentLinkerTableName/;
+	$query = $dbhandle->prepare($dropCommentLinker);
+	$query->execute() or die $DBI::errstr;
+
 	
 }
 
@@ -89,10 +93,32 @@ sub create_photo_table{
 
 	    $params::modifyDateColumn STRING,
 	    $params::insertDateColumn STRING,
-	    $params::rootDirNumColumn STRING
+	    $params::rootDirNumColumn STRING,
+
+	    $params::houseNumColumn STRING,
+	    $params::streetColumn STRING,
+	    $params::cityColumn STRING,
+	    $params::stateColumn STRING,
+	    $params::postcodeCoulumn STRING,
+	    $params::countryColumn STRING,
+	    $params::latColumn STRING,
+	    $params::longColumn STRING
 	); /;
 
 	# Prepare and execute the statement
+	my $sub_state_handle = $dbhandle->prepare($sql_quer);
+	$sub_state_handle->execute() or die $DBI::errstr;
+}
+
+sub create_comments_table{
+	my $sql_quer = qq/CREATE TABLE $params::commentLinkerTableName (
+	    $params::commentLinkerPhotoColumn INTEGER REFERENCES $params::photoTableName ($params::photoKeyColumn),
+	    $params::commentLinkerTagColumn STRING,
+	    $params::commentLinkerTagProbabilityColumn DOUBLE
+	); /;
+
+	print $sql_quer . "\n";
+
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
 }
