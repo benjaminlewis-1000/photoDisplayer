@@ -116,9 +116,7 @@ sub create_comments_table{
 	    $params::commentLinkerTagColumn STRING,
 	    $params::commentLinkerTagProbabilityColumn DOUBLE
 	); /;
-
-	print $sql_quer . "\n";
-
+	
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
 }

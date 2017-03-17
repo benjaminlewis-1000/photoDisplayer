@@ -18,7 +18,8 @@ use strict;
 
 # my %data = getImageData({
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\romney.jpeg",
-#  	filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
+#  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
+#  	filename => 'D:\Pictures\2016\Wedding Time\Honeymoon San Fran\DSC_9012.JPG',
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 012.JPG",
 # 	url  => "http://127.0.0.1:8000/RPC2",
 # 	debug => 1
@@ -101,16 +102,16 @@ sub getImageData{
 	# print Dumper %infoHash;
 
 	# foreach my $k (keys %infoHash){
-	# 	print "$k\n";#; $infoHash{$k}\n";
+	# 	print "$k:  $infoHash{$k}\n";#; $infoHash{$k}\n";
 	# }
-	# print $elapsed . "\n";
-	# if ($params::debug and $params::debug_readXMP ) {
-	# 	foreach my $k (keys %infoHash){
-	# 		if ($k =~ m/comm/i){
-	# 			print $k . " : " . $infoHash{$k} . "\n";
-	# 		}
-	# 	}
-	# }
+	if ($params::debug and $params::debug_readXMP ) {
+		foreach my $k (keys %infoHash){
+			# if ($infoHash{$k} =~ m/N/){
+			if ($k =~ m/gps/i){
+				print $k . " : " . $infoHash{$k} . "\n";
+			}
+		}
+	}
 
 
 	# Parse the XMP data. 

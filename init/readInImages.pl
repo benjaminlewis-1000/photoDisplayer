@@ -30,7 +30,7 @@ require 'read_xmp.pl';
 	# ){
 	# 	warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 	# 	warn "Failed on the following query: $tableHashQuery\n";
-	# 	sleep(5);
+	# 	sleep(1);
 	# }
 
 	# my ($fileName, $insertDate);
@@ -77,10 +77,10 @@ sub readOneImage{
 	}
 
 	if (! defined $args->{dbhandle}){
-		$dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-		print "DB connecting..." . "\n";
+		print "DB Handle not passed in\n";
+		return;
 	}else{
-		$dbhandle = $args->{dbhandle};
+		$dbhandle = ${$args->{dbhandle}};
 	}
 
 	if (! defined  $args->{baseDirName}){
@@ -236,7 +236,7 @@ sub readOneImage{
 		){
 			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 			warn "Failed on the following query: $lastModifiedQuery\n";
-			sleep(5);
+			sleep(1);
 		}# or die $DBI::errstr;
 		my $lastModDate = eval {$query->fetchrow_arrayref->[0] };
 
@@ -262,7 +262,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $photoKeyQuery\n";
-				sleep(5);
+				sleep(1);
 			}# or die $DBI::errstr;
 			my $photoKeyNum = eval {$query->fetchrow_arrayref->[0] };
 
@@ -275,7 +275,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $unlinkLinkerQuery\n";
-				sleep(5);
+				sleep(1);
 			}
 
 			$query = $dbhandle->prepare($unlinkCommentLinkerQuery);
@@ -284,7 +284,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $unlinkCommentLinkerQuery\n";
-				sleep(5);
+				sleep(1);
 			}
 
 
@@ -295,7 +295,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $deletePhotoQuery\n";
-				sleep(5);
+				sleep(1);
 			}# or die $DBI::errstr;
 
 
@@ -343,7 +343,7 @@ sub readOneImage{
 	){
 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 		warn "Failed on the following query: $insertIntoPhotoTable\n";
-		sleep(5);
+		sleep(1);
 	}# or die $DBI::errstr;
 
 
@@ -355,7 +355,7 @@ sub readOneImage{
 	){
 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 		warn "Failed on the following query: $keyNumQuery\n";
-		sleep(5);
+		sleep(1);
 	}# or die $DBI::errstr;
 	my $photoKeyVal = @{$query->fetch()}[0];
 
@@ -399,7 +399,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $personExistsQuery\n";
-				sleep(5);
+				sleep(1);
 			}# or die $DBI::errstr;
 			my $result = eval { $query->fetchrow_arrayref->[0] }; # Can be an uninitialized value. 
 							# The uninitialized value would mean that we haven't seen that person. 
@@ -413,7 +413,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $numQuery\n";
-				sleep(5);
+				sleep(1);
 			}# or die $DBI::errstr;
 			my $numPeopleWithName = eval { $query->fetchrow_arrayref->[0] };
 			if ($params::debug and $params::debug_readIn) { print $numPeopleWithName . " people have that name.". "\n"; }
@@ -443,7 +443,7 @@ sub readOneImage{
 				){
 					warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 					warn "Failed on the following query: $keyNumQuery\n";
-					sleep(5);
+					sleep(1);
 				}# or die $DBI::errstr;
 				$peopleKeyVal = @{$query->fetch()}[0];
 				$nameHashRef->{$_} = $peopleKeyVal;
@@ -471,7 +471,7 @@ sub readOneImage{
 			){
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $insertPhotoCommentLinkerQuery\n";
-				sleep(5);
+				sleep(1);
 			}# or die $DBI::errstr;
 
 	}

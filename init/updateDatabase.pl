@@ -70,7 +70,7 @@ while ($query->fetch){
 	print join (", ", @unq_subdirs) . "\n";
 
 	open OUTPUT,  ">unhandled_files.txt" or die $!;
-	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed, $portNum);
+	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed, $portNum, \$dbhandle);
 	close OUTPUT;
 }
 

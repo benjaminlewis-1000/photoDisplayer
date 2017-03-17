@@ -8,6 +8,13 @@ use File::HomeDir;
 use warnings;
 use strict; 
 
+# $SIG{INT} = \&dying;
+
+sub dying { 
+	print 'Not today here either!\n';
+	exit;
+}
+
 #############  REUSABLE METHODS  ##################################
 
 sub getUniqueSubdirs{
@@ -127,17 +134,18 @@ sub addFilesInListOfSubdirs{
 	my $rootDirectory = $_[2];
 	my $numPassed = $_[3];
 	my $portNum = $_[4];
+	my $dbhandle = ${$_[5]};
 
 	# Create a tmp table with only necessary columns. Shows ~25% speedup. 
 	# createTmpTable();
 
-	our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+	# our $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
 
 	our %insertedDateHash;
 
 	# Only selecting the keyVal that's relevant in this sub so as to avoid conflicts. 
 	my $tableHashQuery = qq/SELECT $params::photoFileColumn, $params::insertDateColumn FROM $params::photoTableName WHERE $params::rootDirNumColumn = $dirKeyVal/;
-	my $query = $tmpDBhandle->prepare($tableHashQuery);
+	my $query = $dbhandle->prepare($tableHashQuery);
 	until(
 		$query->execute()
 	){
@@ -189,7 +197,7 @@ sub addFilesInListOfSubdirs{
 				fileName => $localDir . $imageFile, 
 				baseDirNum => $dirKeyVal,
 				nameHash => \%nameHash,
-				dbhandle => $tmpDBhandle,
+				dbhandle => \$dbhandle,
 				insertedDateHash => \%insertedDateHash,
 				portNum => $portNum
 			});
@@ -292,56 +300,5 @@ sub checkOSFolder{
 	return $root_dir ;
 }
 
-# sub createTmpTable{
-	
-# 	# Make a smaller, temporary table for reading when the files were last inserted in the database.
-# 	# This table *should* be faster to read from. 
-
-# 	## VERIFIED: Doing this shaves access time from 0.04 seconds to 0.03 seconds - a 25% speedup. It's worth it
-# 	## for large (tens of thousands) datasets. 
-# 	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-
-# 	my $tmpTableQuery = qq/CREATE TABLE IF NOT EXISTS $params::tempTableName ($params::insertDateColumn STRING, $params::photoFileColumn STRING, $params::rootDirNumColumn STRING)/;
-# 	my $query = $tmpDBhandle->prepare($tmpTableQuery);
-# 	until(
-# 		$query->execute()
-# 	){
-# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-# 		warn "Failed on the following query: $tmpTableQuery\n";
-# 		sleep(5);
-# 	}# or die $DBI::errstr;
-
-# 	my $clearTable = qq/DELETE FROM $params::tempTableName/;
-# 	$query = $tmpDBhandle->prepare($clearTable);
-# 	until(
-# 		$query->execute()
-# 	){
-# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-# 		warn "Failed on the following query: $clearTable\n";
-# 		sleep(5);
-# 	}# or die $DBI::errstr;
-
-# 	my $populateQuery = qq/INSERT INTO $params::tempTableName SELECT $params::insertDateColumn, $params::photoFileColumn, $params::rootDirNumColumn FROM $params::photoTableName/;
-# 	$query = $tmpDBhandle->prepare($populateQuery);
-# 	until(
-# 		$query->execute()
-# 	){
-# 		warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-# 		warn "Failed on the following query: $populateQuery\n";
-# 		sleep(5);
-# 	}# or die $DBI::errstr;
-
-# 	$tmpDBhandle->disconnect;
-# }
-
-# sub destroyTmpTable{
-# 	my $tmpDBhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-
-# 	my $dropPeople = qq/DROP TABLE IF EXISTS $params::tempTableName/;
-# 	my $query = $tmpDBhandle->prepare($dropPeople);
-# 	$query->execute() or die $DBI::errstr;
-
-# 	$tmpDBhandle->disconnect;
-# }
 
 1;

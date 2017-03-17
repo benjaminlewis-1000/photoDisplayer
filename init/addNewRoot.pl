@@ -13,6 +13,8 @@ use Proc::Background;
 use warnings;
 use strict; 
 
+# $SIG{INT} = sub { print 'Not today!\n'; exit;};
+
 require 'read_xmp.pl';
 require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
@@ -46,35 +48,49 @@ if (!$answerBool){
 	push(@rootDirList, $root_dir2);
 }
 
-while ($answerBool) {
-	my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>$homedir);
-	if (defined $root_dir and $root_dir ne "/" and $root_dir ne ""){
-		# Remove any extraneous end-of-string slashes.
-		$root_dir =~ s/\\$//g;
-		$root_dir =~ s/\/$//g;
+if ( ( -e "dirsWindows.txt" and $params::OS_type == $params::windowsType ) or ( -e "dirsLinux.txt" and $params::OS_type == $params::linuxType ) ){
+	open (my $fh, 'dirsWindows.txt') or die "Couldn't open file\n";
 
-		# Add a backslash to the end and replace back/forward slashes as necessary. 
-		$root_dir = $root_dir . '/';
-		$root_dir =~ s/\\/\//g;
-		push (@rootDirList, $root_dir);
-		print $root_dir . "\n";
-	}else{
-		last;
+	while (my $row = <$fh>){
+		chomp $row;
+
+		push(@rootDirList, "$row");
+		print $row . "\n";
 	}
-	my $answer = $mw->messageBox(-title => 'Please Reply', 
-	     -message => 'Would you like to add more root directories?', 
-	     -type => 'YesNo', -icon => 'question', -default => 'yes');
+}else{
 
-	$answerBool = (lc($answer) eq 'yes') ? 1 : 0;
-	# print $answerBool . "\n";
-	# body...
+	while ($answerBool) {
+		my $root_dir = $mw->chooseDirectory(-title=>'Hey there! Please choose the highest level root directory from which you wish to choose picture files.', -initialdir=>$homedir);
+		if (defined $root_dir and $root_dir ne "/" and $root_dir ne ""){
+			# Remove any extraneous end-of-string slashes.
+			$root_dir =~ s/\\$//g;
+			$root_dir =~ s/\/$//g;
+
+			# Add a backslash to the end and replace back/forward slashes as necessary. 
+			$root_dir = $root_dir . '/';
+			$root_dir =~ s/\\/\//g;
+			push (@rootDirList, $root_dir);
+			print $root_dir . "\n";
+		}else{
+			last;
+		}
+		my $answer = $mw->messageBox(-title => 'Please Reply', 
+		     -message => 'Would you like to add more root directories?', 
+		     -type => 'YesNo', -icon => 'question', -default => 'yes');
+
+		$answerBool = (lc($answer) eq 'yes') ? 1 : 0;
+		# print $answerBool . "\n";
+		# body...
+	}
+	$mw->messageBox(-title => 'Warning', -message => 'Please be patient. Adding all pictures in these directories could take a while.', -type=>'OK');
 }
+
+print join (',', @rootDirList) . "\n";
 
 if (scalar @rootDirList == 0){
 	die "No directories were chosen to add; exiting.\n";
 }
 
-$mw->messageBox(-title => 'Warning', -message => 'Please be patient. Adding all pictures in these directories could take a while.', -type=>'OK');
 
 # Open the database
 our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
@@ -187,7 +203,7 @@ foreach my $root_dir (@rootDirList){
 	our $numPassed = 0;
 	#####
 		open OUTPUT,  ">unhandled_files.txt" or die $!;
-		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed, $portNum);
+		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed, $portNum, \$dbhandle);
 		close OUTPUT;
 	#####
 
