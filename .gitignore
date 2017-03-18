@@ -3,6 +3,7 @@ Thumbs.db
 ehthumbs.db
 *.db
 *.db-journal
+*.key
 
 # Folder config file
 Desktop.ini
