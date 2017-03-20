@@ -340,6 +340,9 @@ sub getImageData{
 	my %embeddedKeywords;
 
 	my @kw_fields = ('UserComment','Keywords','XPKeywords','LastKeywordXMP');
+	# UserComment - my field where I add Google Vision-based keywords.
+	# Keywords - seems to be where Picasa puts tags
+	# The XPKeywords / LastKeywordXMP - just in case. 
 	
 	foreach my $field (@kw_fields){
 		if (defined $infoHash{$field}){

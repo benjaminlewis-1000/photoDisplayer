@@ -1,0 +1,16 @@
+
+Exif.Image.ImageDescription
+Exif.Image.PageNumber
+
+Exif.Image.XMLPacket  --- XMP Metadata
+Exif.Image.ImageID  -- pathname of original image
+Exif.Image.BatteryLevel -- maybe hack this
+Exif.Image.SecurityClassification -- maybe hack this
+Exif.Image.ImageHistory  --- OOOH!! 
+
+Exif.Image.XPTitle
+Exif.Image.XPComment
+Exif.Image.XPKeywords
+Exif.Image.XPSubject
+
+Exif.Photo.UserComment
