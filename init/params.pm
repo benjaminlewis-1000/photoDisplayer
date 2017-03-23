@@ -109,6 +109,10 @@ if ($osname =~ m/win/i){
 	### Metadata fields
 		our $metadataLastEditedField = $config->{'metadataLastEditedField'};
 
+
+	our $googVisionLabelPrefix = $config->{'googVisionLabelPrefix'};
+	our $googImageHistoryPrefix = $config->{'googImageHistoryPrefix'};
+
 sub getLocalModTime{
 
 	if (moduleIsLoaded('File::stat')){

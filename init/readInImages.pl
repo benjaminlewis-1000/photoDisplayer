@@ -8,47 +8,10 @@ use DBI;
 # use File::stat;  ## DO NOT USE File::stat!!
 use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use POSIX qw(strftime);
+use YAML;
 
 use params;
 require 'read_xmp.pl';
-
-	# our $tmpDBhandle = DBI->connect("DBI:SQLite:test.db", "user" , "pass");
-	
-	# our %insertedDateHash;
-	# our %nameHash;
-	# my $rootDirectory = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\\';
-	# my $localDir = '';
-	# my $imageFile = 'canon pictures 012.JPG';
-	# my $dirKeyVal = 1;
-
-
-	# # Only selecting the keyVal that's relevant in this sub so as to avoid conflicts. 
-	# my $tableHashQuery = qq/SELECT $params::photoFileColumn, $params::insertDateColumn FROM $params::photoTableName WHERE $params::rootDirNumColumn = $dirKeyVal/;
-	# my $query = $tmpDBhandle->prepare($tableHashQuery);
-	# until(
-	# 	$query->execute()
-	# ){
-	# 	warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-	# 	warn "Failed on the following query: $tableHashQuery\n";
-	# 	sleep(1);
-	# }
-
-	# my ($fileName, $insertDate);
-	# $query->bind_col(1, \$fileName);
-	# $query->bind_col(2, \$insertDate);
-
-	# while($query->fetch){
-	# 	$insertedDateHash{$fileName} = $insertDate;
-	# }
-
-	# readOneImage({
-	# 	baseDirName => $rootDirectory, 
-	# 	fileName => $localDir . $imageFile, 
-	# 	baseDirNum => $dirKeyVal,
-	# 	nameHash => \%nameHash,
-	# 	dbhandle => $tmpDBhandle,
-	# 	insertedDateHash => \%insertedDateHash
-	# });
 
 sub readOneImage{
 
@@ -465,14 +428,17 @@ sub readOneImage{
 				$params::commentLinkerTagProbabilityColumn		)  
 			VALUES ($photoKeyVal, "$kw", $keywordsInImage{$kw}	)/;
 
-			$query = $dbhandle->prepare($insertPhotoCommentLinkerQuery);
-			until(
-				$query->execute()
-			){
-				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-				warn "Failed on the following query: $insertPhotoCommentLinkerQuery\n";
-				sleep(1);
-			}# or die $DBI::errstr;
+		print "Keyword is " . $kw  . " " . $keywordsInImage{$kw} . "\n";
+
+
+		$query = $dbhandle->prepare($insertPhotoCommentLinkerQuery);
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $insertPhotoCommentLinkerQuery\n";
+			sleep(1);
+		}# or die $DBI::errstr;
 
 	}
 

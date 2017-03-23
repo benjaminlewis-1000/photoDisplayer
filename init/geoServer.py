@@ -20,8 +20,18 @@ server = SimpleXMLRPCServer(("localhost", 8000),
                             requestHandler=RequestHandler)
 server.register_introspection_functions()
 
+locationDict = {}
 
 def geoLookup(lat, lon):
+
+    gpsTuple = (lat,lon)
+
+    if (gpsTuple in locationDict):
+        print 'Already in location dict!'
+        return locationDict[gpsTuple]
+
+    print "Found something new"
+
     location = geolocator.reverse(str(lat) + ', ' + str(lon))
 
     house_number = '-'
@@ -55,6 +65,8 @@ def geoLookup(lat, lon):
               '", "postcode" : "' + postcode  + \
               '", "country" : "' + country  + \
               '"}'
+              
+    locationDict[gpsTuple] = retJSON
 
     if ('error' in location.raw):
         return retJSON

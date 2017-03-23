@@ -52,7 +52,9 @@ sub create_table{
 	# Create the database table, where photo_key is the primary key and photo_file is the file name 
 	my $sql_quer = qq/CREATE TABLE visionData (
 		    fileName        STRING,
-		    lastCheckedDate STRING
+		    lastCheckedDate STRING,
+		    readAsPortrait BOOL,
+		    machineVisionSource STRING
 		); /;
 
 	# Prepare and execute the statement

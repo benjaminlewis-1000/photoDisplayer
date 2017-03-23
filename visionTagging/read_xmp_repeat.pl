@@ -21,12 +21,12 @@ $params::windowsType = 1;
 my %data = getImageData({
  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\romney.jpeg",
  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
- 	filename => 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\dirA\marky.jpg',
+ 	filename => 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\dirA\eif.jpg',
  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 012.JPG",
-	url  => "http://127.0.0.1:8000/RPC2",
+	# url  => "http://127.0.0.1:8000/RPC2",
 	debug => 1
 	});
-# print Dumper %data;
+print Dumper %data;
 
 sub getImageData{
 	my $d = 0;

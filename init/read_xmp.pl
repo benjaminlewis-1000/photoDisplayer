@@ -18,10 +18,10 @@ use strict;
 
 # my %data = getImageData({
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\romney.jpeg",
-#  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 018.JPG",
-#  	filename => 'D:\Pictures\Family CDs\Family pics 2005\2003-07-28\Randy picture 2.jpg',
+#  	# filename => 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\dir with spaces and jpg\reun.jpg',
+#  	filename => 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\dirA\DSC_0648.JPG',
 #  	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 012.JPG",
-# 	url  => "http://127.0.0.1:8000/RPC2",
+# 	# url  => "http://127.0.0.1:8000/RPC2",
 # 	debug => 1
 # 	});
 # print Dumper %data;
@@ -104,14 +104,14 @@ sub getImageData{
 	# foreach my $k (keys %infoHash){
 	# 	print "$k:  $infoHash{$k}\n";#; $infoHash{$k}\n";
 	# }
-	if ($params::debug and $params::debug_readXMP ) {
-		foreach my $k (keys %infoHash){
-			# if ($infoHash{$k} =~ m/N/){
-			if ($k =~ m/gps/i){
-				print $k . " : " . $infoHash{$k} . "\n";
-			}
-		}
-	}
+	# if ($params::debug and $params::debug_readXMP ) {
+	# 	foreach my $k (keys %infoHash){
+	# 		# if ($infoHash{$k} =~ m/N/){
+	# 		if ($k =~ m/gps/i){
+	# 			print $k . " : " . $infoHash{$k} . "\n";
+	# 		}
+	# 	}
+	# }
 
 
 	# Parse the XMP data. 
@@ -352,11 +352,28 @@ sub getImageData{
 				if (! ($kw =~ m/[\x00-\x1f]/) ){  # Try to get rid of any non-printable characters.  
 					$kw =~ s/^\s+//;
 					$kw =~ s/\s+$//;
-					$embeddedKeywords{$kw} = 1;
+					my $weight = 1;
+
+					if ($kw =~ m/\Q$params::googVisionLabelPrefix\E(.*)_([\d\.]+)/){
+						$kw = $1;
+						$weight = $2;
+					}
+
+					# if ($kw =~ m/)
+
+					if (! grep( /^$kw$/, @namesWithLargeAreas) and !($kw =~ m/^\s?$/)){
+						### if the keyword is NOT entirely blank and NOT a person name from the keywords, 
+						### add it to the hash.
+						$embeddedKeywords{$kw} = $weight;
+					}
+
 				}
+
 			}
 		}
 	}
+
+	# print keys %embeddedKeywords . "\n";
 
 	$returnData{'keywordsHash'} = \%embeddedKeywords;
 
@@ -364,7 +381,7 @@ sub getImageData{
 
 	# print Dumper(@namesWithLargeAreas) . "\n";
 
-	if ($params::debug and $params::debug_readXMP) {print join (",", @namesWithLargeAreas); }
+	if ($params::debug and $params::debug_readXMP) {print "\nNames include: "; print join (",", @namesWithLargeAreas); }
 
 	$returnData{'ImageSize'} = $fileSize;
 	$returnData{'Width'} = $imWidth;
@@ -396,8 +413,8 @@ sub getImageData{
 	# $elapsed = tv_interval($sttime);
 	# print "Elapsed: " . $elapsed . "\n";
 
+	if ($params::debug and $params::debug_readXMP) {print "\n\n";}
 	return %returnData;
-
 };
 
 sub trim { 

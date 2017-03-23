@@ -63,3 +63,7 @@ metadataValueColumn: "item_value"
 ### Metadata fields
 metadataLastEditedField: "last_edited_date"
 
+### Prefixes for automated image labeling from Google
+
+googVisionLabelPrefix: "googVision_"
+googImageHistoryPrefix: " Google added: "
