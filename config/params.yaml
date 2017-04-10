@@ -66,4 +66,7 @@ metadataLastEditedField: "last_edited_date"
 ### Prefixes for automated image labeling from Google
 
 googVisionLabelPrefix: "googVision_"
-googImageHistoryPrefix: " Google added: "
+googImageHistoryPrefix: "Google added: "
+
+clarifaiVisionLabelPrefix: "clarifaiVision_"
+clarifaiImageHistoryPrefix: "Clarifai added: "

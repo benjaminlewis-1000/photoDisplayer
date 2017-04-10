@@ -8,11 +8,29 @@ import os
 import pyexiv2 as pe2
 import re
 import sqlite3
+import time
 from time import gmtime, strftime
 import json
 
 import signal
 import sys
+
+def readInfo(filename):
+	metadata = pe2.ImageMetadata(filename)
+	metadata.read()
+	if imageHistoryField in metadata:
+		imageHistory =  metadata[imageHistoryField].raw_value
+		print "Image history: " + imageHistory + "\n"
+	if commentField in metadata:
+		comments =  metadata[commentField].raw_value
+		print "Comments: " + comments + "\n"
+		historyMatch = re.search(r'UUUUU' , comments)
+
+		if (historyMatch):
+			print "Found something!"
+
+	decision = classImage.decideIfNeedToDo(filename, classImage.googleLabelTuple, conn, curTime)
+	print decision
 
 def signal_handler(signal, frame):
 	print "you did it!"
@@ -20,7 +38,34 @@ def signal_handler(signal, frame):
 	conn.close()
 	sys.exit(0)
 
+def wipeImage(filename):
+	metadata = pyexiv2.ImageMetadata(filename)
+	metadata.read()
+	if imageHistoryField in metadata:
+		metadata[imageHistoryField].value = ""
+	if commentField in metadata:
+		metadata[commentField].value = ""
+
+
+	isUnlocked = os.access(filename, os.W_OK)
+	while not isUnlocked:
+		sleep(0.1)
+	try:
+		# print "File " + filename + " exists? : " + str(os.path.isfile(filename))
+		metadata.write()
+	except Exception as e:
+		print "Exception in writing metdata: Not written. Method wipeImage"
+		print "More info: " + str(e)
+
+	rmDBcommand = '''DELETE FROM visionData where filename = "''' + filename + "\""
+	c = conn.cursor()
+	c.execute(rmDBcommand)
+
 signal.signal(signal.SIGINT, signal_handler)
+
+# wipeImage("")
+
+### INVESTIGATE::: D:\Pictures\2016\Ohio\adulting (1).jpg
 
 ### Define a short version of the metadata fields we will be using. 
 picasaTagField = 'Iptc.Application2.Keywords'
@@ -41,7 +86,7 @@ with open('../config/params.yaml') as stream:
 curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
 # dir = 'C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base'
-dir = 'D:\Pictures\\2016'
+dir = 'D:\Pictures\\Family Pictures'
 
 listAllFiles = []
 ext = [".JPG", ".jpg", ".jpeg", ".JPEG"]
@@ -59,9 +104,26 @@ api_file = open('googAPIkey.key', 'r')
 api_key = api_file.read()
 api_file.close()
 
+# testImage = 'D:\Pictures\\2016\Ohio\\adulting (1).jpg'
+
+
+
+# rval = classImage.classifyOneImageGoogleAPI(api_key, 'D:\Pictures\\2016\Ohio\\adulting (1).jpg')
+# print rval
+# readInfo("D:/Pictures/2016/Chicago and Wicked/wicked_south_bend (2).jpg")
+
+
+
+t1 = time.time()
 
 for file in listAllFiles:
-	classImage.classifyImageWithGoogleAPI(api_key, file, conn, curTime)
+	readInfo(file)
+	print file
+	# classImage.classifyImageWithGoogleAPI(api_key, file, conn, curTime)
+
+t2 = time.time()
+
+print "Finished all files! Seconds: " + str(t2 - t1) + " for " + str( len(listAllFiles) ) + " files."
 
 # def clearImage(filename):
 # 	metadata = pe2.ImageMetadata(testImage)
@@ -86,11 +148,11 @@ for file in listAllFiles:
 
 
 # testImage = 'C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\dirA\\awes.jpg'
-# clearImage(testImage)
-# classImage.classifyImageWithGoogleAPI(api_key, testImage, conn, curTime)
+# # clearImage(testImage)
+# # classImage.classifyImageWithGoogleAPI(api_key, testImage, conn, curTime)
 
-# print "Out and about"
-# # print "Needs to be done = " + str(classImage.decideIfNeedToDo(testImage, classImage.googleLabelTuple, conn, curTime))
+# # print "Out and about"
+# print "Needs to be done = " + str(classImage.decideIfNeedToDo(testImage, classImage.googleLabelTuple, conn, curTime))
 
 # # simulateImage(testImage)
 

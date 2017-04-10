@@ -78,7 +78,7 @@
 	.fieldParent{
 		position:relative;
 	    min-height: 70px;
-	    max-width: 1000px;
+	    max-width: 1200px;
 	    /*border: 4px solid black;*/
 		margin 20px auto;
 		padding: 10px;
@@ -89,7 +89,7 @@
 		overflow: hidden
 	}
 
-	.fieldChild, .fieldChildColorless, .calendarBox,.calSelect{
+	.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions{
 	    border: 20px;
 	    cursor: pointer;
 
@@ -103,14 +103,32 @@
 
 	    margin-left: 10px;
 	    margin-right: 10px;
-	    width:100px;
-	    /*margin-top: 10px;
-	    margin-bottom: 10px;*/
 
 	    transition: 1.5s ease;
-	    float:left;
+	    /*float:left;*/
 
 		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+		display: inline-block;
+	}
+
+	.criteriaType{
+     	width: 150px;
+	    background-color: #FFFCE0;
+	    color: #200954;
+	}
+
+	.dropdownOptions{
+		width: 415px;
+	    background-color: #FFFCE0;
+	    color: #200954;
+	    margin-left: 5px
+	}
+
+	.binaryField{
+		width: 265px;
+	    background-color: #FFFCE0;
+	    color: #200954;
 	}
 
 	.fieldChild{
@@ -126,18 +144,27 @@
 	    height: 50px;
 	}
 
+	.labelText{
+		font-size:20px;
+		font-style: oblique;
+	}
+
 	.calendarBox{
 
+	    left: 40px;
+	    right: 40px;
 	    font-size: 20px;
 	    text-align: center;
-	    width:150px;
+	    width:210px;
 
-	    margin-right: -5px;
+	    margin-right: 5px;
+	    font-style: oblique;
+	    font-size: 20px;
 	}
 
 	.calSelect{
 		box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
-		width: 50px;
+		width: 70px;
 	    background-color: #FFFCE0;
 
 	}
@@ -195,7 +222,7 @@ console.log(myData) -->
 		lineDiv.id = 'criteriaBox' + num;
 		lineDiv.className = "fieldParent";
 
-		var subdiv1 = document.createElement('div');
+		var subdiv1 = document.createElement('span');
 			lineDiv.appendChild(subdiv1);
 			subdiv1.id = 'typeBox' + num
 
@@ -208,7 +235,7 @@ console.log(myData) -->
 				select.options.add(new Option(list[i], list[i]));
 			}
 
-			select.className = "fieldChild";
+			select.className = "criteriaType";
 			select.id = "selectCriteriaMenu" + num
 
 			subdiv1.appendChild(select);
@@ -218,24 +245,24 @@ console.log(myData) -->
 			})
 
 
-		var subdiv2 = document.createElement('div')
+		var subdiv2 = document.createElement('span')
 		subdiv2.id = 'binarySelect' + num
 		lineDiv.appendChild(subdiv2)
 
-		var subdiv3 = document.createElement("div")
+		var subdiv3 = document.createElement('span')
 		subdiv3.id = 'selectionDiv' + num
 		lineDiv.appendChild(subdiv3)
 
 		constructSelectionLine(num, lineDiv)
 
 
-		var removeSubdiv = document.createElement('div');
+		var removeSubdiv = document.createElement('span');
 		lineDiv.appendChild(removeSubdiv);
 		removeSubdiv.id = 'removeSubdiv' + num;
 
 			var removeLineButton = document.createElement('BUTTON');
 			removeLineButton.id = 'button';
-			var t = document.createTextNode('Remove Criteria');
+			var t = document.createTextNode('Remove ');
 			removeLineButton.appendChild(t);
 
 			removeLineButton.className = "fieldChild";
@@ -299,7 +326,8 @@ console.log(myData) -->
 				var startLabel = document.createElement('span')
 				startLabel.id = "spacing"
 				var startText = document.createTextNode("From: ")
-				startLabel.appendChild(startText)
+				startLabel.className = "labelText"
+				startLabel.appendChild(startText) 
 
 				/*Calendar #1*/
 				var i1 = document.createElement("input"); //input element, text
@@ -317,7 +345,7 @@ console.log(myData) -->
 				s1.setAttribute('type', 'button')
 				//s1.style.height="30px"
 
-				//subdiv2.appendChild(startLabel)
+				subdiv2.appendChild(startLabel)
 				subdiv2.appendChild(i1);
 				subdiv2.appendChild(s1);
 
@@ -325,8 +353,9 @@ console.log(myData) -->
 					cal.select(i1,'anchor1_'+ divNumber,'MM/dd/yyyy')
 				}
 
-				var endLabel = document.createElement('p')
+				var endLabel = document.createElement('span')
 				var endText = document.createTextNode("To: ")
+				endLabel.className = "labelText"
 				endLabel.appendChild(endText)
 
 				/* Calendar #2 */
@@ -345,7 +374,7 @@ console.log(myData) -->
 				s2.setAttribute('type', 'button')
 				//s2.style.height="30px"
 
-				//subdiv3.appendChild(endLabel)
+				subdiv3.appendChild(endLabel)
 				subdiv3.appendChild(i2);
 				subdiv3.appendChild(s2);
 
@@ -359,7 +388,7 @@ console.log(myData) -->
 				var binarySelect = document.createElement('select')
 				binarySelect.id = 'binarySelectValues' + divNumber
 				subdiv2.appendChild(binarySelect)
-				binarySelect.className = "fieldChild"
+				binarySelect.className = "binaryField"
 
 				binarySelect.options.add(new Option("is", "is", true, true));
 				binarySelect.options.add(new Option("is not", "is not", true, true));
@@ -368,7 +397,7 @@ console.log(myData) -->
 				var personSelect = document.createElement('select')
 				personSelect.id = 'selectionValue' + divNumber
 				subdiv3.appendChild(personSelect)
-				personSelect.className = "fieldChild"
+				personSelect.className = "dropdownOptions"
 
 				for (var i = 0; i < personNames.length; i++){
 					personSelect.options.add(new Option(personNames[i], personNames[i], true, true))
@@ -382,7 +411,7 @@ console.log(myData) -->
 				var binarySelect = document.createElement('select')
 				binarySelect.id = 'binarySelectValues' + divNumber
 				subdiv2.appendChild(binarySelect)
-				binarySelect.className = "fieldChild"
+				binarySelect.className = "binaryField"
 
 				binarySelect.options.add(new Option("is", "is", true, true));
 				binarySelect.options.add(new Option("is not", "is not", true, true));
@@ -394,7 +423,7 @@ console.log(myData) -->
 				var yearSelect = document.createElement("INPUT")
 				yearSelect.setAttribute("type", "text")
 				yearSelect.id = 'selectionValue' + divNumber
-				yearSelect.className = "fieldChildColorless"
+				yearSelect.className = "dropdownOptions"
 				yearSelect.onkeypress=function(){validateNumbers(event)}
 
 				subdiv3.appendChild(yearSelect)
@@ -406,7 +435,7 @@ console.log(myData) -->
 				var binarySelect = document.createElement('select')
 				binarySelect.id = 'binarySelectValues' + divNumber
 				subdiv2.appendChild(binarySelect)
-				binarySelect.className = "fieldChild"
+				binarySelect.className = "binaryField"
 
 				binarySelect.options.add(new Option("is", "is", true, true));
 				binarySelect.options.add(new Option("is not", "is not", true, true));
@@ -417,7 +446,7 @@ console.log(myData) -->
 				var monthSelect = document.createElement('select')
 				monthSelect.id = 'selectionValue' + divNumber
 				subdiv3.appendChild(monthSelect)
-				monthSelect.className = "fieldChild"
+				monthSelect.className = "dropdownOptions"
 
 				for (var i = 0; i < months.length; i++){
 					monthSelect.options.add(new Option(months[i], months[i], true, true))
@@ -540,7 +569,7 @@ console.log(myData) -->
 <div id=header>
 <style type="text/css">
 	#header{
-		max_width:1000px;
+		max_width:1200px;
 	}
 </style>
 	<h1 style="text-align: center;"><span style="color: #ff9900;">Page 2</span></h1>
@@ -571,7 +600,7 @@ console.log(myData) -->
 <style type="text/css">
 	#criteriaFieldsDiv{
 		background-color: #E3EBF7;
-		max-width: 1000;
+		max-width: 1200px;
 	}
 </style>
 </div>
