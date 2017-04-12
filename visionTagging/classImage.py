@@ -13,6 +13,8 @@ import yaml
 import re
 from time import sleep
 
+from clarifai.rest import ClarifaiApp
+
 ENDPOINT_URL = 'https://vision.googleapis.com/v1/images:annotate'
 reload(sys)  # Reload does the trick so we can set default encoding!!!
 sys.setdefaultencoding('UTF8')  ### Let us do more than ASCII
@@ -40,9 +42,8 @@ clarifaiHistoryPrefix = yParams['clarifaiImageHistoryPrefix']
 clarifaiLabelTuple = (clarifaiSourceType, clarifaiLabelPrefix, clarifaiHistoryPrefix)
 
 
-def removePreviousTags(filename, apiLabelTuple):
-	metadata = pyexiv2.ImageMetadata(filename)
-	metadata.read()
+def removePreviousTags(filename, apiLabelTuple, metadata):
+
 	metadataFields = metadata.exif_keys
 
 	userCommentTagKey = 'Exif.Photo.UserComment'
@@ -61,9 +62,6 @@ def removePreviousTags(filename, apiLabelTuple):
 
 	final = re.sub(r'\s+', " ", int2)
 	final = re.sub(r'^\s', "", final)
-
-	print "VV is " + final
-	# print existingTags
 
 	metadata[userCommentTagKey] = final
 	metadata.write()
@@ -186,17 +184,13 @@ def checkIfIsPortrait(filename):
 
 	return isPortrait
 
-def tagPhotoAgnostic(filename, jsonInput, currentTime, apiLabelTuple):
+def tagPhotoAgnostic(filename, jsonInput, apiLabelTuple, metadata):
 	## Function to tag a photo with labels from the method-agnostic JSON.
 	## Assumes that the jsonInput is not empty. 
 
 	assert jsonInput != ""
-	assert currentTime != ""
 	assert filename != ""
 
-	## Read the metadata from the file
-	metadata = pyexiv2.ImageMetadata(filename)
-	metadata.read()
 	metadataFields = metadata.exif_keys
 
 	userCommentTagKey = 'Exif.Photo.UserComment'
@@ -219,10 +213,11 @@ def tagPhotoAgnostic(filename, jsonInput, currentTime, apiLabelTuple):
 		builtString = apiLabelTuple[1] + str(tag) + "_" + str(score) + ", "
 		existingTags += builtString
 
-	metadata[userCommentTagKey].value = str(existingTags[:-2])  #Get rid of the last space and comma
+	metadata[userCommentTagKey] = str(existingTags[:-2])  #Get rid of the last space and comma
+
 
 	metadata.modified = True
-	### Check if the file is locked ### 
+	## Check if the file is locked ### 
 	isUnlocked = os.access(filename, os.W_OK)
 	while not isUnlocked:
 		sleep(0.1)
@@ -234,7 +229,8 @@ def tagPhotoAgnostic(filename, jsonInput, currentTime, apiLabelTuple):
 		print "More info: " + str(e)
 
 
-def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime):
+
+def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime, metadata):
 
 	""" Check the database to see if we have already processed this file by tagging it with the given API, at the given orientation.
 	If so, we can pass. If it's not in the database, we check the image history field, where said information is available.
@@ -245,8 +241,6 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime):
 	assert len(currentTime) > 0
 	sourceType = sourceTuple[0]
 
-	metadata = pyexiv2.ImageMetadata(filename)
-	metadata.read()
 
 	c = databasePointer.cursor()
 
@@ -261,14 +255,14 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime):
 	if oneAns == None:  # It's not in the database... 
 		### It's not in the database. We need to decide if it does need to be done.
 		if not 'Exif.Image.ImageHistory' in metadata:
-			print "No image history, not in database"
+			# print "No image history, not in database"
 			return True  ### If there is no image history, we need to do it.
 		else:
 			imageHistory = metadata['Exif.Image.ImageHistory'].raw_value
 
 		### Parse the image history to see if it's been done for this tuple. 
 		regexString = "(" + sourceTuple[2] + ")" + "(\d+-\d+-\d+ \d+:\d+:\d+)," + " orientation is (\d)."
-		print regexString
+		# print regexString
 
 		historyMatch = re.search(r"" + regexString + "" , imageHistory)
 
@@ -285,7 +279,7 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime):
 			# But don't return quite yet - we need to check if it's been updated yet. 
 		else:
 			# No history for that method and not in database - needs to be done. 
-			print "No image history for this method, not in database"
+			# print "No image history for this method, not in database"
 			return True
 
 	if 'Exif.Photo.UserComment' in metadata:
@@ -297,8 +291,8 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime):
 		commentMatch = re.search(r'UUUUU', tagFields)
 		if (commentMatch):
 			print "It's gone wrong last time we wrote file " + filename
-			metadata['Exif.Image.ImageHistory'].value = ""
-			metadata['Exif.Photo.UserComment'].value = ""
+			metadata['Exif.Image.ImageHistory'] = ""
+			metadata['Exif.Photo.UserComment'] = ""
 	
 			metadata.modified = True
 			isUnlocked = os.access(filename, os.W_OK)
@@ -367,10 +361,8 @@ def checkGoogleOddity(jsonResponse):
 		# No response at all
 		return True
 
-def updateFileHistory(filename, currentTime, apiLabelTuple):
+def updateFileHistory(filename, currentTime, apiLabelTuple, metadata):
 
-	metadata = pyexiv2.ImageMetadata(filename)
-	metadata.read()
 	metadataFields = metadata.exif_keys
 
 	imHistoryKey = 'Exif.Image.ImageHistory'
@@ -387,13 +379,13 @@ def updateFileHistory(filename, currentTime, apiLabelTuple):
 		replaceRegex = "\s?" + apiLabelTuple[2] + "\d+-\d+-\d+ \d+:\d+:\d+" + ", orientation is \d. "
 		newData = " " + apiLabelTuple[2] + currentTime + ", orientation is " + str(checkIfIsPortrait(filename)) + ". "
 		intermediate = re.sub(r"" +  replaceRegex + "" , newData, imHistory)
-		metadata[imHistoryKey].value = unicode(intermediate, "utf-8")
+		metadata[imHistoryKey] = unicode(intermediate, "utf-8")
 		metadata.write()
 		return
 
 	else: ### There was no history match; append to the file history. 
 		imHistory += apiLabelTuple[2] + currentTime + ", orientation is " + str(checkIfIsPortrait(filename)) + ". "
-		metadata[imHistoryKey].value = unicode(imHistory, "utf-8")
+		metadata[imHistoryKey] = unicode(imHistory, "utf-8")
 		
 		metadata.modified = True
 		isUnlocked = os.access(filename, os.W_OK)
@@ -409,17 +401,20 @@ def updateFileHistory(filename, currentTime, apiLabelTuple):
 
 def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 
+	metadata = pyexiv2.ImageMetadata(filename)
+	metadata.read()
+
 	### Check if the file is locked ### 
 	isUnlocked = os.access(filename, os.W_OK)
 	if (not isUnlocked):
 		print "File " + filename + " is locked. Skipping."
 		return
 
-	if decideIfNeedToDo(filename, googleLabelTuple, databaseConn, currentTime):
+	if decideIfNeedToDo(filename, googleLabelTuple, databaseConn, currentTime, metadata):
 
 		print "Classifying image: " + filename
 		# Remove any tags that may be floating from Google. 
-		removePreviousTags(filename, googleLabelTuple)
+		removePreviousTags(filename, googleLabelTuple, metadata)
 		# Request the response from the API
 		response = request_labels_and_landmarks_google(api_key, filename)
 		# Get the appropriate response.
@@ -434,7 +429,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		innerJSONlabels = googleToInternalLabelsJSON(jsonResponse)
 		print innerJSONlabels
 		if innerJSONlabels != -1:
-			tagPhotoAgnostic(filename, jsonResponse, currentTime, googleLabelTuple)
+			tagPhotoAgnostic(filename, innerJSONlabels, googleLabelTuple, metadata)
 			# Go ahead and classify it. LabelAnnotations is in jsonResponse
 			# This method should only write the tags
 			# tagPhotoFromGoogleJSON(filename, jsonResponse, currentTime, googleLabelTuple)
@@ -443,9 +438,12 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 			# We were unable to find any labels for the image. 
 			pass
 
+		if 'landmarkAnnotations' in jsonResponse:
+			tagPhotoGoogleGPS(filename, jsonResponse, googleLabelTuple, metadata)
+
 		## Update the file history and log the file in the database. This should be done 
 		## regardless of the file characteristics that were found. 
-		updateFileHistory(filename, currentTime, googleLabelTuple)
+		updateFileHistory(filename, currentTime, googleLabelTuple, metadata)
 		logInDatabase(filename, googleLabelTuple, currentTime, databaseConn)
 
 
@@ -454,105 +452,186 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + jsonResponse
 			logfile.close()
 
-		# if ('labelAnnotations' in jsonResponse or 'landmarkAnnotations' in jsonResponse):
-		# 	if 'labelAnnotations' in jsonResponse: # I've seen it happen - a landmark with no labels.
-		# 		print jsonResponse['labelAnnotations']
-		# 	else:
-		# 		logfile = open('logErrata.out', 'a')
-		# 		print >>logfile, "File " + filename + " has no labelAnnotations, but does have a landmarkAnnotation."
-		# 		logfile.close()
-		# 	# tagPhotoFromGoogleJSON(filename, jsonResponse, currentTime, googleLabelTuple)
+	else:
+		# print "Don't need to do this one: " + filename
+		return
 
-		# 	if 'landmarkAnnotations' in jsonResponse:
-		# 		landmarkFile = open('logLandmarks.out', 'a')
-		# 		if 'labelAnnotations' in jsonResponse:
-		# 			print >>landmarkFile, filename + " : " + str(jsonResponse['landmarkAnnotations']) + " : " + str(jsonResponse['labelAnnotations'])
-		# 		else:
-		# 			print >>landmarkFile, filename + " : " + str(jsonResponse['landmarkAnnotations'])
-		# 		landmarkFile.close()
+def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
 
-		# else: 
-			# Log it and write its history anyway.
-			# logfile = open('logErrata.out', 'a')
-			# print >>logfile, "File " + filename + " has no labelAnnotations or landmarkAnnotations."
-			# logfile.close()
+	assert jsonInput != ""
+	assert filename != ""
 
+	metadataFields = metadata.exif_keys
+
+	userCommentTagKey = 'Exif.Photo.UserComment'
+
+	## Check if there are comments and set them to a string we will add
+	## to; otherwise, set as empty string. 
+	if userCommentTagKey in metadataFields:
+		existingTags = metadata[userCommentTagKey].raw_value
+		if existingTags is not "":
+			existingTags += ", "
+	else:
+		existingTags = ""
+
+	place = jsonInput['landmarkAnnotations'][0]  # Just get the top scoring place. 
+	print place
+	if 'description' in place:
+		description = place['description']
+		score = place['score']
+		existingTags += apiLabelTuple[1] + str(description) + "_" + str(score) + ", "
+	latLong = place['locations'][0]['latLng']
+	lat = latLong['latitude']
+	lng = latLong['longitude']
+	lat_deg = to_deg(lat, 'lat')
+	lng_deg = to_deg(lng, 'lng')
+	exiv_lat = (pyexiv2.Rational(lat_deg[0]*60+lat_deg[1],60),pyexiv2.Rational(lat_deg[2]*100,6000), pyexiv2.Rational(0, 1))
+	exiv_lng = (pyexiv2.Rational(lng_deg[0]*60+lng_deg[1],60),pyexiv2.Rational(lng_deg[2]*100,6000), pyexiv2.Rational(0, 1))
+	metadata["Exif.GPSInfo.GPSLatitude"] = exiv_lat
+	metadata["Exif.GPSInfo.GPSLatitudeRef"] = lat_deg[3]
+	metadata["Exif.GPSInfo.GPSLongitude"] = exiv_lng
+	metadata["Exif.GPSInfo.GPSLongitudeRef"] = lng_deg[3]
+	metadata["Exif.Image.GPSTag"] = 654
+	metadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84"
+	metadata["Exif.GPSInfo.GPSVersionID"] = '2 0 0 0'
+
+	jsonTag = {}
+	pairs = []
+	pairs.append({place['description']: place['score']})
+	jsonTag['labels'] = json.loads(json.dumps(pairs)) # some JSON
+
+	isUnlocked = os.access(filename, os.W_OK)
+	while not isUnlocked:
+		sleep(0.1)
+		isUnlocked = os.access(filename, os.W_OK)
+	try:
+		metadata.write()
+	except Exception as e:
+		print "Exception in writing metdata: Not written. Method tagWithGPS"
+		print "More info: " + str(e)
+
+	tagPhotoAgnostic(filename, jsonTag, googleLabelTuple, metadata)
+
+def readInfo(filename):
+	metadata = pyexiv2.ImageMetadata(filename)
+	metadata.read()
+	imageHistoryField = 'Exif.Image.ImageHistory'
+	commentField = 'Exif.Photo.UserComment'
+	if imageHistoryField in metadata:
+		imageHistory =  metadata[imageHistoryField].raw_value
+		print "Image history: " + imageHistory 
+	else:
+		print "No image history"
+	if commentField in metadata:
+		comments =  metadata[commentField].raw_value
+		print "Comments: " + comments 
+		historyMatch = re.search(r'UUUUU' , comments)
+		if (historyMatch):
+			print "Found badly formed comments!"
+	else:
+		print "No comments."
+
+def clarifaiClassify(filename, app_id, app_secret):
+
+	app = ClarifaiApp(app_id, app_secret)
+	model = app.models.get("general-v1.3")
+
+	desWidth = 1280.0
+	desHeight = 960.0
+
+	im1 = openImageOriented(filename)
+	# im1 = Image.open(image_filenames)
+	width, height = im1.size
+
+	# Rescale the image if necessary to 2x by 2x the recommended API resolution
+	scale = min(width/desWidth, height/desHeight)
+	if scale > 0.5:
+		im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
+
+	buffer = io.BytesIO()  
+	im1.save(buffer, format="JPEG")
+	buffer.seek(0)  # Reset the buffer, very important
+
+	# Encode in base64
+	ctxt = b64encode(buffer.read()).decode()
+
+	clarifaiJSON = model.predict_by_base64(ctxt)
+
+	tags = clarifaiToInternalLabelsJSON(clarifaiJSON)
+
+	return tags
+
+
+def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, currentTime):
+
+	metadata = pyexiv2.ImageMetadata(filename)
+	metadata.read()
+
+	### Check if the file is locked ### 
+	isUnlocked = os.access(filename, os.W_OK)
+	if (not isUnlocked):
+		print "File " + filename + " is locked. Skipping."
+		return 0
+
+	if decideIfNeedToDo(filename, clarifaiLabelTuple, databaseConn, currentTime, metadata):
+
+		print "Classifying image: " + filename
+		# Remove any tags that may be floating from Google. 
+		removePreviousTags(filename, clarifaiLabelTuple, metadata)
+		# Request the response from the API. Clarifai returns in the agnostic form already.
+		jsonResponse = clarifaiClassify(filename, app_id, app_secret)
+
+		# File log of the JSON response, just for kicks. 
+		outfile = open('out.out', 'w')
+		print >>outfile, jsonResponse
+		outfile.close()
+
+		# Translate to our internal, platform-agnostic label type.
+		if jsonResponse != -1:
+			tagPhotoAgnostic(filename, jsonResponse, clarifaiLabelTuple, metadata)
+			# Go ahead and classify it. LabelAnnotations is in jsonResponse
+			# This method should only write the tags
+		else:
+			# We were unable to find any labels for the image. 
+			pass
+
+		## Update the file history and log the file in the database. This should be done 
+		## regardless of the file characteristics that were found. 
+		updateFileHistory(filename, currentTime, clarifaiLabelTuple, metadata)
+		logInDatabase(filename, clarifaiLabelTuple, currentTime, databaseConn)
+
+
+		# if checkGoogleOddity(jsonResponse):			
+		# 	logfile = open('logErrata.out', 'a')
+		# 	print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + jsonResponse
+		# 	logfile.close()
+		return 1
 
 	else:
 		# print "Don't need to do this one: " + filename
-		pass
+		return 0
 
-def classifyOneImageGoogleAPI(api_key, filename):
-	response = request_labels_and_landmarks_google(api_key, filename)
-	jsonResponse = json.loads(json.dumps(response.json()['responses']))[0]
+def clarifaiToInternalLabelsJSON(jsonResponse):
+	## Translate from the JSON that google returns to an internal, method-agnostic
+	## JSON that I use internally. 
 
-	return jsonResponse
+	dataJSON = jsonResponse['outputs'][0]['data']
 
+	if ('concepts' in dataJSON):
+		labels = dataJSON['concepts']
+		labelDict = {}
+		pairs = []
+		for i in range(len(labels)):
+			jsonTag = labels[i]
+			labelType = jsonTag['name']
+			score = jsonTag['value']
+			pairs.append({labelType: score})
 
+		labelDict['labels'] = json.loads(json.dumps(pairs)) # some JSON
 
-# def tagPhotoFromGoogleJSON(filename, jsonInput, currentTime, apiLabelTuple):
-
-# 	# print "Input is " +  str(jsonInput)
-
-# 	metadata = pyexiv2.ImageMetadata(filename)
-# 	metadata.read()
-# 	metadataFields = metadata.exif_keys
-
-# 	imHistoryKey = 'Exif.Image.ImageHistory'
-# 	userCommentTagKey = 'Exif.Photo.UserComment'
-
-# 	if imHistoryKey in metadataFields:
-# 		imHistory = metadata[imHistoryKey].raw_value
-# 	else:
-# 		imHistory = ""
-
-# 	# imHistory += apiLabelTuple[2] + currentTime + ", orientation is " + str(checkIfIsPortrait(filename)) + "."
-# 	# metadata[imHistoryKey] = imHistory
-
-# 	if userCommentTagKey in metadataFields:
-# 		existingTags = metadata[userCommentTagKey].raw_value
-# 		if existingTags is not "":
-# 			existingTags += ", "
-# 	else:
-# 		existingTags = ""
-
-# 	if 'labelAnnotations' in jsonInput:
-# 		for i in range(len(jsonInput['labelAnnotations'])):
-# 			jsonTag = jsonInput['labelAnnotations'][i]
-# 			labelType = jsonTag['description']
-# 			score = jsonTag['score']
-# 			# print str(labelType) + ": " + str(score)
-# 			builtString = apiLabelTuple[1] + str(labelType) + "_" + str(score) + ", "
-# 			existingTags += builtString
-
-# 	if 'landmarkAnnotations' in jsonInput:
-# 		# for i in len(jsonInput['landmarkAnnotations']):
-# 		# 	place = jsonInput['landmarkAnnotations'][i]
-# 		place = jsonInput['landmarkAnnotations'][0]  # Just get the top scoring place. 
-# 		if 'description' in place:
-# 			description = place['description']
-# 			score = place['score']
-# 			existingTags += apiLabelTuple[1] + str(description) + "_" + str(score) + ", "
-# 		latLong = place['locations'][0]['latLng']
-# 		lat = latLong['latitude']
-# 		lng = latLong['longitude']
-# 		lat_deg = to_deg(lat, 'lat')
-# 		lng_deg = to_deg(lng, 'lng')
-# 		exiv_lat = (pyexiv2.Rational(lat_deg[0]*60+lat_deg[1],60),pyexiv2.Rational(lat_deg[2]*100,6000), pyexiv2.Rational(0, 1))
-# 		exiv_lng = (pyexiv2.Rational(lng_deg[0]*60+lng_deg[1],60),pyexiv2.Rational(lng_deg[2]*100,6000), pyexiv2.Rational(0, 1))
-# 		metadata["Exif.GPSInfo.GPSLatitude"] = exiv_lat
-# 		metadata["Exif.GPSInfo.GPSLatitudeRef"] = lat_deg[3]
-# 		metadata["Exif.GPSInfo.GPSLongitude"] = exiv_lng
-# 		metadata["Exif.GPSInfo.GPSLongitudeRef"] = lng_deg[3]
-# 		metadata["Exif.Image.GPSTag"] = 654
-# 		metadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84"
-# 		metadata["Exif.GPSInfo.GPSVersionID"] = '2 0 0 0'
-# 		# set_gps_location(metadata, lat, lng)
-
-# 		# print description + " " + str(lat) + " " + str(lng)
-
-# 	metadata[userCommentTagKey] = existingTags[:-2]  #Get rid of the last space and comma
-
-	
-	# metadata.modified = True
-# 	metadata.write()
+		return labelDict
+	else:		
+		logfile = open('logErrata.out', 'a')
+		print >>logfile, "File " + filename + " has no labelAnnotations in Clarifai."
+		logfile.close()
+		return -1

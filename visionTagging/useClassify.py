@@ -2,18 +2,18 @@
 
 import classImage
 
-import yaml
 import datetime
+import json
 import os
-import pyexiv2 as pe2
+import pyexiv2
 import re
+import signal
 import sqlite3
+import sys
 import time
 from time import gmtime, strftime
-import json
+import yaml
 
-import signal
-import sys
 
 def readInfo(filename):
 	metadata = pe2.ImageMetadata(filename)
@@ -61,6 +61,7 @@ def wipeImage(filename):
 	c = conn.cursor()
 	c.execute(rmDBcommand)
 
+conn = sqlite3.connect("visionDatabase.db")
 signal.signal(signal.SIGINT, signal_handler)
 
 # wipeImage("")
@@ -86,23 +87,22 @@ with open('../config/params.yaml') as stream:
 curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
 # dir = 'C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base'
-dir = 'D:\Pictures\\Family Pictures'
+rootDirectory = 'D:\Pictures\\Family Pictures'
 
 listAllFiles = []
 ext = [".JPG", ".jpg", ".jpeg", ".JPEG"]
 
-for dirpath, dirnames, filenames in os.walk(dir):
+for dirpath, dirnames, filenames in os.walk(rootDirectory):
 	for fname in filenames:
 		if fname.endswith(tuple(ext)):
 			listAllFiles.append(os.path.join(dirpath, fname))
 
 
-conn = sqlite3.connect("visionDatabase.db")
 
 
-api_file = open('googAPIkey.key', 'r')
-api_key = api_file.read()
-api_file.close()
+goog_api_file = open('googAPIkey.key', 'r')
+goog_api_key = api_file.read()
+goog_api_file.close()
 
 # testImage = 'D:\Pictures\\2016\Ohio\\adulting (1).jpg'
 
@@ -119,59 +119,15 @@ t1 = time.time()
 for file in listAllFiles:
 	readInfo(file)
 	print file
-	# classImage.classifyImageWithGoogleAPI(api_key, file, conn, curTime)
+	# classImage.classifyImageWithGoogleAPI(goog_api_key, file, conn, curTime)
 
 t2 = time.time()
 
 print "Finished all files! Seconds: " + str(t2 - t1) + " for " + str( len(listAllFiles) ) + " files."
 
-# def clearImage(filename):
-# 	metadata = pe2.ImageMetadata(testImage)
-# 	metadata.read()
-# 	metadata[imageHistoryField] = ""
-# 	metadata[commentField] = ""
-# 	metadata.write()
-
-
-# def simulateImage(filename):
-# 	infile = open('out.out', 'rb')
-# 	val = infile.read()
-# 	infile.close()
-
-# 	jsonVal =  json.loads(val)[0]
-# 	classImage.tagPhotoFromGoogleJSON(filename, jsonVal, curTime, classImage.googleLabelTuple)
-
-# clearDBquery = '''DELETE FROM visionData'''
-# c = conn.cursor()
-# c.execute(clearDBquery)
-# conn.commit()
-
-
-# testImage = 'C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\dirA\\awes.jpg'
-# # clearImage(testImage)
-# # classImage.classifyImageWithGoogleAPI(api_key, testImage, conn, curTime)
-
-# # print "Out and about"
-# print "Needs to be done = " + str(classImage.decideIfNeedToDo(testImage, classImage.googleLabelTuple, conn, curTime))
-
-# # simulateImage(testImage)
-
-# metadata = pe2.ImageMetadata(testImage)
-# metadata.read()
-
-# print curTime
-
-# print "Image history: " + str(metadata[imageHistoryField].raw_value) + "\n"
-# print "Comments: " + str(metadata[commentField].raw_value) + "\n"
-
-# imageHistory = metadata['Exif.Image.ImageHistory'].raw_value
-
-# # regexString = "(.*)" + "(\d+-\d+\d+ \d+:\d+:\d+), orientation is (\d)."
-# # historyMatch = re.search(r"" + regexString + "" , imageHistory)
 
 conn.commit()
 conn.close()
-# removePreviousTags(testImage)
 
 
 ### TODO ### 

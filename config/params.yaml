@@ -70,3 +70,11 @@ googImageHistoryPrefix: "Google added: "
 
 clarifaiVisionLabelPrefix: "clarifaiVision_"
 clarifaiImageHistoryPrefix: "Clarifai added: "
+
+visionMetaReadsThisMonth: "Reads_performed_this_month"
+visionMetaReadsPerMonth: "Reads_per_month"
+visionMetaNewMonthDate: "New_month_date"
+visionMetaDayLastRead: "Day_last_read"
+visionMetaDayOfNewMonth: "Day_of_new_month"
+
+visionMetaTableName: "Variables"

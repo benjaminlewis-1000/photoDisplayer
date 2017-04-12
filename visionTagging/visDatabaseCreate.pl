@@ -6,6 +6,17 @@ use warnings;
 use strict;
 
 use DBI;
+use Time::localtime;
+
+use YAML::XS 'LoadFile';
+
+our $base_path = cwd();  # Get the directory of this module. 
+$base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
+$base_path = $1 . "/";  # Capture the output and put it in $base_path.
+
+our $YAML_file = $base_path . "config/params.yaml";
+our $config = LoadFile($YAML_file);  # YAML is more cross-language.
+
 
 #TODO: Delete the old database file
 #TODO: Database file location better handled
@@ -23,11 +34,13 @@ if ($count_args == 1) {
 }
 
 
-dbConnect();
-dropTables();
-create_table();
+# dbConnect();
+# dropTables();
+# createLoggingTable();
+# createMetadataTable();
+populateMetadataTable();
 
-$dbhandle->disconnect;
+# $dbhandle->disconnect;
 
 # End creation of tables.
 
@@ -48,7 +61,7 @@ sub dropTables{
 ###############################################
 
 # Create the photo primary key and filename table
-sub create_table{
+sub createLoggingTable{
 	# Create the database table, where photo_key is the primary key and photo_file is the file name 
 	my $sql_quer = qq/CREATE TABLE visionData (
 		    fileName        STRING,
@@ -60,6 +73,24 @@ sub create_table{
 	# Prepare and execute the statement
 	my $create_handle = $dbhandle->prepare($sql_quer);
 	$create_handle->execute() or die $DBI::errstr;
+}
+
+sub createMetadataTable{
+	my $sql_quer = qq/CREATE TABLE Variables(
+		Name   STRING,
+		Value  STRING
+	); /;
+
+	my $create_handle = $dbhandle->prepare($sql_quer);
+	$create_handle->execute() or die $DBI::errstr;
+}
+
+sub populateMetadataTable{
+	my $tm = localtime;
+	my $year = $tm->year + 1900;
+	my $month = $tm->mon + 1;
+	my $day = $tm->mday;
+	print $day . " " . $month . " " . $year . "\n";
 }
 
 # sub update_metadata{

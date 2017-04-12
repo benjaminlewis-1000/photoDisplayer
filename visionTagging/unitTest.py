@@ -68,99 +68,107 @@ print dots
 
 # Define a test file, the database, and the current time.
 
-file = "D:\Users\Benjamin\\testimage2.JPG"
+file = "D:\Users\Benjamin\\testimage1.JPG"
+# file = "D:\Users\Benjamin\gpsImage.jpeg"
 wipeImage(file)
-# D:\Pictures\Emily Wedding\\2015-08-18 05.33.01-1-1.jpeg
-
-
 api_file = open('googAPIkey.key', 'r')
 api_key = api_file.read()
 api_file.close()
-
 curTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
-### Test 1: See if file needs to be API'd
-needToUpdate = classImage.decideIfNeedToDo(file, classImage.googleLabelTuple, conn, curTime)
-print "This file needs to be done: " + str(needToUpdate) + ". Should be: True"
-if not needToUpdate:
-	errVal = True
+metadata = pyexiv2.ImageMetadata(file)
+metadata.read()
 
-### Test 2: Check the metadata currently in the file
-print dots + "\nGetting current metadata fields:"
-
-readInfo(file)
-print dots
-
-### Test 3: Clearing comments
-
-### Test 4: Classify with Google API
 if 0:
-	response = classImage.request_labels_and_landmarks_google(api_key, file)
-	jsonResponse = json.loads(json.dumps(response.json()['responses']))[0]
 
-	print jsonResponse
+
+	### Test 1: See if file needs to be API'd
+	needToUpdate = classImage.decideIfNeedToDo(file, classImage.googleLabelTuple, conn, curTime, metadata)
+	print "This file needs to be done: " + str(needToUpdate) + ". Should be: True"
+	if not needToUpdate:
+		errVal = True
+
+	### Test 2: Check the metadata currently in the file
+	print dots + "\nGetting current metadata fields:"
+
+	readInfo(file)
 	print dots
 
-	#### I know that this image has both labels and landmark data. Check that this is true:
-	print "This image has labels? " + str('labelAnnotations' in jsonResponse) + ". Should be True."
-	print "This image has landmarks? " + str('landmarkAnnotations' in jsonResponse) + ". Should be False."
+	### Test 3: Clearing comments
+
+	### Test 4: Classify with Google API
+	if 0:
+		response = classImage.request_labels_and_landmarks_google(api_key, file)
+		jsonResponse = json.loads(json.dumps(response.json()['responses']))[0]
+
+		print jsonResponse
+		print dots
+
+		#### I know that this image has both labels and landmark data. Check that this is true:
+		print "This image has labels? " + str('labelAnnotations' in jsonResponse) + ". Should be True."
+		print "This image has landmarks? " + str('landmarkAnnotations' in jsonResponse) + ". Should be False."
+		print dots
+
+		### Test: Translate the labels
+		innerJSON = classImage.googleToInternalLabelsJSON(jsonResponse)
+	else:
+		pairs = []
+		innerJSON = {}
+		pairs.append({'community': 0.6809141})
+		pairs.append({'memorial': 0.62515974})
+
+		innerJSON['labels'] = json.loads(json.dumps(pairs)) # some JSON
+
+	print innerJSON
 	print dots
 
-	### Test: Translate the labels
-	innerJSON = classImage.googleToInternalLabelsJSON(jsonResponse)
+	### Test: Write labels as Google
+	classImage.tagPhotoAgnostic(file, innerJSON, classImage.googleLabelTuple, metadata)
+	### Test: Write labels as Clarifai
+	classImage.tagPhotoAgnostic(file, innerJSON, classImage.clarifaiLabelTuple, metadata)
+	metadata.write()
+	### Test: Update Google file history
+	classImage.updateFileHistory(file, curTime, classImage.googleLabelTuple, metadata)
+	### Test: Update Clarifai file history
+	classImage.updateFileHistory(file, curTime, classImage.clarifaiLabelTuple, metadata)
+
+	print dots
+	readInfo(file)
+
+	print dots
+	googNeed = classImage.decideIfNeedToDo(file, classImage.googleLabelTuple, conn, curTime, metadata)
+	clarNeed = classImage.decideIfNeedToDo(file, classImage.clarifaiLabelTuple, conn, curTime, metadata)
+
+	print "Need to do Google: " + str(googNeed) + ". Should be False."
+	print "Need to do Clarif: " + str(clarNeed) + ". Should be False."
+
+	### Test: Remove the previous tags from the image one at a time. 
+	print dots
+	classImage.removePreviousTags(file, classImage.googleLabelTuple, metadata)
+	readInfo(file)
+	print dots
+	classImage.tagPhotoAgnostic(file, innerJSON, classImage.googleLabelTuple, metadata)
+	metadata.write()
+	classImage.removePreviousTags(file, classImage.clarifaiLabelTuple, metadata)
+	readInfo(file)
+	print dots
+
+	classImage.tagPhotoAgnostic(file, innerJSON, classImage.clarifaiLabelTuple, metadata)
+	metadata.write()
+	curTime = "1992-10-37 83:02:68"
+	classImage.updateFileHistory(file, curTime, classImage.clarifaiLabelTuple, metadata)
+	readInfo(file)
+	print dots
+	curTime = "1692-77-38 90:37:03"
+	classImage.updateFileHistory(file, curTime, classImage.googleLabelTuple, metadata)
+	readInfo(file)
+	print dots
+	# metadata = pyexiv2.ImageMetadata(file)
+	# metadata.read()
+	# metadataFields = metadata.exif_keys
 else:
-	pairs = []
-	innerJSON = {}
-	pairs.append({'community': 0.6809141})
-	pairs.append({'memorial': 0.62515974})
-
-	innerJSON['labels'] = json.loads(json.dumps(pairs)) # some JSON
-
-print innerJSON
-print dots
-
-### Test: Write labels as Google
-classImage.tagPhotoAgnostic(file, innerJSON, curTime, classImage.googleLabelTuple)
-### Test: Write labels as Clarifai
-classImage.tagPhotoAgnostic(file, innerJSON, curTime, classImage.clarifaiLabelTuple)
-### Test: Update Google file history
-classImage.updateFileHistory(file, curTime, classImage.googleLabelTuple)
-### Test: Update Clarifai file history
-classImage.updateFileHistory(file, curTime, classImage.clarifaiLabelTuple)
-
-print dots
-readInfo(file)
-
-print dots
-googNeed = classImage.decideIfNeedToDo(file, classImage.googleLabelTuple, conn, curTime)
-clarNeed = classImage.decideIfNeedToDo(file, classImage.clarifaiLabelTuple, conn, curTime)
-
-print "Need to do Google: " + str(googNeed) + ". Should be False."
-print "Need to do Clarif: " + str(clarNeed) + ". Should be False."
-
-### Test: Remove the previous tags from the image one at a time. 
-print dots
-classImage.removePreviousTags(file, classImage.googleLabelTuple)
-readInfo(file)
-print dots
-classImage.tagPhotoAgnostic(file, innerJSON, curTime, classImage.googleLabelTuple)
-classImage.removePreviousTags(file, classImage.clarifaiLabelTuple)
-readInfo(file)
-print dots
-
-classImage.tagPhotoAgnostic(file, innerJSON, curTime, classImage.clarifaiLabelTuple)
-curTime = "1992-10-37 83:02:68"
-classImage.updateFileHistory(file, curTime, classImage.clarifaiLabelTuple)
-readInfo(file)
-print dots
-curTime = "1692-77-38 90:37:03"
-classImage.updateFileHistory(file, curTime, classImage.googleLabelTuple)
-readInfo(file)
-print dots
-# metadata = pyexiv2.ImageMetadata(file)
-# metadata.read()
-# metadataFields = metadata.exif_keys
-
+	classImage.classifyImageWithGoogleAPI(api_key, file, conn, curTime)
+	readInfo(file)
 # imHistoryKey = 'Exif.Image.ImageHistory'
 
 # if imHistoryKey in metadataFields:
