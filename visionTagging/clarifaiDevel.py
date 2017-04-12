@@ -129,7 +129,7 @@ if __name__ == "__main__":
 		## or have some exception, we save off the new number of files processed and exit the loop.
 		try:
 			clarifaiVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
-		except Exception e:
+		except Exception as e:
 			print str(e)
 			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
 			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
