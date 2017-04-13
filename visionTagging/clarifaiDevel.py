@@ -30,7 +30,7 @@ def signal_handler(signal, frame):
 ## A method to read the database and find out how many reads per month we want to do with Clarifai.
 ## Returns the number of reads already performed this month, the max reads per month, and resets
 ## the month definitions if a new billing month has occurred. 
-def setUpLimitsClarifai(conn, params):
+def setUpLimits(conn, params, method):
 	c = conn.cursor()
 	### Get all the parameters from the appropriate table in the database
 	metadataQuery = '''SELECT * FROM ''' + params['visionMetaTableName']
@@ -43,11 +43,17 @@ def setUpLimitsClarifai(conn, params):
 		metadataDict[dbMetadata[i][0]] = dbMetadata[i][1]
 
 	## Self-explanatory
-	readsPerMonth = metadataDict[params['visionMetaClarifaiReadsPerMonth']]
-	readsThisMonth = metadataDict[params['visionMetaClarifaiReadsThisMonth']]
-	newMonthDate = metadataDict[params['visionMetaClarifaiNewMonthDate']]
-	dateLastRead = metadataDict[params['visionMetaClarifaiDayLastRead']]
-	dayOfNewMonth = metadataDict[params['visionMetaClarifaiDayOfNewMonth']]
+	if method == 'clarifai':
+		methodInsertVar = 'Clarifai'
+	else:
+		methodInsertVar = 'Google'
+
+	readsPerMonth = metadataDict[params['visionMeta' + methodInsertVar + 'ReadsPerMonth']]
+	readsThisMonth = metadataDict[params['visionMeta' + methodInsertVar + 'ReadsThisMonth']]
+	newMonthDate = metadataDict[params['visionMeta' + methodInsertVar + 'NewMonthDate']]
+	dateLastRead = metadataDict[params['visionMeta' + methodInsertVar + 'DayLastRead']]
+	dayOfNewMonth = metadataDict[params['visionMeta' + methodInsertVar + 'DayOfNewMonth']]
+
 	todayDate = strftime("%Y-%m-%d", gmtime())
 	now = datetime.datetime.now()
 
@@ -63,9 +69,9 @@ def setUpLimitsClarifai(conn, params):
 			renewDate = str(str(now.year) + "-" + str(format(now.month, '02') ) + "-" + str(dayOfNewMonth))
 
 		renewDateQuery = '''UPDATE ''' + params['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
-		c.execute(renewDateQuery, (renewDate, params['visionMetaClarifaiNewMonthDate']) )
+		c.execute(renewDateQuery, (renewDate, params['visionMeta' + methodInsertVar + 'NewMonthDate']) )
 		resetCountQuery = '''UPDATE ''' + params['visionMetaTableName'] + ''' SET Value = 0 WHERE Name = ?'''
-		c.execute(resetCountQuery, (params['visionMetaClarifaiReadsThisMonth'],) )
+		c.execute(resetCountQuery, (params['visionMeta' + methodInsertVar + 'ReadsThisMonth'],) )
 
 		conn.commit()
 
@@ -75,14 +81,26 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Tag images using the Clarifai vision API (see clarifai.com). Inputs can include a directory; otherwise, a pop-up window will ask for a root directory to scan.')
 	parser.add_argument('--root', help='Root directory of the images to scan.')
 	parser.add_argument('--doDeep', help="Doesn't use the indexed files in the database to skip already read files; tends to run slower.")
+	parser.add_argument('--method', help="Select methods. Valid values currently are 'google' or 'clarifai'.")
 
 	args = parser.parse_args()
 
+	if args.method == 'clarifai':
+		method = 'clarifai'
+	else:
+		method = 'google'
+
 	## Open the API Key file and read the app ID and app secret.
-	api_file = open('clarifaiAPIkey.key', 'r')
-	app_id = api_file.readline().rstrip("\n\r")
-	app_secret = api_file.readline()
-	api_file.close()
+	if method == 'clarifai':
+		api_file = open('clarifaiAPIkey.key', 'r')
+		app_id = api_file.readline().rstrip("\n\r")
+		app_secret = api_file.readline()
+		api_file.close()
+	else:
+		api_file = open('googAPIkey.key', 'r')
+		api_key = api_file.read().rstrip("\n\r")
+		api_file.close()
+
 
 	# Get the current date and time
 	currentTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -101,7 +119,7 @@ if __name__ == "__main__":
 
 	## Use the method above to find the number of monthly reads we want from Clarifai
 	## and the number that have already been done this month.
-	limits = setUpLimitsClarifai(conn, yParams)
+	limits = setUpLimits(conn, yParams, method)
 	monthlyLimit = limits[1]
 	alreadyDone = limits[0]
 
@@ -166,6 +184,7 @@ if __name__ == "__main__":
 			break
 
 		alreadyDone += clarifaiVal
+		if clarifaiVal:
 		print alreadyDone
 
 		if alreadyDone == monthlyLimit:
