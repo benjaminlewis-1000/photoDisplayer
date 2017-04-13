@@ -163,8 +163,8 @@ if __name__ == "__main__":
 			conn.commit()
 			break
 
-		print clarifaiVal
 		alreadyDone += clarifaiVal
+		print alreadyDone
 
 		if alreadyDone == monthlyLimit:
 			print "Monthly limit has been reached."
