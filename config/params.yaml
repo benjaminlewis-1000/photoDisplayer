@@ -71,13 +71,21 @@ googImageHistoryPrefix: "Google added: "
 clarifaiVisionLabelPrefix: "clarifaiVision_"
 clarifaiImageHistoryPrefix: "Clarifai added: "
 
+visionMetaTableName: "Variables"
+visionMetaNameColumn: "Name"
+visionMetaValueColumn: "Value"
+
 visionMetaClarifaiReadsThisMonth: "Reads_performed_this_month_clarifai"
 visionMetaClarifaiReadsPerMonth: "Reads_per_month_clarifai"
 visionMetaClarifaiNewMonthDate: "New_month_date_clarifai"
 visionMetaClarifaiDayLastRead: "Day_last_read_clarifai"
 visionMetaClarifaiDayOfNewMonth: "Day_of_new_month_clarifai"
 
-visionMetaTableName: "Variables"
+visionMetaGoogleReadsThisMonth: "Reads_performed_this_month_google"
+visionMetaGoogleReadsPerMonth: "Reads_per_month_google"
+visionMetaGoogleNewMonthDate: "New_month_date_google"
+visionMetaGoogleDayLastRead: "Day_last_read_google"
+visionMetaGoogleDayOfNewMonth: "Day_of_new_month_google"
 
 visionRecordDataTableName: "visionData"
 

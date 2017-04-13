@@ -144,14 +144,13 @@ if __name__ == "__main__":
 		clarifaiVal = 0
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
 		## or have some exception, we save off the new number of files processed and exit the loop.
-		print 'Reading ' + filename
 		try:
 			clarifaiVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
 		except IOError as ioe:
 			print "IO Error in clarifai classify: " + str(ioe)
 			clarifaiVal = 0
 			logfile = open('logErrata.out', 'a')
-			print >>logfile, "File " + filename + " was not able to open for classification in Clarifai."
+			print >>logfile, "IO Error in file " + filename + " (most likely caused by inability to open) : " + type(e) + ",  " + str(e.args) + ",  " + str(e)
 			logfile.close()
 		except Exception as e:
 			clarifaiVal = 0
@@ -161,6 +160,9 @@ if __name__ == "__main__":
 			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
 			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
 			conn.commit()
+			logfile = open('logErrata.out', 'a')
+			print >>logfile, "Error in file " + filename + ": " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+			logfile.close()
 			break
 
 		alreadyDone += clarifaiVal

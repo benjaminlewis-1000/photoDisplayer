@@ -5,6 +5,7 @@
 use warnings;
 use strict;
 
+use Cwd;
 use DBI;
 use Time::localtime;
 
@@ -16,7 +17,6 @@ $base_path = $1 . "/";  # Capture the output and put it in $base_path.
 
 our $YAML_file = $base_path . "config/params.yaml";
 our $config = LoadFile($YAML_file);  # YAML is more cross-language.
-
 
 #TODO: Delete the old database file
 #TODO: Database file location better handled
@@ -34,13 +34,13 @@ if ($count_args == 1) {
 }
 
 
-# dbConnect();
-# dropTables();
-# createLoggingTable();
-# createMetadataTable();
+dbConnect();
+dropTables();
+createLoggingTable();
+createMetadataTable();
 populateMetadataTable();
 
-# $dbhandle->disconnect;
+$dbhandle->disconnect;
 
 # End creation of tables.
 
@@ -50,8 +50,13 @@ sub dbConnect{
 
 sub dropTables{
 	# Clean out the old tables so we can create them afresh.
-	my $dropPhotos = qq/DROP TABLE IF EXISTS visionData/;
+	my $dropPhotos = qq/DROP TABLE IF EXISTS $config->{'visionRecordDataTableName'} /;
 	my $query = $dbhandle->prepare($dropPhotos);
+	$query->execute() or die $DBI::errstr;
+
+
+	my $dropMetadata = qq/DROP TABLE IF EXISTS $config->{'visionMetaTableName'} /;
+	$query = $dbhandle->prepare($dropMetadata);
 	$query->execute() or die $DBI::errstr;
 	
 }
@@ -63,11 +68,12 @@ sub dropTables{
 # Create the photo primary key and filename table
 sub createLoggingTable{
 	# Create the database table, where photo_key is the primary key and photo_file is the file name 
-	my $sql_quer = qq/CREATE TABLE visionData (
-		    fileName        STRING,
-		    lastCheckedDate STRING,
-		    readAsPortrait BOOL,
-		    machineVisionSource STRING
+	my $sql_quer = qq/CREATE TABLE $config->{'visionRecordDataTableName'} (
+		    $config->{'visionRecordFileColumn'} 		STRING,
+		    $config->{'visionRecordCheckedColumn'} 		STRING,
+		    $config->{'visionRecordPortraitColumn'} 	BOOL,
+		    $config->{'visionRecordSourceColumn'} 		STRING,
+		    $config->{'visionRecordValidColumn'}		BOOL
 		); /;
 
 	# Prepare and execute the statement
@@ -76,9 +82,9 @@ sub createLoggingTable{
 }
 
 sub createMetadataTable{
-	my $sql_quer = qq/CREATE TABLE Variables(
-		Name   STRING,
-		Value  STRING
+	my $sql_quer = qq/CREATE TABLE $config->{'visionMetaTableName'}(
+		$config->{'visionMetaNameColumn'}  STRING,
+		$config->{'visionMetaValueColumn'}  STRING
 	); /;
 
 	my $create_handle = $dbhandle->prepare($sql_quer);
@@ -88,9 +94,27 @@ sub createMetadataTable{
 sub populateMetadataTable{
 	my $tm = localtime;
 	my $year = $tm->year + 1900;
-	my $month = $tm->mon + 1;
-	my $day = $tm->mday;
-	print $day . " " . $month . " " . $year . "\n";
+	my $month = sprintf("%02d", $tm->mon + 1);
+	my $day = sprintf("%02d", $tm->mday);
+	my $newMonth = "$year-$month-$day";
+
+	my $populateQuery = qq/INSERT INTO $config->{'visionMetaTableName'} 
+		('$config->{'visionMetaNameColumn'}', $config->{'visionMetaValueColumn'}) VALUES
+		('$config->{'visionMetaClarifaiReadsThisMonth'}', '0'), 
+		('$config->{'visionMetaClarifaiReadsPerMonth'}', '5000'),
+		('$config->{'visionMetaClarifaiNewMonthDate'}', '$newMonth'),
+		('$config->{'visionMetaClarifaiDayLastRead'}', '$newMonth'),
+		('$config->{'visionMetaGoogleDayOfNewMonth'}', '$day'),
+		('$config->{'visionMetaGoogleReadsThisMonth'}', '0'), 
+		('$config->{'visionMetaGoogleReadsPerMonth'}', '1000'),
+		('$config->{'visionMetaGoogleNewMonthDate'}', '$newMonth'),
+		('$config->{'visionMetaGoogleDayLastRead'}', '$newMonth'),
+		('$config->{'visionMetaGoogleDayOfNewMonth'}', '$day'); 
+		/;
+
+	my $create_handle = $dbhandle->prepare($populateQuery);
+	$create_handle->execute() or die $DBI::errstr;
+
 }
 
 # sub update_metadata{
