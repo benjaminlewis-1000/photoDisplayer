@@ -74,6 +74,7 @@ def setUpLimitsClarifai(conn, params):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Tag images using the Clarifai vision API (see clarifai.com). Inputs can include a directory; otherwise, a pop-up window will ask for a root directory to scan.')
 	parser.add_argument('--root', help='Root directory of the images to scan.')
+	parser.add_argument('--doDeep', help="Doesn't use the indexed files in the database to skip already read files; tends to run slower.")
 
 	args = parser.parse_args()
 
@@ -107,12 +108,21 @@ if __name__ == "__main__":
 	## Find the root directory that we want to scan. Either it was passed in
 	## as an arg with --root <directory>, or we launch a file dialog to
 	## get the directory. 
-	if os.path.isdir(args.root):
+	if args.root != None and os.path.isdir(args.root):
 		rootDirectory = args.root
 	else:
 		rootWindow = Tk()
 		rootWindow.withdraw()
 		rootDirectory = tkFileDialog.askdirectory()
+
+	c = conn.cursor()
+	getConfirmedFilesQuery = "SELECT " + yParams['visionRecordFileColumn'] + " FROM " + yParams['visionRecordDataTableName'] + " WHERE " + yParams['visionRecordValidColumn'] + " = 1 AND " + yParams['visionRecordSourceColumn'] + " = ?"
+	c.execute(getConfirmedFilesQuery, (classImage.clarifaiLabelTuple[0],) )
+	results = c.fetchall()
+	readFiles = []
+	for i in range(len(results)):
+		readFiles.append( str(results[i][0]) )
+
 
 	## List all the files in the root directory that end with JPEG-type file formats.
 	## Add them to a list. 
@@ -120,17 +130,29 @@ if __name__ == "__main__":
 	for dirpath, dirnames, filenames in os.walk(rootDirectory):
 		for fname in filenames:
 			if fname.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
-				listAllFiles.append(os.path.join(dirpath, fname))
+				if args.doDeep != None:
+					listAllFiles.append(os.path.join(dirpath, fname))
+				else:
+					if os.path.join(dirpath, fname) not in readFiles:
+						listAllFiles.append(os.path.join(dirpath, fname))
+					else:
+						print fname + " is read already."
 
-	c = conn.cursor()
 
 	for filename in listAllFiles:
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
 		## or have some exception, we save off the new number of files processed and exit the loop.
 		try:
 			clarifaiVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
+		except IOError as ioe:
+			print "IO Error in clarifai classify: " + str(ioe)
+			clarifaiVal = 0
+			logfile = open('logErrata.out', 'a')
+			print >>logfile, "File " + filename + " was not able to open for classification in Clarifai."
+			logfile.close()
 		except Exception as e:
-			print str(e)
+			print "Previously unknown exception: " +  str(e)
+			print "Breaking."
 			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
 			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
 			conn.commit()

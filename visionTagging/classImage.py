@@ -137,8 +137,16 @@ def make_image_data_google(image_filenames):
 
 	# Rescale the image if necessary to 2x by 2x the recommended API resolution
 	scale = min(width/desWidth, height/desHeight)
-	if scale > 0.5:
-		im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
+	try:
+		if scale > 0.5:
+			im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
+	except IOError as ioe:
+		print "IO Error in google classify: " + str(ioe)
+		logfile = open('logErrata.out', 'a')
+		print >>logfile, "File " + filename + " was not able to open for classification in Google."
+		logfile.close()
+		return -1
+
 
 	buffer = io.BytesIO()  
 	im1.save(buffer, format="JPEG")
@@ -162,8 +170,11 @@ def make_image_data_google(image_filenames):
 def request_labels_and_landmarks_google(api_key, image_filenames):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
+	b64data = make_image_data_google(image_filenames)
+	if b64data = -1:
+		return -1
 	response = requests.post(ENDPOINT_URL,
-	                         data=make_image_data_google(image_filenames),
+	                         data=b64data,
 	                         params={'key': api_key},
 	                         headers={'Content-Type': 'application/json'})
 	return response
@@ -417,6 +428,9 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		removePreviousTags(filename, googleLabelTuple, metadata)
 		# Request the response from the API
 		response = request_labels_and_landmarks_google(api_key, filename)
+		if response = -1:
+			print "Unable to finish Google classify."
+			return
 		# Get the appropriate response.
 		jsonResponse = json.loads(json.dumps(response.json()['responses']))[0]
 
@@ -545,8 +559,16 @@ def clarifaiClassify(filename, app_id, app_secret):
 
 	# Rescale the image if necessary to 2x by 2x the recommended API resolution
 	scale = min(width/desWidth, height/desHeight)
-	if scale > 0.5:
-		im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
+	try:
+		if scale > 0.5:
+			im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
+	except IOError as ioe:
+		print "IO Error in clarifai classify: " + str(ioe)
+		logfile = open('logErrata.out', 'a')
+		print >>logfile, "File " + filename + " was not able to open for classification in Clarifai."
+		logfile.close()
+		return -1
+
 
 	buffer = io.BytesIO()  
 	im1.save(buffer, format="JPEG")
@@ -580,6 +602,9 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		removePreviousTags(filename, clarifaiLabelTuple, metadata)
 		# Request the response from the API. Clarifai returns in the agnostic form already.
 		jsonResponse = clarifaiClassify(filename, app_id, app_secret)
+		if jsonResponse = -1:
+			print "Unable to complet Clarifai classify for this image."
+			return
 
 		# File log of the JSON response, just for kicks. 
 		outfile = open('out.out', 'w')

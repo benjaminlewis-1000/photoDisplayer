@@ -78,3 +78,11 @@ visionMetaClarifaiDayLastRead: "Day_last_read_clarifai"
 visionMetaClarifaiDayOfNewMonth: "Day_of_new_month_clarifai"
 
 visionMetaTableName: "Variables"
+
+visionRecordDataTableName: "visionData"
+
+visionRecordFileColumn: "fileName"
+visionRecordCheckedColumn: "lastCheckedDate"
+visionRecordPortraitColumn: "readAsPortrait"
+visionRecordSourceColumn: "machineVisionSource"
+visionRecordValidColumn: "validated"
