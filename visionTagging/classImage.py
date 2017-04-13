@@ -419,7 +419,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 	isUnlocked = os.access(filename, os.W_OK)
 	if (not isUnlocked):
 		print "File " + filename + " is locked. Skipping."
-		return
+		return 0
 
 	if decideIfNeedToDo(filename, googleLabelTuple, databaseConn, currentTime, metadata):
 
@@ -430,7 +430,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		response = request_labels_and_landmarks_google(api_key, filename)
 		if response == -1:
 			print "Unable to finish Google classify."
-			return
+			return 0
 		# Get the appropriate response.
 		jsonResponse = json.loads(json.dumps(response.json()['responses']))[0]
 
@@ -466,9 +466,11 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + jsonResponse
 			logfile.close()
 
+		return 1
+
 	else:
 		# print "Don't need to do this one: " + filename
-		return
+		return 0
 
 def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
 
@@ -603,8 +605,8 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		# Request the response from the API. Clarifai returns in the agnostic form already.
 		jsonResponse = clarifaiClassify(filename, app_id, app_secret)
 		if jsonResponse == -1:
-			print "Unable to complet Clarifai classify for this image."
-			return
+			print "Unable to complete Clarifai classify for this image."
+			return 0
 
 		# File log of the JSON response, just for kicks. 
 		outfile = open('out.out', 'w')
