@@ -32,7 +32,6 @@ def wipeImage(filename):
 	if commentField in metadata:
 		metadata[commentField].value = ""
 
-
 	isUnlocked = os.access(filename, os.W_OK)
 	while not isUnlocked:
 		sleep(0.1)

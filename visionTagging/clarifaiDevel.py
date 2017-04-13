@@ -135,7 +135,10 @@ if __name__ == "__main__":
 
 	c = conn.cursor()
 	getConfirmedFilesQuery = "SELECT " + yParams['visionRecordFileColumn'] + " FROM " + yParams['visionRecordDataTableName'] + " WHERE " + yParams['visionRecordValidColumn'] + " = 1 AND " + yParams['visionRecordSourceColumn'] + " = ?"
-	c.execute(getConfirmedFilesQuery, (classImage.clarifaiLabelTuple[0],) )
+	if method == 'clarifai':
+		c.execute(getConfirmedFilesQuery, (classImage.clarifaiLabelTuple[0],) )
+	else:
+		c.execute(getConfirmedFilesQuery, (classImage.googleLabelTuple[0],) )
 	results = c.fetchall()
 	readFiles = []
 	for i in range(len(results)):
@@ -157,43 +160,74 @@ if __name__ == "__main__":
 						print os.path.join(dirpath, fname) + " is read already."
 						readFiles.remove(os.path.join(dirpath, fname))
 
+	if method == 'clarifai':
+		for filename in listAllFiles:
+			successVal = 0
+			## Try-except block to classify the image with the API. In the event that we reach the monthly limit
+			## or have some exception, we save off the new number of files processed and exit the loop.
+			try:
+				successVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
+			except IOError as ioe:
+				print "IO Error in clarifai classify: " + str(ioe)
+				successVal = 0
+				logfile = open('logErrata.out', 'a')
+				print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+				logfile.close()
+			except Exception as e:
+				successVal = 0
+				print "Previously unknown exception: " +  str(e)
+				print "Breaking."
+				print "Error: " + str(e)
+				resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+				c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
+				conn.commit()
+				logfile = open('logErrata.out', 'a')
+				print >>logfile, "Clarifai - error in file " + filename + ": " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+				logfile.close()
+				break
 
-	for filename in listAllFiles:
-		clarifaiVal = 0
-		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
-		## or have some exception, we save off the new number of files processed and exit the loop.
-		try:
-			clarifaiVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
-		except IOError as ioe:
-			print "IO Error in clarifai classify: " + str(ioe)
-			clarifaiVal = 0
-			logfile = open('logErrata.out', 'a')
-			print >>logfile, "IO Error in file " + filename + " (most likely caused by inability to open) : " + type(e) + ",  " + str(e.args) + ",  " + str(e)
-			logfile.close()
-		except Exception as e:
-			clarifaiVal = 0
-			print "Previously unknown exception: " +  str(e)
-			print "Breaking."
-			print "Error: " + str(e)
-			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
-			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
-			conn.commit()
-			logfile = open('logErrata.out', 'a')
-			print >>logfile, "Error in file " + filename + ": " + type(e) + ",  " + str(e.args) + ",  " + str(e)
-			logfile.close()
-			break
+			alreadyDone += successVal
+			if successVal:
+				print alreadyDone
 
-		alreadyDone += clarifaiVal
-		if clarifaiVal:
-		print alreadyDone
+			if alreadyDone == monthlyLimit:
+				print "Monthly limit has been reached."
+				resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+				c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
+				conn.commit()
+				break
 
-		if alreadyDone == monthlyLimit:
-			print "Monthly limit has been reached."
-			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
-			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
-			conn.commit()
-			break
+	else:
+        for filename in listAllFiles:
+            successVal = 0
 
+            ## Try-except block to classify the image with the API. In the event that we reach the monthly limit
+            ## or have some exception, we save off the new number of files processed and exit the loop.
+            try:
+                successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
+            except Exception as e:
+                successVal = 0
+                print "Previously unknown exception: " +  str(e)
+                print "Breaking."
+                print "Error: " + str(e)
+                resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+                c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaGoogleReadsThisMonth']) )
+                conn.commit()
+                logfile = open('logErrata.out', 'a')
+                print >>logfile, "Google - error in file " + filename + ": " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+                logfile.close()
+                break
+
+            alreadyDone += successVal
+            if successVal:
+                print alreadyDone
+
+            if alreadyDone == monthlyLimit:
+                print "Monthly limit has been reached."
+                resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+                c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaGoogleReadsThisMonth']) )
+                conn.commit()
+                break
 
 	conn.commit()
 	conn.close()

@@ -92,8 +92,6 @@ def wipeImage(filename):
 	c = conn.cursor()
 	c.execute(rmDBcommand)
 
-
-
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Tag images using the Google Vision API (see https://cloud.google.com/vision/). Inputs can include a directory; otherwise, a pop-up window will ask for a root directory to scan.')
 	parser.add_argument('--root', help='Root directory of the images to scan.')
@@ -138,7 +136,7 @@ if __name__ == "__main__":
 		rootWindow.withdraw()
 		rootDirectory = tkFileDialog.askdirectory()
 
-	
+
 
 ### Get the current time and connect to the database that lets 
 ### us know if we've already processed the image. 
