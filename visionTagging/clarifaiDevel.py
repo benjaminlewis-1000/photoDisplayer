@@ -151,8 +151,12 @@ if __name__ == "__main__":
 			print >>logfile, "File " + filename + " was not able to open for classification in Clarifai."
 			logfile.close()
 		except Exception as e:
+<<<<<<< HEAD
 			print "Previously unknown exception: " +  str(e)
 			print "Breaking."
+=======
+			print "Error: " + str(e)
+>>>>>>> origin/master
 			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
 			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
 			conn.commit()
