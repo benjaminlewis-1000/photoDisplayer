@@ -136,12 +136,15 @@ if __name__ == "__main__":
 					if os.path.join(dirpath, fname) not in readFiles:
 						listAllFiles.append(os.path.join(dirpath, fname))
 					else:
-						print fname + " is read already."
+						print os.path.join(dirpath, fname) + " is read already."
+						readFiles.remove(os.path.join(dirpath, fname))
 
 
 	for filename in listAllFiles:
+		clarifaiVal = 0
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
 		## or have some exception, we save off the new number of files processed and exit the loop.
+		print 'Reading ' + filename
 		try:
 			clarifaiVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
 		except IOError as ioe:
@@ -151,17 +154,16 @@ if __name__ == "__main__":
 			print >>logfile, "File " + filename + " was not able to open for classification in Clarifai."
 			logfile.close()
 		except Exception as e:
-<<<<<<< HEAD
+			clarifaiVal = 0
 			print "Previously unknown exception: " +  str(e)
 			print "Breaking."
-=======
 			print "Error: " + str(e)
->>>>>>> origin/master
 			resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
 			c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
 			conn.commit()
 			break
 
+		print clarifaiVal
 		alreadyDone += clarifaiVal
 
 		if alreadyDone == monthlyLimit:

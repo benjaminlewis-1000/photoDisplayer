@@ -171,7 +171,7 @@ def request_labels_and_landmarks_google(api_key, image_filenames):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
 	b64data = make_image_data_google(image_filenames)
-	if b64data = -1:
+	if b64data == -1:
 		return -1
 	response = requests.post(ENDPOINT_URL,
 	                         data=b64data,
@@ -428,7 +428,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		removePreviousTags(filename, googleLabelTuple, metadata)
 		# Request the response from the API
 		response = request_labels_and_landmarks_google(api_key, filename)
-		if response = -1:
+		if response == -1:
 			print "Unable to finish Google classify."
 			return
 		# Get the appropriate response.
@@ -602,7 +602,7 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		removePreviousTags(filename, clarifaiLabelTuple, metadata)
 		# Request the response from the API. Clarifai returns in the agnostic form already.
 		jsonResponse = clarifaiClassify(filename, app_id, app_secret)
-		if jsonResponse = -1:
+		if jsonResponse == -1:
 			print "Unable to complet Clarifai classify for this image."
 			return
 
