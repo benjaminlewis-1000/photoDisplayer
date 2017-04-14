@@ -441,7 +441,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 
 		# Translate to our internal, platform-agnostic label type.
 		innerJSONlabels = googleToInternalLabelsJSON(jsonResponse)
-		print innerJSONlabels
+        
 		if innerJSONlabels != -1:
 			tagPhotoAgnostic(filename, innerJSONlabels, googleLabelTuple, metadata)
 			# Go ahead and classify it. LabelAnnotations is in jsonResponse

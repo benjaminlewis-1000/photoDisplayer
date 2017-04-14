@@ -11,8 +11,6 @@ parser.add_argument('--method', help="Select methods. Valid values currently are
 
 args = parser.parse_args()
 
-print args.method
-
 if args.method == 'clarifai':
 	method = 'clarifai'
 else:
