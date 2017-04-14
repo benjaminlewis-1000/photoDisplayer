@@ -179,6 +179,13 @@ if __name__ == "__main__":
                 print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + type(e) + ",  " + str(e.args) + ",  " + str(e)
                 logfile.close()
             except Exception as e:
+                outOfFunds = re.search(r"Account Limits Exceeded", str(e) )
+                if outOfFunds:
+                    print "Out of funds! " + str(e)
+                    resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+                    c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
+                    conn.commit()
+                    break
                 successVal = 0
                 print "Previously unknown exception: " +  str(e)
                 print "Breaking."
