@@ -21,7 +21,10 @@ import yaml
 
 def signal_handler(signal, frame):
     resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
-    c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
+    if method == 'clarifai':
+        c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
+    else:
+        c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaGoogleReadsThisMonth']) )
     print "you did it!"
     conn.commit()
     conn.close()
@@ -53,6 +56,7 @@ def setUpLimits(conn, params, method):
     newMonthDate = metadataDict[params['visionMeta' + methodInsertVar + 'NewMonthDate']]
     dateLastRead = metadataDict[params['visionMeta' + methodInsertVar + 'DayLastRead']]
     dayOfNewMonth = metadataDict[params['visionMeta' + methodInsertVar + 'DayOfNewMonth']]
+    print methodInsertVar
 
     todayDate = strftime("%Y-%m-%d", gmtime())
     now = datetime.datetime.now()
@@ -88,7 +92,7 @@ if __name__ == "__main__":
     if args.method == 'clarifai':
         method = 'clarifai'
     else:
-        method = 'google'  
+        method = 'google' 
 
     ## Open the API Key file and read the app ID and app secret.
     if method == 'clarifai':
@@ -122,6 +126,8 @@ if __name__ == "__main__":
     limits = setUpLimits(conn, yParams, method)
     monthlyLimit = limits[1]
     alreadyDone = limits[0]
+
+    print "Monthly Limit: " + monthlyLimit + ", already done: " + alreadyDone
 
     ## Find the root directory that we want to scan. Either it was passed in
     ## as an arg with --root <directory>, or we launch a file dialog to
