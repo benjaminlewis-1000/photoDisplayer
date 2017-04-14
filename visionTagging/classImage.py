@@ -451,6 +451,9 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 
 		if 'landmarkAnnotations' in jsonResponse:
 			tagPhotoGoogleGPS(filename, jsonResponse, googleLabelTuple, metadata)
+			logfile = open('logLandmarks.out', 'a')
+			print >>logfile, filename + " : " + str(jsonResponse)
+
 
 		## Update the file history and log the file in the database. This should be done 
 		## regardless of the file characteristics that were found. 
@@ -460,7 +463,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 
 		if checkGoogleOddity(jsonResponse):			
 			logfile = open('logErrata.out', 'a')
-			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + jsonResponse
+			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + str(jsonResponse)
 			logfile.close()
 
 		return 1

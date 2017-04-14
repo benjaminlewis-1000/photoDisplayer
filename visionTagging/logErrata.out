@@ -258,3 +258,4 @@ Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.
 Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.KeyError'>,  ('description',),  'description'
 Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.KeyError'>,  ('description',),  'description'
 Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.UnboundLocalError'>,  ("local variable 'jsonTag' referenced before assignment",),  local variable 'jsonTag' referenced before assignment
+Google - error in file /mnt/NAS/Photos/Peru 2012/ben 220.JPG: <type 'exceptions.TypeError'>,  ("cannot concatenate 'str' and 'dict' objects",),  cannot concatenate 'str' and 'dict' objects
