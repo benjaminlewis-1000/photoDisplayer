@@ -58,11 +58,15 @@ def setUpLimits(conn, params, method):
     dayOfNewMonth = metadataDict[params['visionMeta' + methodInsertVar + 'DayOfNewMonth']]
     print methodInsertVar
 
+    print "Database - monthly Limit: " + str(readsPerMonth) + ", already done: " + str(readsThisMonth)
+
     todayDate = strftime("%Y-%m-%d", gmtime())
     now = datetime.datetime.now()
 
     ## If we have hit a new month, then reset the month for a new date using date math and
     ## store that in the database. 
+    print todayDate
+    print newMonthDate
     if todayDate > newMonthDate:
         readsThisMonth = 0
         if now.day > dayOfNewMonth:
@@ -176,10 +180,10 @@ if __name__ == "__main__":
                 print "IO Error in clarifai classify: " + str(ioe)
                 successVal = 0
                 logfile = open('logErrata.out', 'a')
-                print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+                print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
                 logfile.close()
             except Exception as e:
-                outOfFunds = re.search(r"Account Limits Exceeded", str(e) )
+                outOfFunds = re.search(r"Account limits exceeded", str(e) )
                 if outOfFunds:
                     print "Out of funds! " + str(e)
                     resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
@@ -194,7 +198,7 @@ if __name__ == "__main__":
                 c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
                 conn.commit()
                 logfile = open('logErrata.out', 'a')
-                print >>logfile, "Clarifai - error in file " + filename + ": " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+                print >>logfile, "Clarifai - error in file " + filename + ": " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
                 logfile.close()
                 break
 
