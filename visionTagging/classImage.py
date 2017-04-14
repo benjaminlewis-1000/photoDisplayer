@@ -272,7 +272,7 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime, metada
 			imageHistory = metadata['Exif.Image.ImageHistory'].raw_value
 
 		### Parse the image history to see if it's been done for this tuple. 
-		regexString = "(" + sourceTuple[2] + ")" + "(\d+-\d+-\d+ \d+:\d+:\d+)," + " orientation is (\d)."
+		regexString = "(" + str(sourceTuple[2]) + ")" + "(\d+-\d+-\d+ \d+:\d+:\d+)," + " orientation is (\d)."
 		# print regexString
 
 		historyMatch = re.search(r"" + regexString + "" , imageHistory)
@@ -349,10 +349,7 @@ def googleToInternalLabelsJSON(jsonResponse):
 		labelDict['labels'] = json.loads(json.dumps(pairs)) # some JSON
 
 		return labelDict
-	else:		
-		logfile = open('logErrata.out', 'a')
-		print >>logfile, "File " + filename + " has no labelAnnotations, but does have a landmarkAnnotation."
-		logfile.close()
+	else:
 		return -1
 
 def googleToLandmarksJSON(jsonResponse):

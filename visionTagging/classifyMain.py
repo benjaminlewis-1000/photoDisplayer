@@ -190,6 +190,11 @@ if __name__ == "__main__":
                     c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
                     conn.commit()
                     break
+                # Get detailed info about the exception and print it out. 
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+                
                 successVal = 0
                 print "Previously unknown exception: " +  str(e)
                 print "Breaking."
@@ -223,6 +228,11 @@ if __name__ == "__main__":
                 successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
             except Exception as e:
                 successVal = 0
+                # Get detailed info about the exception and print it out.
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
+
                 print "Previously unknown exception: " +  str(e)
                 print "Breaking."
                 print "Error: " + str(e)
@@ -230,7 +240,7 @@ if __name__ == "__main__":
                 c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaGoogleReadsThisMonth']) )
                 conn.commit()
                 logfile = open('logErrata.out', 'a')
-                print >>logfile, "Google - error in file " + filename + ": " + type(e) + ",  " + str(e.args) + ",  " + str(e)
+                print >>logfile, "Google - error in file " + filename + ": " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
                 logfile.close()
                 break
 
