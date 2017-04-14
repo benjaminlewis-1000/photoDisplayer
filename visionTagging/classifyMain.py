@@ -127,7 +127,7 @@ if __name__ == "__main__":
     monthlyLimit = limits[1]
     alreadyDone = limits[0]
 
-    print "Monthly Limit: " + monthlyLimit + ", already done: " + alreadyDone
+    print "Monthly Limit: " + str(monthlyLimit) + ", already done: " + str(alreadyDone)
 
     ## Find the root directory that we want to scan. Either it was passed in
     ## as an arg with --root <directory>, or we launch a file dialog to
@@ -163,7 +163,6 @@ if __name__ == "__main__":
                     if os.path.join(dirpath, fname) not in readFiles:
                         listAllFiles.append(os.path.join(dirpath, fname))
                     else:
-                        print os.path.join(dirpath, fname) + " is read already."
                         readFiles.remove(os.path.join(dirpath, fname))
 
     if method == 'clarifai':
