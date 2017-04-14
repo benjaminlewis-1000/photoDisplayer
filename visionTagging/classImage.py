@@ -508,11 +508,6 @@ def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
 	metadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84"
 	metadata["Exif.GPSInfo.GPSVersionID"] = '2 0 0 0'
 
-	jsonTag = {}
-	pairs = []
-	pairs.append({place['description']: place['score']})
-	jsonTag['labels'] = json.loads(json.dumps(pairs)) # some JSON
-
 	isUnlocked = os.access(filename, os.W_OK)
 	while not isUnlocked:
 		sleep(0.1)
@@ -523,7 +518,13 @@ def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
 		print "Exception in writing metdata: Not written. Method tagWithGPS"
 		print "More info: " + str(e)
 
-	tagPhotoAgnostic(filename, jsonTag, googleLabelTuple, metadata)
+	if 'description' in place:
+		jsonTag = {}
+		pairs = []
+		pairs.append({place['description']: place['score']})
+		jsonTag['labels'] = json.loads(json.dumps(pairs)) # some JSON
+		tagPhotoAgnostic(filename, jsonTag, googleLabelTuple, metadata)
+
 
 def readInfo(filename):
 	metadata = pyexiv2.ImageMetadata(filename)

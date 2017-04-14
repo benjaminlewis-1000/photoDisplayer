@@ -14,6 +14,7 @@ import tkFileDialog
 from Tkinter import *
 import time
 from time import gmtime, strftime
+import traceback
 import json
 import signal
 import sys
@@ -227,6 +228,8 @@ if __name__ == "__main__":
             try:
                 successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
             except Exception as e:
+                print "Stack trace: " 
+                traceback.print_exc()
                 successVal = 0
                 # Get detailed info about the exception and print it out.
                 exc_type, exc_obj, exc_tb = sys.exc_info()
