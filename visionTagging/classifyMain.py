@@ -9,11 +9,12 @@ import datetime
 import os
 import pyexiv2
 import re
+from requests.exceptions import SSLError, ConnectionError
 import sqlite3
 import tkFileDialog
 from Tkinter import *
 import time
-from time import gmtime, strftime
+from time import gmtime, strftime, sleep
 import traceback
 import json
 import signal
@@ -183,6 +184,10 @@ if __name__ == "__main__":
                 logfile = open('logErrata.out', 'a')
                 print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
                 logfile.close()
+            except (SSLError, ConnectionError) as ssle:
+                successVal = 0
+                print "SSL Error: " + str(ssle)
+                sleep(60)
             except Exception as e:
                 outOfFunds = re.search(r"Account limits exceeded", str(e) )
                 if outOfFunds:
@@ -227,6 +232,10 @@ if __name__ == "__main__":
             ## or have some exception, we save off the new number of files processed and exit the loop.
             try:
                 successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
+            except (SSLError, ConnectionError) as ssle:
+                successVal = 0
+                print "SSL Error: " + str(ssle)
+                sleep(60)
             except Exception as e:
                 print "Stack trace: " 
                 traceback.print_exc()

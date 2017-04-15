@@ -259,3 +259,200 @@ Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.
 Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.KeyError'>,  ('description',),  'description'
 Google - error in file /mnt/NAS/Photos/Peru 2012/ben 278.JPG: <type 'exceptions.UnboundLocalError'>,  ("local variable 'jsonTag' referenced before assignment",),  local variable 'jsonTag' referenced before assignment
 Google - error in file /mnt/NAS/Photos/Peru 2012/ben 220.JPG: <type 'exceptions.TypeError'>,  ("cannot concatenate 'str' and 'dict' objects",),  cannot concatenate 'str' and 'dict' objects
+File /mnt/NAS/Photos/Peru 2012/peru 246.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 229.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 272.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 194.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 211.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 207.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 110.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 275.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 082.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 042.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/2012-04-26 16.27.32.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 187.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 247.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 149.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 291.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 151.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 193.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 114.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 198.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 196.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 244.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/ben 215.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Google - error in file /mnt/NAS/Photos/Peru 2012/peru 043.JPG: <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Traceback (most recent call last):
+  File "classifyMain.py", line 232, in <module>
+    successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
+  File "/home/pi/photoDisplayer/visionTagging/classImage.py", line 427, in classifyImageWithGoogleAPI
+    response = request_labels_and_landmarks_google(api_key, filename)
+  File "/home/pi/photoDisplayer/visionTagging/classImage.py", line 179, in request_labels_and_landmarks_google
+    headers={'Content-Type': 'application/json'})
+  File "/usr/lib/python2.7/dist-packages/requests/api.py", line 94, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/api.py", line 49, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 457, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 569, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/adapters.py", line 407, in send
+    raise ConnectionError(err, request=request)
+ConnectionError: ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+(<class 'requests.exceptions.ConnectionError'>, 'classifyMain.py', 232)
+Previously unknown exception: ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Breaking.
+Error: ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+
+File /mnt/NAS/Photos/Peru 2012/ben 064.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 152.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Peru 2012/peru 235.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Feb2004 Pics/100_0794.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/2007/Nicholas's Hawai'i Pictures/P6214938.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/2007/Nicholas's Hawai'i Pictures/P6194801.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Family 2005/RSCN1425.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Family 2005/DSCN1419.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0482.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0483.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/RSCN0435.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0477.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0462.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0459.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0488.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0415.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0444.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0258.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0436.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0451.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0328.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0496.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0460.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0455.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0463.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28/DSCN0461.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2005-03-11/DSCN0612.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2005-03-11/RSCN0604.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-11-28/DSCN0069.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-11-28/DSCN0061.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12-20/DSCN0159.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+tack trace: 
+Traceback (most recent call last):
+  File "classifyMain.py", line 229, in <module>
+    successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
+  File "/home/pi/photoDisplayer/visionTagging/classImage.py", line 427, in classifyImageWithGoogleAPI
+    response = request_labels_and_landmarks_google(api_key, filename)
+  File "/home/pi/photoDisplayer/visionTagging/classImage.py", line 179, in request_labels_and_landmarks_google
+    headers={'Content-Type': 'application/json'})
+  File "/usr/lib/python2.7/dist-packages/requests/api.py", line 94, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/api.py", line 49, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 457, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/sessions.py", line 569, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python2.7/dist-packages/requests/adapters.py", line 420, in send
+    raise SSLError(e, request=request)
+SSLError: <unprintable SSLError object>
+(<class 'requests.exceptions.SSLError'>, 'classifyMain.py', 229)
+Traceback (most recent call last):
+  File "classifyMain.py", line 239, in <module>
+    print "Previously unknown exception: " +  str(e)
+TypeError: __str__ returned non-string (type SysCallError)
+
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12-20/DSCN0139.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2005-01 (Jan)-06/DSCN0552.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12-24/DSCN0161.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12-24/DSCN0227.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-07 (Jul)-31/IM000515.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-07 (Jul)-31/IM000482.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-07 (Jul)-31/IM000448.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Church Pictures, Nicholas Bday/100_0259.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2004-01 (Jan)-01/IM000749.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2004-01 (Jan)-01/IM000753.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2004-01 (Jan)-01/IM000732.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2004-01 (Jan)-01/IM000754.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-07 (Jul)/IM000360.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-07 (Jul)/IM000303.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-07 (Jul)/IM000347.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-07 (Jul)/IM000350.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-06 (Jun)/IM000218.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-06 (Jun)/IM000210.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-06 (Jun)/IM000039.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-06 (Jun)/IM000155.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-05 (May)/IM000178.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
