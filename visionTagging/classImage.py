@@ -123,7 +123,7 @@ def openImageOriented(filename):
 		image=Image.open(filename)
 		return image
 
-def make_image_data_google(image_filenames):
+def make_image_data_google(image_filenames, type):
 	"""
 	image_filenames is a list of filename strings
 	Returns a list of dicts formatted as the Google Vision API
@@ -155,22 +155,32 @@ def make_image_data_google(image_filenames):
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
 
-	img_requests.append({
-		'image': {'content': ctxt},
-		'features': [{
-				'type': 'LABEL_DETECTION' # Or LANDMARK_DETECTION
-			},{
-				'type': 'LANDMARK_DETECTION' # Or LANDMARK_DETECTION
-			}
-		]
-	})
+	if type == 'label':
+
+		img_requests.append({
+			'image': {'content': ctxt},
+			'features': [{
+					'type': 'LABEL_DETECTION' # Or LANDMARK_DETECTION
+				}
+			]
+		})
+	else:
+
+		img_requests.append({
+			'image': {'content': ctxt},
+			'features': [{
+					'type': 'LANDMARK_DETECTION' # Or LANDMARK_DETECTION
+				}
+			]
+		})
+
 	# return img_requests
 	return json.dumps({"requests": img_requests }).encode()
 
-def request_labels_and_landmarks_google(api_key, image_filenames):
+def request_labels_and_landmarks_google(api_key, image_filenames, request_type):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
-	b64data = make_image_data_google(image_filenames)
+	b64data = make_image_data_google(image_filenames, request_type)
 	if b64data == -1:
 		return -1
 	response = requests.post(ENDPOINT_URL,
@@ -407,7 +417,7 @@ def updateFileHistory(filename, currentTime, apiLabelTuple, metadata):
 			print "Exception in writing metdata: File changed. API is " + apiLabelTuple[2]
 			print "More details: " + str(e)
 
-def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
+def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, knownWords):
 
 	metadata = pyexiv2.ImageMetadata(filename)
 	metadata.read()
@@ -424,12 +434,12 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		# Remove any tags that may be floating from Google. 
 		removePreviousTags(filename, googleLabelTuple, metadata)
 		# Request the response from the API
-		response = request_labels_and_landmarks_google(api_key, filename)
+		response = request_labels_and_landmarks_google(api_key, filename, 'label')
 		if response == -1:
 			print "Unable to finish Google classify."
 			return 0
 		# Get the appropriate response.
-		jsonResponse = json.loads(json.dumps(response.json()['responses']))[0]
+		jsonLabelResponse = json.loads(json.dumps(response.json()['responses']))[0]
 
 		# File log of the JSON response, just for kicks. 
 		outfile = open('out.out', 'w')
@@ -437,22 +447,43 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		outfile.close()
 
 		# Translate to our internal, platform-agnostic label type.
-		innerJSONlabels = googleToInternalLabelsJSON(jsonResponse)
+		innerJSONlabels = googleToInternalLabelsJSON(jsonLabelResponse)
         
 		if innerJSONlabels != -1:
 			tagPhotoAgnostic(filename, innerJSONlabels, googleLabelTuple, metadata)
 			# Go ahead and classify it. LabelAnnotations is in jsonResponse
 			# This method should only write the tags
-			# tagPhotoFromGoogleJSON(filename, jsonResponse, currentTime, googleLabelTuple)
+			# tagPhotoFromGoogleJSON(filename, jsonLabelResponse, currentTime, googleLabelTuple)
 			pass
 		else:
 			# We were unable to find any labels for the image. 
 			pass
 
-		if 'landmarkAnnotations' in jsonResponse:
-			tagPhotoGoogleGPS(filename, jsonResponse, googleLabelTuple, metadata)
-			logfile = open('logLandmarks.out', 'a')
-			print >>logfile, filename + " : " + str(jsonResponse)
+		## Get the different labels that were in the response
+		wordList = []
+		# print jsonLabelResponse
+		if ('labelAnnotations' in jsonLabelResponse):
+			match = re.search(r"{u'labelAnnotations': (\[.*?\])", str(jsonLabelResponse))
+			# print match
+			# print match.group(1)
+			if match:
+				notations = match.group(1)
+				keywords = re.finditer(r"u'description': u'(.*?)'", notations)
+				for i in keywords:
+					wordList.append(i.group(1))
+
+			# knownWords = ['landmark', 'tourism', 'monument', 'mountain', 'landform', 'tower', 'mountainous landforms', 'vacation', 'place of worship', 'geographical feature', 'building', 'people', 'tours', 'city', 'vehicle', 'temple', 'adventure', 'ancient history', 'human settlement', 'rock', 'body of water', 'architecture', 'town', 'structure', 'memorial', 'water', 'night', 'tree', 'sea', 'historic site', 'art', 'lake', 'arch', 'geological phenomenon', 'natural environment', 'sports', 'wall', 'coast', 'water feature', 'ancient rome', 'community', 'plaza', 'text', 'walking', 'waterfall', 'palace', 'estate', 'mountain range', 'skyline', 'photograph', 'atmosphere of earth', 'garden', 'evening', 'wilderness', 'aerial photography', 'travel', 'loch', 'wadi', 'horizon', 'shore', 'statue', 'blue', 'tower block', 'property', 'reflection', 'metropolitan area', 'interior design', 'image', 'highland', 'skyscraper', 'church', 'crowd', 'shape', 'light', 'lighting', 'screenshot', 'basilica', 'sculpture', 'park', 'boat', 'playground', 'geology', 'child', 'person', 'backyard', 'extreme sport', 'urban area', 'ecosystem', 'atmospheric phenomenon', 'recreation room', 'grass', 'spring', 'nature', 'metropolis', 'flower', 'town square', 'man made object', 'room', 'cliff', 'sport climbing', 'residential area', 'bridge', 'handwriting', 'design', 'watercourse', 'lawn', 'mast', 'newspaper', 'fountain', 'darkness', 'neighbourhood', 'play', 'house', 'color', 'waterway', 'reservoir', 'ocean', 'woody plant', 'desert', 'cityscape', 'ancient roman architecture', 'commemorative plaque', 'document', 'ship', 'cathedral', 'transport', 'fjord', 'line', 'rock climbing', 'stadium', 'watercraft', 'watercraft rowing', 'road', 'games', 'yard', 'formation', 'totem pole', 'plant', 'archaeological site', 'street', 'sign', 'bell tower', 'ruins', 'river', 'arecales', 'badlands', 'hill', 'resort', 'physical fitness', 'sky', 'font', 'drawing', 'writing', 'lane', 'climbing', 'steeple', 'farm', 'brand', 'snow', 'facade', 'fun', 'cloud', 'downtown', 'human positions', 'valley', 'outdoor structure', 'warship', 'fair', 'canyon', 'suspension bridge', 'hiking', 'jumping', 'diagram', 'stage', 'ridge', 'social group', 'mural', 'season', 'track', 'agriculture', 'home', 'naval ship', 'terrain', 'wheel', 'bay', 'day', 'leisure', 'rope bridge', 'electricity', 'destroyer', 'public space', 'advertising', 'green', 'amphitheatre', 'ravine', 'middle ages', 'sunset', 'summit', 'outdoor recreation', 'surfboard', 'rolling stock', 'suburb', 'jungle', 'monastery', 'dusk', 'tourist attraction', 'beach', 'performance', 'control tower', 'stone wall', 'machine', 'endurance', 'cave', 'billiard room', 'controlled access highway', 'stream', 'winter', 'ceremony', 'demonstration', 'automotive exterior', 'landscape', 'pedestrian', 'grass family', 'soil', 'sport venue', 'ferry', 'caving', 'siding', 'human action', 'roof', 'currency', 'aviation', 'cottage', 'walkway', 'passenger ship', 'construction', 'trail', 'performance art', 'altar', 'flight', 'plain', 'fence', 'white', 'canopy walkway', 'grave', 'traffic light', 'panorama', 'festival', 'crew', 'bicycle', 'number', 'cemetery', 'musical instrument', 'mosque', 'industry', 'column', 'restaurant', 'surfing equipment and supplies', 'headstone', 'indoor games and sports', 'sitting', 'marina', 'drums', 'bouldering', 'pit cave', 'dome', 'aeolian landform', 'highway', 'net', 'endurance sports', 'ice', 'sand', 'leg', 'public transport', 'plan', "ch\xe2teau", 'morning', 'signage', 'road trip', 'outdoor play equipment', 'sketch', 'gargoyle', 'floristry', 'drum', 'chapel', 'asphalt', 'dock', 'physical exercise', 'material', 'hill station', 'vendor', 'family', 'circle', 'money', 'black', 'hammock', 'relief', 'swimming pool', 'silver', 'triumphal arch', 'mountaineering', 'yellow' ]
+
+			## Get a boolean to see if there are any shared words between the lists. 
+			sharedWords = bool(set(wordList) & set(knownWords) )
+			if (sharedWords):
+				print "Found a possible landmark phrase: " + str(set(wordList) & set(knownWords) )
+				jsonLandmarkResponse = request_labels_and_landmarks_google(api_key, filename, 'landmarks')
+
+				if 'landmarkAnnotations' in jsonLandmarkResponse:
+					tagPhotoGoogleGPS(filename, jsonLabelResponse, googleLabelTuple, metadata)
+					logfile = open('logLandmarks.out', 'a')
+					print >>logfile, filename + " : " + str(jsonLabelResponse)
 
 
 		## Update the file history and log the file in the database. This should be done 
@@ -461,9 +492,9 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime):
 		logInDatabase(filename, googleLabelTuple, currentTime, databaseConn)
 
 
-		if checkGoogleOddity(jsonResponse):			
+		if checkGoogleOddity(jsonLabelResponse):			
 			logfile = open('logErrata.out', 'a')
-			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + str(jsonResponse)
+			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + str(jsonLabelResponse)
 			logfile.close()
 
 		return 1

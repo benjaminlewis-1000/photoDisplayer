@@ -965,3 +965,18 @@ File /mnt/NAS/Photos/Emily's Pictures/Hawaii June 2010/DSC04512.JPG has no label
 ...{}
 File /mnt/NAS/Photos/Emily's Pictures/Hawaii June 2010/DSC03967.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
 ...{}
+Google - error in file N:/Photos/Senior Year\2013-10-17 19.47.17.jpg: <type 'exceptions.TypeError'>,  ('expected string or buffer',),  expected string or buffer
+Google - error in file N:/Photos/Senior Year\2013-10-17 19.47.17.jpg: <type 'exceptions.TypeError'>,  ('expected string or buffer',),  expected string or buffer
+Google - error in file N:/Photos/Senior Year\2013-10-17 19.47.17.jpg: <type 'exceptions.TypeError'>,  ('expected string or buffer',),  expected string or buffer
+Google - error in file N:/Photos/Senior Year\2013-10-17 19.47.17.jpg: <type 'exceptions.TypeError'>,  ('expected string or buffer',),  expected string or buffer
+Google - error in file N:/Photos/Senior Year\2013-10-17 19.47.17.jpg: <type 'exceptions.NameError'>,  ("global name 'jsonResponse' is not defined",),  global name 'jsonResponse' is not defined
+Google - error in file N:/Photos/Senior Year\2013-10-17 19.47.17.jpg: <type 'exceptions.NameError'>,  ("global name 'jsonResponse' is not defined",),  global name 'jsonResponse' is not defined
+Google - error in file N:/Photos/Senior Year\2013-10-14 20.08.14.jpg: <type 'exceptions.TypeError'>,  ('expected string or buffer',),  expected string or buffer
+File N:/Photos/Senior Year\2014-01-09 09.00.22.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File N:/Photos/Senior Year\2013-10-09 16.46.30.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File N:/Photos/Senior Year\2013-08-18 22.18.56.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File N:/Photos/Senior Year\robot_soccer (5).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}

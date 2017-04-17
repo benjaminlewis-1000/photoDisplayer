@@ -171,6 +171,8 @@ if __name__ == "__main__":
                     else:
                         readFiles.remove(os.path.join(dirpath, fname))
 
+    knownLandmarkWords = [line.rstrip('\n') for line in open('landmarkKeywords.txt')]
+
     if method == 'clarifai':
         for filename in listAllFiles:
             successVal = 0
@@ -231,7 +233,13 @@ if __name__ == "__main__":
             ## Try-except block to classify the image with the API. In the event that we reach the monthly limit
             ## or have some exception, we save off the new number of files processed and exit the loop.
             try:
-                successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
+                successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime, knownLandmarkWords)
+            except IOError as ioe:
+                print "IO Error in clarifai classify: " + str(ioe)
+                successVal = 0
+                logfile = open('logErrata.out', 'a')
+                print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
+                logfile.close()
             except (SSLError, ConnectionError) as ssle:
                 successVal = 0
                 print "SSL Error: " + str(ssle)
