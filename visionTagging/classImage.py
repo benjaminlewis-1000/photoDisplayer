@@ -143,7 +143,7 @@ def make_image_data_google(image_filenames):
 	except IOError as ioe:
 		print "IO Error in google classify: " + str(ioe)
 		logfile = open('logErrata.out', 'a')
-		print >>logfile, "File " + filename + " was not able to open for classification in Google."
+		print >>logfile, "File " + image_filenames + " was not able to open for classification in Google."
 		logfile.close()
 		return -1
 
