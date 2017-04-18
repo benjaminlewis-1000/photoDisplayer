@@ -64,7 +64,15 @@ sub dropTables{
 	$query = $dbhandle->prepare($dropMetadata);
 	$query->execute() or die $DBI::errstr;
 
-	my $dropCommentLinker = qq/DROP TABLE IF EXISTS $params::commentLinkerTableName/;
+	my $dropCommentLinker = qq/DROP TABLE IF EXISTS $params::commentLinkerUserTableName/;
+	$query = $dbhandle->prepare($dropCommentLinker);
+	$query->execute() or die $DBI::errstr;
+
+	$dropCommentLinker = qq/DROP TABLE IF EXISTS $params::commentLinkerGoogleTableName/;
+	$query = $dbhandle->prepare($dropCommentLinker);
+	$query->execute() or die $DBI::errstr;
+
+	$dropCommentLinker = qq/DROP TABLE IF EXISTS $params::commentLinkerClarifaiTableName/;
 	$query = $dbhandle->prepare($dropCommentLinker);
 	$query->execute() or die $DBI::errstr;
 
@@ -111,13 +119,33 @@ sub create_photo_table{
 }
 
 sub create_comments_table{
-	my $sql_quer = qq/CREATE TABLE $params::commentLinkerTableName (
+	my $sql_quer = qq/CREATE TABLE $params::commentLinkerUserTableName (
 	    $params::commentLinkerPhotoColumn INTEGER REFERENCES $params::photoTableName ($params::photoKeyColumn),
 	    $params::commentLinkerTagColumn STRING,
 	    $params::commentLinkerTagProbabilityColumn DOUBLE
 	); /;
 	
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
+	$sub_state_handle->execute() or die $DBI::errstr;
+
+
+	$sql_quer = qq/CREATE TABLE $params::commentLinkerGoogleTableName (
+	    $params::commentLinkerPhotoColumn INTEGER REFERENCES $params::photoTableName ($params::photoKeyColumn),
+	    $params::commentLinkerTagColumn STRING,
+	    $params::commentLinkerTagProbabilityColumn DOUBLE
+	); /;
+	
+	$sub_state_handle = $dbhandle->prepare($sql_quer);
+	$sub_state_handle->execute() or die $DBI::errstr;
+
+
+	$sql_quer = qq/CREATE TABLE $params::commentLinkerClarifaiTableName (
+	    $params::commentLinkerPhotoColumn INTEGER REFERENCES $params::photoTableName ($params::photoKeyColumn),
+	    $params::commentLinkerTagColumn STRING,
+	    $params::commentLinkerTagProbabilityColumn DOUBLE
+	); /;
+	
+	$sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
 }
 

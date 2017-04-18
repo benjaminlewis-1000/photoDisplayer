@@ -10,7 +10,10 @@ peopleTableName: "People"
 linkerTableName: "PhotoLinker"
 rootTableName: "RootDirs"
 metadataTableName: "Metadata"
-commentLinkerTableName: "CommentLinker"
+
+commentLinkerUserTableName: "UserCommentLinker"
+commentLinkerGoogleTableName: "GoogleCommentLinker"
+commentLinkerClarifaiTableName: "ClarifaiCommentLinker"
 
 
 # Table column names 
