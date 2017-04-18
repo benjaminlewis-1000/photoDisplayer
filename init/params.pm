@@ -50,7 +50,9 @@ if ($osname =~ m/win/i){
 	our $linkerTableName = $config->{'linkerTableName'};
 	our $rootTableName = $config->{'rootTableName'};
 	our $metadataTableName = $config->{'metadataTableName'};
-	our $commentLinkerTableName = $config->{'commentLinkerTableName'};
+	our $commentLinkerUserTableName = $config->{'commentLinkerUserTableName'};
+	our $commentLinkerGoogleTableName = $config->{'commentLinkerGoogleTableName'};
+	our $commentLinkerClarifaiTableName = $config->{'commentLinkerClarifaiTableName'};
 
 # Table column names 
 	## Photo table
@@ -112,6 +114,9 @@ if ($osname =~ m/win/i){
 
 	our $googVisionLabelPrefix = $config->{'googVisionLabelPrefix'};
 	our $googImageHistoryPrefix = $config->{'googImageHistoryPrefix'};
+
+	our $clarifaiVisionLabelPrefix = $config->{'clarifaiVisionLabelPrefix'};
+	our $clarifaiImageHistoryPrefix = $config->{'clarifaiImageHistoryPrefix'};
 
 sub getLocalModTime{
 

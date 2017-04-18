@@ -420,27 +420,40 @@ sub readOneImage{
 
 	}
 
-	our %keywordsInImage = %{$data{'keywordsHash'}};
-	foreach my $kw (keys %keywordsInImage){
-		my $insertPhotoCommentLinkerQuery = qq/
-			INSERT INTO $params::commentLinkerTableName ( 
-				$params::commentLinkerPhotoColumn, $params::commentLinkerTagColumn, 
-				$params::commentLinkerTagProbabilityColumn		)  
-			VALUES ($photoKeyVal, "$kw", $keywordsInImage{$kw}	)/;
+	our %userKeywordsInImage = %{$data{'keywordsUserHash'}};
+	our %googKeywordsInImage = %{$data{'keywordsGoogHash'}};
+	our %clarifaiKeywordsInImage = %{$data{'keywordsClarifaiHash'}};
 
-		print "Keyword is " . $kw  . " " . $keywordsInImage{$kw} . "\n";
+	my @arrayOfHashes = (\%userKeywordsInImage, \%googKeywordsInImage, \%clarifaiKeywordsInImage);
+	my @fields = ($params::commentLinkerUserTableName, $params::commentLinkerGoogleTableName, $params::commentLinkerClarifaiTableName);
+	my $numKeys = scalar @arrayOfHashes;
+
+	for (my $i = 0; $i < $numKeys; $i++){
+		my %keyHash = %{$arrayOfHashes[$i]};
+
+		foreach my $kw (keys %keyHash){
+			my $insertPhotoCommentLinkerQuery = qq/
+				INSERT INTO $fields[$i] ( 
+					$params::commentLinkerPhotoColumn, $params::commentLinkerTagColumn, 
+					$params::commentLinkerTagProbabilityColumn		)  
+				VALUES ($photoKeyVal, "$kw", $keyHash{$kw}	)/;
+
+			# print $fields[$i] . ": Keyword is " . $kw  . " " . $keyHash{$kw} . "\n";
 
 
-		$query = $dbhandle->prepare($insertPhotoCommentLinkerQuery);
-		until(
-			$query->execute()
-		){
-			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-			warn "Failed on the following query: $insertPhotoCommentLinkerQuery\n";
-			sleep(1);
-		}# or die $DBI::errstr;
+			$query = $dbhandle->prepare($insertPhotoCommentLinkerQuery);
+			until(
+				$query->execute()
+			){
+				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+				warn "Failed on the following query: $insertPhotoCommentLinkerQuery\n";
+				sleep(1);
+			}# or die $DBI::errstr;
+
+		}
 
 	}
+
 
 };
 

@@ -337,10 +337,12 @@ sub getImageData{
 
 
 
-	my %embeddedKeywords;
+	my %embeddedGoogleKeywords;
+	my %embeddedClarifaiKeywords;
+	my %embeddedOtherKeywords;
 
 	my @kw_fields = ('UserComment','Keywords','XPKeywords','LastKeywordXMP');
-	# UserComment - my field where I add Google Vision-based keywords.
+	# UserComment - my field where I add Google Vision/Clarifai-based keywords.
 	# Keywords - seems to be where Picasa puts tags
 	# The XPKeywords / LastKeywordXMP - just in case. 
 	
@@ -353,19 +355,39 @@ sub getImageData{
 					$kw =~ s/^\s+//;
 					$kw =~ s/\s+$//;
 					my $weight = 1;
+					my $keepLooking = 1;
 
 					if ($kw =~ m/\Q$params::googVisionLabelPrefix\E(.*)_([\d\.]+)/){
 						$kw = $1;
 						$weight = $2;
+						if (! grep( /^$kw$/, @namesWithLargeAreas) and !($kw =~ m/^\s?$/)){
+							### if the keyword is NOT entirely blank and NOT a person name from the keywords, 
+							### add it to the hash.
+							$embeddedGoogleKeywords{$kw} = $weight;
+						}
+						$keepLooking = 0;
+					}
+
+					if ($kw =~ m/\Q$params::clarifaiVisionLabelPrefix\E(.*)_([\d\.]+)/){
+						$kw = $1;
+						$weight = $2;
+						if (! grep( /^$kw$/, @namesWithLargeAreas) and !($kw =~ m/^\s?$/)){
+							### if the keyword is NOT entirely blank and NOT a person name from the keywords, 
+							### add it to the hash.
+							$embeddedClarifaiKeywords{$kw} = $weight;
+						}
+						$keepLooking = 0;
+					}
+
+
+					if ($keepLooking and ( ! grep( /^$kw$/, @namesWithLargeAreas) ) and !($kw =~ m/^\s?$/)){
+						### if the keyword is NOT entirely blank and NOT a person name from the keywords, 
+						### add it to the hash.
+						$embeddedOtherKeywords{$kw} = $weight;
 					}
 
 					# if ($kw =~ m/)
 
-					if (! grep( /^$kw$/, @namesWithLargeAreas) and !($kw =~ m/^\s?$/)){
-						### if the keyword is NOT entirely blank and NOT a person name from the keywords, 
-						### add it to the hash.
-						$embeddedKeywords{$kw} = $weight;
-					}
 
 				}
 
@@ -373,9 +395,9 @@ sub getImageData{
 		}
 	}
 
-	# print keys %embeddedKeywords . "\n";
-
-	$returnData{'keywordsHash'} = \%embeddedKeywords;
+	$returnData{'keywordsUserHash'} = \%embeddedOtherKeywords;
+	$returnData{'keywordsGoogHash'} = \%embeddedGoogleKeywords;
+	$returnData{'keywordsClarifaiHash'} = \%embeddedClarifaiKeywords;
 
 	$returnData{'NameList'} = \@namesWithLargeAreas;
 

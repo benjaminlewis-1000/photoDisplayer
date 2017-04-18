@@ -30,5 +30,14 @@ for line in content:
 # print wordDict
 sorted_x = sorted(wordDict.items(), key=operator.itemgetter(1))
 sorted_x.reverse()
-for i in range(len(sorted_x)):
-	print sorted_x[i][0] + " : " + str(sorted_x[i][1])
+# for i in range(len(sorted_x)):
+# 	print sorted_x[i][0] + " : " + str(sorted_x[i][1])
+
+with open('landmarkKeywords.txt', 'w') as f:
+	for i in range(len(sorted_x)):
+		if sorted_x[i][1] > 15:
+			if sorted_x[i][0].strip() not in ['person', 'day', 'text', 'stage', 'room', 'people', 'snow', \
+			   'season', 'wall', 'adventure', 'image', 'photograph', 'light', 'shape', 'lighting', 'water', 'vehicle', \
+			   'night', 'sea', 'rock', 'tree']  :
+				print >>f, sorted_x[i][0]
+				print sorted_x[i][0] + " : " + str(sorted_x[i][1])
