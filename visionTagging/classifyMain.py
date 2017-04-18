@@ -156,6 +156,9 @@ if __name__ == "__main__":
     for i in range(len(results)):
         readFiles.append( str(results[i][0]) )
 
+    with open('landmarkKeywords.txt') as f:
+        knownWords = f.read().splitlines()
+
 
 	## List all the files in the root directory that end with JPEG-type file formats.
 	## Add them to a list. 
@@ -184,7 +187,7 @@ if __name__ == "__main__":
             if method == 'clarifai':
                 successVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
             else:
-                successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime)
+                successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime, knownWords)
 
         except IOError as ioe:
             print "IO Error in clarifai classify: " + str(ioe)
