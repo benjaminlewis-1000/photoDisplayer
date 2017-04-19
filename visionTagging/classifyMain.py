@@ -195,7 +195,7 @@ if __name__ == "__main__":
             print "IO Error in clarifai classify: " + str(ioe)
             successVal = 0
             logfile = open('logErrata.out', 'a')
-            print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
+            print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(ioe)) + ",  " + str(ioe.args) + ",  " + str(ioe)
             logfile.close()
 
         except (SSLError, ConnectionError) as ssle:
