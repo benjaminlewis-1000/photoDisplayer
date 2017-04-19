@@ -179,6 +179,8 @@ if __name__ == "__main__":
     else:
         readsThisMonthField = yParams['visionMetaGoogleReadsThisMonth']
 
+    print "Length to do: " + str(len(listAllFiles))
+
     for filename in listAllFiles:
         successVal = 0
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
