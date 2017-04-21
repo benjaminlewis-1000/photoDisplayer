@@ -230,7 +230,6 @@ sub readOneImage{
 			my $photoKeyNum = eval {$query->fetchrow_arrayref->[0] };
 
 			my $unlinkLinkerQuery = qq/DELETE FROM $params::linkerTableName WHERE $params::linkerPhotoColumn = $photoKeyNum/;
-			my $unlinkCommentLinkerQuery = qq/DELETE FROM $params::commentLinkerTableName WHERE $params::commentLinkerPhotoColumn = $photoKeyNum/;
 
 			$query = $dbhandle->prepare($unlinkLinkerQuery);
 			until(
@@ -240,8 +239,13 @@ sub readOneImage{
 				warn "Failed on the following query: $unlinkLinkerQuery\n";
 				sleep(1);
 			}
+			
+			my @commentTables = ($params::commentLinkerUserTableName, $params::commentLinkerGoogleTableName, $params::commentLinkerClarifaiTableName);
 
-			$query = $dbhandle->prepare($unlinkCommentLinkerQuery);
+			for (my $i = 0; $i < scalar(@commentTables); $i++){
+
+			my $unlinkCommentLinkerQuery = qq/DELETE FROM $commentTables[$i] WHERE $params::commentLinkerPhotoColumn = $photoKeyNum/;
+			my $query = $dbhandle->prepare($unlinkCommentLinkerQuery);
 			until(
 				$query->execute()
 			){
@@ -250,7 +254,10 @@ sub readOneImage{
 				sleep(1);
 			}
 
+			}
 
+
+			
 			my $deletePhotoQuery = qq/DELETE FROM $params::photoTableName WHERE $params::photoKeyColumn = $photoKeyNum/;
 			$query = $dbhandle->prepare($deletePhotoQuery);
 			until(
