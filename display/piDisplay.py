@@ -57,7 +57,7 @@ for row in c.execute(query):
 query = "SELECT " + params['photoFileColumn'] + ", " + params['rootDirNumColumn'] + ", " + params['photoDateColumn'] + " FROM " + params['photoTableName'] + " WHERE " + params['photoYearColumn'] + " = ?" + " AND " + params['photoMonthColumn'] + " = ?"
 val = (2016, 6)
 
-query = "SELECT photo_file, root_dir_num, photo_date from photos where photo_key in (SELECT photo from Linker where person = 4 OR person = ?)"
+query = "SELECT photo_file, root_dir_num, photo_date from photos where photo_key in (SELECT photo from PhotoLinker where person = 4 OR person = ?)"
 print query
 val = (5,)
 f1=open('testfile', 'w+')
