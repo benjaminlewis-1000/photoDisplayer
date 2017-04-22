@@ -152,9 +152,9 @@ if __name__ == "__main__":
     else:
         c.execute(getConfirmedFilesQuery, (classImage.googleLabelTuple[0],) )
     results = c.fetchall()
-    readFiles = []
+    readFiles = set()
     for i in range(len(results)):
-        readFiles.append( str(results[i][0]) )
+        readFiles.add( str(results[i][0]) )
 
     with open('landmarkKeywords.txt') as f:
         knownWords = f.read().splitlines()
@@ -162,17 +162,21 @@ if __name__ == "__main__":
 
 	## List all the files in the root directory that end with JPEG-type file formats.
 	## Add them to a list. 
-    listAllFiles = []
+    setOfFiles = set()
     for dirpath, dirnames, filenames in os.walk(rootDirectory):
         for fname in filenames:
             if fname.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
-                if args.doDeep != None:
-                    listAllFiles.append(os.path.join(dirpath, fname))
-                else:
-                    if os.path.join(dirpath, fname) not in readFiles:
-                        listAllFiles.append(os.path.join(dirpath, fname))
-                    else:
-                        readFiles.remove(os.path.join(dirpath, fname))
+                setOfFiles.add(os.path.join(dirpath, fname))
+                # if args.doDeep != None:
+                #     listAllFiles.append(os.path.join(dirpath, fname))
+                # else:
+                #     if os.path.join(dirpath, fname) not in readFiles:
+                #         listAllFiles.append(os.path.join(dirpath, fname))
+                #     else:
+                #         readFiles.remove(os.path.join(dirpath, fname))
+
+    # setOfFiles = setOfFiles - readFiles
+    listAllFiles = list(setOfFiles - readFiles)
 
     if method == 'clarifai':
         readsThisMonthField = yParams['visionMetaClarifaiReadsThisMonth']
