@@ -297,39 +297,42 @@ sub getImageData{
 
 		my %seen;
 
-		if (exists $seenFaces{$name}){
-			# If the name is already in a hash, do this:
-			# 1) Evaluate if we've already found a region with this face that's larger
-			# than $minSize. If so, we're done. 
+		if (!($name =~ m/^\./)){  ### Name doesn't start with a period, which I'm using for ignored names. 
 
-			if ($params::debug and $params::debug_readXMP) {print "Seen in the hash" . "\n"; }
-			my $storedArea = $seen{$name};
-			if ($storedArea > $minSize){
-				# Do nothing; we've found a big enough area already. 
-				next;
-			}else{
-				# If we haven't found a large enough area, update the largest seen area. 
-				# If the area is now large enough, add the name to the deduplicated list
-				# of appreciably sized faces. Otherwise, don't bother even updating the 
-				# seen area size, because it doesn't really matter. 
-				if ($area > $storedArea){
-					$seen{$name} = $area;
-					if ($area > $minSize){
-						push(@namesWithLargeAreas, $name);
-					}
+			if (exists $seenFaces{$name}){
+				# If the name is already in a hash, do this:
+				# 1) Evaluate if we've already found a region with this face that's larger
+				# than $minSize. If so, we're done. 
+
+				if ($params::debug and $params::debug_readXMP) {print "Seen in the hash" . "\n"; }
+				my $storedArea = $seen{$name};
+				if ($storedArea > $minSize){
+					# Do nothing; we've found a big enough area already. 
 					next;
 				}else{
-					next;
+					# If we haven't found a large enough area, update the largest seen area. 
+					# If the area is now large enough, add the name to the deduplicated list
+					# of appreciably sized faces. Otherwise, don't bother even updating the 
+					# seen area size, because it doesn't really matter. 
+					if ($area > $storedArea){
+						$seen{$name} = $area;
+						if ($area > $minSize){
+							push(@namesWithLargeAreas, $name);
+						}
+						next;
+					}else{
+						next;
+					}
 				}
-			}
-		}else{
-			# If we haven't seen the name yet, add it to the hash. If 
-			# the area is large enough, push the name to the list 
-			# of acceptably-sized faces. 
-			if ($params::debug and $params::debug_readXMP) { print "Adding to the hash" . "\n"; }
-			$seen{$name} = $area;
-			if ($area > $minSize){
-				push(@namesWithLargeAreas, $name);
+			}else{
+				# If we haven't seen the name yet, add it to the hash. If 
+				# the area is large enough, push the name to the list 
+				# of acceptably-sized faces. 
+				if ($params::debug and $params::debug_readXMP) { print "Adding to the hash" . "\n"; }
+				$seen{$name} = $area;
+				if ($area > $minSize){
+					push(@namesWithLargeAreas, $name);
+				}
 			}
 		}
 
