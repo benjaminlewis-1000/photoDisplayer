@@ -20,6 +20,7 @@ import json
 import signal
 import sys
 import yaml
+from clarifai.rest.client import ApiError
 
 def signal_handler(signal, frame):
     resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
@@ -183,6 +184,7 @@ if __name__ == "__main__":
     else:
         readsThisMonthField = yParams['visionMetaGoogleReadsThisMonth']
 
+
     print "Length to do: " + str(len(listAllFiles))
 
     for filename in listAllFiles:
@@ -205,6 +207,9 @@ if __name__ == "__main__":
         except (SSLError, ConnectionError) as ssle:
             successVal = 0
             print "SSL Error: " + str(ssle)
+            sleep(60)
+        except ApiError as apie:
+            print "Clarifai API error..." + str(apie)
             sleep(60)
 
         except Exception as e:

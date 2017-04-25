@@ -42,7 +42,7 @@ clarifaiHistoryPrefix = yParams['clarifaiImageHistoryPrefix']
 clarifaiLabelTuple = (clarifaiSourceType, clarifaiLabelPrefix, clarifaiHistoryPrefix)
 
 
-def removePreviousTags(filename, apiLabelTuple, metadata):
+def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 
 	metadataFields = metadata.exif_keys
 
@@ -52,7 +52,23 @@ def removePreviousTags(filename, apiLabelTuple, metadata):
 	else:
 		return
 
-	# print "Existing tags are " + existingTags
+#	print "Existing tags are " + existingTags
+
+	invalidMatch = re.search(r'UUUUU', existingTags)
+	if (invalidMatch):
+		print "The current tags are not good! Erasing...\n"
+		existingTags = ""
+	        metadata[userCommentTagKey] = ""
+		metadata["Exif.Image.ImageHistory"] = ""
+        	metadata.write()
+
+		c = databasePointer.conn()
+		delQuery = '''DELETE FROM visionData WHERE filename = ?'''
+		c.execute(delQuery, (filename,) )
+		databasePointer.commit()
+
+        	return
+
 
 	removeString = "\s+" + apiLabelTuple[1] + "[A-Za-z\s]+_[\d\.]+,?"
 	intermediate = re.sub(r"" +  removeString + "" , "", existingTags)
@@ -432,7 +448,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 
 		print "Classifying image: " + filename
 		# Remove any tags that may be floating from Google. 
-		removePreviousTags(filename, googleLabelTuple, metadata)
+		removePreviousTags(filename, googleLabelTuple, metadata, databaseConn)
 		# Request the response from the API
 		response = request_labels_and_landmarks_google(api_key, filename, 'label')
 		if response == -1:
@@ -633,7 +649,7 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 
 		print "Classifying image: " + filename
 		# Remove any tags that may be floating from Google. 
-		removePreviousTags(filename, clarifaiLabelTuple, metadata)
+		removePreviousTags(filename, clarifaiLabelTuple, metadata, databaseConn)
 		# Request the response from the API. Clarifai returns in the agnostic form already.
 		jsonResponse = clarifaiClassify(filename, app_id, app_secret)
 		if jsonResponse == -1:

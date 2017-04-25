@@ -4,6 +4,7 @@ ehthumbs.db
 *.db
 *.db-journal
 *.key
+*.swp
 
 # Folder config file
 Desktop.ini
