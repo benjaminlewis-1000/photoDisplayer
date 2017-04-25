@@ -93,6 +93,7 @@ if __name__ == "__main__":
     parser.add_argument('--root', help='Root directory of the images to scan.')
     parser.add_argument('--doDeep', help="Doesn't use the indexed files in the database to skip already read files; tends to run    slower.")
     parser.add_argument('--method', help="Select methods. Valid values currently are 'google' or 'clarifai'.")  
+    parser.add_argument('--debug_file', help="Debug input file.")
 
     args = parser.parse_args()  
 
@@ -160,14 +161,19 @@ if __name__ == "__main__":
     with open('landmarkKeywords.txt') as f:
         knownWords = f.read().splitlines()
 
+    if args.debug_file != None:
+        print "Debugging..."
+        listAllFiles = (args.debug_file,)
+
+    else:
 
 	## List all the files in the root directory that end with JPEG-type file formats.
 	## Add them to a list. 
-    setOfFiles = set()
-    for dirpath, dirnames, filenames in os.walk(rootDirectory):
-        for fname in filenames:
-            if fname.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
-                setOfFiles.add(os.path.join(dirpath, fname))
+        setOfFiles = set()
+        for dirpath, dirnames, filenames in os.walk(rootDirectory):
+            for fname in filenames:
+                if fname.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
+                    setOfFiles.add(os.path.join(dirpath, fname))
                 # if args.doDeep != None:
                 #     listAllFiles.append(os.path.join(dirpath, fname))
                 # else:
@@ -177,7 +183,7 @@ if __name__ == "__main__":
                 #         readFiles.remove(os.path.join(dirpath, fname))
 
     # setOfFiles = setOfFiles - readFiles
-    listAllFiles = list(setOfFiles - readFiles)
+        listAllFiles = list(setOfFiles - readFiles)
 
     if method == 'clarifai':
         readsThisMonthField = yParams['visionMetaClarifaiReadsThisMonth']
