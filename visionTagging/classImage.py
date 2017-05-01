@@ -52,7 +52,7 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 	else:
 		return
 
-#	print "Existing tags are " + existingTags
+	print "Existing tags are " + existingTags
 
 	invalidMatch = re.search(r'UUUUU', existingTags)
 	if (invalidMatch):
@@ -77,9 +77,13 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 	int2 = re.sub(r"" +  removeString + "" , "", intermediate)
 
 	final = re.sub(r'\s+', " ", int2)
-	final = re.sub(r'^\s', "", final)
+	final2 = re.sub(r'^\s', "", final)
+	final3 = re.sub(r"charset=\".*\"\s?,?\s?", "", final2)
+	final4 = re.sub(r"II", "", final3)
 
-	metadata[userCommentTagKey] = final
+	print final4
+
+	metadata[userCommentTagKey] = final4
 	metadata.write()
 
 	return

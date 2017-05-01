@@ -1949,3 +1949,680 @@ clarifai - error in file /mnt/NAS/Photos/Masters 2014-15/Halloween_time_2015/war
 File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
 clarifai - error in file /mnt/NAS/Photos/Mission/gurguri/Coconuts, root beer, and apostasia (chimmarão)/DSCN9013.JPG: <class 'sqlite3.ProgrammingError'>,  ('You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings.',),  You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings.
 File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+clarifai - error in file /mnt/NAS/Photos/Mission/gurguri/Coconuts, root beer, and apostasia (chimmarão)/DSCN9013.JPG: <class 'sqlite3.ProgrammingError'>,  ('You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings.',),  You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings.
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Summer 2015/_DSC0092.JPG: <class 'sqlite3.ProgrammingError'>,  ('Incorrect number of bindings supplied. The current statement uses 1, and there are 2 supplied.',),  Incorrect number of bindings supplied. The current statement uses 1, and there are 2 supplied.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+Clarifai - IO Error in file /mnt/NAS/Photos/2016/Family_texts/cynthialewis9_gmail.com_20161115_133452.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+clarifai - error in file /mnt/NAS/Photos/Mission/gurguri/Coconuts, root beer, and apostasia (chimmarão)/DSCN9013.JPG: <class 'sqlite3.ProgrammingError'>,  ('You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings.',),  You must not use 8-bit bytestrings unless you use a text_factory that can interpret 8-bit bytestrings (like text_factory = str). It is highly recommended that you instead just switch your application to Unicode strings.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+clarifai - error in file /mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015/20150523_105154_001.jpg: <type 'exceptions.ValueError'>,  ('Invalid value',),  Invalid value
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+Clarifai - IO Error in file /mnt/NAS/Photos/Emily's Pictures/3-30-2009/4-27-08 253.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0015.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2014/3-2-14/DSC_0114.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Nicholas again/NL 9-10 (pre-mission, hike Timp)/101_2345.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Masters 2014-15/20150112_162336.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Mission/arapiraca/pday activities/Imagem 113.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0482.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+clarifai - error in file /mnt/NAS/Photos/2017/Family Texts/2017-03-10 06.50.53.jpg: <type 'exceptions.AttributeError'>,  ("'sqlite3.Connection' object has no attribute 'conn'",),  'sqlite3.Connection' object has no attribute 'conn'
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in Clarifai.
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0485.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Family Pictures/2016/October 2016 B/_DSC0683.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Sep 2016/_DSC0726.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Pickup/Rio Largo/brazil!!! 121.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Ben's 2006 trip pictures/DSCN2677.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Dec 29 2013/DSC_0093.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Senior Year/2014-03-09 18.06.28.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0323.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0060.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/2015-01-03 13.05.57.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/2008-1-15/DSCN4490.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Senior Year/2013-11-21 19.10.29.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/5-30-2012/DSC_0647.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Summer 2015/_DSC0257.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0977.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0428.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (5) May/Peru 2011 (232).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/EFY 2006 - San Fransisco/RSCN2966.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Winter Break/DSC_4182.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2014/Paul Cutler Photos 2-2014/IMG_8218.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Ben's Pictures/June 2008/DSCN4657.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/zone conference print/Imagem 068.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/2005-06-22b/DSCN1335.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Robot Soccer (TA)/DSC_5036.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Jazz Age Lawn Party/11823084_10206777034411888_5868787426641061097_o.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/mission call/101_1354.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/Meagan 2015 PROM/DSC_0808.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Dad Trips/Peru Trip/100_0805.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Soph-Junior Years/Special Needs Carnival/RBL1212999_63.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015 (2)/DSC_0670.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Winter Break/DSC_4183.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Summer 2015 Trip/_DSC0191.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2013/Micron Intern Photos/IMG_6000.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/recife/RECIFE BRAZIL TEMPLE 164.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Sep 2016/_DSC0608.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/20051228094637/PC241038.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0810.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/members/DSC04675.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Emily Homecoming/DSC_4377.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20131005_101948.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/missionary meetings/DSCN0008.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2013/Roommate Roadtrip/100_7835.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/Peru/Uros/100_2800.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/Going to the mall/DSCN8868.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Alex Wedding/_DSC0106.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Temple Square 2015 Date/Originals/DSC_7659.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/May 2016/_DSC0115.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/MAGICC and Nerds/laboween (1).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Peru 2014/2014-06-11 09.12.09.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/183rd Ward/DSC_7405.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Soph-Junior Years/DSC00006.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Dad Trips/Lewis/IMG_2312.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/Hawaii/DSCN3582.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/Goodbye!/DSCN9736.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/11-2012/DSC_0168.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0859.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/2015-01-03 10.57.41.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Summer 2015/_DSC0680.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/NL 3-09 (mission call, TEAM-S, Mark 1st b-day)/100_1191.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0319.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/Nov 2009/DSC00496.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Robot Soccer (TA)/DSC_5012.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/Goodbye!/DSCN9737.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0502.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/11-30-14/_DSC0170.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Nick and Charlotte Wedding/disney_w_cousins (10).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/9-21-14/_DSC0030.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/7-2012/July Trip/Palmyra (113).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (1) January/DSC_0010.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/20140712_103738.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Pickup/Airport/100_5051.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2013/2013-07-13 17.34.51.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Paul Cutler Photos 2-2014/IMG_3719.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2008/2008-05-29/100_4162.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (2) February/DSC_0045.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/7-2012/July Trip/Nauvoo (53).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/At the chapel/Imagem 046.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{u'error': {u'message': u'image-annotator::Bad response.: Backend internal error!', u'code': 13}}
+File /mnt/NAS/Photos/Mission/gurguri/Night in Tabuleiro- justino birthday/RSCN8912.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/March 2016/_DSC0225.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Senior Year/100_7901.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/Nov 2009/DSC00474.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Feb 2013/DSC_0302.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/5-30-2012/DSC_0532.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Hike and light Y with brothers/DSC_3511.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130611_185715.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Sep 2016 (B)/Homecoming 2016/_DSC0398.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/2014-11-13 12.16.59.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (5) May/Peru 2011 (146).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/9-21-14/_DSC0013.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Birthday/birthday_colorMeMine (2).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Dec 15 2013/Building (16).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/4-27-14/_DSC0126.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/FHE.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/rejane call/DSC01274.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/Snapchat-2204563660789990495.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/new years eve/106_3571.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Peru 2016/20160504_201331.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2013/June 2013/DSC_0142.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2016/Sep 2016 (B)/Caroline and Erica/_DSC0235.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Family Pictures/2014/2nd Paul Cutler photos/IMG_5514.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015 (2)/_DSC0284.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/transfers/DSCN9790.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015/_DSC0308.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/meetings with missionaries/CIMG0001.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Misc Picture/NL 8-09 (Oklahoma, EFY SLC, San Fransisco, Peru/100_2282.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130702_115544.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Sep 2016/_DSC1050.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/5-30-2012/DSC_0719.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/1-2012/Jan 2012 (10).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/crab hunting/102_0885.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/christmas/56 (4).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (5) May/Peru 2011 (38).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/June 2009/PICT1766.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/At the chapel/DSC04271.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/goodbyes/106_3726.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/March 2013/Family_2013 654.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/MAGICC and Nerds/laboween (2).jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Pickup/Arapiraca/brazil!!! 188.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0231.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/Peru/100_2948.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/Nauvoo, Chicago, Boston 2006/P6292826.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/7-7-14/_DSC0177.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/20150105_171633.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/bday/nety 115.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Emily Homecoming/DSC_4375.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2016/Sep 2016/_DSC0449.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Family Pictures/2012/11-2012/DSC_0064 (2).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0250.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/NL 3-09 (mission call, TEAM-S, Mark 1st b-day)/100_1154.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/California 2012/100_7506.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Mission/estancia/camachos aracaju trip/DSC00898.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2014/7-26-14/_DSC0106.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Meagan's Pictures/Feb 2010/PICT2027.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/service projects/fun stuf (57).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Camera/_DSC0566.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0645.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/Meagan 2015 PROM/DSC_0761.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/June 2009/PICT1356.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/California Wedding Trip/DSC_6216.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/CTM/DSCN4912.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/2015-01-23 18.40.00.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Dec 29 2013/DSC_0123.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/crab hunting/Imagem 209.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/California Wedding Trip/DSC_6134.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/Fogo!!/DSCN9409.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (5) May/Peru 2011 (357).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (1) January/DSC_0015.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Erica_dad_peru_trip_texts (10).jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/recife/RECIFE BRAZIL TEMPLE 145.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Texts/2015-05-05 15.45.42-2.jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/general conference/SDC10002.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Dad Trips/Lewis/IMG_2320.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0824.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/NL 3-09 (mission call, TEAM-S, Mark 1st b-day)/100_1128.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/NL 3-09 (mission call, TEAM-S, Mark 1st b-day)/100_1043.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/Christmas time and Goblin Valley/PC274270.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Dec 29 2013/DSC_0244.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/7-2012/DSC_0012.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (1) January/DSC_0094.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/4-20-14/Meagan Prom/DSC_0456.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Camera/_DSC0564.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Misc Picture/Pictures/100_1411.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/zone conference print/Imagem 065.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/4-20-14/DSC_0253.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/2005-06-22b/DSCN1285.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Dec 29 2013/DSC_0134.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/members e pesquisadores/105_0036.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130603_174738.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/August 2013/Aug 18 2013 (12).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Feb 2013/DSC_0304.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Peru 2014/DSC03032.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/June 2016/June 2016 (132).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0125.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/March 2016/_DSC0259.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/2015-01-05 17.10.21.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Camera/_DSC0563.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015 (2)/_DSC0869.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/April 2013/20130304_104852.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/March 2013/Family_2013 609.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/June 2009/Meagan 2009 Camp (21).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/October 2014/2014-10-20 11.25.25.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0845.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Pickup/São Paulo/brazil! 045.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (1) January/DSC_0003.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/California Wedding Trip/DSC_6285.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/May 2016/_DSC0057.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/food/fotos 286.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+google - error in file /mnt/NAS/Photos/2017/Dayton Events/sweet_jessica_love_you_hansome.jpg: <type 'exceptions.AttributeError'>,  ("'sqlite3.Connection' object has no attribute 'conn'",),  'sqlite3.Connection' object has no attribute 'conn'
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/20150108_101048.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0082.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20140220_124922.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Move to Ohio/DSC_0169.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/4-27-14/_DSC0232.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/burnings!/Imagem 626.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/soccer/Imagem 667.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/scenery around arapiraca/fun stuf (28).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Canada Trip/_DSC0379.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/California Wedding Trip/DSC_6208.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0081.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/7-2012/July Trip/Nauvoo (74).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/2017/Family Texts/benjamin.lewis.13_us.af.mil_ryap_party.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Pickup/Rio Largo/brazil!!! 090.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/service projects/100_4561.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Erica's Haircut/DSC_0525.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/Jan 2009/PICT0695.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/members/199_0196.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Hawaii/DSCN4280.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/guitar and music/DSCN9959.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/February 2016/Meagan Leaves/_DSC0384.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/stevie_came_to_visit (7).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/star_wars (4).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/7-26-14/_DSC0048.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/4-27-14/_DSC0019.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/OK trip/2015-08-27 20.32.17.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/8-2012/DSC_0245.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/9-21-14/_DSC0048.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Summer 2015/_DSC0657.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0057.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (10) October/DSC_0302.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Paul Cutler Photos 2-2014/IMG_3795.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (7) July/DSC_0856.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (5) May/Peru 2011 (50).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2014 ABQ/Alex Wedding/Alex Wedding (13).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Winter Break/DSC_4177.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Canada - Tacy's wedding/DSC_6668.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Paul Cutler Photos 2-2014/IMG_8403.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Summer 2014/2014-07-23 20.37.11.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/20060107135112/P1061639.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Dad Trips/Lewis/IMG_2319.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Misc Picture/NL 5-09 (Prom, Senior Ball, awards)/100_1388.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2008/2008-05-29/100_4133.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Img0012/DSCN2180.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/20140826_113513.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0305.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/goodbyes/106_3727.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Peru 2014/DSC02648.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (7) July/DSC_0034.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/MAGICC and Nerds/iab_meeting (2).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Summer 2015/_DSC0581.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015 (2)/DSC_0673.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/Paul Cutler Photos 2-2014/IMG_8181.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/March 2016/_DSC0267.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Hawaii/DSCN4134.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/November 2014/Meagan Sadies/_DSC0210.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0813.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/getting the greenie/recovered (92).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/Jan 2009/PICT0534.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/California 2012/100_7513.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/1421021435867.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Move to Ohio/DSC_0048.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/At the chapel/1SCN9159.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/11-2012/DSC_0109 (2).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Soph-Junior Years/Special Needs Carnival/RBL1212999_125.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/February 2016/_DSC0176.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/3-2-14/DSC_0103.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/piping/101_1310.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/February 2016/_DSC0189.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130902_195229.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015/_DSC0507.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Summer 2015/_DSC0730.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/11-2012/DSC_0149.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/family_texts (27).jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Grandpa_and_meagan_recital (2).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0177.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/2016/Engagement Pics/_DSC0080.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/random stuff/nety 053.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/California Wedding Trip/DSC_6161.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/star_wars (3).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (4) April/Becky's wedding party.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/February 2016/Meagan Leaves/_DSC0444.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/5-30-2012/DSC_0796.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/2014-11-11 16.15.35.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/peba with ym/Imagem 217 (2).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/20140826_213128.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Canada Trip/_DSC0359.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/CTM/Last night/DSCN5045.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Misc Picture/NL 8-09 (Oklahoma, EFY SLC, San Fransisco, Peru/100_2194.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Panama trip print/100_6172.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0661.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/rejane call/DSC00841.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/baptisms/100_4880.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Winter Break/DSC_4001.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Soph-Junior Years/DanceSport!!/DSC00712.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2014 ABQ/2014-07-23 19.57.22.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/baptisms/Imagem 135.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Texts/helping_temple_open_house (4).jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/20150105_080258.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/2015-01-01 13.27.17.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Funk_fam_pictures/00264_s_13akbyf45c0263.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20140113_170031.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (11) November/DSC_0217.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (6) June/DSC_0492.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/goodbyes/Imagem 336.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015/_DSC0154.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/9-2012/Visit with Olsons (35).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Senior Year/2013-10-17 19.49.05.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/June 2009/PICT0985.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/2008-1-06/DSCN4355.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/christmas/106_3492.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/Coconuts, root beer, and apostasia (chimmarão)/199_0068.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/president's house/214_1870.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/service projects/Imagem 123 (4).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/random - not actually mine/DSC04758.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/12-3-05/DSCN2053.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/2005-06-22b/DSCN1362.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/11-2012/DSC_0004 (2).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/arapiraca/scenery around arapiraca/Arapiraca 084.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130718_163205.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Sep 2016/_DSC0502.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/gurguri/Fogo!!/DSCN9261 (2).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130815_192427.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2013/Roommate Roadtrip/2013-08-22 17.20.38.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Misc Picture/Pictures/100_1414.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Panama trip print/100_6002.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/12-2012/DSC_0307.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/crab hunting/102_0882.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/Jan 2009/PICT0470.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/burnings!/Imagem 577.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/20140826_110726.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/Australia,Homecoming/20150102_205347.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/7-2012/July Trip/Nauvoo (32).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/burnings!/Imagem 615.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20140131_144825.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}

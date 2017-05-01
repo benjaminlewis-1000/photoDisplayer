@@ -127,6 +127,7 @@ if __name__ == "__main__":
 
     ## Connect to the database. Also set up Ctrl-C Handling
     conn = sqlite3.connect("visionDatabase.db")
+    conn.text_factory = str
     signal.signal(signal.SIGINT, signal_handler)
 
     ## Use the method above to find the number of monthly reads we want from Clarifai
@@ -210,26 +211,31 @@ if __name__ == "__main__":
             print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(ioe)) + ",  " + str(ioe.args) + ",  " + str(ioe)
             logfile.close()
 
+        except AttributeError as ae:
+            print "AttributeError: " + str(ae)
+            successVal = 0
+            sleep(60)
+
         except (SSLError, ConnectionError) as ssle:
             successVal = 0
             print "SSL Error: " + str(ssle)
             sleep(60)
         except ApiError as apie:
+
+            # Try to see if we are out of funds (For Clarifai)
+            outOfFunds = re.search(r"limits exceeded", str(apie) )
+            if outOfFunds:
+                print "Out of funds! Exiting..."
+                setCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+                c.execute(setCountQuery, (alreadyDone, readsThisMonthField ) )
+                conn.commit()
+                break
+
             print "Clarifai API error..." + str(apie)
             sleep(60)
 
         except Exception as e:
 
-            # Try to see if we are out of funds (For Clarifai)
-            outOfFunds = re.search(r"Account limits exceeded", str(e) )
-            if outOfFunds:
-                print "Out of funds! " + str(e)
-                resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
-                c.execute(resetCountQuery, (alreadyDone, readsThisMonthField ) )
-                conn.commit()
-                break
-
-            # Otherwise, break down and print the stack trace. 
             print "Stack trace: " 
             traceback.print_exc()
             successVal = 0
