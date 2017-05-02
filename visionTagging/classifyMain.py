@@ -21,13 +21,18 @@ import signal
 import sys
 import yaml
 from clarifai.rest.client import ApiError
+import xmltodict
 
 def signal_handler(signal, frame):
-    resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+    resetCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
+
+
     if method == 'clarifai':
-        c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaClarifaiReadsThisMonth']) )
+        readsThisMonthField = params['params']['visionTaggingParams']['database']['Fields']['clarifaiFields']['ReadsThisMonth']
+        c.execute(resetCountQuery, (alreadyDone, readsThisMonthField) )
     else:
-        c.execute(resetCountQuery, (alreadyDone, yParams['visionMetaGoogleReadsThisMonth']) )
+        readsThisMonthField = params['params']['visionTaggingParams']['database']['Fields']['googFields']['ReadsThisMonth']
+        c.execute(resetCountQuery, (alreadyDone, readsThisMonthField) )
     print "you did it!"
     conn.commit()
     conn.close()
@@ -39,7 +44,8 @@ def signal_handler(signal, frame):
 def setUpLimits(conn, params, method):
     c = conn.cursor()
     ### Get all the parameters from the appropriate table in the database
-    metadataQuery = '''SELECT * FROM ''' + params['visionMetaTableName']
+    visionMetaTableName = params['params']['visionTaggingParams']['database']['tables']['visionMetaTable']['Name']
+    metadataQuery = '''SELECT * FROM ''' + visionMetaTableName
     c.execute(metadataQuery )
 
     ## Read all parameters into a dictionary. 
@@ -50,16 +56,20 @@ def setUpLimits(conn, params, method):
 
     ## Self-explanatory
     if method == 'clarifai':
-        methodInsertVar = 'Clarifai'
+        fieldsVar = 'clarifaiFields'
     else:
-        methodInsertVar = 'Google'
+        fieldsVar = 'googFields'
 
-    readsPerMonth = metadataDict[params['visionMeta' + methodInsertVar + 'ReadsPerMonth']]
-    readsThisMonth = metadataDict[params['visionMeta' + methodInsertVar + 'ReadsThisMonth']]
-    newMonthDate = metadataDict[params['visionMeta' + methodInsertVar + 'NewMonthDate']]
-    dateLastRead = metadataDict[params['visionMeta' + methodInsertVar + 'DayLastRead']]
-    dayOfNewMonth = metadataDict[params['visionMeta' + methodInsertVar + 'DayOfNewMonth']]
-    print methodInsertVar
+    fieldsBase = params['params']['visionTaggingParams']['database']['Fields']
+
+    print fieldsBase[fieldsVar]['ReadsPerMonth']
+    print metadataDict.keys()
+
+    readsPerMonth = metadataDict[fieldsBase[fieldsVar]['ReadsPerMonth']]
+    readsThisMonth = metadataDict[fieldsBase[fieldsVar]['ReadsThisMonth']]
+    newMonthDate = metadataDict[fieldsBase[fieldsVar]['NewMonthDate']]
+    dateLastRead = metadataDict[fieldsBase[fieldsVar]['DayLastRead']]
+    dayOfNewMonth = metadataDict[fieldsBase[fieldsVar]['DayOfNewMonth']]
 
     print "Database - monthly Limit: " + str(readsPerMonth) + ", already done: " + str(readsThisMonth)
 
@@ -79,10 +89,10 @@ def setUpLimits(conn, params, method):
         else:
             renewDate = str(str(now.year) + "-" + str(format(now.month, '02') ) + "-" + str(dayOfNewMonth))
 
-        renewDateQuery = '''UPDATE ''' + params['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
-        c.execute(renewDateQuery, (renewDate, params['visionMeta' + methodInsertVar + 'NewMonthDate']) )
-        resetCountQuery = '''UPDATE ''' + params['visionMetaTableName'] + ''' SET Value = 0 WHERE Name = ?'''
-        c.execute(resetCountQuery, (params['visionMeta' + methodInsertVar + 'ReadsThisMonth'],) )
+        renewDateQuery = '''UPDATE ''' + visionMetaTableName+ ''' SET Value = ? WHERE Name = ?'''
+        c.execute(renewDateQuery, (renewDate, fieldsBase[fieldsVar]['NewMonthDate']) )
+        resetCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = 0 WHERE Name = ?'''
+        c.execute(resetCountQuery, (fieldsBase[fieldsVar]['NewMonthDate'],) )
 
         conn.commit()
 
@@ -118,12 +128,14 @@ if __name__ == "__main__":
     currentTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
 	## Open the params.yaml file for the configuration parameters
-    with open('../config/params.yaml') as stream:
+    with open('../config/params.xml') as stream:
         try:
-            yParams = yaml.load(stream)
-        except yaml.YAMLError as exc:
+            params = xmltodict.parse(stream.read())
+        except Exception as exc:
             print(exc)
             exit(1)
+
+    visionMetaTableName = params['params']['visionTaggingParams']['database']['tables']['visionMetaTable']['Name']
 
     ## Connect to the database. Also set up Ctrl-C Handling
     conn = sqlite3.connect("visionDatabase.db")
@@ -132,7 +144,7 @@ if __name__ == "__main__":
 
     ## Use the method above to find the number of monthly reads we want from Clarifai
     ## and the number that have already been done this month.
-    limits = setUpLimits(conn, yParams, method)
+    limits = setUpLimits(conn, params, method)
     monthlyLimit = limits[1]
     alreadyDone = limits[0]
 
@@ -141,6 +153,8 @@ if __name__ == "__main__":
     ## Find the root directory that we want to scan. Either it was passed in
     ## as an arg with --root <directory>, or we launch a file dialog to
     ## get the directory. 
+    print args.root
+    print os.path.isdir(args.root)
     if args.root != None and os.path.isdir(args.root):
         rootDirectory = args.root
     else:
@@ -149,7 +163,11 @@ if __name__ == "__main__":
         rootDirectory = tkFileDialog.askdirectory()
 
     c = conn.cursor()
-    getConfirmedFilesQuery = "SELECT " + yParams['visionRecordFileColumn'] + " FROM " + yParams['visionRecordDataTableName'] + " WHERE " + yParams['visionRecordValidColumn'] + " = 1 AND " + yParams['visionRecordSourceColumn'] + " = ?"
+    recordColumn = params['params']['visionTaggingParams']['database']['tables']['recordDataTable']['Columns']['File']
+    recordTableName = params['params']['visionTaggingParams']['database']['tables']['recordDataTable']['Name']
+    validityColumn = params['params']['visionTaggingParams']['database']['tables']['recordDataTable']['Columns']['Valid']
+    sourceColumn = params['params']['visionTaggingParams']['database']['tables']['recordDataTable']['Columns']['Source']
+    getConfirmedFilesQuery = "SELECT " + recordColumn + " FROM " + recordTableName + " WHERE " + validityColumn + " = 1 AND " + sourceColumn + " = ?"
     if method == 'clarifai':
         c.execute(getConfirmedFilesQuery, (classImage.clarifaiLabelTuple[0],) )
     else:
@@ -187,9 +205,9 @@ if __name__ == "__main__":
         listAllFiles = list(setOfFiles - readFiles)
 
     if method == 'clarifai':
-        readsThisMonthField = yParams['visionMetaClarifaiReadsThisMonth']
+        readsThisMonthField = params['params']['visionTaggingParams']['database']['Fields']['clarifaiFields']['ReadsThisMonth']
     else:
-        readsThisMonthField = yParams['visionMetaGoogleReadsThisMonth']
+        readsThisMonthField = params['params']['visionTaggingParams']['database']['Fields']['googFields']['ReadsThisMonth']
 
 
     print "Length to do: " + str(len(listAllFiles))
@@ -226,7 +244,7 @@ if __name__ == "__main__":
             outOfFunds = re.search(r"limits exceeded", str(apie) )
             if outOfFunds:
                 print "Out of funds! Exiting..."
-                setCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+                setCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
                 c.execute(setCountQuery, (alreadyDone, readsThisMonthField ) )
                 conn.commit()
                 break
@@ -248,7 +266,7 @@ if __name__ == "__main__":
             print "Previously unknown exception: " +  str(e)
             print "Breaking."
             print "Error: " + str(e)
-            resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+            resetCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
             c.execute(resetCountQuery, (alreadyDone, readsThisMonthField) )
             conn.commit()
             logfile = open('logErrata.out', 'a')
@@ -263,7 +281,7 @@ if __name__ == "__main__":
 
         if alreadyDone == monthlyLimit:
             print "Monthly limit has been reached."
-            resetCountQuery = '''UPDATE ''' + yParams['visionMetaTableName'] + ''' SET Value = ? WHERE Name = ?'''
+            resetCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
             c.execute(resetCountQuery, (alreadyDone, readsThisMonthField) )
             conn.commit()
             break

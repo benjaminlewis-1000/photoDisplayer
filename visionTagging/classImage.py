@@ -9,9 +9,10 @@ import sys
 import json
 import requests
 import pyexiv2
-import yaml
+# import yaml
 import re
 from time import sleep
+import xmltodict
 
 from clarifai.rest import ClarifaiApp
 
@@ -23,21 +24,22 @@ sys.setdefaultencoding('UTF8')  ### Let us do more than ASCII
 desWidth = 1280.0
 desHeight = 960.0
 
-with open('../config/params.yaml') as stream:
+with open('../config/params.xml') as stream:
 	try:
-		yParams = yaml.load(stream)
-	except yaml.YAMLError as exc:
+		params = xmltodict.parse(stream.read())
+	except Exception as exc:
 		print(exc)
+		exit(1)
 
 googSourceType = 'Goog'
-googLabelPrefix = yParams['googVisionLabelPrefix'] 
-googHistoryPrefix = yParams['googImageHistoryPrefix']
+googLabelPrefix = params['params']['visionTaggingParams']['googleTagging']['googVisionLabelPrefix']
+googHistoryPrefix = params['params']['visionTaggingParams']['googleTagging']['googImageHistoryPrefix']
 
 googleLabelTuple = (googSourceType, googLabelPrefix, googHistoryPrefix)
 
 clarifaiSourceType = 'Clarifai'
-clarifaiLabelPrefix = yParams['clarifaiVisionLabelPrefix']
-clarifaiHistoryPrefix = yParams['clarifaiImageHistoryPrefix']
+clarifaiLabelPrefix = params['params']['visionTaggingParams']['clarifaiTagging']['clarifaiVisionLabelPrefix']
+clarifaiHistoryPrefix = params['params']['visionTaggingParams']['clarifaiTagging']['clarifaiImageHistoryPrefix']
 
 clarifaiLabelTuple = (clarifaiSourceType, clarifaiLabelPrefix, clarifaiHistoryPrefix)
 

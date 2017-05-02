@@ -140,5 +140,7 @@
 	</visionTaggingParams>
 	<serverParams>
 		<geoServerPort>8040</geoServerPort>
+		<displayServerPort>8001</displayServerPort>
+		<successVal>Success</successVal>
 	</serverParams>
 </params>
