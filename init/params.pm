@@ -8,8 +8,9 @@ use strict;
 use warnings;
 use Cwd;
 use File::Basename;
-use YAML::XS 'LoadFile';
-
+#use YAML::XS 'LoadFile';
+use XML::Simple qw(:strict);
+use Data::Dumper;
 
 our $debug = 0;
 
@@ -22,17 +23,23 @@ our $base_path = cwd();  # Get the directory of this module.
 $base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
 $base_path = $1 . "/";  # Capture the output and put it in $base_path.
 
-my $YAML_file = $base_path . "config/params.yaml";
+my $config_file = $base_path . "config/params.xml";
+# my $config = LoadFile($YAML_file);  # YAML is more cross-language.
 
-my $config = LoadFile($YAML_file);  # YAML is more cross-language.
+our $config = XMLin( $config_file, ForceArray => 1, KeyAttr=>[]) or die("Sorry! Can't read this XML.");
 
-our $database = $base_path . "databases/" . $config->{'database'};
+# print Dumper($config);
+#print Dumper($config->{'ostypes'}->[0]) . "\n";
+
+
+our $database = $base_path . "databases/" . $config->{'photoDatabase'}->[0]->{'fileName'}->[0];
 
 my $osname = $^O;
 our $OS_type;
 
-our $windowsType = $config->{'windowsType'};
-our $linuxType = $config->{'linuxType'};
+my $osBase = $config->{'ostypes'}->[0];
+our $windowsType = $osBase->{'windowsType'};
+our $linuxType = $osBase->{'linuxType'};
 
 if ($osname =~ m/win/i){
 	$OS_type = $windowsType;
@@ -45,78 +52,86 @@ if ($osname =~ m/win/i){
 # map {if (!$_) { ______ } } $params::debug;
 
 ## Table names
-	our $photoTableName = $config->{'photoTableName'};
-	our $peopleTableName = $config->{'peopleTableName'};
-	our $linkerTableName = $config->{'linkerTableName'};
-	our $rootTableName = $config->{'rootTableName'};
-	our $metadataTableName = $config->{'metadataTableName'};
-	our $commentLinkerUserTableName = $config->{'commentLinkerUserTableName'};
-	our $commentLinkerGoogleTableName = $config->{'commentLinkerGoogleTableName'};
-	our $commentLinkerClarifaiTableName = $config->{'commentLinkerClarifaiTableName'};
+my $pdbBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0];
+
+	our $photoTableName = $pdbBase->{'photoTable'}->[0]->{'Name'}->[0];
+	our $peopleTableName = $pdbBase->{'peopleTable'}->[0]->{'Name'}->[0];
+	our $linkerTableName = $pdbBase->{'photoLinkerTable'}->[0]->{'Name'}->[0];  #$config->{'Name'};
+	our $rootTableName = $pdbBase->{'rootTable'}->[0]->{'Name'}->[0];  #$config->{'Name'};
+	our $metadataTableName = $pdbBase->{'metadataTable'}->[0]->{'Name'}->[0];  #$config->{'Name'};
+	our $commentLinkerUserTableName = $pdbBase->{'commentLinkerUserTable'}->[0]->{'Name'}->[0];  #$config->{'Name'};
+	our $commentLinkerGoogleTableName = $pdbBase->{'commentLinkerGoogleTable'}->[0]->{'Name'}->[0];  #$config->{'Name'};
+	our $commentLinkerClarifaiTableName = $pdbBase->{'commentLinkerClarifaiTable'}->[0]->{'Name'}->[0];  #$config->{'Name'};
 
 # Table column names 
 	## Photo table
-	our $photoKeyColumn = $config->{'photoKeyColumn'};
-	our $photoFileColumn = $config->{'photoFileColumn'};
-	our $photoDateColumn = $config->{'photoDateColumn'};
-	our $photoYearColumn = $config->{'photoYearColumn'};
-	our $photoMonthColumn = $config->{'photoMonthColumn'};
-	our $photoDayColumn = $config->{'photoDayColumn'};
-	our $photoHourColumn = $config->{'photoHourColumn'};
-	our $photoMinuteColumn = $config->{'photoMinuteColumn'};
-	our $photoGMTColumn = $config->{'photoGMTColumn'};
-	our $modifyDateColumn = $config->{'modifyDateColumn'};
-	our $rootDirNumColumn = $config->{'rootDirNumColumn'};
-	our $insertDateColumn = $config->{'insertDateColumn'};
+my $photoTableColumnBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0]->{'photoTable'}->[0]->{'Columns'}->[0];
 
+	our $photoKeyColumn = $photoTableColumnBase->{'photoKey'}->[0];
+	our $photoFileColumn = $photoTableColumnBase->{'photoFile'}->[0];
+	our $photoDateColumn = $photoTableColumnBase->{'photoDate'}->[0];
+	our $photoYearColumn = $photoTableColumnBase->{'photoYear'}->[0];
+	our $photoMonthColumn = $photoTableColumnBase->{'photoMonth'}->[0];
+	our $photoDayColumn = $photoTableColumnBase->{'photoDay'}->[0];
+	our $photoHourColumn = $photoTableColumnBase->{'photoHour'}->[0];
+	our $photoMinuteColumn = $photoTableColumnBase->{'photoMinute'}->[0];
+	our $photoGMTColumn = $photoTableColumnBase->{'photoGMT'}->[0];
+	our $modifyDateColumn = $photoTableColumnBase->{'modifyDate'}->[0];
+	our $rootDirNumColumn = $photoTableColumnBase->{'rootDirNum'}->[0];
+	our $insertDateColumn = $photoTableColumnBase->{'insertDate'}->[0];
+	our $houseNumColumn = $photoTableColumnBase->{'houseNum'}->[0];
+	our $streetColumn = $photoTableColumnBase->{'street'}->[0];
+	our $cityColumn = $photoTableColumnBase->{'city'}->[0];
+	our $stateColumn = $photoTableColumnBase->{'state'}->[0];
+	our $postcodeCoulumn = $photoTableColumnBase->{'postcode'}->[0];
+	our $countryColumn = $photoTableColumnBase->{'country'}->[0];
+	our $latColumn = $photoTableColumnBase->{'lat'}->[0];
+	our $longColumn = $photoTableColumnBase->{'long'}->[0];
 
-	our $houseNumColumn = $config->{'houseNumColumn'};
-	our $streetColumn = $config->{'streetColumn'};
-	our $cityColumn = $config->{'cityColumn'};
-	our $stateColumn = $config->{'stateColumn'};
-	our $postcodeCoulumn = $config->{'postcodeCoulumn'};
-	our $countryColumn = $config->{'countryColumn'};
-	our $latColumn = $config->{'latColumn'};
-	our $longColumn = $config->{'longColumn'};
-
+my $peopleTableColumnBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0]->{'peopleTable'}->[0]->{'Columns'}->[0];
 	## People Table
-	our $peopleKeyColumn = $config->{'peopleKeyColumn'};
-	our $personNameColumn = $config->{'personNameColumn'};
-	# our $personPicasaID = "person_picasa_id";
+	our $peopleKeyColumn = $peopleTableColumnBase->{'peopleKey'}->[0];
+	our $personNameColumn = $peopleTableColumnBase->{'personName'}->[0];
 
+my $photoLinkerColumnBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0]->{'photoLinkerTable'}->[0]->{'Columns'}->[0];
 	## Photo Linker Table
-	our $linkerPeopleColumn = $config->{'linkerPeopleColumn'};
-	our $linkerPhotoColumn = $config->{'linkerPhotoColumn'};
+	our $linkerPeopleColumn = $photoLinkerColumnBase->{'linkerPeople'}->[0];
+	our $linkerPhotoColumn = $photoLinkerColumnBase->{'linkerPhoto'}->[0];
 
+my $commentLinkerSharedColumnBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0]->{'commentLinkerUserTable'}->[0]->{'Columns'}->[0];
 	## Comment Linker Table
-	our $commentLinkerPhotoColumn = $config->{'commentLinkerPhotoColumn'};
-	our $commentLinkerTagColumn = $config->{'commentLinkerTagColumn'};
-	our $commentLinkerTagProbabilityColumn = $config->{'commentLinkerTagProbabilityColumn'};
+	our $commentLinkerPhotoColumn = $commentLinkerSharedColumnBase->{'commentLinkerPhoto'}->[0];
+	our $commentLinkerTagColumn = $commentLinkerSharedColumnBase->{'commentLinkerTag'}->[0];
+	our $commentLinkerTagProbabilityColumn = $commentLinkerSharedColumnBase->{'commentLinkerTagProbability'}->[0];
 
+my $rootTableBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0]->{'rootTable'}->[0]->{'Columns'}->[0];
 	## Root Directory Table
 	our $rootDirPath;
-	our $rootKeyColumn = $config->{'rootKeyColumn'};
-		our $windowsRootPath = $config->{'windowsRootPath'};
-		our $linuxRootPath = $config->{'linuxRootPath'};
+	our $rootKeyColumn = $rootTableBase->{'rootKey'}->[0];
+		our $windowsRootPath = $rootTableBase->{'windowsRootPath'}->[0];
+		our $linuxRootPath = $rootTableBase->{'linuxRootPath'}->[0];
 	if ($OS_type == $windowsType){
 		$rootDirPath = $windowsRootPath;
 	}else{
 		$rootDirPath = $linuxRootPath;
 	}
 
+my $metadataTableBase = $config->{'photoDatabase'}->[0]->{'tables'}->[0]->{'metadataTable'}->[0];
 	## Metadata Table
-	our $metadataNameColumn = $config->{'metadataNameColumn'};
-	our $metadataValueColumn = $config->{'metadataValueColumn'};
+	our $metadataNameColumn = $metadataTableBase->{'Columns'}->[0]->{'metadataName'}->[0];
+	our $metadataValueColumn = $metadataTableBase->{'Columns'}->[0]->{'metadataValue'}->[0];
 
 	### Metadata fields
-		our $metadataLastEditedField = $config->{'metadataLastEditedField'};
+		our $metadataLastEditedField = $metadataTableBase->{'Fields'}->[0]->{'metadataLastEditedField'}->[0];
 
+my $visionParamsBase = $config->{'visionTaggingParams'}->[0];
+	our $googVisionLabelPrefix = $visionParamsBase->{'googleTagging'}->[0]->{'googVisionLabelPrefix'}->[0];
+	our $googImageHistoryPrefix = $visionParamsBase->{'googleTagging'}->[0]->{'googImageHistoryPrefix'}->[0];
 
-	our $googVisionLabelPrefix = $config->{'googVisionLabelPrefix'};
-	our $googImageHistoryPrefix = $config->{'googImageHistoryPrefix'};
+	our $clarifaiVisionLabelPrefix = $visionParamsBase->{'clarifaiTagging'}->[0]->{'clarifaiVisionLabelPrefix'}->[0];
+	our $clarifaiImageHistoryPrefix = $visionParamsBase->{'clarifaiTagging'}->[0]->{'clarifaiImageHistoryPrefix'}->[0];
 
-	our $clarifaiVisionLabelPrefix = $config->{'clarifaiVisionLabelPrefix'};
-	our $clarifaiImageHistoryPrefix = $config->{'clarifaiImageHistoryPrefix'};
+	our $geoServerPort = $config->{'serverParams'}->[0]->{'geoServerPort'}->[0];
 
 sub getLocalModTime{
 

@@ -449,7 +449,7 @@ console.log(myData) -->
 				monthSelect.className = "dropdownOptions"
 
 				for (var i = 0; i < months.length; i++){
-					monthSelect.options.add(new Option(months[i], months[i], true, true))
+					monthSelect.options.add(new Option(months[i], i + 1, true, true))
 				}
 				monthSelect.selectedIndex = 0
 
@@ -502,11 +502,17 @@ console.log(myData) -->
 
 		criteriaJSON = criteriaToJSON();
 
-		$.ajax({
+		var callback = $.ajax({
 		  type: 'POST',
 		  url: 'launchSlideshow.php',
 		  data: {'json': criteriaJSON},
+		  complete: function(r){
+	         console.log(r.responseText);
+	      }
 		});
+
+		console.log(callback);
+		//console.log(callback.responseText);
 	}
 </script>
 

@@ -9,19 +9,26 @@ use Cwd;
 use DBI;
 use Time::localtime;
 
-use YAML::XS 'LoadFile';
+# use YAML::XS 'LoadFile';
+use XML::Simple qw(:strict);
 
 our $base_path = cwd();  # Get the directory of this module. 
 $base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
 $base_path = $1 . "/";  # Capture the output and put it in $base_path.
 
-our $YAML_file = $base_path . "config/params.yaml";
-our $config = LoadFile($YAML_file);  # YAML is more cross-language.
+our $config_file = $base_path . "config/params.xml";
+# our $config = LoadFile($YAML_file);  # YAML is more cross-language.
+
+
+our $config = XMLin( $config_file, ForceArray => 1, KeyAttr=>[]) or die("Sorry! Can't read this XML.");
 
 #TODO: Delete the old database file
 #TODO: Database file location better handled
+
+my $visionBase = $config->{'visionTaggingParams'}->[0];
+
 our $dbhandle;
-our $dbName = 'visionDatabase.db';
+our $dbName = $visionBase->{'database'}->[0]->{'fileName'}->[0];
 
 my $count_args = @ARGV ;
 
@@ -32,6 +39,7 @@ if ($count_args == 1) {
 		$dbName = $db;
 	}
 }
+
 
 
 dbConnect();
@@ -50,12 +58,13 @@ sub dbConnect{
 
 sub dropTables{
 	# Clean out the old tables so we can create them afresh.
-	my $dropPhotos = qq/DROP TABLE IF EXISTS $config->{'visionRecordDataTableName'} /;
+	my $tableBase = $visionBase->{'database'}->[0]->{'tables'}->[0];
+	my $dropPhotos = qq/DROP TABLE IF EXISTS $tableBase->{'recordDataTable'}->[0]->{'Name'}->[0] /;
 	my $query = $dbhandle->prepare($dropPhotos);
 	$query->execute() or die $DBI::errstr;
 
 
-	my $dropMetadata = qq/DROP TABLE IF EXISTS $config->{'visionMetaTableName'} /;
+	my $dropMetadata = qq/DROP TABLE IF EXISTS $tableBase->{'visionMetaTable'}->[0]->{'Name'}->[0] /;
 	$query = $dbhandle->prepare($dropMetadata);
 	$query->execute() or die $DBI::errstr;
 	
@@ -68,12 +77,13 @@ sub dropTables{
 # Create the photo primary key and filename table
 sub createLoggingTable{
 	# Create the database table, where photo_key is the primary key and photo_file is the file name 
-	my $sql_quer = qq/CREATE TABLE $config->{'visionRecordDataTableName'} (
-		    $config->{'visionRecordFileColumn'} 		STRING,
-		    $config->{'visionRecordCheckedColumn'} 		STRING,
-		    $config->{'visionRecordPortraitColumn'} 	BOOL,
-		    $config->{'visionRecordSourceColumn'} 		STRING,
-		    $config->{'visionRecordValidColumn'}		BOOL
+	my $recordBase = $visionBase->{'database'}->[0]->{'tables'}->[0]->{'recordDataTable'}->[0];
+	my $sql_quer = qq/CREATE TABLE $recordBase->{'Name'}->[0] (
+		    $recordBase->{'Columns'}->[0]->{'File'}->[0] 			STRING,
+		    $recordBase->{'Columns'}->[0]->{'Checked'}->[0] 		STRING,
+		    $recordBase->{'Columns'}->[0]->{'Portrait'}->[0] 		BOOL,
+		    $recordBase->{'Columns'}->[0]->{'Source'}->[0] 			STRING,
+		    $recordBase->{'Columns'}->[0]->{'Valid'}->[0]			BOOL
 		); /;
 
 	# Prepare and execute the statement
@@ -82,9 +92,10 @@ sub createLoggingTable{
 }
 
 sub createMetadataTable{
-	my $sql_quer = qq/CREATE TABLE $config->{'visionMetaTableName'}(
-		$config->{'visionMetaNameColumn'}  STRING,
-		$config->{'visionMetaValueColumn'}  STRING
+	my $metaBase = $visionBase->{'database'}->[0]->{'tables'}->[0]->{'visionMetaTable'}->[0];
+	my $sql_quer = qq/CREATE TABLE $metaBase->{'Name'}->[0](
+		$metaBase->{'Columns'}->[0]->{'NameColumn'}->[0]  STRING,
+		$metaBase->{'Columns'}->[0]->{'ValueColumn'}->[0]  STRING
 	); /;
 
 	my $create_handle = $dbhandle->prepare($sql_quer);
@@ -98,18 +109,22 @@ sub populateMetadataTable{
 	my $day = sprintf("%02d", $tm->mday);
 	my $newMonth = "$year-$month-$day";
 
-	my $populateQuery = qq/INSERT INTO $config->{'visionMetaTableName'} 
-		('$config->{'visionMetaNameColumn'}', $config->{'visionMetaValueColumn'}) VALUES
-		('$config->{'visionMetaClarifaiReadsThisMonth'}', '0'), 
-		('$config->{'visionMetaClarifaiReadsPerMonth'}', '5000'),
-		('$config->{'visionMetaClarifaiNewMonthDate'}', '$newMonth'),
-		('$config->{'visionMetaClarifaiDayLastRead'}', '$newMonth'),
-		('$config->{'visionMetaGoogleDayOfNewMonth'}', '$day'),
-		('$config->{'visionMetaGoogleReadsThisMonth'}', '0'), 
-		('$config->{'visionMetaGoogleReadsPerMonth'}', '1000'),
-		('$config->{'visionMetaGoogleNewMonthDate'}', '$newMonth'),
-		('$config->{'visionMetaGoogleDayLastRead'}', '$newMonth'),
-		('$config->{'visionMetaGoogleDayOfNewMonth'}', '$day'); 
+	my $googFieldsBase = $visionBase->{'database'}->[0]->{'Fields'}->[0]->{'googFields'}->[0];
+	my $clarifaiFieldsBase = $visionBase->{'database'}->[0]->{'Fields'}->[0]->{'googFields'}->[0];
+	my $metaBase = $visionBase->{'database'}->[0]->{'tables'}->[0]->{'visionMetaTable'}->[0];
+
+	my $populateQuery = qq/INSERT INTO $metaBase->{'Name'}->[0] 
+		('$metaBase->{'Columns'}->[0]->{'NameColumn'}->[0]', '$metaBase->{'Columns'}->[0]->{'ValueColumn'}->[0]') VALUES
+		('$clarifaiFieldsBase->{'ReadsThisMonth'}->[0]', '0'), 
+		('$clarifaiFieldsBase->{'ReadsPerMonth'}->[0]', '5000'),
+		('$clarifaiFieldsBase->{'NewMonthDate'}->[0]', '$newMonth'),
+		('$clarifaiFieldsBase->{'DayLastRead'}->[0]', '$newMonth'),
+		('$clarifaiFieldsBase->{'DayOfNewMonth'}->[0]', '$day'),
+		('$googFieldsBase->{'ReadsThisMonth'}->[0]', '0'), 
+		('$googFieldsBase->{'ReadsPerMonth'}->[0]', '1000'),
+		('$googFieldsBase->{'NewMonthDate'}->[0]', '$newMonth'),
+		('$googFieldsBase->{'DayLastRead'}->[0]', '$newMonth'),
+		('$googFieldsBase->{'DayOfNewMonth'}->[0]', '$day'); 
 		/;
 
 	my $create_handle = $dbhandle->prepare($populateQuery);

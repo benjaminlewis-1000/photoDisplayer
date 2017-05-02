@@ -62,7 +62,7 @@ sub readOneImage{
 
 	if (!defined $args->{portNum} ){
 		print "RPC Server port number not given.\n";
-		$serverPortNum = 8000;
+		$serverPortNum = $params::geoServerPort;
 	}else{
 		$serverPortNum = $args->{portNum};
 	}

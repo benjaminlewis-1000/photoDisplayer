@@ -1,0 +1,5 @@
+SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = "Benjamin Lewis" ) UNION SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = "Jessica Lewis" )
+SELECT photo_key FROM photos AS photo_key_and_var JOIN (SELECT photo AS photo_key FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = "Benjamin Lewis" ) INTERSECT SELECT photo AS photo_key FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = "Jessica Lewis" ) ) AS linker_tmp_var ON photo_key_and_var.photo_key = linker_tmp_var.photo_key
+WITH photo_handle AS (SELECT * FROM Photos)
+   SELECT * FROM photo_handle WHERE photo_key IN 
+   (SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = "Benjamin Lewis" ) UNION SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = "Jessica Lewis" ) INTERSECT SELECT photo_key FROM Photos WHERE taken_month != 10 OR taken_month = 3)

@@ -32,8 +32,8 @@ our @rootDirList;
 
 our $answerBool = 1;
 
-our $portNum = 8000;
-my $geoserverProc = Proc::Background->new("python geoServer.py");
+our $portNum = $params::geoServerPort;
+my $geoserverProc = Proc::Background->new("python geoServer.py $portNum");
 $geoserverProc->alive;
 
 if (!$answerBool){
@@ -109,6 +109,7 @@ foreach my $root_dir (@rootDirList){
 	#  Check if a higher-up directory is already in the table. If so, we don't need to add this in. 
 	my $existingRootDirsQuery = qq/SELECT $params::rootDirPath FROM $params::rootTableName/;
 	my $query = $dbhandle->prepare($existingRootDirsQuery);
+	print $existingRootDirsQuery . "\n";
 	until(
 		$query->execute()
 	){

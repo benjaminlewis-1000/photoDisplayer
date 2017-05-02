@@ -5,6 +5,8 @@ import SocketServer
 import geopy
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+import sys
+import numbers
 
 import unicodedata
 
@@ -15,8 +17,14 @@ geolocator = Nominatim()
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
+assert len(sys.argv) > 1
+assert sys.argv[1]
+print sys.argv[1]
+assert float(sys.argv[1]) - int(sys.argv[1]) == 0
+
+
 # Create server
-server = SimpleXMLRPCServer(("localhost", 8000),
+server = SimpleXMLRPCServer(("localhost", int(sys.argv[1])),
                             requestHandler=RequestHandler)
 server.register_introspection_functions()
 

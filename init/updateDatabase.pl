@@ -23,8 +23,8 @@ if (! -e 'trimDeletedFiles.pl'){
 
 our @rootDirList;
 
-our $portNum = 8000;
-my $geoserverProc = Proc::Background->new("python geoServer.py");
+our $portNum = $params::geoServerPort;
+my $geoserverProc = Proc::Background->new("python geoServer.py $portNum");
 $geoserverProc->alive;
 
 # Open the database

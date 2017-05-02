@@ -1,99 +1,99 @@
 
-windowsType: 1
-linuxType: 2
+# windowsType: 1
+# linuxType: 2
 
-database: "photos_master.db"
+#database: "photos_master.db"
 
-# Table names:
-photoTableName: "Photos"
-peopleTableName: "People"
-linkerTableName: "PhotoLinker"
-rootTableName: "RootDirs"
-metadataTableName: "Metadata"
+# # Table names:
+# photoTableName: "Photos"
+# peopleTableName: "People"
+# linkerTableName: "PhotoLinker"
+# rootTableName: "RootDirs"
+# metadataTableName: "Metadata"
 
-commentLinkerUserTableName: "UserCommentLinker"
-commentLinkerGoogleTableName: "GoogleCommentLinker"
-commentLinkerClarifaiTableName: "ClarifaiCommentLinker"
+# commentLinkerUserTableName: "UserCommentLinker"
+# commentLinkerGoogleTableName: "GoogleCommentLinker"
+# commentLinkerClarifaiTableName: "ClarifaiCommentLinker"
 
 
 # Table column names 
   ## Photo table
-photoKeyColumn: "photo_key"
-photoFileColumn: "photo_file"
-photoDateColumn: "photo_date"
-photoYearColumn: "taken_year"
-photoMonthColumn: "taken_month"
-photoDayColumn: "taken_day"
-photoHourColumn: "taken_hour"
-photoMinuteColumn: "taken_minute"
-photoGMTColumn: "taken_timezone"
-modifyDateColumn: "modification_date"
-rootDirNumColumn: "root_dir_num"
-insertDateColumn: "inserted_date"
+# photoKeyColumn: "photo_key"
+# photoFileColumn: "photo_file"
+# photoDateColumn: "photo_date"
+# photoYearColumn: "taken_year"
+# photoMonthColumn: "taken_month"
+# photoDayColumn: "taken_day"
+# photoHourColumn: "taken_hour"
+# photoMinuteColumn: "taken_minute"
+# photoGMTColumn: "taken_timezone"
+# modifyDateColumn: "modification_date"
+# rootDirNumColumn: "root_dir_num"
+# insertDateColumn: "inserted_date"
 
 # Picture geolocation data in photo table
-houseNumColumn: "geoHouseNum" 
-streetColumn: "geoStreetName" 
-cityColumn: "geoCityName" 
-stateColumn: "geoStateName" 
-postcodeCoulumn: "geoPostcode" 
-countryColumn: "geoCountryName"
-latColumn: "picLatitude"
-longColumn: "picLongitude" 
+# houseNumColumn: "geoHouseNum" 
+# streetColumn: "geoStreetName" 
+# cityColumn: "geoCityName" 
+# stateColumn: "geoStateName" 
+# postcodeCoulumn: "geoPostcode" 
+# countryColumn: "geoCountryName"
+# latColumn: "picLatitude"
+# longColumn: "picLongitude" 
 
-## Comment Linker Table
-commentLinkerPhotoColumn: "photo_number"
-commentLinkerTagColumn: "tag"
-commentLinkerTagProbabilityColumn: "tag_probability"
+# ## Comment Linker Table
+# commentLinkerPhotoColumn: "photo_number"
+# commentLinkerTagColumn: "tag"
+# commentLinkerTagProbabilityColumn: "tag_probability"
 
 ## People Table
-peopleKeyColumn: "people_key"
-personNameColumn: "person_name"
+# peopleKeyColumn: "people_key"
+# personNameColumn: "person_name"
 
-## Linker Table
-linkerPeopleColumn: "person"
-linkerPhotoColumn: "photo"
+## Photo Linker Table
+# linkerPeopleColumn: "person"
+# linkerPhotoColumn: "photo"
 
 ## Root Directory Table
-rootKeyColumn: "directory_root_key"
-windowsRootPath: "root_path_windows"
-linuxRootPath: "root_path_linux"
+# rootKeyColumn: "directory_root_key"
+# windowsRootPath: "root_path_windows"
+# linuxRootPath: "root_path_linux"
 
-## Metadata Table
-metadataNameColumn: "item_name"
-metadataValueColumn: "item_value"
+# ## Metadata Table
+# metadataNameColumn: "item_name"
+# metadataValueColumn: "item_value"
 
 ### Metadata fields
-metadataLastEditedField: "last_edited_date"
+# metadataLastEditedField: "last_edited_date"
 
 ### Prefixes for automated image labeling from Google
 
-googVisionLabelPrefix: "googVision_"
-googImageHistoryPrefix: "Google added: "
+# googVisionLabelPrefix: "googVision_"
+# googImageHistoryPrefix: "Google added: "
 
-clarifaiVisionLabelPrefix: "clarifaiVision_"
-clarifaiImageHistoryPrefix: "Clarifai added: "
+# clarifaiVisionLabelPrefix: "clarifaiVision_"
+# clarifaiImageHistoryPrefix: "Clarifai added: "
 
-visionMetaTableName: "Variables"
-visionMetaNameColumn: "Name"
-visionMetaValueColumn: "Value"
+# visionMetaTableName: "Variables"
+# visionMetaNameColumn: "Name"
+# visionMetaValueColumn: "Value"
 
-visionMetaClarifaiReadsThisMonth: "Reads_performed_this_month_clarifai"
-visionMetaClarifaiReadsPerMonth: "Reads_per_month_clarifai"
-visionMetaClarifaiNewMonthDate: "New_month_date_clarifai"
-visionMetaClarifaiDayLastRead: "Day_last_read_clarifai"
-visionMetaClarifaiDayOfNewMonth: "Day_of_new_month_clarifai"
+# visionMetaClarifaiReadsThisMonth: "Reads_performed_this_month_clarifai"
+# visionMetaClarifaiReadsPerMonth: "Reads_per_month_clarifai"
+# visionMetaClarifaiNewMonthDate: "New_month_date_clarifai"
+# visionMetaClarifaiDayLastRead: "Day_last_read_clarifai"
+# visionMetaClarifaiDayOfNewMonth: "Day_of_new_month_clarifai"
 
-visionMetaGoogleReadsThisMonth: "Reads_performed_this_month_google"
-visionMetaGoogleReadsPerMonth: "Reads_per_month_google"
-visionMetaGoogleNewMonthDate: "New_month_date_google"
-visionMetaGoogleDayLastRead: "Day_last_read_google"
-visionMetaGoogleDayOfNewMonth: "Day_of_new_month_google"
+# visionMetaGoogleReadsThisMonth: "Reads_performed_this_month_google"
+# visionMetaGoogleReadsPerMonth: "Reads_per_month_google"
+# visionMetaGoogleNewMonthDate: "New_month_date_google"
+# visionMetaGoogleDayLastRead: "Day_last_read_google"
+# visionMetaGoogleDayOfNewMonth: "Day_of_new_month_google"
 
-visionRecordDataTableName: "visionData"
+# visionRecordDataTableName: "visionData"
 
-visionRecordFileColumn: "fileName"
-visionRecordCheckedColumn: "lastCheckedDate"
-visionRecordPortraitColumn: "readAsPortrait"
-visionRecordSourceColumn: "machineVisionSource"
-visionRecordValidColumn: "validated"
+# visionRecordFileColumn: "fileName"
+# visionRecordCheckedColumn: "lastCheckedDate"
+# visionRecordPortraitColumn: "readAsPortrait"
+# visionRecordSourceColumn: "machineVisionSource"
+# visionRecordValidColumn: "validated"
