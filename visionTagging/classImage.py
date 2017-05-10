@@ -64,7 +64,7 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 		metadata["Exif.Image.ImageHistory"] = ""
         	metadata.write()
 
-		c = databasePointer.conn()
+		c = databasePointer.cursor()
 		delQuery = '''DELETE FROM visionData WHERE filename = ?'''
 		c.execute(delQuery, (filename,) )
 		databasePointer.commit()
@@ -425,7 +425,7 @@ def updateFileHistory(filename, currentTime, apiLabelTuple, metadata):
 
 	else: ### There was no history match; append to the file history. 
 		imHistory += apiLabelTuple[2] + currentTime + ", orientation is " + str(checkIfIsPortrait(filename)) + ". "
-		metadata[imHistoryKey] = unicode(imHistory, "utf-8")
+		metadata[imHistoryKey] = imHistory
 		
 		metadata.modified = True
 		isUnlocked = os.access(filename, os.W_OK)

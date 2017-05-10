@@ -1,130 +1,333 @@
-/mnt/NAS/Jessica Pictures/Family Scans isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/1996 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/2000 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/2001 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/2002 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/2003 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/2004 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Family Scans/unknown isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Engagements isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Formals isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/girls camp isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/girls camp/Girls Camp 2008 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/guard isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/guard/2008 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/icons isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/100KC182 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/114___11 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/Rollins isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/trujillo isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/trujillo/101NIKON isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/trujillo/102NIKON isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Mission/trujillo/103NIKON isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Cusco and Machu Picchu isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Lima isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Pictures and Videos from Derek isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Porcon isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Porcon/Other isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Porcon/Water Heater isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Some of Caleb's photos and videos isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Uros Islands isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Uros Islands/Other isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Uros Islands/Water Filter isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Peru/Uros Islands/Water Pump isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Phone isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Phone 2 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Phone 2/Adventures isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Phone 2/Camera isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Phone 2/Facebook isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Phone 2/Facebook_edited isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/American Fork isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Boys isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Bruise isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Christmas isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Drom isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Earth isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Fall 2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Football isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Football/2014-08-06 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Freshman Quote Wall isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/girls camp isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/girls camp/08 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Grand Old Opery isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/guard isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/guard/2008 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Hiking in the Canyon isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Hostage Shower curtain isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Hotel isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Jesus isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/girls camp isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/girls camp/08 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/guard isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/guard/2008 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/prom 2009 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/prom 2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/youth conferance isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/youth conferance/08 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Kirtland/pictures/youth conferance/09 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mammoth Caves isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/facebook isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/facebook 2 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/MTC isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/my pictures isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/pictures isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/pictures/114___11 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/pictures/trujillo isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/Rollins isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/trujillo isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/trujillo/101NIKON isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/trujillo/102NIKON isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mission/trujillo/103NIKON isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Mountains isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/NASA isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Nebulas isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/New Years Eve Dance isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Nicole isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Nicole/Mexico isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Nicole/RMC isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Peru isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/prom 2009 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Prom 2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Provo Tabernacle isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Roomates Final isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Roommates isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/San Antonio isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Senior Night isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/smithpary isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Sophomore Year isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Summer 2014 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Talent show isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Thanksgiving 2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/the others isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Winter 2009-2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Winter 2011 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Winter Semester 2012 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/youth conferance isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/youth conferance/08 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/youth conferance/09 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/youth conferance/Youth Conference 2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Pictures/Youth Confrence 2007 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/prom 2009 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/prom 2010 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Wedding Day isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Wedding Slideshow isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Wedding Slideshow/AM isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Wedding Slideshow/BM isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Wedding Slideshow/HS isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/Wedding Slideshow/M isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/With Ben isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/With Ben/engagement 5_files isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/youth conferance isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/youth conferance/08 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/Laptop/youth conferance/09 isn't a valid directory. 
-/mnt/NAS/Jessica Pictures/mnt/NAS/Jessica Pictures isn't a valid directory. 
+/mnt/NAS/Photos/2016 isn't a valid directory. 
+/mnt/NAS/Photos/2016/Apartment Painting isn't a valid directory. 
+/mnt/NAS/Photos/2016/Chicago and Wicked isn't a valid directory. 
+/mnt/NAS/Photos/2016/Chicago Architecture Open House isn't a valid directory. 
+/mnt/NAS/Photos/2016/Engagement Pics isn't a valid directory. 
+/mnt/NAS/Photos/2016/Family_texts isn't a valid directory. 
+/mnt/NAS/Photos/2016/Fun Family Videos isn't a valid directory. 
+/mnt/NAS/Photos/2016/Funny isn't a valid directory. 
+/mnt/NAS/Photos/2016/Lillian isn't a valid directory. 
+/mnt/NAS/Photos/2016/Lunar Photography isn't a valid directory. 
+/mnt/NAS/Photos/2016/Meagan Mission isn't a valid directory. 
+/mnt/NAS/Photos/2016/Mylissa Wedding isn't a valid directory. 
+/mnt/NAS/Photos/2016/NYC Trip isn't a valid directory. 
+/mnt/NAS/Photos/2016/Ohio isn't a valid directory. 
+/mnt/NAS/Photos/2016/Practice with Jessica isn't a valid directory. 
+/mnt/NAS/Photos/2016/Provo isn't a valid directory. 
+/mnt/NAS/Photos/2016/Thanksgiving and Moving isn't a valid directory. 
+/mnt/NAS/Photos/2016/Utah isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time/Engagements isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time/Formals isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time/Honeymoon San Fran isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time/Wedding isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time/Wedding - Julies pics isn't a valid directory. 
+/mnt/NAS/Photos/2016/Wedding Time/Wedding Reception - Ohio isn't a valid directory. 
+/mnt/NAS/Photos/2016/Yellowstone isn't a valid directory. 
+/mnt/NAS/Photos/2017 isn't a valid directory. 
+/mnt/NAS/Photos/2017/Ben Utah Training isn't a valid directory. 
+/mnt/NAS/Photos/2017/Dayton Events isn't a valid directory. 
+/mnt/NAS/Photos/2017/Family Texts isn't a valid directory. 
+/mnt/NAS/Photos/2017/Meagan Mission isn't a valid directory. 
+/mnt/NAS/Photos/2017/Photo Practice - Woods isn't a valid directory. 
+/mnt/NAS/Photos/Alex Wedding isn't a valid directory. 
+/mnt/NAS/Photos/Artistic isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/12-3-05 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/2005-06-22b isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/2005-07-21bp isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/2007-6-17 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/2008-1-06 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/2008-1-15 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Ben's 2006 trip pictures isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Ben's 2006 trip pictures/102P_002 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Ben's 2006 trip pictures/104P_004 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Ben's Graduation May 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Canada Trip July 2011 print not GC isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/EFY 2006 - San Fransisco isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Hawaii isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Img0012 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Img0016 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/June 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Panama trip print isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Panama trip print/.picasaoriginals isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Pictures- freshman isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Pictures- freshman/Cool pictures isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Pictures- freshman/Missionary pics isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/Summer 2005 isn't a valid directory. 
+/mnt/NAS/Photos/Ben's Pictures/TEAMS pictures isn't a valid directory. 
+/mnt/NAS/Photos/California 2012 isn't a valid directory. 
+/mnt/NAS/Photos/California Trip isn't a valid directory. 
+/mnt/NAS/Photos/Captured VHS isn't a valid directory. 
+/mnt/NAS/Photos/Captured VHS/Jmw8223.tmp isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F41 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F42 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F43 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F44 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F45 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F46 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F47 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F48 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F49 isn't a valid directory. 
+/mnt/NAS/Photos/Christmas Carol 2013/iPod Photo Cache/F50 isn't a valid directory. 
+/mnt/NAS/Photos/Dad Trips isn't a valid directory. 
+/mnt/NAS/Photos/Dad Trips/Ghana isn't a valid directory. 
+/mnt/NAS/Photos/Dad Trips/Ghana/Morgan isn't a valid directory. 
+/mnt/NAS/Photos/Dad Trips/Lewis isn't a valid directory. 
+/mnt/NAS/Photos/Dad Trips/Peru Trip isn't a valid directory. 
+/mnt/NAS/Photos/Dad Trips/Velasquez 2 isn't a valid directory. 
+/mnt/NAS/Photos/Emily Wedding isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/1st day of school isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/3-30-2009 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/9-25-07daddy-daughter isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/at home isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Baby Mark Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Ballroom Idaho Competition 9-9-09 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Beehive D.I. Fashion show isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Bens Birthday isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/California Ballroom Tour 2011 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Canada trip summer 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/cross-country skiing Jan 26 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Cute Brothers isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Dance Competition November 10 07 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Dawns birthday party Jan 26 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Disneyland June 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EFY 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EFY 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Emily isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Emily Dance isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Emily Haircut isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Emily Passport isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT/December 10 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT/December 10 2007/Christmas Present pics 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT/December 22 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT/December 23 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT/Hike isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/EMILY TO SORT/New Years Eve 2007 end isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Emily's 14 birthday isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/extras isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/fun isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Gardener Village isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Girls Camp June 9-12 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Goblin Valley isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Grandpa Twinkletoes Lewis isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Grandpa's Funeral isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Great Depression Pics 2-3-10 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Halloween Time isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Hawaii June 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Hike to the Y isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Homecoming 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Homecoming parade 07 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Just Having Fun! isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Leadership conference 9-28-07 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Lewis Family Reunion June 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Masatomos visit isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Masatomos visit/Nicholas 16th Birthday isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Me! isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Misc isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/MORP 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/My Brothers isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/My Sweet 16 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Nicholas Christmas 2010 pictures isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Nicholas MTC isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Oklahoma isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Oklahoma August 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Oklahoma, Nauvoo, Grandpas Funeral July 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Old Pics isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Peru April 26-May 11 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/random isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Scenery Shots isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Scenery Shots/more isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/senior pictures May 2012 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/spring break 2010 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Summer Fun isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/summer trip scenery isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Sweethearts isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Sweethearts/pic1_files isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Sweethearts/pic1_files/Emily Lewis_files isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Sweethearts/pic1_files/Facebook_files isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Sweethearts/pic2_files isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Thanksgiving 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/twinkletoes isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/100KM341print isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/101NIKON print isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/102NIKON isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/102P_001 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/103NIKON isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/103P_002 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/104NIKON print to sculpture park isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/104P_003 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/105P_004 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/vancouver trip emily print/106NIKON isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Young Women Activities isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Youth Conference 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Youth Conference Moab 2011 isn't a valid directory. 
+/mnt/NAS/Photos/Emily's Pictures/Youth Conference Moab 2011/Youth Conference 2 isn't a valid directory. 
+/mnt/NAS/Photos/Erica's Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Erica's Pictures/12-22-10 isn't a valid directory. 
+/mnt/NAS/Photos/Erica's Pictures/6-12-11 isn't a valid directory. 
+/mnt/NAS/Photos/Erica's Pictures/erica fotos vancouver isn't a valid directory. 
+/mnt/NAS/Photos/Erica's Pictures/January 2009 isn't a valid directory. 
+/mnt/NAS/Photos/Erica's Pictures/October 2008 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/2007 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/2007/Nicholas's Hawai'i Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/2008 Kids Camp isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/ASEE and Rome isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/ASEE and Rome/2004-05-18 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/ASEE and Rome/2004-05-18b isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/ASEE and Rome/2004-05-19 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben 2006 Trip Pics isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-03-20 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-04-10 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-05-01 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-05-31 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-07-11 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004/Febuary 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004/January 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004/July 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004/June 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004/March 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jan to Jul 2004/May 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-07 (Jul)-31 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-11-28 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12 (Dec)-28 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12-20 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2004-12-24 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2005-01 (Jan)-06 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics - Jun 2004 to Mar 2005/2005-03-11 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-05 (May) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-06 (Jun) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-07 (Jul) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-07 (Jul)/other isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-08 (Aug) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-08 (Aug)/other isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-09 (Sep) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-10 (Oct) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2003-10 (Oct)/other isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2004-01 (Jan)-01 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ben Pics 5-03 to 1-04/2004-01 (Jan)-01/other isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Church Pictures, Nicholas Bday isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2/2004-05-31 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2/2004-08-09 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2/2005-02-02 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2/2005-05-11 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2/2005-06-29 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family 2005 pt 2/Christmas 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-04-20 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-04-21 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-04-27 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-05-18 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-06-02 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-07-28 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2004-01-10 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2004-04-28 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family April03-May 2004/2004-05-06 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2004-05-19 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2004-10-4 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2005-03-10 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2005-03-30 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2005-06-03 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2005-06-21 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2005-07-10 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family May 04 - Jul 05/2005-07-21 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2003-06-06 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2003-07-28 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2003-08-13 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2003-08-21 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2003-09-13 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2004-02-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2004-03-09 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/2004-03-12 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/Family Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/2003-02 (Feb) isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/April 15, 2002 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/Aug. 2002 Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/Christmas 2001 calendar isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/Dec. 2001 Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/July 2001 Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/March 2002 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/May 14, 2002 Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/November 2002 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/October 9, 2002 Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/Photos 12 Feb 2001 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/Photos 12 Feb 2001/April isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Family pics 2005/PHOTOS/Photos 12 Feb 2001/April 4, 2001 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Feb2004 Pics isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/100CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/101CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/102CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/103CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/104CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/105CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Hawaii 2007/106CANON isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/High adventure isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Homers' Farewell isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Mar 05 Family Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/2004-05-19 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/2004-10-4 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/2005-03-10 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/2005-03-30 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/2005-06-21 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/2005-07-10 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/More Pictures/7-30-05 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Nancy Simper Farm 2007 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Ouachita Hike isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Pictures 2003 isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Redd Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family CDs/Soccer Players isn't a valid directory. 
+/mnt/NAS/Photos/Family Histories  & Patriarchal Blessings isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2006 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2006/2006-03-09 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2006/2006-05-23 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2006/2006-06-15 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2006/2006-07-23 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2006/2006-10-06 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/11-28-2008 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/2008 July isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/2008-01-06 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/2008-01-31 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/2008-04-26 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/2008-05-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2008/2008-05-29 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (1) January isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (10) October isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (11) November isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (12) December isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (2) February isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (3) March isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (4) April isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (5) May isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (6) June isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (7) July isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/2011 (8) August isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2011/December also isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/1-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/10-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/11-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/12-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/2-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/3-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/4-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/5-30-2012 isn't a valid directory. 
