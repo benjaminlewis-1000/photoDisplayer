@@ -42,7 +42,8 @@ class displayServer:
                                     requestHandler=RequestHandler)
         self.server.register_introspection_functions()
 
-        self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate"
+        # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate"
+        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate"]
 
         self.masterQuery = ""
 
@@ -88,7 +89,7 @@ class displayServer:
 
         properties = json.loads(propertiesJSON)
 
-        self.commandString = ""
+        self.commandArray = []
         for i in range(len(properties)):
             propertyType = properties[i]['property']
             propertyVal = unicode(properties[i]['enabled'])
@@ -101,15 +102,18 @@ class displayServer:
                 assert val >= 0
                 if val > 0:
                     # Let the maximum delay be 5 minutes.
-                    self.commandString += commandDict['delay'] + str(min(val, 300.0))
+                    # self.commandString += commandDict['delay'] + str(min(val, 300.0))
+                    self.commandArray.append(commandDict['delay'] + str(min(val, 300.0)))
             if propertyType.lower() == 'sort':
                 assert propertyVal.lower() in ['0', 'none', 'name', 'filename', 'mtime', 'width', 'height', 'pixels', 'size', 'format']
                 if propertyVal.lower() not in ['0', 'none']:
-                    self.commandString += commandDict['sort'] + propertyVal.lower()
+                    # self.commandString += commandDict['sort'] + propertyVal.lower()
+                    self.commandArray.append(commandDict['sort'] + propertyVal.lower())
             if propertyType.lower() in ['fullZoom', 'hidePointer', 'randomize', 'autorotate', 'showFilename', 'noMenus', 'quiet', 'stretch']:
                 assert propertyVal.isnumeric() or propertyVal.lower() in ['true', 'false']
                 if propertyVal != 0:
-                    self.commandString += commandDict[propertyType.lower()]
+                    # self.commandString += commandDict[propertyType.lower()]
+                    self.commandArray.append(commandDict[propertyType.lower()])
 
         # print self.commandString
 
@@ -121,7 +125,7 @@ class displayServer:
             if self.p != None:
                 self.p.terminate()
                 self.p.wait()
-            self.p = subprocess.Popen(["feh", self.commandString, "-f ", self.fileListName])
+            self.p = subprocess.Popen(["feh"] + self.commandArray + ["-f", self.fileListName])
         else:
             raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
 
