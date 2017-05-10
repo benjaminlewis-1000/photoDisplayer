@@ -3,24 +3,33 @@
 import sys
 import xmlrpclib
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-import yaml
+# import yaml
+import xmltodict
 # from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 
 def doit(json):
 
-
-    with open('../config/serverParams.yaml') as stream:
+    with open('../config/params.xml') as stream:
         try:
-            params = yaml.load(stream)
-        except yaml.YAMLError as exc:
+            params = xmltodict.parse(stream.read())
+        except Exception as exc:
             print(exc)
+            exit(1)
+    with open('received.out', 'w+') as f:
+        print >>f, json
+
+
+    # with open('../config/serverParams.yaml') as stream:
+    #     try:
+    #         params = yaml.load(stream)
+    #     except yaml.YAMLError as exc:
+    #         print(exc)
             # exit(0)
 
-
-    proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + str(params['displayServerPort']) + "/")
+    proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + str(params['params']['serverParams']['displayServerPort']) + "/")
 
     try:
-        print proxy.startSlideshow(json);
+        print proxy.buildQuery(json);
         # exit(1)
     except xmlrpclib.Fault as err:
         print "A fault occurred"
@@ -29,5 +38,8 @@ def doit(json):
         # exit(0)
 
 
-json = sys.argv[1]
+json = str(sys.argv[1])
+with open('received.out', 'w+') as f:
+    print >>f, json
+# json = '''[{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"2017/05/01\"","\"criteriaVal\"":"\"<None>\""}]'''
 doit(json)

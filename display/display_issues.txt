@@ -1,0 +1,5 @@
+ISSUES:
+
+- "is not" person is being treated as an "is" person.
+- Date range isn't being passed from sendJSONtoSlideshow.php when it contains a <none> value (launchSlideshow is having issues...)
+- Make sure to handle months properly; I'm passing them as numbers, now... (single digit 1-9)

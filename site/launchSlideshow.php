@@ -22,7 +22,7 @@
 		//echo '../databases/' . $photoDBname;
 		$db = new SQLite3('../databases/' . $photoDBname);
 
-		$fieldBasestruct = $xml_params->photoDatabase->tables
+		$fieldBasestruct = $xml_params->photoDatabase->tables;
 		//$results = $db->query('SELECT person_name FROM people');
 		$results = $db->query('SELECT ' . $fieldBasestruct->peopleTable->Columns->personName . ' FROM ' . $fieldBasestruct->peopleTable->Name);
 		$people = array();
@@ -66,17 +66,17 @@
 
 				## Reform the JSON so I know I'm passing it in a given state. 
 				if ($boolVal == "<none>"){
-					$start_formatted = "<None>";
+					$start_formatted = "None";
 				}else{
 					$start_formatted = $date_start['year'] . '/' . str_pad($date_start['month'], 2, "0", STR_PAD_LEFT) . '/' . str_pad($date_start['day'], 2, "0", STR_PAD_LEFT);
 				}
 				if ($criteriaVal == "<none>"){
-					$end_formatted = "<None>";
+					$end_formatted = "None";
 				}else{
 					$end_formatted = $date_end['year'] . '/' . str_pad($date_end['month'], 2, "0", STR_PAD_LEFT) . '/' . str_pad($date_end['day'], 2, "0", STR_PAD_LEFT);
 				}
 
-				$data = array("criteriaType" =>"Date Range", "booleanValue" => $start_formatted, "criteriaVal" =>$end_formatted);
+				$data = array("\"criteriaType\"" =>"\"Date Range\"", "\"booleanValue\"" => "\"$start_formatted\"", "\"criteriaVal\"" => "\"$end_formatted\"");
 				array_push($formedArray, $data);
 				break;
 			case "Person":
@@ -93,7 +93,7 @@
 					$allValid = 0;
 				}
 
-				$data = array("criteriaType" =>"Person", "booleanValue" => $boolVal, "criteriaVal" =>$criteriaVal);
+				$data = array("\"criteriaType\"" =>"\"Person\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" => "\"$criteriaVal\"");
 				array_push($formedArray, $data);
 				break;
 			case "Year":
@@ -119,7 +119,7 @@
 				$year = strval($year);
 
 				//print_r($year);
-				$data = array("criteriaType" =>"Year", "booleanValue" => $boolVal, "criteriaVal" =>$year);
+				$data = array("\"criteriaType\"" =>"\"Year\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" =>"\"$year\"");
 				array_push($formedArray, $data);
 				break;
 			case "Month":
@@ -131,21 +131,23 @@
 					echo("$boolVal, $criteriaVal not valid in Month");
 					$allValid = 0;
 				}
+				$data = array("\"criteriaType\"" =>"\"Month\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" =>"\"$criteriaVal\"");
+				array_push($formedArray, $data);
 
 				break;
 		}
 
 	}
 
-
+	//print_r($formedArray);
 	$parsed_text =  json_encode($formedArray, JSON_UNESCAPED_SLASHES);
+	//echo $parsed_text;
 	
 	if (!$allValid){
 		echo "Not all criteria in the JSON were valid. See console for more info.\n";
 		echo 'var valid=0';
 	}else{
 		// We're good to go! All these have been validated to be good JSON. 
-		echo "Good.";
 		exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
 		if (count($output) > 0 && $output[0] != "Success"){
 			echo "Not a success... " . $output[0];
