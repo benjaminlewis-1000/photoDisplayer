@@ -216,6 +216,7 @@ sub checkOSFolder{
 	my $winRootDir = $args->{winRootDir};
 	my $linRootDir = $args->{linRootDir};
 	my $dbhandle = $args->{dbhandle};
+	my $rootKey = $args->{rootKey};
 	my $root_dir;
 
 	if ($params::OS_type == $params::windowsType){
@@ -244,7 +245,7 @@ sub checkOSFolder{
 			print $winRootDir . "\n";
 
 			# Add to database.
-			my $update_query = qq/UPDATE $params::rootTableName SET $params::windowsRootPath = "$winRootDir"/;
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::windowsRootPath = "$winRootDir" WHERE $params::rootKeyColumn = $rootKey/;
 			my $query = $dbhandle->prepare($update_query);
 			until(
 				$query->execute()

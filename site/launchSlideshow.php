@@ -13,8 +13,7 @@
 	$xml_params = simplexml_load_file('C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\config\params.xml') or die("Can't load this file!");
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
 	$photoDBname = $xml_params->photoDatabase->fileName;
-	//echo $photoDBname;
-
+	
 	$jsonArray = json_decode($jsonText, true);
 
 	$allValid = 1;
@@ -23,7 +22,9 @@
 		//echo '../databases/' . $photoDBname;
 		$db = new SQLite3('../databases/' . $photoDBname);
 
-		$results = $db->query('SELECT person_name FROM people');
+		$fieldBasestruct = $xml_params->photoDatabase->tables
+		//$results = $db->query('SELECT person_name FROM people');
+		$results = $db->query('SELECT ' . $fieldBasestruct->peopleTable->Columns->personName . ' FROM ' . $fieldBasestruct->peopleTable->Name);
 		$people = array();
 		while ($row = $results->fetchArray()) {
 			if (!empty($row[0])){

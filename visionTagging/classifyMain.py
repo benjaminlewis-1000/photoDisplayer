@@ -62,9 +62,6 @@ def setUpLimits(conn, params, method):
 
     fieldsBase = params['params']['visionTaggingParams']['database']['Fields']
 
-    print fieldsBase[fieldsVar]['ReadsPerMonth']
-    print metadataDict.keys()
-
     readsPerMonth = metadataDict[fieldsBase[fieldsVar]['ReadsPerMonth']]
     readsThisMonth = metadataDict[fieldsBase[fieldsVar]['ReadsThisMonth']]
     newMonthDate = metadataDict[fieldsBase[fieldsVar]['NewMonthDate']]
@@ -153,8 +150,6 @@ if __name__ == "__main__":
     ## Find the root directory that we want to scan. Either it was passed in
     ## as an arg with --root <directory>, or we launch a file dialog to
     ## get the directory. 
-    print args.root
-    print os.path.isdir(args.root)
     if args.root != None and os.path.isdir(args.root):
         rootDirectory = args.root
     else:

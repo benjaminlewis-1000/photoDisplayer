@@ -50,19 +50,33 @@ $query->bind_col(3, \$linRootDir);
 # For each root directory, get the unique subdirectories and call the add file method,
 # which will take care of adding or updating the images as necessary. Congrats, you're done!
 our $numPassed = 0;
+my @rootDirMultiArray;
 while ($query->fetch){
 
 	our $root_dir = checkOSFolder({
 			linRootDir => $linRootDir,
 			winRootDir => $winRootDir,
-			dbhandle => $dbhandle
+			dbhandle => $dbhandle,
+			rootKey => $rootKey
 		});
+
+	# Sorry, this is SUPER hacky; I just want to be able to update all root directories 
+	# at once, then go on to process, so you don't have to wait a super long time.
+	my @localArray = ($linRootDir, $winRootDir, $rootKey, $root_dir);
+	push @rootDirMultiArray, \@localArray;
+}
+
+for (my $i = 0; $i < scalar @rootDirMultiArray; $i++ ){
+	my @localArray = @{$rootDirMultiArray[$i]};
+	my $linRootDir = $localArray[0];
+	my $winRootDir = $localArray[1];
+	my $rootKey    = $localArray[2];
+	my $root_dir = $localArray[3];
 
 	print "Root dir, ud.pl: " . $root_dir . "\n";
 
 	# print $rootKey . "  " . $root_dir . "\n";
 	my @unq_subdirs = getUniqueSubdirs($root_dir);
-
 	# my @unq_subdirs;
 	# push @unq_subdirs, "Summer 2014 ABQ/Keep";
 

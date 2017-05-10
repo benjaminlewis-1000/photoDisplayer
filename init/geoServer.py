@@ -19,7 +19,7 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 
 assert len(sys.argv) > 1
 assert sys.argv[1]
-print sys.argv[1]
+# print sys.argv[1]
 assert float(sys.argv[1]) - int(sys.argv[1]) == 0
 
 
