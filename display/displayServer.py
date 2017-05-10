@@ -118,10 +118,10 @@ class displayServer:
             raise Exception('The current OS is not supported as a slideshow type.')
 
         if os.path.isfile(self.fileListName):
-            if p != None:
-                p.terminate()
-                p.wait()
-            p = subprocess.Popen(["feh", self.commandString, self.fileListName])
+            if self.p != None:
+                self.p.terminate()
+                self.p.wait()
+            self.p = subprocess.Popen(["feh", self.commandString, "-f ", self.fileListName])
         else:
             raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
 
