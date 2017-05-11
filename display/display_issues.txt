@@ -8,3 +8,4 @@ ISSUES:
 - launchSlideshow.php has a hard coded xml file, which breaks it on different OS's.
 - Year before/after logic is bad... (maybe? That may have just been my file lock)
 - Image removal script chokes on unicode file names (mission/São Paulo, for instance). I think the addition to the database is bad. 
+- Vision tagging is not actually resizing images, which is bad for large images.

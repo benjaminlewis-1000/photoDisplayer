@@ -83,7 +83,7 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 	final3 = re.sub(r"charset=\".*\"\s?,?\s?", "", final2)
 	final4 = re.sub(r"II", "", final3)
 
-	print final4
+	print "Final tag is : " + final4
 
 	metadata[userCommentTagKey] = final4
 	metadata.write()
@@ -176,7 +176,7 @@ def make_image_data_google(image_filenames, type):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
-        print len(ctxt)
+        print "Calling twice..." + str(len(ctxt))
 
 	if type == 'label':
 
@@ -204,6 +204,7 @@ def request_labels_and_landmarks_google(api_key, image_filenames, request_type):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
 	b64data = make_image_data_google(image_filenames, request_type)
+        print "Passed to google is " + str(len(b64data))
 	if b64data == -1:
 		return -1
 	response = requests.post(ENDPOINT_URL,
@@ -545,7 +546,7 @@ def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
 		existingTags = ""
 
 	place = jsonInput['landmarkAnnotations'][0]  # Just get the top scoring place. 
-	print place
+	print "Place is: " + place
 	if 'description' in place:
 		description = place['description']
 		score = place['score']
@@ -633,6 +634,7 @@ def clarifaiClassify(filename, app_id, app_secret):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
+        print "Clarifai: " + str(len(ctxt))
 
 	clarifaiJSON = model.predict_by_base64(ctxt)
 
