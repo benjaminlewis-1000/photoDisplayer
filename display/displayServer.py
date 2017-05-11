@@ -135,8 +135,8 @@ class displayServer:
         ## IMPORTANT NOTE: When building a query that will be INTERSECTED with something else but has UNIONS in it,
         ## it must be wrapped in '''SELECT * FROM ( <the query> ).
         ## Assume that we're only passing vetted JSON to the server here. 
-        slideshowParams = json.loads(str(criteriaJSON))
         print criteriaJSON
+        slideshowParams = json.loads(str(criteriaJSON))
 
         people = [ ]
         selectedYears = [ ]

@@ -95,7 +95,7 @@
 					$allValid = 0;
 				}
 
-				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal");
+				$data = array("\"criteriaType\"" =>"\"Person\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" => "\"$criteriaVal\"");
 				array_push($formedArray, $data);
 				break;
 			case "Year":
@@ -152,11 +152,11 @@ print_r($formedArray);
 		// We're good to go! All these have been validated to be good JSON. 
                 echo "OK";
                 echo $parsed_text;
-		//exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
-		exec("python sendJSONtoSlideshow.py text");
-//		if ( (count($output) > 0 && $output[0] != "Success" )|| count($output == 0)){
-//			echo "Not a success... " . $output[0];
-//		}
+		exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
+		//exec("python sendJSONtoSlideshow.py text");
+		if ( (count($output) > 0 && $output[0] != "Success" )|| count($output == 0)){
+			echo "Not a success... " . $output[0];
+		}
 	}
 
 ?>
