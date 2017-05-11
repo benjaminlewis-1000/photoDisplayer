@@ -394,6 +394,8 @@ class displayServer:
 
                     print >>f, '{0: <90}'.format( rootDict[photo_root_key] + photo_file)  +  '{0:>15}'.format(photo_taken_date)
 
+            f.close()
+
             try:
                 self.startSlideshow()
             except:
