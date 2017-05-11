@@ -7,8 +7,11 @@ ehthumbs.db
 *.swp
 
 display/.slideshowFileList.txt
-display/fileListDebug.out
-display/queryTest.out
+init/unhandled_files.txt
+
+# display/fileListDebug.out
+# display/queryTest.out
+*.out
 
 # Folder config file
 Desktop.ini
