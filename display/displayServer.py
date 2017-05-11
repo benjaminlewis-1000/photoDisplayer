@@ -56,6 +56,8 @@ class displayServer:
         self.conn.text_factory = str  # For UTF-8 compatibility
 
         self.fileListName = '.slideshowFileList.txt'
+        if (os.path.isfile(self.fileListName) ):
+            os.remove(self.fileListName)
 
         self.p = None
 
@@ -121,16 +123,22 @@ class displayServer:
         if currentOS != self.xmlParams['params']['ostypes']['linuxType']:
             raise Exception('The current OS is not supported as a slideshow type.')
 
-        if os.path.isfile(self.fileListName):
-            if self.p != None:
-                self.p.terminate()
-                self.p.wait()
-            self.p = subprocess.Popen(["feh"] + self.commandArray + ["-f", self.fileListName])
-        else:
-            raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
+#        if os.path.isfile(self.fileListName):
+#            cont = True
+#        if cont:
+        self.p = subprocess.Popen(["feh"] + self.commandArray + ["-f", self.fileListName])
+#        else:
+#            raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
 
 
     def buildQuery(self, criteriaJSON):
+
+        ## feh, the display program, locks the file in self.fileListName.
+        ## Therefore, it is necessary to kill the subprocess that is running
+        ## feh, if there is one, before overwriting the file.
+        if self.p != None:
+            self.p.terminate()
+            self.p.wait()
 
         ## IMPORTANT NOTE: When building a query that will be INTERSECTED with something else but has UNIONS in it,
         ## it must be wrapped in '''SELECT * FROM ( <the query> ).
@@ -385,7 +393,8 @@ class displayServer:
                 rootDict[rootKey] = rootPath
 
             f = open('fileListDebug.out', 'w')
-            with open(self.fileListName, 'w') as file:
+            print str(len(fileResults)) + " files returned"
+            with open(str(self.fileListName), 'w') as file:
                 for i in range(len(fileResults)):
                     photo_file = fileResults[i][1]
                     photo_root_key = fileResults[i][2]
