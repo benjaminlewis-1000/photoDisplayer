@@ -594,13 +594,6 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 		updateFileHistory(filename, currentTime, googleLabelTuple, metadata)
 		logInDatabase(filename, googleLabelTuple, currentTime, databaseConn)
 
-<<<<<<< HEAD
-=======
-	# Encode in base64
-	ctxt = b64encode(buffer.read()).decode()
-        print "Clarifai: " + str(len(ctxt))
->>>>>>> 1ea9195c85f58662da894ce60d5c983798ca9bbb
-
 		if checkGoogleOddity(jsonLabelResponse):			
 			logfile = open('logErrata.out', 'a')
 			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + str(jsonLabelResponse)
