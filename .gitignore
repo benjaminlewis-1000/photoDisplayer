@@ -6,6 +6,10 @@ ehthumbs.db
 *.key
 *.swp
 
+display/.slideshowFileList.txt
+display/fileListDebug.out
+display/queryTest.out
+
 # Folder config file
 Desktop.ini
 

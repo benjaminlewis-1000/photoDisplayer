@@ -49,13 +49,15 @@ class displayServer:
 
         self.xmlParams = xmlParams
 
-        self.printDebug = False
+        self.printDebug = True
 
         ### Connect to the database
         self.conn = sqlite3.connect(rootDir + "/databases/" + self.xmlParams['params']['photoDatabase']['fileName'])
         self.conn.text_factory = str  # For UTF-8 compatibility
 
         self.fileListName = '.slideshowFileList.txt'
+        if (os.path.isfile(self.fileListName) ):
+            os.remove(self.fileListName)
 
         self.p = None
 
@@ -121,18 +123,28 @@ class displayServer:
         if currentOS != self.xmlParams['params']['ostypes']['linuxType']:
             raise Exception('The current OS is not supported as a slideshow type.')
 
-        if os.path.isfile(self.fileListName):
-            if self.p != None:
-                self.p.terminate()
-                self.p.wait()
-            self.p = subprocess.Popen(["feh"] + self.commandArray + ["-f", self.fileListName])
-        else:
-            raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
+#        if os.path.isfile(self.fileListName):
+#            cont = True
+#        if cont:
+        self.p = subprocess.Popen(["feh"] + self.commandArray + ["-f", self.fileListName])
+#        else:
+#            raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
 
 
     def buildQuery(self, criteriaJSON):
+
+        ## feh, the display program, locks the file in self.fileListName.
+        ## Therefore, it is necessary to kill the subprocess that is running
+        ## feh, if there is one, before overwriting the file.
+        if self.p != None:
+            self.p.terminate()
+            self.p.wait()
+
+        ## IMPORTANT NOTE: When building a query that will be INTERSECTED with something else but has UNIONS in it,
+        ## it must be wrapped in '''SELECT * FROM ( <the query> ).
         ## Assume that we're only passing vetted JSON to the server here. 
-        slideshowParams = json.loads(criteriaJSON)
+        print criteriaJSON
+        slideshowParams = json.loads(str(criteriaJSON))
 
         people = [ ]
         selectedYears = [ ]
@@ -147,7 +159,8 @@ class displayServer:
                 assert unicode(critVal).isnumeric()
                 selectedYears.append( (critVal, boolVal) )
             if str(critType) == 'Date Range' or str(critType) == "Date%20Range":
-                dateRangeVals.append( (boolVal, critVal) )
+                if not (boolVal == "None" and critVal == "None"):
+                    dateRangeVals.append( (boolVal, critVal) )
             if critType == 'Person':
                 people.append(critVal)
             if critType == 'Month':
@@ -186,14 +199,16 @@ class displayServer:
 
         ### OR SQL person query
         # orPersonQuery = '''SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = '''
-        orPersonQuery = '''SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(plPhoto, plTableName, plPerson, ppKey, ppTableName, ppName)
+        orPersonQuery = '''SELECT * FROM ( SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(plPhoto, plTableName, plPerson, ppKey, ppTableName, ppName)
         for i in range(len(people)):
             orPersonQuery += "\"" + people[i] + "\""
             if i != len(people) - 1:
                 ## orPersonQuery += ''' ) UNION SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = '''
                 orPersonQuery += ''' ) UNION SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(plPhoto, plTableName, plPerson, ppKey, ppTableName, ppName)
 
-        orPersonQuery += " )"
+        orPersonQuery += " ) )"
+
+        # print orPersonQuery
 
         ## The only difference between AND and OR is INTERSECT vs UNION
 
@@ -221,7 +236,7 @@ class displayServer:
         months = {"January" : 1, "February" : 2, "March" : 3, "April" : 4, "May" : 5, "June" : 6, "July" : 7, "August" : 8, "September" : 9, "October" : 10, "November" : 11, "December" : 12}
         i = 0
         for i in range(len(selectedMonths)):
-            monthOrdinal = months[ selectedMonths[i][0] ]
+            monthOrdinal =  selectedMonths[i][0] 
             isOrIsnt = selectedMonths[i][1]
             if isOrIsnt == 'is':
                 orMonthQuery += '= '
@@ -268,16 +283,36 @@ class displayServer:
 
         ### Date ranges - must be or'd. It doesn't make sense to AND date ranges, because the date
         ### range could be changed or another date range selected to get the appropriate values. 
+        print "Here"
         orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(phKey, phTableName, phTakenDate)
         for i in range(len(dateRangeVals)):
             startDate = dateRangeVals[i][0]
             endDate = dateRangeVals[i][1]
-            startDate = datetime.datetime.strptime(startDate, "%m/%d/%Y").strftime("%Y-%m-%d 00:00:00")
-            endDate = datetime.datetime.strptime(endDate, "%m/%d/%Y").strftime("%Y-%m-%d 23:59:59")
-            orDateRangeQuery += " > \"" + startDate + "\" AND {} < \"".format(phTakenDate) + endDate + "\""
+
+            print startDate
+            print endDate
+
+            # Format the dates, if they aren't "None". 
+            if startDate != "None":
+                startDate = datetime.datetime.strptime(startDate, "%Y/%m/%d").strftime("%Y-%m-%d 00:00:00") 
+            if endDate != "None":
+                endDate = datetime.datetime.strptime(endDate, "%Y/%m/%d").strftime("%Y-%m-%d 23:59:59")
+
+            if ( startDate != "None" and endDate != "None" ):
+                # Get the ordering right, so we don't have mutually exclusive dates. 
+                if endDate < startDate:
+                    tmp = startDate
+                    startDate = endDate
+                    endDate = tmp
+                orDateRangeQuery += " > \"" + startDate + "\" AND {} < \"".format(phTakenDate) + endDate + "\""
+            else:
+                if ( startDate != "None" ):
+                    orDateRangeQuery += " > \"" + startDate + "\""
+                else:
+                    orDateRangeQuery += " < \"" + endDate + "\""
+
             if i != len(dateRangeVals) - 1:
                 orDateRangeQuery += " OR {} ".format(phTakenDate)
-
 
 
         self.masterQuery = ""
@@ -306,12 +341,14 @@ class displayServer:
         if buildDates != "":
             self.masterQuery += buildDates
 
-        if orPersonQuery != "":
-            self.masterQuery += " INTERSECT " + orPersonQuery
+        if len(people) > 0: #orPersonQuery != "":
+            if self.masterQuery != "":
+                self.masterQuery += " INTERSECT "
+            self.masterQuery += orPersonQuery
 
         if self.masterQuery != "":
             #### Preliminary:
-            prelimQuery = '''SELECT {}, {}, {} FROM {} WHERE {} IN \n '''.format(phKey, phFile, phRootDir, phTableName, phKey)
+            prelimQuery = '''SELECT {}, {}, {}, {} FROM {} WHERE {} IN \n '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName, phKey)
             self.masterQuery = prelimQuery +  "(" +  self.masterQuery + ")"  
 
         if self.printDebug:
@@ -355,13 +392,26 @@ class displayServer:
                 assert rootKey not in rootDict.keys()
                 rootDict[rootKey] = rootPath
 
-            with open(self.fileListName, 'w') as file:
+            f = open('fileListDebug.out', 'w')
+            print str(len(fileResults)) + " files returned"
+            with open(str(self.fileListName), 'w') as file:
                 for i in range(len(fileResults)):
                     photo_file = fileResults[i][1]
                     photo_root_key = fileResults[i][2]
+                    photo_taken_date = fileResults[i][3]
                     print >>file, rootDict[photo_root_key] + photo_file
 
-            self.startSlideshow()
+                    print >>f, '{0: <90}'.format( rootDict[photo_root_key] + photo_file)  +  '{0:>15}'.format(photo_taken_date)
+
+            f.close()
+
+            try:
+                self.startSlideshow()
+            except:
+                pass
+            print self.masterQuery
+        else:
+            print "Invalid request."
 
 
         return self.xmlParams['params']['serverParams']['successVal']
@@ -407,9 +457,11 @@ if __name__ == '__main__':
                     {"property": "noMenus", "enabled": "true"}, {"property": "quiet", "enabled": "1"}, {"property": "sort", "enabled": "0"}, {"property": "stretch", "enabled": "0"} ]'''
 
 
-    criteriaJSON = '''[{"num":0,"criteriaType":"Year","booleanValue":"is","criteriaVal":"2018"},{"num":3,"criteriaType":"Year","booleanValue":"is","criteriaVal":"2013"},{"num":1,"criteriaType":"Date%20Range","booleanValue":"04/12/2016","criteriaVal":"04/21/2016"},{"num":2,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"},{"num":5,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jessica Lewis"},{"num":3,"criteriaType":"Month","booleanValue":"is","criteriaVal":"October"}]'''
+    criteriaJSON = '''[{"criteriaType":"Year","booleanValue":"is","criteriaVal":2001}]'''
+    criteriaJSON = '''[{"criteriaType":"Month","booleanValue":"is","criteriaVal":"3"}]'''
+    criteriaJSON = '''[{"criteriaType":"Date Range","booleanValue":"2016/05/01","criteriaVal":"None"}]'''
 
-    myServer.buildQuery(criteriaJSON)
-    myServer.setSlideshowProperties(propertiesJSON)
+    # myServer.buildQuery(criteriaJSON)
+    # myServer.setSlideshowProperties(propertiesJSON)
 
-    # myServer.run()
+    myServer.run()

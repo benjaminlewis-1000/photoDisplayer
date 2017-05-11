@@ -83,7 +83,7 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 	final3 = re.sub(r"charset=\".*\"\s?,?\s?", "", final2)
 	final4 = re.sub(r"II", "", final3)
 
-	print final4
+	print "Final tag is : " + final4
 
 	metadata[userCommentTagKey] = final4
 	metadata.write()
@@ -169,6 +169,7 @@ def scaleEncodeImageB64(image_filenames):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
+<<<<<<< HEAD
 	return ctxt
 
 def make_image_data_google(image_filenames, type):
@@ -180,6 +181,9 @@ def make_image_data_google(image_filenames, type):
 	img_requests = []
 
 	ctxt = scaleEncodeImageB64(image_filenames)
+=======
+        print "Calling twice..." + str(len(ctxt))
+>>>>>>> 1ea9195c85f58662da894ce60d5c983798ca9bbb
 
 	if type == 'label':
 
@@ -207,6 +211,7 @@ def request_labels_and_landmarks_google(api_key, image_filenames, request_type):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
 	b64data = make_image_data_google(image_filenames, request_type)
+        print "Passed to google is " + str(len(b64data))
 	if b64data == -1:
 		return -1
 	response = requests.post(ENDPOINT_URL,
@@ -445,7 +450,7 @@ def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
 		existingTags = ""
 
 	place = jsonInput['landmarkAnnotations'][0]  # Just get the top scoring place. 
-	print place
+	print "Place is: " + place
 	if 'description' in place:
 		description = place['description']
 		score = place['score']
@@ -589,6 +594,12 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 		updateFileHistory(filename, currentTime, googleLabelTuple, metadata)
 		logInDatabase(filename, googleLabelTuple, currentTime, databaseConn)
 
+<<<<<<< HEAD
+=======
+	# Encode in base64
+	ctxt = b64encode(buffer.read()).decode()
+        print "Clarifai: " + str(len(ctxt))
+>>>>>>> 1ea9195c85f58662da894ce60d5c983798ca9bbb
 
 		if checkGoogleOddity(jsonLabelResponse):			
 			logfile = open('logErrata.out', 'a')

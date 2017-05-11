@@ -75,8 +75,8 @@ def setUpLimits(conn, params, method):
 
     ## If we have hit a new month, then reset the month for a new date using date math and
     ## store that in the database. 
-    print todayDate
-    print newMonthDate
+    print "Today's date is: " + todayDate
+    print "New month's date is : " + newMonthDate
     if todayDate > newMonthDate:
         readsThisMonth = 0
         if now.day > dayOfNewMonth:
@@ -272,7 +272,7 @@ if __name__ == "__main__":
         finally:
             alreadyDone += successVal
             if successVal:
-                print alreadyDone
+                print "We have done " + str(alreadyDone) + " pictures this month now."
 
         if alreadyDone == monthlyLimit:
             print "Monthly limit has been reached."
