@@ -20,10 +20,6 @@ ENDPOINT_URL = 'https://vision.googleapis.com/v1/images:annotate'
 reload(sys)  # Reload does the trick so we can set default encoding!!!
 sys.setdefaultencoding('UTF8')  ### Let us do more than ASCII
 
-# Recommended size: 640x480 for label detection. I double that.
-desWidth = 1280.0
-desHeight = 960.0
-
 with open('../config/params.xml') as stream:
 	try:
 		params = xmltodict.parse(stream.read())
@@ -42,7 +38,6 @@ clarifaiLabelPrefix = params['params']['visionTaggingParams']['clarifaiTagging']
 clarifaiHistoryPrefix = params['params']['visionTaggingParams']['clarifaiTagging']['clarifaiImageHistoryPrefix']
 
 clarifaiLabelTuple = (clarifaiSourceType, clarifaiLabelPrefix, clarifaiHistoryPrefix)
-
 
 def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 
@@ -145,14 +140,14 @@ def openImageOriented(filename):
 		image=Image.open(filename)
 		return image
 
-def scaleEncodeImageB64(image_filenames):
+def scaleEncodeImageB64(image_filenames, resolution):
 
 	im1 = openImageOriented(image_filenames)
 	# im1 = Image.open(image_filenames)
 	width, height = im1.size
 
 	# Rescale the image if necessary to 2x by 2x the recommended API resolution
-	scale = min(width/desWidth, height/desHeight)
+	scale = min(width/resolution[0], height/resolution[1])
 	try:
 		if scale > 1.0:
 			im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
@@ -169,10 +164,9 @@ def scaleEncodeImageB64(image_filenames):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
-<<<<<<< HEAD
 	return ctxt
 
-def make_image_data_google(image_filenames, type):
+def make_image_data_google(image_filenames, type, resolution):
 	"""
 	image_filenames is a list of filename strings
 	Returns a list of dicts formatted as the Google Vision API
@@ -180,10 +174,7 @@ def make_image_data_google(image_filenames, type):
 	"""
 	img_requests = []
 
-	ctxt = scaleEncodeImageB64(image_filenames)
-=======
-        print "Calling twice..." + str(len(ctxt))
->>>>>>> 1ea9195c85f58662da894ce60d5c983798ca9bbb
+	ctxt = scaleEncodeImageB64(image_filenames, resolution)
 
 	if type == 'label':
 
@@ -210,12 +201,13 @@ def make_image_data_google(image_filenames, type):
 def request_labels_and_landmarks_google(api_key, image_filenames, request_type):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
-	b64data = make_image_data_google(image_filenames, request_type)
-        print "Passed to google is " + str(len(b64data))
-	if b64data == -1:
+	googData = make_image_data_google(image_filenames, request_type, (640, 480))
+    print "Passed to google is " + str(len(b64data))
+
+	if googData == -1:
 		return -1
 	response = requests.post(ENDPOINT_URL,
-	                         data=b64data,
+	                         data=googData,
 	                         params={'key': api_key},
 	                         headers={'Content-Type': 'application/json'})
 	return response
@@ -374,12 +366,6 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime, metada
 		c.execute(delQuery, (filename,))
 	return hasRotated ## If it's rotated, we should redo it. 
 
-# def googleToLandmarksJSON(jsonResponse):
-# 	if ('landmarkAnnotations' in jsonResponse):
-# 		pass
-# 	else:
-# 		return -1
-
 def checkGoogleOddity(jsonResponse):
 	# Definition of an oddity: ONLY a landmark (no labels) or no response at all. Logging for my curiosity.
 	if ('labelAnnotations' in jsonResponse or 'landmarkAnnotations' in jsonResponse):
@@ -507,19 +493,6 @@ def readInfo(filename):
 	else:
 		print "No comments."
 
-# def clarifaiClassify(filename, app_id, app_secret):
-
-# 	app = ClarifaiApp(app_id, app_secret)
-# 	model = app.models.get("general-v1.3")
-
-# 	ctxt = scaleEncodeImageB64(image_filenames)
-
-# 	clarifaiJSON = model.predict_by_base64(ctxt)
-
-# 	tags = clarifaiToInternalLabelsJSON(clarifaiJSON)
-
-# 	return tags
-
 def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, knownWords):
 
 	metadata = pyexiv2.ImageMetadata(filename)
@@ -627,12 +600,10 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		### clarifaiClassify, put in this context. 
 		app = ClarifaiApp(app_id, app_secret)
 		model = app.models.get("general-v1.3")
-		ctxt = scaleEncodeImageB64(image_filenames)
+		ctxt = scaleEncodeImageB64(image_filenames, (1280, 960))
 		clarifaiJSON = model.predict_by_base64(ctxt)
 		jsonResponse = clarifaiToInternalLabelsJSON(clarifaiJSON)
 		###
-
-		# jsonResponse = clarifaiClassify(filename, app_id, app_secret)
 
 		if jsonResponse == -1:
 			print "Unable to complete Clarifai classify for this image."
