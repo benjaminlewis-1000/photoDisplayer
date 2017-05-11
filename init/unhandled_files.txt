@@ -331,3 +331,198 @@
 /mnt/NAS/Photos/Family Pictures/2012/3-2012 isn't a valid directory. 
 /mnt/NAS/Photos/Family Pictures/2012/4-2012 isn't a valid directory. 
 /mnt/NAS/Photos/Family Pictures/2012/5-30-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/7-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/7-2012/July Trip isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/8-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/9-2012 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/Children Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/Grandpa's house isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/Mom's Wedding isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_01_20 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_02_10 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_02_25 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_03_03 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_03_08 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_03_21 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_04_16 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_08_15 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_09_22 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_09_24 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_11_08 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2012/MP Navigator EX/2012_11_09 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/2013-04-15 Randy's childhood pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/2013-08-27 emily isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Addition isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/April 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/April 2013/.picasaoriginals isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/August 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/August 2013/.picasaoriginals isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Band isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Boy's Baseball isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Dan's Soccer isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/David's Graduation isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Dec 1 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Dec 15 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Dec 19 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Dec 29 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Emily's Farewell isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Emily's Missionary Pics isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Emily's sister sendoff isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Erica's Haircut isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Family isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Family Pics isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Feb 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Hershey Track isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Jan 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/July 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/June 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/K.Lani's Bridal Shower isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/March 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Mark's happy School isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Meagan's Soccer isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Nicholas' Marathon isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Nov 17 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Nov 3 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Oct 20 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Oct 27 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Oct 8 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/sep 15 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Sep 2013 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/Wasatch end of year dance isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2013/YW Conference isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/1-3-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/1-9-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/10-5-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/11-2-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/11-30-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/2-16-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/2nd Paul Cutler photos isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/3-16-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/3-2-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/3rd Paul Cutler Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/4-20-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/4-20-14/Meagan Prom isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/4-27-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/4th Paul early, slides from Ken and Helen isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/5th Paul 40th Bday isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/7-26-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/7-7-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/8-7-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/9-21-14 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Alpine loop&Sundance isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Dan's baptism isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Helen and Ken Photos isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Helen and Ken Photos/photos to print for Myrna isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Mark's basketball isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Meagan Senior Photo shoot isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/November 2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/November 2014/Meagan Sadies isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/October 2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Paul Cutler Photos 2-2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Peru 2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/PROM Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/September 2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2014/Summer 2014 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/April 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/April 2015/Charlotte's Graduation isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/April 2015/Erica's 16 Party isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/April 2015/Meagan 2015 PROM isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/April 2015/Spring Break-Colorado isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Camera isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Canada Trip isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Emily Bridal shoot isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Emily Homecoming isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Emily Wedding isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Emily Wedding 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Emily's dress isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Emily's ward bridal shower isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Dad's -downloaded isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Fall 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Fall 2015 (2) isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Jacob Crandall MTC isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/January 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Meagan Endowment isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Mom's Phone isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Mom's Phone/Australia,Homecoming isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Pictures for Charlotte and Nicholas for wedding reception isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Pictures for Charlotte and Nicholas for wedding reception/Favorites to print isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Randy Phone Nov 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Summer 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Summer 2015 Trip isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Watts visit 2015 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2015/Winter Break isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/April 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Emily_engagement isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/February 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/February 2016/Meagan Leaves isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/June 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/March 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/May 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/May 2016 (2) isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/October 2016 A isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/October 2016 B isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Peru 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Peru 2016/Machu Picchu isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Sep 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Sep 2016 (B) isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Sep 2016 (B)/Caroline and Erica isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/2016/Sep 2016 (B)/Homecoming 2016 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/Hawaii isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/Meagan SF Jan 2011 isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/Misc isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/Old House, Nick Eagle Project isn't a valid directory. 
+/mnt/NAS/Photos/Family Pictures/Pictures isn't a valid directory. 
+/mnt/NAS/Photos/Family Reunion isn't a valid directory. 
+/mnt/NAS/Photos/Funk_fam_pictures isn't a valid directory. 
+/mnt/NAS/Photos/Funny isn't a valid directory. 
+/mnt/NAS/Photos/iPod photos isn't a valid directory. 
+/mnt/NAS/Photos/Junior Year isn't a valid directory. 
+/mnt/NAS/Photos/Junior Year/photos from Matthew isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1980 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1984 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1988 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1992 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1993 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1994 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1995 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1996 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1997 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1998 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/1999 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2000 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2001 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2002 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2003 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2005 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2007 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/2008 isn't a valid directory. 
+/mnt/NAS/Photos/Lewis Family Scans/misc isn't a valid directory. 
+/mnt/NAS/Photos/Lewis_pics isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15 isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/183rd Ward isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Alyssa concert isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Birthday isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/California Wedding Trip isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Canada - Tacy's wedding isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/chalkboard isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Christmas Break isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Computer Vision isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Cruise isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Dayton Trip isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/directory_photos isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Emily Homecoming isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/EQ Activity Great Race isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Family Reunion isn't a valid directory. 
+/mnt/NAS/Photos/Masters 2014-15/Flight Test isn't a valid directory. 
+/mnt/NAS/Photos/

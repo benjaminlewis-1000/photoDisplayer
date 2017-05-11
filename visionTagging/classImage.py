@@ -176,6 +176,7 @@ def make_image_data_google(image_filenames, type):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
+        print len(ctxt)
 
 	if type == 'label':
 

@@ -9,8 +9,10 @@
 		echo("Not ok");
 		exit;
 	}
+        $winFile = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\config\params.xml';
+	$linFile = '/home/pi/photoDisplayer/config/params.xml';
 
-	$xml_params = simplexml_load_file('C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\config\params.xml') or die("Can't load this file!");
+	$xml_params = simplexml_load_file('/home/pi/photoDisplayer/config/params.xml') or die("Can't load this file!");
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
 	$photoDBname = $xml_params->photoDatabase->fileName;
 	
@@ -93,7 +95,7 @@
 					$allValid = 0;
 				}
 
-				$data = array("\"criteriaType\"" =>"\"Person\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" => "\"$criteriaVal\"");
+				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal");
 				array_push($formedArray, $data);
 				break;
 			case "Year":
@@ -139,7 +141,7 @@
 
 	}
 
-	//print_r($formedArray);
+print_r($formedArray);
 	$parsed_text =  json_encode($formedArray, JSON_UNESCAPED_SLASHES);
 	//echo $parsed_text;
 	
@@ -148,10 +150,13 @@
 		echo 'var valid=0';
 	}else{
 		// We're good to go! All these have been validated to be good JSON. 
-		exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
-		if (count($output) > 0 && $output[0] != "Success"){
-			echo "Not a success... " . $output[0];
-		}
+                echo "OK";
+                echo $parsed_text;
+		//exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
+		exec("python sendJSONtoSlideshow.py text");
+//		if ( (count($output) > 0 && $output[0] != "Success" )|| count($output == 0)){
+//			echo "Not a success... " . $output[0];
+//		}
 	}
 
 ?>

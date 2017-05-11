@@ -15,19 +15,13 @@ def doit(json):
         except Exception as exc:
             print(exc)
             exit(1)
-    with open('received.out', 'w+') as f:
-        print >>f, json
+#    with open('received.out', 'w+') as f:
+#        print >>f, json
 
-
-    # with open('../config/serverParams.yaml') as stream:
-    #     try:
-    #         params = yaml.load(stream)
-    #     except yaml.YAMLError as exc:
-    #         print(exc)
-            # exit(0)
 
     proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + str(params['params']['serverParams']['displayServerPort']) + "/")
 
+    print json
     try:
         print proxy.buildQuery(json);
         # exit(1)
@@ -39,7 +33,7 @@ def doit(json):
 
 
 json = str(sys.argv[1])
-with open('received.out', 'w+') as f:
-    print >>f, json
-# json = '''[{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"2017/05/01\"","\"criteriaVal\"":"\"<None>\""}]'''
+#with open('received.out', 'w+') as f:
+ #   print >>f, json
+#json = '''[{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]'''
 doit(json)
