@@ -145,13 +145,7 @@ def openImageOriented(filename):
 		image=Image.open(filename)
 		return image
 
-def make_image_data_google(image_filenames, type):
-	"""
-	image_filenames is a list of filename strings
-	Returns a list of dicts formatted as the Google Vision API
-	    needs them to be
-	"""
-	img_requests = []
+def scaleEncodeImageB64(image_filenames):
 
 	im1 = openImageOriented(image_filenames)
 	# im1 = Image.open(image_filenames)
@@ -160,15 +154,14 @@ def make_image_data_google(image_filenames, type):
 	# Rescale the image if necessary to 2x by 2x the recommended API resolution
 	scale = min(width/desWidth, height/desHeight)
 	try:
-		if scale > 0.5:
+		if scale > 1.0:
 			im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
 	except IOError as ioe:
-		print "IO Error in google classify: " + str(ioe)
+		print "IO Error in image base64 encoding: " + str(ioe)
 		logfile = open('logErrata.out', 'a')
-		print >>logfile, "File " + image_filenames + " was not able to open for classification in Google."
+		print >>logfile, "File " + image_filenames + " was not able to open for classification in scaleEncodeImageB64."
 		logfile.close()
 		return -1
-
 
 	buffer = io.BytesIO()  
 	im1.save(buffer, format="JPEG")
@@ -176,6 +169,17 @@ def make_image_data_google(image_filenames, type):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
+	return ctxt
+
+def make_image_data_google(image_filenames, type):
+	"""
+	image_filenames is a list of filename strings
+	Returns a list of dicts formatted as the Google Vision API
+	    needs them to be
+	"""
+	img_requests = []
+
+	ctxt = scaleEncodeImageB64(image_filenames)
 
 	if type == 'label':
 
@@ -365,30 +369,11 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime, metada
 		c.execute(delQuery, (filename,))
 	return hasRotated ## If it's rotated, we should redo it. 
 
-def googleToInternalLabelsJSON(jsonResponse):
-	## Translate from the JSON that google returns to an internal, method-agnostic
-	## JSON that I use internally. 
-	if ('labelAnnotations' in jsonResponse):
-		labels = jsonResponse['labelAnnotations']
-		labelDict = {}
-		pairs = []
-		for i in range(len(labels)):
-			jsonTag = labels[i]
-			labelType = jsonTag['description']
-			score = jsonTag['score']
-			pairs.append({labelType: score})
-
-		labelDict['labels'] = json.loads(json.dumps(pairs)) # some JSON
-
-		return labelDict
-	else:
-		return -1
-
-def googleToLandmarksJSON(jsonResponse):
-	if ('landmarkAnnotations' in jsonResponse):
-		pass
-	else:
-		return -1
+# def googleToLandmarksJSON(jsonResponse):
+# 	if ('landmarkAnnotations' in jsonResponse):
+# 		pass
+# 	else:
+# 		return -1
 
 def checkGoogleOddity(jsonResponse):
 	# Definition of an oddity: ONLY a landmark (no labels) or no response at all. Logging for my curiosity.
@@ -438,6 +423,97 @@ def updateFileHistory(filename, currentTime, apiLabelTuple, metadata):
 			print metadata
 			print "Exception in writing metdata: File changed. API is " + apiLabelTuple[2]
 			print "More details: " + str(e)
+
+
+
+def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
+
+	assert jsonInput != ""
+	assert filename != ""
+
+	metadataFields = metadata.exif_keys
+
+	userCommentTagKey = 'Exif.Photo.UserComment'
+
+	## Check if there are comments and set them to a string we will add
+	## to; otherwise, set as empty string. 
+	if userCommentTagKey in metadataFields:
+		existingTags = metadata[userCommentTagKey].raw_value
+		if existingTags is not "":
+			existingTags += ", "
+	else:
+		existingTags = ""
+
+	place = jsonInput['landmarkAnnotations'][0]  # Just get the top scoring place. 
+	print place
+	if 'description' in place:
+		description = place['description']
+		score = place['score']
+		existingTags += apiLabelTuple[1] + str(description) + "_" + str(score) + ", "
+	latLong = place['locations'][0]['latLng']
+	lat = latLong['latitude']
+	lng = latLong['longitude']
+	lat_deg = to_deg(lat, 'lat')
+	lng_deg = to_deg(lng, 'lng')
+	exiv_lat = (pyexiv2.Rational(lat_deg[0]*60+lat_deg[1],60),pyexiv2.Rational(lat_deg[2]*100,6000), pyexiv2.Rational(0, 1))
+	exiv_lng = (pyexiv2.Rational(lng_deg[0]*60+lng_deg[1],60),pyexiv2.Rational(lng_deg[2]*100,6000), pyexiv2.Rational(0, 1))
+	metadata["Exif.GPSInfo.GPSLatitude"] = exiv_lat
+	metadata["Exif.GPSInfo.GPSLatitudeRef"] = lat_deg[3]
+	metadata["Exif.GPSInfo.GPSLongitude"] = exiv_lng
+	metadata["Exif.GPSInfo.GPSLongitudeRef"] = lng_deg[3]
+	metadata["Exif.Image.GPSTag"] = 654
+	metadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84"
+	metadata["Exif.GPSInfo.GPSVersionID"] = '2 0 0 0'
+
+	isUnlocked = os.access(filename, os.W_OK)
+	while not isUnlocked:
+		sleep(0.1)
+		isUnlocked = os.access(filename, os.W_OK)
+	try:
+		metadata.write()
+	except Exception as e:
+		print "Exception in writing metdata: Not written. Method tagWithGPS"
+		print "More info: " + str(e)
+
+	if 'description' in place:
+		jsonTag = {}
+		pairs = []
+		pairs.append({place['description']: place['score']})
+		jsonTag['labels'] = json.loads(json.dumps(pairs)) # some JSON
+		tagPhotoAgnostic(filename, jsonTag, googleLabelTuple, metadata)
+
+
+def readInfo(filename):
+	metadata = pyexiv2.ImageMetadata(filename)
+	metadata.read()
+	imageHistoryField = 'Exif.Image.ImageHistory'
+	commentField = 'Exif.Photo.UserComment'
+	if imageHistoryField in metadata:
+		imageHistory =  metadata[imageHistoryField].raw_value
+		print "Image history: " + imageHistory 
+	else:
+		print "No image history"
+	if commentField in metadata:
+		comments =  metadata[commentField].raw_value
+		print "Comments: " + comments 
+		historyMatch = re.search(r'UUUUU' , comments)
+		if (historyMatch):
+			print "Found badly formed comments!"
+	else:
+		print "No comments."
+
+# def clarifaiClassify(filename, app_id, app_secret):
+
+# 	app = ClarifaiApp(app_id, app_secret)
+# 	model = app.models.get("general-v1.3")
+
+# 	ctxt = scaleEncodeImageB64(image_filenames)
+
+# 	clarifaiJSON = model.predict_by_base64(ctxt)
+
+# 	tags = clarifaiToInternalLabelsJSON(clarifaiJSON)
+
+# 	return tags
 
 def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, knownWords):
 
@@ -525,120 +601,6 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 		# print "Don't need to do this one: " + filename
 		return 0
 
-def tagPhotoGoogleGPS(filename, jsonInput, apiLabelTuple, metadata):
-
-	assert jsonInput != ""
-	assert filename != ""
-
-	metadataFields = metadata.exif_keys
-
-	userCommentTagKey = 'Exif.Photo.UserComment'
-
-	## Check if there are comments and set them to a string we will add
-	## to; otherwise, set as empty string. 
-	if userCommentTagKey in metadataFields:
-		existingTags = metadata[userCommentTagKey].raw_value
-		if existingTags is not "":
-			existingTags += ", "
-	else:
-		existingTags = ""
-
-	place = jsonInput['landmarkAnnotations'][0]  # Just get the top scoring place. 
-	print place
-	if 'description' in place:
-		description = place['description']
-		score = place['score']
-		existingTags += apiLabelTuple[1] + str(description) + "_" + str(score) + ", "
-	latLong = place['locations'][0]['latLng']
-	lat = latLong['latitude']
-	lng = latLong['longitude']
-	lat_deg = to_deg(lat, 'lat')
-	lng_deg = to_deg(lng, 'lng')
-	exiv_lat = (pyexiv2.Rational(lat_deg[0]*60+lat_deg[1],60),pyexiv2.Rational(lat_deg[2]*100,6000), pyexiv2.Rational(0, 1))
-	exiv_lng = (pyexiv2.Rational(lng_deg[0]*60+lng_deg[1],60),pyexiv2.Rational(lng_deg[2]*100,6000), pyexiv2.Rational(0, 1))
-	metadata["Exif.GPSInfo.GPSLatitude"] = exiv_lat
-	metadata["Exif.GPSInfo.GPSLatitudeRef"] = lat_deg[3]
-	metadata["Exif.GPSInfo.GPSLongitude"] = exiv_lng
-	metadata["Exif.GPSInfo.GPSLongitudeRef"] = lng_deg[3]
-	metadata["Exif.Image.GPSTag"] = 654
-	metadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84"
-	metadata["Exif.GPSInfo.GPSVersionID"] = '2 0 0 0'
-
-	isUnlocked = os.access(filename, os.W_OK)
-	while not isUnlocked:
-		sleep(0.1)
-		isUnlocked = os.access(filename, os.W_OK)
-	try:
-		metadata.write()
-	except Exception as e:
-		print "Exception in writing metdata: Not written. Method tagWithGPS"
-		print "More info: " + str(e)
-
-	if 'description' in place:
-		jsonTag = {}
-		pairs = []
-		pairs.append({place['description']: place['score']})
-		jsonTag['labels'] = json.loads(json.dumps(pairs)) # some JSON
-		tagPhotoAgnostic(filename, jsonTag, googleLabelTuple, metadata)
-
-
-def readInfo(filename):
-	metadata = pyexiv2.ImageMetadata(filename)
-	metadata.read()
-	imageHistoryField = 'Exif.Image.ImageHistory'
-	commentField = 'Exif.Photo.UserComment'
-	if imageHistoryField in metadata:
-		imageHistory =  metadata[imageHistoryField].raw_value
-		print "Image history: " + imageHistory 
-	else:
-		print "No image history"
-	if commentField in metadata:
-		comments =  metadata[commentField].raw_value
-		print "Comments: " + comments 
-		historyMatch = re.search(r'UUUUU' , comments)
-		if (historyMatch):
-			print "Found badly formed comments!"
-	else:
-		print "No comments."
-
-def clarifaiClassify(filename, app_id, app_secret):
-
-	app = ClarifaiApp(app_id, app_secret)
-	model = app.models.get("general-v1.3")
-
-	desWidth = 1280.0
-	desHeight = 960.0
-
-	im1 = openImageOriented(filename)
-	# im1 = Image.open(image_filenames)
-	width, height = im1.size
-
-	# Rescale the image if necessary to 2x by 2x the recommended API resolution
-	scale = min(width/desWidth, height/desHeight)
-	try:
-		if scale > 0.5:
-			im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
-	except IOError as ioe:
-		print "IO Error in clarifai classify: " + str(ioe)
-		logfile = open('logErrata.out', 'a')
-		print >>logfile, "File " + filename + " was not able to open for classification in Clarifai."
-		logfile.close()
-		return -1
-
-
-	buffer = io.BytesIO()  
-	im1.save(buffer, format="JPEG")
-	buffer.seek(0)  # Reset the buffer, very important
-
-	# Encode in base64
-	ctxt = b64encode(buffer.read()).decode()
-
-	clarifaiJSON = model.predict_by_base64(ctxt)
-
-	tags = clarifaiToInternalLabelsJSON(clarifaiJSON)
-
-	return tags
-
 
 def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, currentTime):
 
@@ -657,7 +619,17 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		# Remove any tags that may be floating from Google. 
 		removePreviousTags(filename, clarifaiLabelTuple, metadata, databaseConn)
 		# Request the response from the API. Clarifai returns in the agnostic form already.
-		jsonResponse = clarifaiClassify(filename, app_id, app_secret)
+
+		### clarifaiClassify, put in this context. 
+		app = ClarifaiApp(app_id, app_secret)
+		model = app.models.get("general-v1.3")
+		ctxt = scaleEncodeImageB64(image_filenames)
+		clarifaiJSON = model.predict_by_base64(ctxt)
+		jsonResponse = clarifaiToInternalLabelsJSON(clarifaiJSON)
+		###
+
+		# jsonResponse = clarifaiClassify(filename, app_id, app_secret)
+
 		if jsonResponse == -1:
 			print "Unable to complete Clarifai classify for this image."
 			return 0
@@ -681,11 +653,6 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		updateFileHistory(filename, currentTime, clarifaiLabelTuple, metadata)
 		logInDatabase(filename, clarifaiLabelTuple, currentTime, databaseConn)
 
-
-		# if checkGoogleOddity(jsonResponse):			
-		# 	logfile = open('logErrata.out', 'a')
-		# 	print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + jsonResponse
-		# 	logfile.close()
 		return 1
 
 	else:
@@ -715,4 +682,23 @@ def clarifaiToInternalLabelsJSON(jsonResponse):
 		logfile = open('logErrata.out', 'a')
 		print >>logfile, "File " + filename + " has no labelAnnotations in Clarifai."
 		logfile.close()
+		return -1
+
+def googleToInternalLabelsJSON(jsonResponse):
+	## Translate from the JSON that google returns to an internal, method-agnostic
+	## JSON that I use internally. 
+	if ('labelAnnotations' in jsonResponse):
+		labels = jsonResponse['labelAnnotations']
+		labelDict = {}
+		pairs = []
+		for i in range(len(labels)):
+			jsonTag = labels[i]
+			labelType = jsonTag['description']
+			score = jsonTag['score']
+			pairs.append({labelType: score})
+
+		labelDict['labels'] = json.loads(json.dumps(pairs)) # some JSON
+
+		return labelDict
+	else:
 		return -1
