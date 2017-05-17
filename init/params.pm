@@ -12,6 +12,8 @@ use File::Basename;
 use XML::Simple qw(:strict);
 use Data::Dumper;
 
+our $totalTimeElapseSeconds = 120;#4 * 3600;
+
 our $debug = 0;
 
 	our $debug_readXMP = 0;

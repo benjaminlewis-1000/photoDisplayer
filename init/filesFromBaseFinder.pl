@@ -136,7 +136,7 @@ sub addFilesInListOfSubdirs{
 	my $numPassed = $_[3];
 	my $portNum = $_[4];
 	my $dbhandle = ${$_[5]};
-	my $sttime = ${$_[6]};
+	my $methodsttime = ${$_[6]};
 
 
 
@@ -195,7 +195,7 @@ sub addFilesInListOfSubdirs{
 				print "We have read ${$numPassed} files and processed them accordingly.\n";
 			}
 
-			my $sttime = [gettimeofday];
+			# my $sttime = [gettimeofday];
 			readOneImage({
 				baseDirName => $rootDirectory, 
 				fileName => $localDir . $imageFile, 
@@ -206,9 +206,12 @@ sub addFilesInListOfSubdirs{
 				portNum => $portNum
 			});
 			my $entime = DateTime->now;
-			my $elapse = $entime - $sttime;
-			print "Elapsed time : ".$elapse->in_units('seconds')."m\n";
-			my $elapse = tv_interval($sttime);
+			my $elapse = $entime - $methodsttime;
+			print "Total elapsed time : ".$elapse->in_units('seconds')."m\n";
+			if ($elapse > $params::totalTimeElapseSeconds){
+				print "Need to exit now\n";
+			}
+			# my $elapse = tv_interval($sttime);
 			
 		}
 
