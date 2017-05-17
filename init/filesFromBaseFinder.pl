@@ -4,6 +4,7 @@ use params;
 use File::Find;
 require 'readInImages.pl';
 use File::HomeDir;
+use DateTime;
 
 use warnings;
 use strict; 
@@ -135,6 +136,9 @@ sub addFilesInListOfSubdirs{
 	my $numPassed = $_[3];
 	my $portNum = $_[4];
 	my $dbhandle = ${$_[5]};
+	my $sttime = ${$_[6]};
+
+
 
 	# Create a tmp table with only necessary columns. Shows ~25% speedup. 
 	# createTmpTable();
@@ -201,6 +205,9 @@ sub addFilesInListOfSubdirs{
 				insertedDateHash => \%insertedDateHash,
 				portNum => $portNum
 			});
+			my $entime = DateTime->now;
+			my $elapse = $entime - $sttime;
+			print "Elapsed time : ".$elapse->in_units('seconds')."m\n";
 			my $elapse = tv_interval($sttime);
 			
 		}

@@ -72,7 +72,7 @@ while ($query->fetch){
 	push @rootDirMultiArray, \@localArray;
 }
 
-$sttime = DateTime->now();
+my $sttime = DateTime->now();
 for (my $i = 0; $i < scalar @rootDirMultiArray; $i++ ){
 	my @localArray = @{$rootDirMultiArray[$i]};
 	my $linRootDir = $localArray[0];
@@ -91,11 +91,8 @@ for (my $i = 0; $i < scalar @rootDirMultiArray; $i++ ){
 	print join (", ", @unq_subdirs) . "\n";
 
 	open OUTPUT,  ">unhandled_files.txt" or die $!;
-	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed, $portNum, \$dbhandle);
-	
-	$entime = DateTime->now;
-	$elapse = $entime - $sttime;
-	print "Elapsed time : ".$elapse->in_units('minutes')."m\n";
+	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed, $portNum, \$dbhandle, \$sttime);
+
 	close OUTPUT;
 }
 
