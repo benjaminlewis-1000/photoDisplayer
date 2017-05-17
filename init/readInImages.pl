@@ -79,6 +79,7 @@ sub readOneImage{
 
 		my $file = $baseDirName . $fileName;
 		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
+		print "Last edited: " . $fileLastEditDate . "\n";
 
 		### For comparison - this was the old method. 
 		# open (my $fh, "<", $baseDirName . $fileName) ;
@@ -211,10 +212,10 @@ sub readOneImage{
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 		if ($lastModDate gt $data{'ModifyDate'}) {
-			if ($params::debug and $params::debug_readIn){
+		#	if ($params::debug and $params::debug_readIn){
 				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n";
 				print "We have inserted this in the table at a later date than the photo was modified.\n";
-			}
+		#	}
 			$upToDate = 1;
 		}else{
 			if ($params::debug and $params::debug_readIn){
@@ -281,6 +282,7 @@ sub readOneImage{
 			if ($upToDate){ # Print this message if we ARE debugging AND ARE up to date. 
 				print "Would be exiting here b/c photo exists\n";}
 			} else{ # Return if we ARE NOT debugging AND we ARE up to date. 
+			print "Up to date!\n";
 			  return; 
 			} 
 		} 
@@ -320,6 +322,7 @@ sub readOneImage{
 		warn "Failed on the following query: $insertIntoPhotoTable\n";
 		sleep(1);
 	}# or die $DBI::errstr;
+	print $insertIntoPhotoTable;
 
 
 	# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
