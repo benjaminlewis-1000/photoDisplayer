@@ -164,6 +164,8 @@ def scaleEncodeImageB64(image_filenames, resolution):
 
 	# Encode in base64
 	ctxt = b64encode(buffer.read()).decode()
+        print "Previous resolution was {} x {}".format(width, height)
+        print "Encoded length is : " + str(len(ctxt)) + ". Im size is " + str(im1.size[0]) + "x" + str(im1.size[1])
 	return ctxt
 
 def make_image_data_google(image_filenames, type, resolution):
@@ -202,7 +204,6 @@ def request_labels_and_landmarks_google(api_key, image_filenames, request_type):
 	""" POST a request to the Google Vision API servers and return 
 	the JSON response.	"""
 	googData = make_image_data_google(image_filenames, request_type, (640, 480))
-    print "Passed to google is " + str(len(b64data))
 
 	if googData == -1:
 		return -1
@@ -515,6 +516,9 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 			print "Unable to finish Google classify."
 			return 0
 		# Get the appropriate response.
+                # print response.json()
+                if 'error' in response.json():
+                    return 0
 		jsonLabelResponse = json.loads(json.dumps(response.json()['responses']))[0]
 
 		# File log of the JSON response, just for kicks. 

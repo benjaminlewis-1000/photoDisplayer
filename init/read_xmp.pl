@@ -16,17 +16,16 @@ use Time::HiRes qw(  gettimeofday tv_interval  );
 use warnings;
 use strict; 
 
-#my $t0 = [gettimeofday];
-#my %data = getImageData({
- 	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\romney.jpeg",
- 	# filename => 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\dir with spaces and jpg\reun.jpg',
-# 	 filename => 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\base\dirA\DSC_0648.JPG',
- 	# filename => "C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\base\\canon pictures 012.JPG",
-	# url  => "http://127.0.0.1:$params::geoServerPort/RPC2",
-#	debug => 1
-#	});
+=pod
+my $t0 = [gettimeofday];
+my %data = getImageData({
+ 	 filename => "/mnt/NAS/Photos/2016/Wedding Time/Honeymoon San Fran/DSC_8608.JPG",
+	 url  => "http://127.0.0.1:8020/RPC2",
+	debug => 1
+	});
 #print Dumper %data;
-#print "Elapsed time : ", tv_interval($t0);
+print "Elapsed time : ", tv_interval($t0);
+=cut
 
 sub getImageData{
 	my $d = 0;
@@ -106,14 +105,14 @@ sub getImageData{
 	# foreach my $k (keys %infoHash){
 	# 	print "$k:  $infoHash{$k}\n";#; $infoHash{$k}\n";
 	# }
-	# if ($params::debug and $params::debug_readXMP ) {
-	# 	foreach my $k (keys %infoHash){
-	# 		# if ($infoHash{$k} =~ m/N/){
-	# 		if ($k =~ m/gps/i){
-	# 			print $k . " : " . $infoHash{$k} . "\n";
-	# 		}
-	# 	}
-	# }
+	 if ($params::debug and $params::debug_readXMP ) {
+	 	foreach my $k (keys %infoHash){
+	 		#if ($infoHash{$k} =~ m/date/i){
+	 		if ($k =~ m/date/i){
+	 			print $k . " : " . $infoHash{$k} . "\n";
+	 		}
+	 	}
+	 }
 
 
 	# Parse the XMP data. 
@@ -128,13 +127,30 @@ sub getImageData{
         $takenDate = $infoHash{'FileCreateDate'};
 		$modifyDate = $infoHash{'FileModifyDate'};
     }else{
-        $takenDate = $infoHash{'CreateDate'};
-        if (!defined $takenDate or  $infoHash{'CreateDate'} !~ m/\d/ ){  # No numeric
-        	undef $takenDate;
-        	if ( $infoHash{'CreateDate (1)'} ){  # Alt
-        		$takenDate = $infoHash{'CreateDate (1)'};
-        	}
-        }
+	$takenDate = "N/A";
+	if (defined $infoHash{'CreateDate'}){
+		$takenDate = $infoHash{'CreateDate'};
+	}elsif(defined $infoHash{'CreateDate (1)'}){
+		$takenDate = $infoHash{'CreateDate (1)'};
+	}elsif(defined $infoHash{'DateTimeCreated'}){
+		$takenDate = $infoHash{'DateTimeCreated'};
+	}else{
+	 	foreach my $k (keys %infoHash){
+	 		#if ($infoHash{$k} =~ m/date/i){
+	 		if ($k =~ m/date/i){
+	 			print $k . " : " . $infoHash{$k} . "\n";
+	 		}
+	 	}
+		die("Can't find the right date!");
+
+	}
+#        $takenDate = $infoHash{'CreateDate'};
+#        if (!defined $takenDate or  $infoHash{'CreateDate'} !~ m/\d/ ){  # No numeric
+#        	undef $takenDate;
+#        	if ( $infoHash{'CreateDate (1)'} ){  # Alt
+#        		$takenDate = $infoHash{'CreateDate (1)'};
+#        	}
+#        }
         $modifyDate = $infoHash{'ModifyDate'};
         if (!defined $modifyDate or $infoHash{'ModifyDate'} !~ m/\d/ ){  # No numeric
         	undef $modifyDate;

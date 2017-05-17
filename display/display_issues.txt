@@ -17,3 +17,5 @@ SOLUTIONS:
 	   script that writes a file from server-side PHP code. 
 - Picture resizing is wrong in vision tagging
 	-- Simple math errors. Not sure what I was thinking. 
+- Vision tagging is not actually resizing images, which is bad for large images.
+    -- Solved. Had some bad math going on. 

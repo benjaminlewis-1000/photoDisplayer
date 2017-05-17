@@ -101,6 +101,7 @@ sub readOneImage{
 		if (defined $dbInsertDate ){
 			if ($params::debug and $params::debug_readIn) { 
 				print "DB Last edit date: " . $dbInsertDate . "\n";
+				print $fileLastEditDate . "\n";
 			}
 
 			if ($dbInsertDate gt $fileLastEditDate){
@@ -144,6 +145,10 @@ sub readOneImage{
 	$year += 1900;
 	$mon += 1;
 	my $dbInsertionDate = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
+
+	if ($params::debug and $params::debug_readIn){
+		print "Inserting date: " . $dbInsertionDate . "\n";
+	}
 
 	# Quick check to make sure that the system time is set properly. I'm writing this code in 2017, 
 	# so this is fairly accurate right now. In the future, it may only catch systems that are set 
