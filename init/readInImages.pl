@@ -207,20 +207,20 @@ sub readOneImage{
 			warn "Failed on the following query: $lastModifiedQuery\n";
 			sleep(1);
 		}# or die $DBI::errstr;
-		my $lastModDate = "zzzzz";#eval {$query->fetchrow_arrayref->[0] };
+		my $lastModDateInDB = eval {$query->fetchrow_arrayref->[0] };
 
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 
-
+		my $fileModDate = "zzzzz";
 		if ( -e $baseDirName . $fileName ){
 			my $file = $baseDirName . $fileName;
-			$lastModDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
+			$fileModDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
 		}
 
-		if ($lastModDate gt $data{'ModifyDate'}) {
+		if ($lastModDateInDB gt $fileModDate) {
 		#	if ($params::debug and $params::debug_readIn){
-				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n";
+				print $lastModDateInDB . "   " . $fileModDate  . "\n";
 				print "We have inserted this in the table at a later date than the photo was modified.\n";
 		#	}
 			$upToDate = 1;
