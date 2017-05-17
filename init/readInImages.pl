@@ -118,6 +118,7 @@ sub readOneImage{
 		}
 	}else{
 		# Shouldn't ever get here because I just barely read the file to pass in here, but I'm covering my bases. 
+		die("What? You literally just checked that this file exists.");
 		return;
 	}
 
@@ -213,45 +214,44 @@ sub readOneImage{
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 
-		if ($lastModDateInDB gt $fileLastEditDate ) {
-			if ($params::debug and $params::debug_readIn){
-				print $lastModDateInDB . "   " . $fileLastEditDate  . "\n";
-				print "We have inserted this in the table at a later date than the photo was modified.\n";
-			}
-			$upToDate = 1;
-		}else{
-			if ($params::debug and $params::debug_readIn){
-				print $lastModDateInDB . "   " . $data{'ModifyDate'}  . "\n";
-				print "The photo has been modified since we inserted it in the table.\n";
-			}
+		# if ($lastModDateInDB gt $fileLastEditDate ) {
+		# 	if ($params::debug and $params::debug_readIn){
+		# 		print $lastModDateInDB . "   " . $fileLastEditDate  . "\n";
+		# 		print "We have inserted this in the table at a later date than the photo was modified.\n";
+		# 	}
+		# 	$upToDate = 1;
+		# }else{
+			# if ($params::debug and $params::debug_readIn){
+			# 	print $lastModDateInDB . "   " . $data{'ModifyDate'}  . "\n";
+			# 	print "The photo has been modified since we inserted it in the table.\n";
+			# }
 
-			# Remove the old data from the table. 
-			my $photoKeyQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/ ;
-			$query = $dbhandle->prepare($photoKeyQuery);
-			until(
-				$query->execute()
-			){
-				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-				warn "Failed on the following query: $photoKeyQuery\n";
-				sleep(1);
-			}# or die $DBI::errstr;
-			my $photoKeyNum = eval {$query->fetchrow_arrayref->[0] };
+		# Remove the old data from the table. 
+		my $photoKeyQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/ ;
+		$query = $dbhandle->prepare($photoKeyQuery);
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $photoKeyQuery\n";
+			sleep(1);
+		}# or die $DBI::errstr;
+		my $photoKeyNum = eval {$query->fetchrow_arrayref->[0] };
 
-			my $unlinkLinkerQuery = qq/DELETE FROM $params::linkerTableName WHERE $params::linkerPhotoColumn = $photoKeyNum/;
+		my $unlinkLinkerQuery = qq/DELETE FROM $params::linkerTableName WHERE $params::linkerPhotoColumn = $photoKeyNum/;
 
-			$query = $dbhandle->prepare($unlinkLinkerQuery);
-			until(
-				$query->execute()
-			){
-				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-				warn "Failed on the following query: $unlinkLinkerQuery\n";
-				sleep(1);
-			}
-			
-			my @commentTables = ($params::commentLinkerUserTableName, $params::commentLinkerGoogleTableName, $params::commentLinkerClarifaiTableName);
+		$query = $dbhandle->prepare($unlinkLinkerQuery);
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $unlinkLinkerQuery\n";
+			sleep(1);
+		}
+		
+		my @commentTables = ($params::commentLinkerUserTableName, $params::commentLinkerGoogleTableName, $params::commentLinkerClarifaiTableName);
 
-			for (my $i = 0; $i < scalar(@commentTables); $i++){
-
+		for (my $i = 0; $i < scalar(@commentTables); $i++){
 			my $unlinkCommentLinkerQuery = qq/DELETE FROM $commentTables[$i] WHERE $params::commentLinkerPhotoColumn = $photoKeyNum/;
 			my $query = $dbhandle->prepare($unlinkCommentLinkerQuery);
 			until(
@@ -260,24 +260,21 @@ sub readOneImage{
 				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 				warn "Failed on the following query: $unlinkCommentLinkerQuery\n";
 				sleep(1);
-			}
-
-			}
-
-
-			
-			my $deletePhotoQuery = qq/DELETE FROM $params::photoTableName WHERE $params::photoKeyColumn = $photoKeyNum/;
-			$query = $dbhandle->prepare($deletePhotoQuery);
-			until(
-				$query->execute()
-			){
-				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-				warn "Failed on the following query: $deletePhotoQuery\n";
-				sleep(1);
-			}# or die $DBI::errstr;
-
-
+				}
 		}
+		
+		my $deletePhotoQuery = qq/DELETE FROM $params::photoTableName WHERE $params::photoKeyColumn = $photoKeyNum/;
+		$query = $dbhandle->prepare($deletePhotoQuery);
+		until(
+			$query->execute()
+		){
+			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+			warn "Failed on the following query: $deletePhotoQuery\n";
+			sleep(1);
+		}# or die $DBI::errstr;
+
+
+		# }
 
 		# If we are debugging and are up to date, print the message; else, silently return.
 		if ( ( $params::debug  and $params::debug_readIn ) or !$upToDate){ # Get in this loop if we ARE debugging OR if we ARE NOT up to date.
