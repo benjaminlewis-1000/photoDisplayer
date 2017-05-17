@@ -79,7 +79,7 @@ sub readOneImage{
 
 		my $file = $baseDirName . $fileName;
 		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
-		print "Last edited: " . $fileLastEditDate . "\n";
+		#print "Last edited: " . $fileLastEditDate . "\n";
 
 		### For comparison - this was the old method. 
 		# open (my $fh, "<", $baseDirName . $fileName) ;
@@ -219,14 +219,14 @@ sub readOneImage{
 		}
 
 		if ($lastModDateInDB gt $fileModDate) {
-		#	if ($params::debug and $params::debug_readIn){
+			if ($params::debug and $params::debug_readIn){
 				print $lastModDateInDB . "   " . $fileModDate  . "\n";
 				print "We have inserted this in the table at a later date than the photo was modified.\n";
-		#	}
+			}
 			$upToDate = 1;
 		}else{
 			if ($params::debug and $params::debug_readIn){
-				print $lastModDate . "   " . $data{'ModifyDate'}  . "\n";
+				print $lastModDateInDB . "   " . $data{'ModifyDate'}  . "\n";
 				print "The photo has been modified since we inserted it in the table.\n";
 			}
 
@@ -329,7 +329,6 @@ sub readOneImage{
 		warn "Failed on the following query: $insertIntoPhotoTable\n";
 		sleep(1);
 	}# or die $DBI::errstr;
-	print $insertIntoPhotoTable;
 
 
 	# Get the value of the autoincremented value for the table; this value is in $photoKeyVal
