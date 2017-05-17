@@ -19,7 +19,7 @@ use strict;
 =pod
 my $t0 = [gettimeofday];
 my %data = getImageData({
- 	 filename => "/mnt/NAS/Photos/2016/Wedding Time/Honeymoon San Fran/DSC_8608.JPG",
+ 	 filename => "/mnt/NAS/Photos/Family Pictures/2014/4th Paul early, slides from Ken and Helen/00732_s_13akbyf45c0733.jpg",
 	 url  => "http://127.0.0.1:8020/RPC2",
 	debug => 1
 	});
@@ -146,14 +146,11 @@ sub getImageData{
 #		die("Can't find the right date!");
 
 	}
-#        $takenDate = $infoHash{'CreateDate'};
-#        if (!defined $takenDate or  $infoHash{'CreateDate'} !~ m/\d/ ){  # No numeric
-#        	undef $takenDate;
-#        	if ( $infoHash{'CreateDate (1)'} ){  # Alt
-#        		$takenDate = $infoHash{'CreateDate (1)'};
-#        	}
-#        }
-        $modifyDate = $infoHash{'ModifyDate'};
+        
+    if (!defined $takenDate || $takenDate !~ m/\d/){
+    	$takenDate = "1969:01:01 00:00:00-00:00";
+    }
+	$modifyDate = $infoHash{'ModifyDate'};
         if (!defined $modifyDate or $infoHash{'ModifyDate'} !~ m/\d/ ){  # No numeric
         	undef $modifyDate;
         	if ( $infoHash{'FileModifyDate'} ){  # Alt
@@ -165,9 +162,6 @@ sub getImageData{
         
     }
 
-    if (!defined $takenDate){
-    	$takenDate = "1969:01:01 00:00:00-00:00";
-    }
 
 
 	# my $elapsed = tv_interval($sttime);
@@ -175,14 +169,14 @@ sub getImageData{
 
 	# Parse the date. 
 
-    # print "Taken on: " . $takenDate . "\n";
+#     print "Taken on: " . $takenDate . "\n";
 	our ($ss, $mm, $hh, $day, $month, $year, $zone);
 	my $time = str2time($takenDate);
 	($ss, $mm, $hh, $day, $month, $year, $zone) = strptime($takenDate);
 	$year += 1900;
 	$month += 1;
 	# print $takenDate . "\n";
-	# print $year . " , " .  $day . " , " . $month . "\n";
+#	 print $year . " , " .  $day . " , " . $month . "\n";
 	
 
 	my $fileSize = $infoHash{'FileSize'};

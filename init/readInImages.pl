@@ -69,6 +69,7 @@ sub readOneImage{
 
 	my $serverName = "http://127.0.0.1:$serverPortNum/RPC2";
 
+	our $fileLastEditDate= "zzzzz";
 
 	# Get the last modified date. Opens the file. 
 	# print "processing file rii.pl: " . $baseDirName . $fileName . "\n";
@@ -78,7 +79,7 @@ sub readOneImage{
 		my $sttime = [gettimeofday];
 
 		my $file = $baseDirName . $fileName;
-		my $fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
+		$fileLastEditDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
 		#print "Last edited: " . $fileLastEditDate . "\n";
 
 		### For comparison - this was the old method. 
@@ -212,15 +213,9 @@ sub readOneImage{
 		# Even though we haven't included time zone/GMT into this comparison, it is sufficiently robust for systems that are on the correct time... oh... anyway, if we have modified the picture on the same system that it is now being stored in, the "modify date" will be relative to each other. 
 		# TODO: Make sure the system that is adding is on a correct time relative to the world (1970 won't work)
 
-		my $fileModDate = "zzzzz";
-		if ( -e $baseDirName . $fileName ){
-			my $file = $baseDirName . $fileName;
-			$fileModDate = strftime( "%Y-%m-%d %H:%M:%S", params::getLocalModTime($file) );
-		}
-
-		if ($lastModDateInDB gt $fileModDate) {
+		if ($lastModDateInDB gt $fileLastEditDate ) {
 			if ($params::debug and $params::debug_readIn){
-				print $lastModDateInDB . "   " . $fileModDate  . "\n";
+				print $lastModDateInDB . "   " . $fileLastEditDate  . "\n";
 				print "We have inserted this in the table at a later date than the photo was modified.\n";
 			}
 			$upToDate = 1;
@@ -310,7 +305,7 @@ sub readOneImage{
 
 		)  
 	VALUES ("$fileName", 
-		"$data{'TakenDate'}", "$data{"ModifyDate"}", 
+		"$data{'TakenDate'}", "$fileLastEditDate", 
 		$rootDirNum, $data{'Year'}, 
 		$data{'Month'}, $data{'Day'}, 
 		$data{'Hour'}, $data{'Minute'}, 
