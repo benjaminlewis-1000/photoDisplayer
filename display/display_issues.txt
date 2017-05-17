@@ -1,11 +1,19 @@
 ISSUES:
 
 - "is not" person is being treated as an "is" person.
-- Date range isn't being passed from sendJSONtoSlideshow.php when it contains a <none> value (launchSlideshow is having issues...)
-	-- Solution: sendJSonToSlideshow.py was writing to a file and didn't have permissions. In order to be save, don't directly call any 
-	   script that writes a file from server-side PHP code. 
 - Make sure to handle months properly; I'm passing them as numbers, now... (single digit 1-9)
 - launchSlideshow.php has a hard coded xml file, which breaks it on different OS's.
 - Year before/after logic is bad... (maybe? That may have just been my file lock)
 - Image removal script chokes on unicode file names (mission/São Paulo, for instance). I think the addition to the database is bad. 
-- Vision tagging is not actually resizing images, which is bad for large images.
+- Don't delete the file in the display server - we want to keep it for startup
+- Date range should handle year ranges only (user expectancy)
+- Need to have a "person cleanup" script for when person names change but there are no supporting photos of them in the database.
+- Some files are getting the year "1969" erroneously. 
+
+
+SOLUTIONS:
+- Date range isn't being passed from sendJSONtoSlideshow.php when it contains a <none> value (launchSlideshow is having issues...)
+	-- Solution: sendJSonToSlideshow.py was writing to a file and didn't have permissions. In order to be save, don't directly call any 
+	   script that writes a file from server-side PHP code. 
+- Picture resizing is wrong in vision tagging
+	-- Simple math errors. Not sure what I was thinking. 
