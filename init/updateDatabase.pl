@@ -28,7 +28,12 @@ my $geoserverProc = Proc::Background->new("python geoServer.py $portNum");
 $geoserverProc->alive;
 
 # Open the database
-our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass",
+{
+   AutoCommit => 1,
+  on_connect_do => [ "SET CHARACTER SET 'utf8'"]
+}
+);
 
 # Query the database for a list of all root directories in the database. 
 my $rootDirQuery = qq/SELECT $params::rootKeyColumn, $params::windowsRootPath, $params::linuxRootPath FROM $params::rootTableName/;

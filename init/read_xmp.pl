@@ -141,7 +141,9 @@ sub getImageData{
 	 			print $k . " : " . $infoHash{$k} . "\n";
 	 		}
 	 	}
-		die("Can't find the right date!");
+		$takenDate = "1969:01:01 00:00:01-00:00";
+		print "Can't find the right date!\n";
+#		die("Can't find the right date!");
 
 	}
 #        $takenDate = $infoHash{'CreateDate'};

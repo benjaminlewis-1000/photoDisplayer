@@ -100,7 +100,12 @@ if (scalar @rootDirList == 0){
 
 
 # Open the database
-our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
+our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass",
+{
+   AutoCommit => 1,
+  on_connect_do => [ "SET CHARACTER SET 'utf8'"]
+}
+);
 
 foreach my $root_dir (@rootDirList){
 
