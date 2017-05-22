@@ -76,7 +76,7 @@ def setUpLimits(conn, params, method):
     ## If we have hit a new month, then reset the month for a new date using date math and
     ## store that in the database. 
     print "Today's date is: " + todayDate
-    print "New month's date is : " + newMonthDate
+    print "New month's date is : " + str(newMonthDate)
     if todayDate > newMonthDate:
         readsThisMonth = 0
         if now.day > dayOfNewMonth:
@@ -101,6 +101,7 @@ if __name__ == "__main__":
     parser.add_argument('--doDeep', help="Doesn't use the indexed files in the database to skip already read files; tends to run    slower.")
     parser.add_argument('--method', help="Select methods. Valid values currently are 'google' or 'clarifai'.")  
     parser.add_argument('--debug_file', help="Debug input file.")
+    parser.add_argument('--max_sec', help="Max time for method to run, in seconds.")
 
     args = parser.parse_args()  
 
@@ -109,14 +110,17 @@ if __name__ == "__main__":
     else:
         method = 'google' 
 
+    if not args.max_sec:
+        args.max_sec = 99999
+
     ## Open the API Key file and read the app ID and app secret.
     if method == 'clarifai':
-        api_file = open('clarifaiAPIkey.key', 'r')
+        api_file = open(classImage.script_path + '/clarifaiAPIkey.key', 'r')
         app_id = api_file.readline().rstrip("\n\r")
         app_secret = api_file.readline()
         api_file.close()
     else:
-        api_file = open('googAPIkey.key', 'r')
+        api_file = open(classImage.script_path + '/googAPIkey.key', 'r')
         api_key = api_file.read().rstrip("\n\r")
         api_file.close()
 
@@ -125,7 +129,7 @@ if __name__ == "__main__":
     currentTime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
 	## Open the params.yaml file for the configuration parameters
-    with open('../config/params.xml') as stream:
+    with open(classImage.project_path + '/config/params.xml') as stream:
         try:
             params = xmltodict.parse(stream.read())
         except Exception as exc:
@@ -135,7 +139,7 @@ if __name__ == "__main__":
     visionMetaTableName = params['params']['visionTaggingParams']['database']['tables']['visionMetaTable']['Name']
 
     ## Connect to the database. Also set up Ctrl-C Handling
-    conn = sqlite3.connect("visionDatabase.db")
+    conn = sqlite3.connect(classImage.script_path + "/" + params['params']['visionTaggingParams']['database']['fileName'])
     conn.text_factory = str
     signal.signal(signal.SIGINT, signal_handler)
 
@@ -172,7 +176,7 @@ if __name__ == "__main__":
     for i in range(len(results)):
         readFiles.add( str(results[i][0]) )
 
-    with open('landmarkKeywords.txt') as f:
+    with open(classImage.script_path + '/landmarkKeywords.txt') as f:
         knownWords = f.read().splitlines()
 
     if args.debug_file != None:
@@ -207,6 +211,7 @@ if __name__ == "__main__":
 
     print "Length to do: " + str(len(listAllFiles))
 
+    start_time = time.time()
     for filename in listAllFiles:
         successVal = 0
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
@@ -216,11 +221,18 @@ if __name__ == "__main__":
                 successVal = classImage.classifyImageWithClarifaiAPI(filename, app_id, app_secret, conn, currentTime)
             else:
                 successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime, knownWords)
+            elapsed_time = time.time() - start_time
+            if int(elapsed_time) > int(args.max_sec):
+                print "Time specified ({} seconds) has elapsed. Exiting.".format(args.max_sec)
+                setCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
+                c.execute(setCountQuery, (alreadyDone, readsThisMonthField ) )
+                conn.commit()
+                break
 
         except IOError as ioe:
             print "IO Error in clarifai classify: " + str(ioe)
             successVal = 0
-            logfile = open('logErrata.out', 'a')
+            logfile = open(classImage.script_path + '/logErrata.out', 'a')
             print >>logfile, "Clarifai - IO Error in file " + filename + " (most likely caused by inability to open) : " + str(type(ioe)) + ",  " + str(ioe.args) + ",  " + str(ioe)
             logfile.close()
 
@@ -264,7 +276,7 @@ if __name__ == "__main__":
             resetCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
             c.execute(resetCountQuery, (alreadyDone, readsThisMonthField) )
             conn.commit()
-            logfile = open('logErrata.out', 'a')
+            logfile = open(classImage.script_path + '/logErrata.out', 'a')
             print >>logfile, method + " - error in file " + filename + ": " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
             logfile.close()
             break

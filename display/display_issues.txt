@@ -9,6 +9,7 @@ ISSUES:
 - Date range should handle year ranges only (user expectancy)
 - Need to have a "person cleanup" script for when person names change but there are no supporting photos of them in the database.
 - Some files are getting the year "1969" erroneously. 
+- New month logic is incomplete for day of, in vision tagging.
 
 
 SOLUTIONS:

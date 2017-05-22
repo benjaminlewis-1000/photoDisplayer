@@ -6,9 +6,9 @@ use DBI;
 use warnings;
 use strict;
 
-require 'read_xmp.pl';
-require 'readInImages.pl';
-require 'filesFromBaseFinder.pl';
+require './read_xmp.pl';
+require './readInImages.pl';
+require './filesFromBaseFinder.pl';
 
 trimDeletedFiles();
 

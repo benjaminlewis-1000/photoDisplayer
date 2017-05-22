@@ -2,6 +2,8 @@
 
 # Simple function: it takes a root directory, $root_dir, and queries the database to see if a database has been modified at a higher level. If no higher level has been inserted and we have not inserted this directory before, then the new root_dir is inserted in the $params::rootTableName. From there, we can list all the directories that are directly off this one and that are not covered by existing root directories. 
 
+use FindBin;
+use lib $FindBin::Bin;
 use params;
 use DBI;
 use Tk;
@@ -32,8 +34,9 @@ our @rootDirList;
 
 our $answerBool = 1;
 
+`bash $params::init_dir/killGeoServer.sh`;
 our $portNum = $params::geoServerPort;
-my $geoserverProc = Proc::Background->new("python geoServer.py $portNum");
+my $geoserverProc = Proc::Background->new("python $params::init_dir/geoServer.py $portNum");
 $geoserverProc->alive;
 
 if (!$answerBool){
@@ -193,6 +196,7 @@ foreach my $root_dir (@rootDirList){
 	print "We have inserted a new root directory, $root_dir. Its key value is $directoryKeyVal.\n";
 }
 
+my $sttime = time;#DateTime->now();
 foreach my $root_dir (@rootDirList){
 
 	#####
@@ -215,8 +219,8 @@ foreach my $root_dir (@rootDirList){
 
 	our $numPassed = 0;
 	#####
-		open OUTPUT,  ">unhandled_files.txt" or die $!;
-		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed, $portNum, \$dbhandle);
+		open OUTPUT,  ">$params::init_dir/nhandled_files.txt" or die $!;
+		addFilesInListOfSubdirs(\@subdirectories, $directoryKeyVal, $root_dir, \$numPassed, $portNum, \$dbhandle, \$sttime);
 		close OUTPUT;
 	#####
 

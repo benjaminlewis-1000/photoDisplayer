@@ -205,11 +205,12 @@ sub addFilesInListOfSubdirs{
 				insertedDateHash => \%insertedDateHash,
 				portNum => $portNum
 			});
-			my $entime = DateTime->now;
+			my $entime = time;#DateTime->now;
 			my $elapse = $entime - $methodsttime;
-			print "Total elapsed time : ".$elapse->in_units('seconds')."m\n";
 			if ($elapse > $params::totalTimeElapseSeconds){
-				print "Need to exit now\n";
+				print "Need to exit now. Time elapsed is : " . $elapse . " seconds.\n";
+				require 'trimDeletedFiles.pl'; # Automatically runs the trim.
+				exit();
 			}
 			# my $elapse = tv_interval($sttime);
 			

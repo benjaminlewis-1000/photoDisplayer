@@ -6,13 +6,13 @@ package params;
 
 use strict;
 use warnings;
-use Cwd;
+use Cwd 'abs_path';
 use File::Basename;
 #use YAML::XS 'LoadFile';
 use XML::Simple qw(:strict);
 use Data::Dumper;
 
-our $totalTimeElapseSeconds = 120;#4 * 3600;
+our $totalTimeElapseSeconds = 24 * 3600;
 
 our $debug = 0;
 
@@ -21,9 +21,8 @@ our $debug = 0;
 	our $debugNewRoot = 0;
 
 
-our $base_path = cwd();  # Get the directory of this module. 
-$base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
-$base_path = $1 . "/";  # Capture the output and put it in $base_path.
+our $base_path = abs_path($0 . "/../..") . "/";  # Get the directory of this module. 
+our $init_dir = abs_path($0 . "/..");
 
 my $config_file = $base_path . "config/params.xml";
 # my $config = LoadFile($YAML_file);  # YAML is more cross-language.

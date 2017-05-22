@@ -6,6 +6,8 @@
 # In particular, the photos are checked for modifications since the last
 # insertion date (which is handled in readInImages.pl). 
 
+use FindBin;
+use lib $FindBin::Bin;
 use params;
 use DBI;
 use Tk;
@@ -18,14 +20,15 @@ use strict;
 require 'read_xmp.pl';
 require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
-if (! -e 'trimDeletedFiles.pl'){
+if (! -e "$params::init_dir/trimDeletedFiles.pl"){
 	die "Can't locate file 'trimDeletedFiles.pl'. Exiting.";
 }
 
 our @rootDirList;
 
+`bash $params::init_dir/killGeoServer.sh`;
 our $portNum = $params::geoServerPort;
-my $geoserverProc = Proc::Background->new("python geoServer.py $portNum");
+my $geoserverProc = Proc::Background->new("python $params::init_dir/geoServer.py $portNum");
 $geoserverProc->alive;
 
 # Open the database
@@ -72,7 +75,7 @@ while ($query->fetch){
 	push @rootDirMultiArray, \@localArray;
 }
 
-my $sttime = DateTime->now();
+my $sttime = time;#DateTime->now();
 for (my $i = 0; $i < scalar @rootDirMultiArray; $i++ ){
 	my @localArray = @{$rootDirMultiArray[$i]};
 	my $linRootDir = $localArray[0];
@@ -90,7 +93,7 @@ for (my $i = 0; $i < scalar @rootDirMultiArray; $i++ ){
 	print "Got a list of unique subdirectories." . "\n";
 	print join (", ", @unq_subdirs) . "\n";
 
-	open OUTPUT,  ">unhandled_files.txt" or die $!;
+	open OUTPUT,  ">$params::init_dir/unhandled_files.txt" or die $!;
 	addFilesInListOfSubdirs(\@unq_subdirs, $rootKey, $root_dir, \$numPassed, $portNum, \$dbhandle, \$sttime);
 
 	close OUTPUT;

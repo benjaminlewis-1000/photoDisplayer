@@ -20,7 +20,10 @@ ENDPOINT_URL = 'https://vision.googleapis.com/v1/images:annotate'
 reload(sys)  # Reload does the trick so we can set default encoding!!!
 sys.setdefaultencoding('UTF8')  ### Let us do more than ASCII
 
-with open('../config/params.xml') as stream:
+project_path = os.path.abspath(os.path.join(__file__,"../.."))
+script_path  = os.path.abspath(os.path.join(__file__,".."))
+
+with open(project_path + '/config/params.xml') as stream:
 	try:
 		params = xmltodict.parse(stream.read())
 	except Exception as exc:
@@ -153,7 +156,7 @@ def scaleEncodeImageB64(image_filenames, resolution):
 			im1 = im1.resize( (int(width/scale), int(height/scale ) ), Image.ANTIALIAS )
 	except IOError as ioe:
 		print "IO Error in image base64 encoding: " + str(ioe)
-		logfile = open('logErrata.out', 'a')
+		logfile = open(script_path + '/logErrata.out', 'a')
 		print >>logfile, "File " + image_filenames + " was not able to open for classification in scaleEncodeImageB64."
 		logfile.close()
 		return -1
@@ -522,7 +525,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 		jsonLabelResponse = json.loads(json.dumps(response.json()['responses']))[0]
 
 		# File log of the JSON response, just for kicks. 
-		outfile = open('out.out', 'w')
+		outfile = open(script_path + '/out.out', 'w')
 		print >>outfile, json.dumps(response.json()['responses'])
 		outfile.close()
 
@@ -572,7 +575,7 @@ def classifyImageWithGoogleAPI(api_key, filename, databaseConn, currentTime, kno
 		logInDatabase(filename, googleLabelTuple, currentTime, databaseConn)
 
 		if checkGoogleOddity(jsonLabelResponse):			
-			logfile = open('logErrata.out', 'a')
+			logfile = open(script_path + '/logErrata.out', 'a')
 			print >>logfile, "File " + filename + " has no labelAnnotations, and may or may not have a landmarkAnnotation." + "\n..." + str(jsonLabelResponse)
 			logfile.close()
 
@@ -604,7 +607,7 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 		### clarifaiClassify, put in this context. 
 		app = ClarifaiApp(app_id, app_secret)
 		model = app.models.get("general-v1.3")
-		ctxt = scaleEncodeImageB64(image_filenames, (1280, 960))
+		ctxt = scaleEncodeImageB64(filename, (1280, 960))
 		clarifaiJSON = model.predict_by_base64(ctxt)
 		jsonResponse = clarifaiToInternalLabelsJSON(clarifaiJSON)
 		###
@@ -614,7 +617,7 @@ def classifyImageWithClarifaiAPI(filename, app_id, app_secret, databaseConn, cur
 			return 0
 
 		# File log of the JSON response, just for kicks. 
-		outfile = open('out.out', 'w')
+		outfile = open(script_path + '/out.out', 'w')
 		print >>outfile, jsonResponse
 		outfile.close()
 
@@ -658,7 +661,7 @@ def clarifaiToInternalLabelsJSON(jsonResponse):
 
 		return labelDict
 	else:		
-		logfile = open('logErrata.out', 'a')
+		logfile = open(script_path + '/logErrata.out', 'a')
 		print >>logfile, "File " + filename + " has no labelAnnotations in Clarifai."
 		logfile.close()
 		return -1

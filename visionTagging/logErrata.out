@@ -5598,3 +5598,5 @@ File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0106.JPG has no labelAn
 Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2011/2011 (7) July/DSC_0561.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
 File /mnt/NAS/Photos/Family Pictures/2016/June 2016/June 2016 (25).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
 ...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
