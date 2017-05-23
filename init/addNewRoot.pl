@@ -103,12 +103,12 @@ if (scalar @rootDirList == 0){
 
 
 # Open the database
-our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass",
-{
-   AutoCommit => 1,
-  on_connect_do => [ "SET CHARACTER SET 'utf8'"]
-}
-);
+our $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");#,
+#{
+#   AutoCommit => 1,
+#  on_connect_do => [ "SET CHARACTER SET 'utf8'"]
+#}
+#);
 
 foreach my $root_dir (@rootDirList){
 
@@ -171,7 +171,10 @@ foreach my $root_dir (@rootDirList){
 		if (!defined $directoryKeyVal or $directoryKeyVal eq "" ){
 			# If the directory doesn't exist, we then have to add it to the root directory table and get its unique key value (for use in adding all the pictures).
 			my $insertDirectory = qq/INSERT INTO $params::rootTableName ( $params::rootDirPath)  VALUES ("$root_dir")/;
-			$dbhandle->do($insertDirectory) or die $DBI::errstr;
+print $insertDirectory . "\n";
+			## $dbhandle->do($insertDirectory) or die $DBI::errstr;
+ 			my $insertQuery = $dbhandle->prepare($insertDirectory);
+			$insertQuery->execute();
 
 			# Get the value of the autoincremented value for the table; this value is in $directoryKeyVal
 			my $keyNumQuery = qq/SELECT last_insert_rowid()/;

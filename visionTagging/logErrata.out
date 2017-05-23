@@ -5600,3 +5600,40 @@ File /mnt/NAS/Photos/Family Pictures/2016/June 2016/June 2016 (25).JPG has no la
 ...{}
 File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
 File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/2017/Life/science_museum (3).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150501_174737.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0866.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Summer 2013/Roommate Roadtrip/100_7809.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/2015-01-08 10.28.49.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150429_174057.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0794.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/K.Lani's Bridal Shower/DSC_0385.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/More Pictures/2004-05-19/100_1482.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-03-20/DSCN0644.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Mission/estancia/sao joao/fotos 635.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/2017/Life/valentines (1).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Canada - Tacy's wedding/DSC_6614.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/Hawaii/DSCN3928.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/NL 3-09 (mission call, TEAM-S, Mark 1st b-day)/100_1082.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2014 ABQ/Alex Wedding/Alex Wedding (21).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/8 Mar 14 Moms phone/20130902_192721.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (8) August/Family Reunion (74).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Nicholas' Pictures/End of school 2006/P5192468.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Oct 27 2013/DSC_0044.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)

@@ -287,6 +287,7 @@ sub readOneImage{
 		} 
 
 	# Insert the data about the photo (date and filename) into the appropriate table. 
+        print "File name is : $baseDirName $fileName\n";
 	my $insertIntoPhotoTable = qq/
 	INSERT INTO $params::photoTableName ( 
 		$params::photoFileColumn, $params::photoDateColumn, 
