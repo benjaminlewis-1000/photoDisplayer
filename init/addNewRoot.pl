@@ -11,6 +11,7 @@ use File::Find;
 use File::HomeDir;
 use Data::Dumper;
 use Proc::Background;
+use Encode qw(decode encode);
 
 use warnings;
 use strict; 
@@ -22,7 +23,7 @@ require 'readInImages.pl';
 require 'filesFromBaseFinder.pl';
 
 my $homedir = File::HomeDir->my_home;
-print $homedir . "\n";
+# print $homedir . "\n";
 
 my $mw = MainWindow->new;
 $mw->withdraw;  # Hide the main window.
@@ -95,8 +96,6 @@ if ( ( -e "dirsWindows.txt" and $params::OS_type == $params::windowsType ) or ( 
 	$mw->messageBox(-title => 'Warning', -message => 'Please be patient. Adding all pictures in these directories could take a while.', -type=>'OK');
 }
 
-print join (',', @rootDirList) . "\n";
-
 if (scalar @rootDirList == 0){
 	die "No directories were chosen to add; exiting.\n";
 }
@@ -117,7 +116,7 @@ foreach my $root_dir (@rootDirList){
 	#  Check if a higher-up directory is already in the table. If so, we don't need to add this in. 
 	my $existingRootDirsQuery = qq/SELECT $params::rootDirPath FROM $params::rootTableName/;
 	my $query = $dbhandle->prepare($existingRootDirsQuery);
-	print $existingRootDirsQuery . "\n";
+	# print $existingRootDirsQuery . "\n";
 	until(
 		$query->execute()
 	){
@@ -157,7 +156,8 @@ foreach my $root_dir (@rootDirList){
 # Check if the root directory is already in the table. If so, get its number.
 # If not, insert into the table. 
 	if (!$higherDirectoryExists){
-		my $rootDirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$root_dir"/;
+		my $utf_root_dir = decode('utf8',$root_dir);
+		my $rootDirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$utf_root_dir"/;
 		my $query = $dbhandle->prepare($rootDirExistsQuery);
 		until(
 			$query->execute()
@@ -167,36 +167,40 @@ foreach my $root_dir (@rootDirList){
 			sleep(5);
 		}# or die $DBI::errstr;
 		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
+		my $sql = qq{SET $params::rootTableName 'utf8';};
+		# $dbhandle->{'mysql_enable_utf8'} = 1;
 
-		if (!defined $directoryKeyVal or $directoryKeyVal eq "" ){
-			# If the directory doesn't exist, we then have to add it to the root directory table and get its unique key value (for use in adding all the pictures).
-			my $insertDirectory = qq/INSERT INTO $params::rootTableName ( $params::rootDirPath)  VALUES ("$root_dir")/;
-print $insertDirectory . "\n";
-			## $dbhandle->do($insertDirectory) or die $DBI::errstr;
- 			my $insertQuery = $dbhandle->prepare($insertDirectory);
-			$insertQuery->execute();
+		if ( $root_dir ne "" ) {
+			if ( !defined $directoryKeyVal or $directoryKeyVal eq ""){
+				# If the directory doesn't exist, we then have to add it to the root directory table and get its unique key value (for use in adding all the pictures).
+				# my $utf_root_dir = decode('utf8',$root_dir);
+				my $insertDirectory = qq/INSERT INTO $params::rootTableName ( $params::rootDirPath)  VALUES ("$utf_root_dir")/;
+				## $dbhandle->do($insertDirectory) or die $DBI::errstr;
+	 			my $insertQuery = $dbhandle->prepare($insertDirectory);
+				$insertQuery->execute();
 
-			# Get the value of the autoincremented value for the table; this value is in $directoryKeyVal
-			my $keyNumQuery = qq/SELECT last_insert_rowid()/;
-			my $query = $dbhandle->prepare($keyNumQuery);
-			until(
-				$query->execute()
-			){
-				warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
-				warn "Failed on the following query: $keyNumQuery\n";
-				sleep(5);
-			}# or die $DBI::errstr;
+				# Get the value of the autoincremented value for the table; this value is in $directoryKeyVal
+				my $keyNumQuery = qq/SELECT last_insert_rowid()/;
+				my $query = $dbhandle->prepare($keyNumQuery);
+				until(
+					$query->execute()
+				){
+					warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
+					warn "Failed on the following query: $keyNumQuery\n";
+					sleep(5);
+				}# or die $DBI::errstr;
 
-			$directoryKeyVal = @{$query->fetch()}[0];
-			print "Key val is " . $directoryKeyVal . "\n";
-		}else{
-			# We have the directory already. Its directory key value is in $result.
-			print "We have that directory.\n";
-			exit();
+				$directoryKeyVal = @{$query->fetch()}[0];
+				print "Key val is " . $directoryKeyVal . "\n";
+			}else{
+				# We have the directory already. Its directory key value is in $result.
+				print "We have that directory.\n";
+				exit();
+			}
+			print "We have inserted a new root directory, $root_dir. Its key value is $directoryKeyVal.\n";
 		}
 	}
 
-	print "We have inserted a new root directory, $root_dir. Its key value is $directoryKeyVal.\n";
 }
 
 my $sttime = time;#DateTime->now();
@@ -209,7 +213,8 @@ foreach my $root_dir (@rootDirList){
 	# Query the database for the key value for the current root directory
 
  # $dbhandle = DBI->connect("DBI:SQLite:$params::database", "user" , "pass");
-	my $rootDirKeyValQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$root_dir"/;
+	my $utf_root_dir = decode('utf8',$root_dir);
+	my $rootDirKeyValQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$utf_root_dir"/;
 	my $query = $dbhandle->prepare($rootDirKeyValQuery);
 	until(
 		$query->execute()

@@ -5,6 +5,8 @@ use File::Find;
 require 'readInImages.pl';
 use File::HomeDir;
 use DateTime;
+use Encode qw(decode encode);
+use Cwd;
 
 use warnings;
 use strict; 
@@ -55,15 +57,15 @@ sub getUniqueSubdirs{
 	my @subdirectories;
 	foreach my $directory (sort {lc $a cmp lc $b} keys %subdirhash) {
 	    # printf "%-8s\n", $directory;
-	    push @subdirectories, $directory;
+	    my $tdr = $directory;
+		if ($params::OS_type == $params::linuxType){
+			$tdr = "\/" . $tdr . "\/";
+		}
+	    if ($tdr ne $base_directory){
+	    	push @subdirectories, $directory;
+	    }
 	}
 
-	# Get a list of subdirectories from this root directory, so we can see if they are already in the list. 
-	# The regex is looking for the opposite of any file that ends with a .*** extension.
-	# my @subdirectories = grep(!/\.([a-zA-Z][^\.^\\]+$)/i, @file_list);
-	# # Remove the root directory. We now have a list of all the subdirectories. This is to help the iteration.
-	# @subdirectories = grep(/$base_directory/, @subdirectories);
-	# chomp(@subdirectories);
 	# Copy the subdirectories into remainingSubdirs, which we can then remove from with impunity in a for loop. 
 	my @remainingSubdirs = @subdirectories;
 
@@ -71,8 +73,12 @@ sub getUniqueSubdirs{
 
 	for (my $i = 0; $i < scalar @subdirectories; $i++){
 		# Query the database to see if it has this specific subdirectory already. If so, get it's key value and put it in $directoryKeyVal.
-		# Remember that we've taken out this specific root directory, so we are in no danger of removing legitimate subdirectories. 
-		my $dirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$subdirectories[$i]\/"/;
+		# Remember that we've taken out this specific root directory, so we are in no danger of removing legitimate subdirectories.
+		my $utf_subdir = decode('utf8',$subdirectories[$i]);
+		# if ($params::OS_type == $params::linuxType){
+		# 	$utf8
+		# }
+		my $dirExistsQuery = qq/SELECT $params::rootKeyColumn FROM $params::rootTableName WHERE $params::rootDirPath = "$utf_subdir"/;
 		my $query = $localDBHandle->prepare($dirExistsQuery);
 
 		until(
@@ -81,7 +87,8 @@ sub getUniqueSubdirs{
 			warn "Can't connect: $DBI::errstr. Pausing before retrying.\n";
 			warn "Failed on the following query: $dirExistsQuery\n";
 			sleep(5);
-		}# or die $DBI::errstr;
+		}
+
 		$directoryKeyVal = eval { $query->fetchrow_arrayref->[0] };
 
 		# Now, if the subdirectory is already accounted for, get its key number and base directory and add it to the appropriate hashes. Then remove it and all its subdirectories from the @remainingSubdirs list. 
@@ -256,7 +263,8 @@ sub checkOSFolder{
 			print $winRootDir . "\n";
 
 			# Add to database.
-			my $update_query = qq/UPDATE $params::rootTableName SET $params::windowsRootPath = "$winRootDir" WHERE $params::rootKeyColumn = $rootKey/;
+			my $utf_winRootDir = decode('utf8',$winRootDir);
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::windowsRootPath = "$utf_winRootDir" WHERE $params::rootKeyColumn = $rootKey/;
 			my $query = $dbhandle->prepare($update_query);
 			until(
 				$query->execute()
@@ -294,7 +302,8 @@ sub checkOSFolder{
 			$linRootDir .= '/';
 
 			# Add to database.
-			my $update_query = qq/UPDATE $params::rootTableName SET $params::linuxRootPath = "$linRootDir"/;
+			my $utf_linRootDir = decode('utf8',$linRootDir);
+			my $update_query = qq/UPDATE $params::rootTableName SET $params::linuxRootPath = "$utf_linRootDir"/;
 			my $query = $dbhandle->prepare($update_query);
 			until(
 				$query->execute()

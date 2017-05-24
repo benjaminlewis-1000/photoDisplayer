@@ -8,7 +8,8 @@ use DBI;
 # use File::stat;  ## DO NOT USE File::stat!!
 use Time::HiRes qw( usleep gettimeofday tv_interval  );
 use POSIX qw(strftime);
-use YAML;
+use Encode qw(encode decode);
+#use YAML;
 
 use params;
 require 'read_xmp.pl';
@@ -176,7 +177,8 @@ sub readOneImage{
 
 	our %peopleToKeyHash;
 
-	my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+	my $utf_filename = decode('utf8', $fileName);
+	my $checkPhotoInTableQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$utf_filename" AND $params::rootDirNumColumn = $rootDirNum/;
 
 	my $query = $dbhandle->prepare($checkPhotoInTableQuery);
 	until(
@@ -200,7 +202,8 @@ sub readOneImage{
 
 	if ($photoExists){
 		# Get the date when the photo was inserted from the table. 
-		my $lastModifiedQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/;
+		my $utf_filename = decode('utf8', $fileName);
+		my $lastModifiedQuery = qq/SELECT $params::insertDateColumn FROM $params::photoTableName WHERE $params::photoFileColumn = "$utf_filename" AND $params::rootDirNumColumn = $rootDirNum/;
 		$query = $dbhandle->prepare($lastModifiedQuery);
 		until(
 			$query->execute()
@@ -227,7 +230,7 @@ sub readOneImage{
 			# }
 
 		# Remove the old data from the table. 
-		my $photoKeyQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$fileName" AND $params::rootDirNumColumn = $rootDirNum/ ;
+		my $photoKeyQuery = qq/SELECT * FROM $params::photoTableName WHERE $params::photoFileColumn = "$utf_filename" AND $params::rootDirNumColumn = $rootDirNum/ ;
 		$query = $dbhandle->prepare($photoKeyQuery);
 		until(
 			$query->execute()
@@ -287,7 +290,7 @@ sub readOneImage{
 		} 
 
 	# Insert the data about the photo (date and filename) into the appropriate table. 
-        print "File name is : $baseDirName $fileName\n";
+        print "File name is : $baseDirName$fileName\n";
 	my $insertIntoPhotoTable = qq/
 	INSERT INTO $params::photoTableName ( 
 		$params::photoFileColumn, $params::photoDateColumn, 
@@ -302,7 +305,7 @@ sub readOneImage{
 		$params::latColumn, $params::longColumn
 
 		)  
-	VALUES ("$fileName", 
+	VALUES ("$utf_filename", 
 		"$data{'TakenDate'}", "$fileLastEditDate", 
 		$rootDirNum, $data{'Year'}, 
 		$data{'Month'}, $data{'Day'}, 
@@ -368,7 +371,8 @@ sub readOneImage{
 			# $peopleKeyVal if the peron exists. 
 			# If they do, then get their unique key and add it to the hash so that we don't have to find it 
 			# ever again. 
-			my $personExistsQuery = qq/SELECT $params::peopleKeyColumn FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
+			my $name_utf = decode('utf8', $_);
+			my $personExistsQuery = qq/SELECT $params::peopleKeyColumn FROM $params::peopleTableName WHERE $params::personNameColumn = "$name_utf"/;
 
 			my $query = $dbhandle->prepare($personExistsQuery);
 			until(
@@ -383,7 +387,7 @@ sub readOneImage{
 
 			# Find the number of people in the database with that name; should be only one. 
 			# TODO: Work out how to distinguish people with the exact same name... 
-			my $numQuery = qq/SELECT COUNT(*) FROM $params::peopleTableName WHERE $params::personNameColumn = "$_"/;
+			my $numQuery = qq/SELECT COUNT(*) FROM $params::peopleTableName WHERE $params::personNameColumn = "$name_utf"/;
 			$query = $dbhandle->prepare($numQuery);
 			until(
 				$query->execute()
@@ -408,7 +412,7 @@ sub readOneImage{
 					die("Error! Getting more than one person with this name: $_.");
 				}
 
-				my $insertPersonInPersonTable = qq/INSERT INTO $params::peopleTableName ($params::personNameColumn) VALUES ("$_")/;
+				my $insertPersonInPersonTable = qq/INSERT INTO $params::peopleTableName ($params::personNameColumn) VALUES ("$name_utf")/;
 
 				$dbhandle->do($insertPersonInPersonTable) or die $DBI::errstr;
 
@@ -446,11 +450,12 @@ sub readOneImage{
 		my %keyHash = %{$arrayOfHashes[$i]};
 
 		foreach my $kw (keys %keyHash){
+			my $kw_utf = decode('utf8', $kw);
 			my $insertPhotoCommentLinkerQuery = qq/
 				INSERT INTO $fields[$i] ( 
 					$params::commentLinkerPhotoColumn, $params::commentLinkerTagColumn, 
 					$params::commentLinkerTagProbabilityColumn		)  
-				VALUES ($photoKeyVal, "$kw", $keyHash{$kw}	)/;
+				VALUES ($photoKeyVal, "$kw_utf", $keyHash{$kw}	)/;
 
 			# print $fields[$i] . ": Keyword is " . $kw  . " " . $keyHash{$kw} . "\n";
 

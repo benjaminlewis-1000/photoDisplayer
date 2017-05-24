@@ -5,7 +5,7 @@
 	  <linuxType>2</linuxType>
 	</ostypes>
 	<photoDatabase>
-		<fileName>photos_master_tmp.db</fileName>
+		<fileName>photos_master.db</fileName>
 		<tables>
 			<photoTable>
 				<Name>Photos</Name>
