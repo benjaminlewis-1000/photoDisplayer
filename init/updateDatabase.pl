@@ -24,6 +24,11 @@ if (! -e "$params::init_dir/trimDeletedFiles.pl"){
 	die "Can't locate file 'trimDeletedFiles.pl'. Exiting.";
 }
 
+my $time = localtime;
+open OUTPUT, ">>$params::init_dir/timesRun.txt";
+print OUTPUT "Update run at: $time\n";
+close OUTPUT;
+
 our @rootDirList;
 
 `bash $params::init_dir/killGeoServer.sh`;
@@ -100,5 +105,11 @@ for (my $i = 0; $i < scalar @rootDirMultiArray; $i++ ){
 }
 
 $geoserverProc->die;
+
+$time = localtime;
+open OUTPUT, ">>$params::init_dir/timesRun.txt";
+print OUTPUT "Update concluded at: $time\n";
+close OUTPUT;
+
 
 require 'trimDeletedFiles.pl'; # Automatically runs the trim.

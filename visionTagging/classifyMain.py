@@ -89,7 +89,7 @@ def setUpLimits(conn, params, method):
         renewDateQuery = '''UPDATE ''' + visionMetaTableName+ ''' SET Value = ? WHERE Name = ?'''
         c.execute(renewDateQuery, (renewDate, fieldsBase[fieldsVar]['NewMonthDate']) )
         resetCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = 0 WHERE Name = ?'''
-        c.execute(resetCountQuery, (fieldsBase[fieldsVar]['NewMonthDate'],) )
+        c.execute(resetCountQuery, (fieldsBase[fieldsVar]['ReadsThisMonth'],) )
 
         conn.commit()
 
@@ -107,8 +107,10 @@ if __name__ == "__main__":
 
     if args.method == 'clarifai':
         method = 'clarifai'
+        print "Using method Clarifai"
     else:
         method = 'google' 
+        print "Using method Google"
 
     if not args.max_sec:
         args.max_sec = 99999

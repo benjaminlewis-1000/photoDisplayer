@@ -5637,3 +5637,91 @@ File /mnt/NAS/Photos/Nicholas' Pictures/End of school 2006/P5192468.JPG has no l
 File /mnt/NAS/Photos/Family Pictures/2013/Oct 27 2013/DSC_0044.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
 ...{}
 Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150501_174737.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150429_174057.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/2016/Wedding Time/Honeymoon San Fran/DSC_8862.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/More Pictures/2004-05-19/100_1482.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-03-20/DSCN0644.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Mission/arapiraca/goodbyes/100_4918.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (7) July/DSC_0424.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150501_174737.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150429_174057.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family CDs/More Pictures/2004-05-19/100_1482.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family CDs/Ben Mar-Jul2005/2005-03-20/DSCN0644.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Family Pictures/2015/Aussie Aussie Aussie/2015-01-03 10.23.52.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2013/Emily's farewell, MTC dropoff/DSC_0866.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Nicholas' Pictures/Christmas time and Goblin Valley/PC024078.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family CDs/Family April03-May 2004/2003-05-18/100_0013.JPG was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Masters 2014-15/Temple Square 2015 Date/Originals/DSC_7652.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/April 2015/_DSC0994.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/baile/Imagem 408.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Family Reunion/DSC_9976.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Robot Soccer (TA)/DSC_5001.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/December also/DSC_0051.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Summer 2014 ABQ/Alex Wedding/Alex Bachelor Party (3).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/Penedo/baptisms/102_2248.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/December also/DSC_0091.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/2nd Paul Cutler photos/WP_20130828_019.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Misc/PART_1427691522821_20150329_224451.jpg.jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Family Reunion/DSC_9990.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/CTM/DSCN4942.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0342.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/2016/Ohio/ohio_move (3).jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2011/2011 (4) April/Becky's wedding party (22).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2015/January 2015/_DSC0145.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Mission/estancia/missionary meetings/DSC01193.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/2-2012/Timberlake Cabins (38).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Texts/2015-09-01 23.19.40-2.jpeg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Winter Break/DSC_3982.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2014/3rd Paul Cutler Photos/WP_20130828_010.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Family Reunion/DSC_9991.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/2016/Wedding Time/Honeymoon San Fran/DSC_8614.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Ben's Pictures/Ben's 2006 trip pictures/DSCN2477.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/June 2016/June 2016 (286).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2016/Sep 2016/_DSC0867.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Masters 2014-15/Alyssa concert/2015-11-01 19.27.13.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Meagan's Pictures/Nov 2009/DSC00505.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/10-2012/DSC_0124 (2).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2013/Feb 2013/Family_2013 416.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2014/11-30-14/_DSC0206.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
