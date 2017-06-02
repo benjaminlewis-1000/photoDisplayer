@@ -215,6 +215,10 @@ if __name__ == "__main__":
 
     start_time = time.time()
     for filename in listAllFiles:
+
+        metadata = pyexiv2.ImageMetadata(filename)
+        metadata.read()
+        dateTaken = metadata['Exif.Photo.DateTimeOriginal'].raw_value
         successVal = 0
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
 		## or have some exception, we save off the new number of files processed and exit the loop.
@@ -224,11 +228,18 @@ if __name__ == "__main__":
             else:
                 successVal = classImage.classifyImageWithGoogleAPI(api_key, filename, conn, currentTime, knownWords)
             elapsed_time = time.time() - start_time
+
             if int(elapsed_time) > int(args.max_sec):
                 print "Time specified ({} seconds) has elapsed. Exiting.".format(args.max_sec)
                 setCountQuery = '''UPDATE ''' + visionMetaTableName + ''' SET Value = ? WHERE Name = ?'''
                 c.execute(setCountQuery, (alreadyDone, readsThisMonthField ) )
                 conn.commit()
+
+                metadata = pyexiv2.ImageMetadata(filename)
+                metadata.read()
+                metadata['Exif.Photo.DateTimeOriginal'] = dateTaken
+                metadata.write()
+                
                 break
 
         except IOError as ioe:
@@ -281,12 +292,23 @@ if __name__ == "__main__":
             logfile = open(classImage.script_path + '/logErrata.out', 'a')
             print >>logfile, method + " - error in file " + filename + ": " + str(type(e)) + ",  " + str(e.args) + ",  " + str(e)
             logfile.close()
+
+            metadata = pyexiv2.ImageMetadata(filename)
+            metadata.read()
+            metadata['Exif.Photo.DateTimeOriginal'] = dateTaken
+            metadata.write()
+
             break
 
         finally:
             alreadyDone += successVal
             if successVal:
                 print "We have done " + str(alreadyDone) + " pictures this month now."
+
+            metadata = pyexiv2.ImageMetadata(filename)
+            metadata.read()
+            metadata['Exif.Photo.DateTimeOriginal'] = dateTaken
+            metadata.write()
 
         if alreadyDone == monthlyLimit:
             print "Monthly limit has been reached."
