@@ -132,6 +132,9 @@ class displayServer:
 
 
     def buildQuery(self, criteriaJSON):
+        stream = open('serverLog.txt', 'w+')
+        print >>stream, "Building a query... {}".format(criteriaJSON)
+        i = 0
 
         ## feh, the display program, locks the file in self.fileListName.
         ## Therefore, it is necessary to kill the subprocess that is running
@@ -150,6 +153,8 @@ class displayServer:
         selectedYears = [ ]
         selectedMonths = [ ]
         dateRangeVals = [ ]
+        print >>stream, "I am here,  #{}".format(i)
+        i = i + 1
 
         for i in range(len(slideshowParams)):
             critType = slideshowParams[i]['criteriaType']
@@ -169,6 +174,8 @@ class displayServer:
                 raise TypeError
 
         # Build year limits
+        print >>stream, "I am here,  #{}".format(i)
+        i = i + 1
 
         for i in range(len(slideshowParams)):
             # print slideshowParams[i]
@@ -196,6 +203,8 @@ class displayServer:
         phTakenDate   =  photosTable['Columns']['photoDate']
         phFile        =  photosTable['Columns']['photoFile']
         phRootDir     =  photosTable['Columns']['rootDirNum']
+        print >>stream, "I am here,  #{}".format(i)
+        i = i + 1
 
         ### OR SQL person query
         # orPersonQuery = '''SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = '''
@@ -207,6 +216,8 @@ class displayServer:
                 orPersonQuery += ''' ) UNION SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(plPhoto, plTableName, plPerson, ppKey, ppTableName, ppName)
 
         orPersonQuery += " ) )"
+        print >>stream, "I am here,  #{}".format(i)
+        i = i + 1
 
         # print orPersonQuery
 
@@ -226,6 +237,8 @@ class displayServer:
                 andPersonQuery += ''' INTERSECT SELECT {} AS {} FROM {} WHERE {} = '''.format(plPhoto, phKey, plTableName, plPerson)
 
         andPersonQuery += " ) AS linker_tmp_var ON photo_key_and_var.{} = linker_tmp_var.{}".format(phKey, phKey)
+        print >>stream, "I am here,  #{}".format(i)
+        i = i + 1
 
 
         ### Month SQL Query - each month should be unioned, then intersected with the larger query. 
