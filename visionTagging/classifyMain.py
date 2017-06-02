@@ -238,6 +238,7 @@ if __name__ == "__main__":
                 metadata = pyexiv2.ImageMetadata(filename)
                 metadata.read()
                 metadata['Exif.Photo.DateTimeOriginal'] = dateTaken
+                metadata['Exif.Photo.DateTime'] = dateTaken
                 metadata.write()
                 
                 break
@@ -296,6 +297,7 @@ if __name__ == "__main__":
             metadata = pyexiv2.ImageMetadata(filename)
             metadata.read()
             metadata['Exif.Photo.DateTimeOriginal'] = dateTaken
+            metadata['Exif.Photo.DateTime'] = dateTaken
             metadata.write()
 
             break
@@ -308,6 +310,7 @@ if __name__ == "__main__":
             metadata = pyexiv2.ImageMetadata(filename)
             metadata.read()
             metadata['Exif.Photo.DateTimeOriginal'] = dateTaken
+            metadata['Exif.Photo.DateTime'] = dateTaken
             metadata.write()
 
         if alreadyDone == monthlyLimit:
