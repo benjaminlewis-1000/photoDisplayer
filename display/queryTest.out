@@ -1,8 +1,8 @@
 SELECT * FROM ( SELECT photo AS c FROM PhotoLinker WHERE person = (SELECT people_key FROM People WHERE person_name =  ) )
 SELECT photo_key FROM Photos AS photo_key_and_var JOIN (SELECT photo AS photo_key FROM PhotoLinker WHERE person =  ) AS linker_tmp_var ON photo_key_and_var.photo_key = linker_tmp_var.photo_key
-SELECT photo_key FROM Photos WHERE taken_year  > 2013
 SELECT photo_key FROM Photos WHERE taken_year 
+SELECT photo_key FROM Photos WHERE taken_year  = 2017
 SELECT photo_key FROM Photos WHERE photo_date 
-SELECT photo_key FROM Photos WHERE taken_year  > 2013
+SELECT photo_key FROM Photos WHERE taken_year  = 2017
 SELECT photo_key, photo_file, root_dir_num, photo_date FROM Photos WHERE photo_key IN 
- (SELECT photo_key FROM Photos WHERE taken_year  > 2013)
+ (SELECT photo_key FROM Photos WHERE taken_year  = 2017)

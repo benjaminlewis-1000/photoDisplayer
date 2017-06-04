@@ -126,13 +126,26 @@ class displayServer:
 #        if os.path.isfile(self.fileListName):
 #            cont = True
 #        if cont:
-        self.p = subprocess.Popen(["feh"] + self.commandArray + ["-f", self.fileListName])
+        stream = open(rootDir + '/serverLog.txt', 'a') 
+        print >>stream, "I am here,  starting the slideshow"
+        self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+        #sleep(5)
+        #if not self.p.poll():
+        #    print >>stream, self.p.communicate()
+        #stdout, stderr = self.p.communicate()
+        print >>stream, self.p
+        #print >>stream, stdout
+        #print >>stream, stderr
+        stream.close()
 #        else:
+#             print >>stream, "Exception, can't find file!"
+#             stream.close()
 #            raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
 
 
     def buildQuery(self, criteriaJSON):
-        stream = open('serverLog.txt', 'w+')
+        stream = open(rootDir + '/serverLog.txt', 'a') 
+        print rootDir
         print >>stream, "Building a query... {}".format(criteriaJSON)
         i = 0
 
@@ -297,6 +310,7 @@ class displayServer:
         ### Date ranges - must be or'd. It doesn't make sense to AND date ranges, because the date
         ### range could be changed or another date range selected to get the appropriate values. 
         print "Here"
+        stream.close()
         orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(phKey, phTableName, phTakenDate)
         for i in range(len(dateRangeVals)):
             startDate = dateRangeVals[i][0]
@@ -441,7 +455,7 @@ class displayServer:
 if __name__ == '__main__':
     ### Load the parameters from files
 
-    with open('../config/params.xml') as stream:
+    with open(rootDir + '/config/params.xml') as stream:
         try:
             tparams = xmltodict.parse(stream.read())
         except Exception as exc:

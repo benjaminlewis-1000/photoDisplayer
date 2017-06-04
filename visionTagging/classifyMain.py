@@ -219,7 +219,7 @@ if __name__ == "__main__":
         metadata = pyexiv2.ImageMetadata(filename)
         metadata.read()
         dateTakenOrig = metadata['Exif.Photo.DateTimeOriginal'].raw_value
-        dateTaken = metadata['Exif.Photo.DateTime'].raw_value
+        dateTaken = metadata['Exif.Image.DateTime'].raw_value
         successVal = 0
 		## Try-except block to classify the image with the API. In the event that we reach the monthly limit
 		## or have some exception, we save off the new number of files processed and exit the loop.
@@ -239,7 +239,7 @@ if __name__ == "__main__":
                 metadata = pyexiv2.ImageMetadata(filename)
                 metadata.read()
                 metadata['Exif.Photo.DateTimeOriginal'] = dateTakenOrig
-                metadata['Exif.Photo.DateTime'] = dateTaken
+                metadata['Exif.Image.DateTime'] = dateTaken
                 metadata.write()
                 
                 break
@@ -298,7 +298,7 @@ if __name__ == "__main__":
             metadata = pyexiv2.ImageMetadata(filename)
             metadata.read()
             metadata['Exif.Photo.DateTimeOriginal'] = dateTakenOrig
-            metadata['Exif.Photo.DateTime'] = dateTaken
+            metadata['Exif.Image.DateTime'] = dateTaken
             metadata.write()
 
             break
@@ -311,7 +311,7 @@ if __name__ == "__main__":
             metadata = pyexiv2.ImageMetadata(filename)
             metadata.read()
             metadata['Exif.Photo.DateTimeOriginal'] = dateTakenOrig
-            metadata['Exif.Photo.DateTime'] = dateTaken
+            metadata['Exif.Image.DateTime'] = dateTaken
             metadata.write()
 
         if alreadyDone == monthlyLimit:

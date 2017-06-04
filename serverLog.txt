@@ -1,0 +1,161 @@
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2011"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2011"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2011"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+2
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2017"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2017"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2017"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764d9930>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2017"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764bf930>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764a2730>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764a2e90>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764a2630>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764a2e50>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764a2730>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764a2e90>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2011"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x7652bf90>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2011"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x7652b750>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2014"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76552850>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2004"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76552f10>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2004"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76552f90>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2002"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76552850>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2002"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76552f10>
