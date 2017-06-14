@@ -35,9 +35,11 @@ our @rootDirList;
 
 our $answerBool = 1;
 
-`bash $params::init_dir/killGeoServer.sh`;
+if ($params::OS_type == $params::linuxType){
+	`bash $params::init_dir/killGeoServer.sh`;
+}
 our $portNum = $params::geoServerPort;
-my $geoserverProc = Proc::Background->new("python $params::init_dir/geoServer.py $portNum");
+my $geoserverProc = Proc::Background->new(qq/python "$params::init_dir\/geoServer.py" $portNum/);
 $geoserverProc->alive;
 
 if (!$answerBool){
@@ -131,7 +133,9 @@ foreach my $root_dir (@rootDirList){
 	
 	while (my @row = $query->fetchrow_array) { # retrieve one row
 	    my $registeredRow = join("", @row);
-	    if ( $root_dir =~ $registeredRow ){
+	    my $utf_root_dir = decode('utf8',$root_dir);
+	    print $utf_root_dir . "\n";
+	    if ( $utf_root_dir =~ $registeredRow ){
 	    	print "I've put $root_dir in already at a higher level, at: $registeredRow. Exiting.\n";
 	    	$higherDirectoryExists = 1;
 

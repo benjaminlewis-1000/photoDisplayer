@@ -31,9 +31,12 @@ close OUTPUT;
 
 our @rootDirList;
 
-`bash $params::init_dir/killGeoServer.sh`;
+if ($params::OS_type == $params::linuxType){
+	`bash $params::init_dir/killGeoServer.sh`;
+}
 our $portNum = $params::geoServerPort;
-my $geoserverProc = Proc::Background->new("python $params::init_dir/geoServer.py $portNum");
+my $geoserverProc = Proc::Background->new(qq/python "$params::init_dir\/geoServer.py" $portNum/);
+
 $geoserverProc->alive;
 
 # Open the database

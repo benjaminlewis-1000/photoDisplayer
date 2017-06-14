@@ -12,7 +12,7 @@ use Encode qw(encode decode);
 #use YAML;
 
 use params;
-require 'read_xmp.pl';
+require 'xmp_link.pl';
 
 sub readOneImage{
 
@@ -134,6 +134,7 @@ sub readOneImage{
 		resY => 0,
 		url => $serverName
 		});
+	# my %data = %{readExifPython("$baseDirName" . "$fileName")};
 
 	if ($params::debug and $params::debug_readIn) { 
 		my $elapse = tv_interval($sttime);
@@ -459,7 +460,7 @@ sub readOneImage{
 
 			# print $fields[$i] . ": Keyword is " . $kw  . " " . $keyHash{$kw} . "\n";
 
-
+			print $insertPhotoCommentLinkerQuery . "\n";
 			$query = $dbhandle->prepare($insertPhotoCommentLinkerQuery);
 			until(
 				$query->execute()

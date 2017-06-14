@@ -1,0 +1,1 @@
+<pyexiv2.metadata.ImageMetadata object at 0x02B10B30>

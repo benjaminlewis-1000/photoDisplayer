@@ -3,10 +3,13 @@
 import SimpleHTTPServer
 import SocketServer
 import geopy
+from geopy.exc import GeocoderTimedOut
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import sys
 import numbers
+from time import sleep
+import json
 
 import unicodedata
 
@@ -30,6 +33,15 @@ server.register_introspection_functions()
 
 locationDict = {}
 
+def do_geocode(address):
+    # Recursive until we get an answer
+    try:
+        return geolocator.reverse(address, timeout=3)
+    except GeocoderTimedOut:
+        sleep(1)
+        print("Error: geocode timed out")
+        return do_geocode(address)
+
 def geoLookup(lat, lon):
 
     gpsTuple = (lat,lon)
@@ -38,9 +50,14 @@ def geoLookup(lat, lon):
         print 'Already in location dict!'
         return locationDict[gpsTuple]
 
+    # Prevent ourselves from getting throttled.
+    # sleep(3)
+
+    location = do_geocode(str(lat) + ', ' + str(lon))
+
     print "Found something new"
 
-    location = geolocator.reverse(str(lat) + ', ' + str(lon))
+    print location.raw['address']
 
     house_number = '-'
     road = '-'
@@ -50,36 +67,50 @@ def geoLookup(lat, lon):
     country = '-'
 
     if (not 'error' in location.raw):
+        print 'hafe'
+        addr = location.raw['address']
         if ('house_number' in location.raw['address']):
-            house_number = location.raw['address']['house_number']
-        if ('road' in location.raw['address']):
-            road = location.raw['address']['road']
-        if ('city' in location.raw['address']):
-            city = location.raw['address']['city']
-        if ('village' in location.raw['address']):
-            city = location.raw['address']['village']
-        if ('state' in location.raw['address']):
-            state = location.raw['address']['state']
-        if ('postcode' in location.raw['address']):
-            postcode = location.raw['address']['postcode']
-        if ('country' in location.raw['address']):
-            country = location.raw['address']['country']
+            house_number = addr['house_number']
+        if ('road' in addr):
+            road = unicode(addr['road']).encode('utf-8')
+        if ('city' in addr):
+            city = unicode(addr['city']).encode('utf-8')
+        if ('village' in addr):
+            city = unicode(addr['village']).encode('utf-8')
+        if ('state' in addr):
+            state = unicode(addr['state']).encode('utf-8')
+        if ('postcode' in  addr):
+            postcode = unicode(addr['postcode']).encode('utf-8')
+        if ('country' in addr):
+            country = unicode(addr['country']).encode('utf-8')
 
-    retJSON = '{' + \
-              '"house_number" : "' + house_number  + \
-              '", "road" : "' +  road + \
-              '", "city" : "' + city  + \
-              '", "state" : "' +  state + \
-              '", "postcode" : "' + postcode  + \
-              '", "country" : "' + country  + \
-              '"}'
+    else:
+        print "error!"
+
+    retDict = {}
+    retDict['house_number'] = house_number
+    retDict['road'] = road
+    retDict['city'] = city
+    retDict['state'] = state
+    retDict['postcode'] = postcode
+    retDict['country'] = country
+
+    retJSON = json.dumps(retDict)
+
+    # retJSON = '{' + \
+    #           '"house_number" : "' + house_number  + \
+    #           '", "road" : "' +  road + \
+    #           '", "city" : "' + city  + \
+    #           '", "state" : "' +  state + \
+    #           '", "postcode" : "' + postcode  + \
+    #           '", "country" : "' + country  + \
+    #           '"}'
+    print retJSON
               
     locationDict[gpsTuple] = retJSON
 
-    if ('error' in location.raw):
-        return retJSON
-    else:
-        return retJSON
+    return retJSON
+
 server.register_function(geoLookup, 'geoLookup')
 
 def test():
