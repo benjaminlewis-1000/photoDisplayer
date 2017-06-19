@@ -20,30 +20,6 @@ def isSubDir(compDir, possibleSubDir):
     else:
         return True
 
-def getUniqueSubDirs(rootsList):
-    subDirsDict = dict()
-    for eachRoot in rootsList:
-        currentSubDirs = []
-        for root, dirs, files in os.walk(eachRoot):
-            currentSubDirs.append(root)
-        subDirsDict[eachRoot] = currentSubDirs
-
-    for currentRoot in rootsList:
-        otherRoots = list(set(rootsList) - set([currentRoot]))
-
-        currentSubDirs = subDirsDict[currentRoot]
-
-        for other in otherRoots:
-            otherSubDirs = subDirsDict[other]
-            if isSubDir(other, currentRoot):
-                pass
-            else:
-                if isSubDir(currentRoot, other):
-                    currentSubDirs = list(set(currentSubDirs) - set(currentSubDirs).intersection(set(otherSubDirs)) )
-
-        subDirsDict[currentRoot] = currentSubDirs
-
-    return subDirsDict
 
 
 

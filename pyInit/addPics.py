@@ -129,10 +129,7 @@ def getRoots(conn, args, params):
                 exit(1)
 
             # Get the root key of the new directory
-            rootKeyQuery = '''SELECT {} FROM {} WHERE {} = ?'''.format(rootKeyField, rootTable, rootPathFieldName)
-            c.execute(rootKeyQuery, (newDirName,))
-            row = c.fetchone()
-            rootKey = row[0]
+            rootKey = c.lastrowid  # SQLite function 
             rootDirRows[newDirName] = rootKey
 
     return rootDirRows
