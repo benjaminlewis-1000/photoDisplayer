@@ -21,8 +21,6 @@ def isSubDir(compDir, possibleSubDir):
         return True
 
 
-
-
 unq = getUniqueSubDirs(rrs)
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(unq)  

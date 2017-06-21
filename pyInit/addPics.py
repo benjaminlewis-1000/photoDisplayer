@@ -8,6 +8,9 @@ import argparse
 from Tkinter import Tk
 import tkMessageBox
 from tkFileDialog import askdirectory
+from time import sleep
+
+import photoHandler
 
 import vars
 
@@ -17,7 +20,17 @@ script_path  = os.path.abspath(os.path.join(__file__,".."))
 def isSubDir(compDir, possibleSubDir):
     # print compDir
     # print possibleSubDir
-    if re.search(r''+compDir, possibleSubDir) is None:
+    try:
+        cdir = compDir.encode('utf-8')
+    except UnicodeDecodeError as ude:
+        cdir = compDir
+
+    try:
+        pdir = possibleSubDir.encode('utf-8', errors='ignore')
+    except UnicodeDecodeError as ude:
+        pdir = possibleSubDir
+
+    if re.search(r'' + cdir, pdir, re.UNICODE) is None:
         return False
     else:
         return True
@@ -98,18 +111,30 @@ def getRoots(conn, args, params):
         row = c.fetchone()
 
     if args.addRoot:
+        if args.addRoot == "":
 
-        acceptedVal = 'No'
-        while acceptedVal != 'yes':
-            newDirName = askdirectory() # show an "Open" dialog box and return the path to the selected file
-            if newDirName == '':
-                window.option_add('*Dialog.msg.width', 20)
-                exitVal = tkMessageBox.askquestion("Confirmation", "Exit?", icon='warning')
-                if exitVal == 'yes':
-                    exit(1)
-                window.option_add('*Dialog.msg.width', 75)
-            else:
-                acceptedVal = tkMessageBox.askquestion("Exit", "{} directory: {}".format(vars.osType, newDirName), icon='warning')
+            acceptedVal = 'No'
+            while acceptedVal != 'yes':
+                newDirName = askdirectory() # show an "Open" dialog box and return the path to the selected file
+                if newDirName == '':
+                    window.option_add('*Dialog.msg.width', 20)
+                    exitVal = tkMessageBox.askquestion("Confirmation", "Exit?", icon='warning')
+                    if exitVal == 'yes':
+                        exit(1)
+                    window.option_add('*Dialog.msg.width', 75)
+                else:
+                    acceptedVal = tkMessageBox.askquestion("Exit", vars.osType + " directory: "+ newDirName.encode('utf-8') , icon='warning')
+        else:
+            newDirName = args.addRoot
+
+        isdir = os.path.isdir(newDirName)
+        isabsdir = os.path.isabs(newDirName)
+
+        if not os.path.isabs(newDirName):
+            newDirName = os.path.expanduser(newDirName)
+            newDirName = os.path.abspath(newDirName)
+
+        print newDirName
 
         isNewDirValid = os.path.isdir(newDirName) # Should be true if it's a directory
         for root in list(rootDirRows.keys()):
@@ -119,8 +144,9 @@ def getRoots(conn, args, params):
         if isNewDirValid:
             newRootQuery = '''INSERT INTO {} ({}) VALUES (?) '''.format(rootTable, rootPathFieldName)
 
+            print "Inserting new dir : " + newDirName
             try:
-                c.execute(newRootQuery, (newDirName,))
+                c.execute(newRootQuery, (unicode(str(newDirName), "utf-8", "ignore"),))
                 conn.commit()
             except sqlite3.OperationalError as oe:
                 print "Operational error: " + str(oe)
@@ -140,7 +166,10 @@ def getUniqueSubDirs(rootsList):
     for eachRoot in rootsList:
         currentSubDirs = []
         for root, dirs, files in os.walk(eachRoot):
+            print root
+            root = re.sub(r''+eachRoot, '', root, re.UNICODE)
             currentSubDirs.append(root)
+            # print dirs 
         subDirsDict[eachRoot] = currentSubDirs
 
     for currentRoot in rootsList:
@@ -163,6 +192,10 @@ def getUniqueSubDirs(rootsList):
 
 if __name__ == '__main__':
 
+    print "TODO! Encode all input with '.encode('utf-8')'."
+    # TODO: Expand a directory passed via command line
+    # sleep(3)
+
     ## Open the params.xml file for the configuration parameters
     with open(os.path.join(project_path, 'config/params.xml') ) as stream:
         try:
@@ -172,7 +205,7 @@ if __name__ == '__main__':
             exit(1)
 
     parser = argparse.ArgumentParser(description='Python version of the photo display program.')
-    parser.add_argument('--addRoot', action='store_true', help='Add new image root directory.')
+    parser.add_argument('--addRoot', help='Add new image root directory.')
 
     args = parser.parse_args()  
     dbName = params['params']['photoDatabase']['fileName']
@@ -185,10 +218,25 @@ if __name__ == '__main__':
     print rootDirRows
 
     rootSubdirs = getUniqueSubDirs( list(rootDirRows.keys() ) )
+    personNameDict = {}
+
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(rootSubdirs)
+    exit(1)
 
     for eachRoot in list(rootDirRows.keys() ):
-        key = rootDirRows[eachRoot]
+        rootDirKey = rootDirRows[eachRoot]
         subdirs = rootSubdirs[eachRoot]
+
+        print subdirs
+        for eachDirectory in subdirs:
+            files = os.listdir(os.path.join(eachRoot, eachDirectory) )
+            for eachFile in files:
+                photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
+
+
+
 
 # for root, dirs, files in os.walk(dirB):
 #     for name in files:

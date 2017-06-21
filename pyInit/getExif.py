@@ -90,7 +90,11 @@ def getExifData(filename, doGeocode):
             dateTime = ["1969-01-01", "00:00:01"]
             dateIso = "1969-01-01 00:00:01"
             logfile = open(script_path + '/logNoDates.out', 'a')
-            print >>logfile, "No date/time for: " + filename 
+            try:
+                utf_filename = filename.encode('utf-8')
+            except UnicodeDecodeError as ude:
+                utf_filename = filename
+            print >>logfile, "No date/time for: " + utf_filename
             logfile.close()
 
         assert len(dateTime) == 2  # Date and time
@@ -238,7 +242,7 @@ def getExifData(filename, doGeocode):
             pTags = []
             for tagOrig in picasaTags:
                 if not (re.search('METADATA-START', tagOrig) or (tagOrig in nameList)):
-                    pTags.append(tagOrig)
+                    pTags.append( (tagOrig, 1) )
             jData['picasaTags'] = pTags
             # assert len(jData['picasaTags']) > 0
         else:
