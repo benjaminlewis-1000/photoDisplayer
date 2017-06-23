@@ -9,6 +9,11 @@ from Tkinter import Tk
 import tkMessageBox
 from tkFileDialog import askdirectory
 from time import sleep
+import os
+import subprocess
+import psutil
+import signal
+import time
 
 import photoHandler
 
@@ -16,6 +21,7 @@ import vars
 
 project_path = os.path.abspath(os.path.join(__file__,"../.."))
 script_path  = os.path.abspath(os.path.join(__file__,".."))
+
 
 def isSubDir(compDir, possibleSubDir):
     # print compDir
@@ -106,6 +112,7 @@ def getRoots(conn, args, params):
             except Exception as e:
                 print "Unknown exception: " + str(e)
 
+        thisOSPath = re.sub(r'[\\/]$', '', thisOSPath)
         rootDirRows[thisOSPath] = keyVal
 
         row = c.fetchone()
@@ -162,19 +169,19 @@ def getRoots(conn, args, params):
 
 
 def getUniqueSubDirs(rootsList):
+    print "Obtaining all subdirectories of the roots and de-duplicating them..."
     subDirsDict = dict()
     for eachRoot in rootsList:
         currentSubDirs = []
         for root, dirs, files in os.walk(eachRoot):
-            print root
-            root = re.sub(r''+eachRoot, '', root, re.UNICODE)
+            # print root
+            root = re.sub(r'[\\/]$', '', root, re.UNICODE)
             currentSubDirs.append(root)
             # print dirs 
         subDirsDict[eachRoot] = currentSubDirs
 
     for currentRoot in rootsList:
         otherRoots = list(set(rootsList) - set([currentRoot]))
-
         currentSubDirs = subDirsDict[currentRoot]
 
         for other in otherRoots:
@@ -183,9 +190,21 @@ def getUniqueSubDirs(rootsList):
                 pass
             else:
                 if isSubDir(currentRoot, other):
+                    # print set(currentSubDirs)
+                    # print set(currentSubDirs).intersection(set(otherSubDirs))
+                    # print set(otherSubDirs)
+                    # print list(set(currentSubDirs) - set(currentSubDirs).intersection(set(otherSubDirs)) )
                     currentSubDirs = list(set(currentSubDirs) - set(currentSubDirs).intersection(set(otherSubDirs)) )
 
         subDirsDict[currentRoot] = currentSubDirs
+
+    for currentRoot in rootsList:
+        subdirs = subDirsDict[currentRoot]
+        # print subdirs
+        for i in range(len(subdirs)):
+            subdirs[i] = re.sub(r''+ currentRoot, '', subdirs[i])
+            subdirs[i] = re.sub(r'^[\\/]', '', subdirs[i])
+        subDirsDict[currentRoot] = subdirs
 
     return subDirsDict
 
@@ -204,6 +223,24 @@ if __name__ == '__main__':
             print(exc)
             exit(1)
 
+    geoServerPort = params['params']['serverParams']['geoServerPort']
+
+    # Kill the previously running server on this port, if applicable
+    for process in psutil.process_iter():
+        # print process.cmdline
+        cmdline = process.cmdline
+        if re.search(r'geoServer', str(cmdline) ) :
+            print process.cmdline
+            if str(geoServerPort) in cmdline:
+                print "Killing previous version of geoServer..."
+            process.terminate()
+            break
+
+    proc = subprocess.Popen(["python", "/home/lewis/gitRepos/photoDisplayer/pyInit/geoServer.py", "8040"])
+        # [] + self.commandArray + ["-f", self.fileListName])
+        #sleep(5)
+        #if not self.p.poll():
+
     parser = argparse.ArgumentParser(description='Python version of the photo display program.')
     parser.add_argument('--addRoot', help='Add new image root directory.')
 
@@ -214,27 +251,99 @@ if __name__ == '__main__':
     conn = sqlite3.connect(os.path.join(project_path, 'databases', dbName))
     conn.text_factory = lambda x: unicode(x, "utf-8", "ignore")
 
+    def signal_handler(signal, frame):
+        proc.kill()
+        conn.commit()
+        conn.close()
+        print "Going down!"
+        exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
     rootDirRows = getRoots(conn, args, params)
     print rootDirRows
 
+    # Reverse rootDirRows for key to dir translation
+    rootDirReverse = {}
+    for key in rootDirRows.keys():
+        rootDirReverse[rootDirRows[key]] = key
+
+    photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
+    photoCols = params['params']['photoDatabase']['tables']['photoTable']['Columns']
+    photoFileCol = photoCols['photoFile']
+    modDateCol = photoCols['modifyDate']
+    rootDirCol = photoCols['rootDirNum']
+
+    photoInTableQuery = '''SELECT {}, {}, {} FROM {}'''.format(photoFileCol, modDateCol, rootDirCol, photoTableName)
+
+    def dict_factory(cursor, row):
+        d = dict()
+        # Formats the return of a result so that we get a fullpath and a moddate in a dictionary.
+
+        for idx, col in enumerate(cursor.description):
+            filename = row[0]
+            modDate = row[1]
+            rootDirKey = row[2]
+            rootDir = rootDirReverse[rootDirKey]
+            fullpath = os.path.join(rootDir, filename)
+            d[fullpath] = modDate
+        return d
+
+    conn.row_factory = dict_factory
+    cc = conn.cursor()
+    cc.execute(photoInTableQuery)
+    result = cc.fetchone()
+
+    dateDict = {}
+
+    while result != None:
+        fullpath = result.keys()[0]
+        modDate = result[fullpath]
+        dateDict[fullpath] = modDate
+        result = cc.fetchone()
+        # print fullpath + " " + modDate
+    # IMPORTANT! Set the row factory for the database. 
+    conn.row_factory = sqlite3.Row
+
     rootSubdirs = getUniqueSubDirs( list(rootDirRows.keys() ) )
+
+
     personNameDict = {}
 
-    import pprint
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(rootSubdirs)
-    exit(1)
+    filesProcessed = 0
 
     for eachRoot in list(rootDirRows.keys() ):
+        print eachRoot
         rootDirKey = rootDirRows[eachRoot]
-        subdirs = rootSubdirs[eachRoot]
+        subdirs = sorted(rootSubdirs[eachRoot])
 
         print subdirs
         for eachDirectory in subdirs:
             files = os.listdir(os.path.join(eachRoot, eachDirectory) )
             for eachFile in files:
-                photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
+                filesProcessed += 1
+                filepath = os.path.join(eachRoot, eachDirectory, eachFile);
+                # print ('TODO: Check filepath in dict and stuff...')
+                last_modified_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(os.path.getmtime(filepath)))
+                # Using the dateDict, we try to prevent a read to the database for every single file
+                # just to see if it's up to date. Instead, we check dateDict and see if the modification
+                # date is acceptable. If not, or it doesn't exist, we go ahead and add the photo using
+                # the addPhoto function. Checking whether the file is in the dict is quite a bit faster. 
+                if filepath in dateDict and (dateDict[filepath] >= last_modified_date):
+                    pass
+                else:
+                    try:
+                        photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
+                    except Exception as e:
+                        print "Error! " + str(e)
+                        raise e
+                        exit(1)
+                if filesProcessed % 500 == 0 and filesProcessed > 0:
+                    print "{} files processed already.".format(filesProcessed)
 
+    photoHandler.checkPhotosAtEnd(conn, params)
+
+    proc.terminate()
 
 
 

@@ -176,6 +176,15 @@ sub create_people_table{
 
 	my $sub_state_handle = $dbhandle->prepare($sql_quer);
 	$sub_state_handle->execute() or die $DBI::errstr;
+
+	my $ben_query = qq/INSERT INTO $params::peopleTableName ($params::personNameColumn) VALUES ("Benjamin Lewis");/;
+	my $jessica_query = qq/INSERT INTO $params::peopleTableName ($params::personNameColumn) VALUES ("Jessica Lewis");/;
+
+	$sub_state_handle = $dbhandle->prepare($ben_query);
+	$sub_state_handle->execute() or die $DBI::errstr;
+
+	$sub_state_handle = $dbhandle->prepare($jessica_query);
+	$sub_state_handle->execute() or die $DBI::errstr;
 }
 
 # Create the linkage table

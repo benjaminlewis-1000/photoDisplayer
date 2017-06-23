@@ -9,6 +9,7 @@ from getExif import getExifData
 import json
 
 def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
+    conn.row_factory = sqlite3.Row
 
     fullPath = os.path.join(basePath, fileRelPath)
 
@@ -35,7 +36,24 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
 
     row = c.fetchone()
 
-    photoData = json.loads(getExifData(fullPath, False))
+    if row != None:
+        recordedModDate = row[1]
+        if recordedModDate >= last_modified_date:
+            # Do nothing - already recorded and up to date.
+            return
+
+    exifData = getExifData(fullPath, True)
+    if exifData == -1:
+        # Something in the photo data lookup failed, so we are going 
+        # to skip this for now and come back on a future update.
+        return
+    try:
+        photoData = json.loads(exifData)
+    except Exception as e:
+        print "File: " + fullPath
+        print exifData
+        print "Error! : " + str(e)
+        exit(1)
 
     photoDateColumn  = photoCols['photoDate']
     rootDirNumColumn  = photoCols['rootDirNum']
@@ -85,7 +103,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
         if recordedModDate < last_modified_date:
             pass 
             # Need to do an update
-            print 'Need to update' + fullPath + "  " + str(last_modified_date)
+            print 'Need to update ' + fullPath
             getExifData(fullPath, False)
             clearPhotoLinks(conn, photoID, params)
 
@@ -110,7 +128,6 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
             pass
             # Do nothing 
     else:
-        print "Empty..."
         print "Currently processing image: " + fullPath
 
         photoInsertQuery = '''INSERT INTO {} ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'''.format(photoTableName, photoFileCol, photoDateColumn, modDateCol, rootDirNumColumn, photoYearColumn, photoMonthColumn, photoDayColumn, photoHourColumn, photoMinuteColumn, photoTimezoneColumn, insertDateColumn, houseNumColumn, streetColumn, cityColumn, stateColumn, postcodeCoulumn, countryColumn, latColumn, longColumn)
@@ -132,6 +149,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
         linkTags(conn, photoID, photoData['picasaTags'], photoData['autoTagsClarifai'], photoData['autoTagsGoogle'], params)
 
 def clearPhotoLinks(conn, photoKeyID, params):
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
     linkerTable = params['params']['photoDatabase']['tables']['photoLinkerTable']['Name']
@@ -161,7 +179,56 @@ def clearPhotoLinks(conn, photoKeyID, params):
 
     conn.commit()
 
+def checkPhotosAtEnd(conn, params):
+
+    # IMPORTANT! Set the row factory for the database. 
+    conn.row_factory = sqlite3.Row
+
+    rootKeyField = params['params']['photoDatabase']['tables']['rootTable']['Columns']['rootKey']
+    rootTable = params['params']['photoDatabase']['tables']['rootTable']['Name']
+
+    rootQuery = '''SELECT {}, {} FROM {}'''.format(rootPathFieldName, rootKeyField, rootTable)
+    c = conn.cursor()
+    c.execute(rootQuery)
+
+    row = c.fetchone()
+    rootDict = {}
+    while row != None:
+        key = row[1]
+        dir = row[0]
+        rootDict[key] = dir
+        row = c.fetchone()
+
+    photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
+    photoCols = params['params']['photoDatabase']['tables']['photoTable']['Columns']
+    photoFileCol = photoCols['photoFile']
+    rootDirCol = photoCols['rootDirNum']
+    photoKeyCol = photoCols['photoKey']
+
+    picsQuery = '''SELECT {}, {}, {} FROM {}'''.format(rootDirCol, photoFileCol, photoKeyCol, photoTableName)
+    c.execute(picsQuery)
+    row = c.fetchone()
+    count = 0
+    while row != None:
+        if count % 1000 == 0:
+            print "Done {} files".format(count)
+        rootDir = rootDict[row[0]]
+        filename = row[1]
+        photoKeyID = row[2]
+        fullpath = os.path.join(rootDir, filename)
+        if not os.path.isfile(fullpath):
+            print os.path.join(rootDir, filename) + " is not a file"
+            clearPhotoLinks(conn, photoKeyID, params)
+            delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirNumColumn)
+            d = conn.cursor()
+            d.execute(delPhotoQuery, (fileName, rootDir))
+            d.commit()
+        row = c.fetchone()
+        count += 1
+
 def insertName(name, conn, photoKeyID, params, nameDict):
+
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
     if name not in nameDict:
@@ -213,6 +280,8 @@ def insertName(name, conn, photoKeyID, params, nameDict):
     conn.commit()
 
 def linkTags(conn, photoKeyID, userTags, clarifaiTags, googTags, params):
+
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']

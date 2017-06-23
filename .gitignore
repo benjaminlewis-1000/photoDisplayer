@@ -5,6 +5,7 @@ ehthumbs.db
 *.db-journal
 *.key
 *.swp
+*.pyc
 
 display/.slideshowFileList.txt
 init/unhandled_files.txt

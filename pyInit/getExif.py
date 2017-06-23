@@ -24,9 +24,6 @@ with open(project_path + '/config/params.xml') as stream:
         print(exc)
         exit(1)
 
-fname = "N:\\Photos\\Family CDs\\Ouachita Hike\\IM_A0005.JPG"
-
-
 # desiredField = "Exif.Photo.DateTimeOriginal"
 
 '''
@@ -96,6 +93,7 @@ def getExifData(filename, doGeocode):
                 utf_filename = filename
             print >>logfile, "No date/time for: " + utf_filename
             logfile.close()
+            return -1
 
         assert len(dateTime) == 2  # Date and time
         assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
@@ -140,18 +138,22 @@ def getExifData(filename, doGeocode):
 
             # print "{} {} / {} {}".format(lat, lon, latDec, lonDec)
 
-            proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + params['params']['serverParams']['geoServerPort'] + "/RPC2")
 
             if doGeocode:
                 # passed = False
                 # while not passed:
+                proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + params['params']['serverParams']['geoServerPort'] + "/RPC2")
                 try:
-                    val = json.loads(proxy.geoLookup(latDec, lonDec).encode('utf-8'))
+                    val = proxy.geoLookup(latDec, lonDec)
+                    if val == -1:
+                        return -1
+                    else:
+                        val = json.loads(val.encode('utf-8'))
                     passed = True
                 except Exception as e :
                     return str(e)
 
-                # print val
+
 
                 jData['house_number'] = val['house_number']
                 jData['road'] = val['road']
@@ -267,24 +269,45 @@ def getExifData(filename, doGeocode):
 
 # # val = json.loads(proxy.geoLookup("40.2338", "-111.6585").encode('utf-8'))
 
+if __name__ == '__main__':
 
-# rootDirectory = "D:\\Pictures"
-# if True:
-#     testImage = "N:\Photos\\2016\Wedding Time\Engagements\BJ-144.jpg"
+    if False:
+        rootDirectory = "/home/lewis/Pictures"
 
-#     metadata = pyexiv2.ImageMetadata(testImage)
-#     try:
-#         metadata.read()
-#     except IOError as ioe:
-#         print str(ioe)
-#         exit(1)
+        print rootDirectory
+        for root, dir, file in os.walk(rootDirectory):
+            print dir
+            for file in os.listdir(root):
+                fullPath =  os.path.join(root, file)
+                print getExifData(fullPath, True)
+    else:
+        fullPath = "/home/lewis/test.jpg"
+        print getExifData(fullPath, True)
 
-#     metadataFields = metadata.xmp_keys
-#     nameList = []
-#     for i in range(len(metadataFields)):
-#         if (re.search('Lewis', str(metadata[metadataFields[i]].raw_value))):
-#             print metadataFields[i] + " " + str(metadata[metadataFields[i]].raw_value)
-#     # print getExifData(testImage, False)
+
+
+    if True:
+        # testImage = "/home/lewis/Pictures/chicago_sept (3).jpg"
+        testImage = "/home/lewis/test.jpg"
+
+        metadata = pyexiv2.ImageMetadata(testImage)
+        try:
+            metadata.read()
+        except IOError as ioe:
+            print str(ioe)
+            exit(1)
+
+        metadataFields = metadata.exif_keys
+        nameList = []
+        # print "here"
+        print metadataFields
+        for i in range(len(metadataFields)):
+            # print metadataFields[i]
+            print metadataFields[i] + " " + str(metadata[metadataFields[i]].raw_value)
+            if (re.search('Date', str(metadata[metadataFields[i]].raw_value))):
+                print "found"
+                print metadataFields[i] + " " + str(metadata[metadataFields[i]].raw_value)
+    # print getExifData(testImage, False)
 # else:
 
 #     dirFile = open(script_path + "/directories.txt", 'r')
