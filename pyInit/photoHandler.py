@@ -7,6 +7,7 @@ import xmltodict
 import sqlite3
 from getExif import getExifData
 import json
+import vars
 
 def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
     conn.row_factory = sqlite3.Row
@@ -187,6 +188,17 @@ def checkPhotosAtEnd(conn, params):
     rootKeyField = params['params']['photoDatabase']['tables']['rootTable']['Columns']['rootKey']
     rootTable = params['params']['photoDatabase']['tables']['rootTable']['Name']
 
+
+    if vars.osType == vars.linuxType:
+        rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']
+        otherRootType = params['params']['photoDatabase']['tables']['rootTable']['Columns']['windowsRootPath']
+    elif vars.osType == vars.winType:
+        rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['windowsRootPath']
+        otherRootType = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']
+    else:
+        assert(vars.osType == vars.winType or vars.osType == vars.linuxType)
+        print "Not a windows or Linux system; this code hasn't been tested on a mac. More work required."
+
     rootQuery = '''SELECT {}, {} FROM {}'''.format(rootPathFieldName, rootKeyField, rootTable)
     c = conn.cursor()
     c.execute(rootQuery)
@@ -219,10 +231,10 @@ def checkPhotosAtEnd(conn, params):
         if not os.path.isfile(fullpath):
             print os.path.join(rootDir, filename) + " is not a file"
             clearPhotoLinks(conn, photoKeyID, params)
-            delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirNumColumn)
+            delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
             d = conn.cursor()
-            d.execute(delPhotoQuery, (fileName, rootDir))
-            d.commit()
+            d.execute(delPhotoQuery, (filename, rootDir))
+            conn.commit()
         row = c.fetchone()
         count += 1
 

@@ -91,6 +91,8 @@ def getExifData(filename, doGeocode):
                 utf_filename = filename.encode('utf-8')
             except UnicodeDecodeError as ude:
                 utf_filename = filename
+                logfile = open(script_path + '/unicodeTagErrors.out', 'a')
+                print >>logfile, "Unicode Date Error in this file: " + str(utf_filename)
             print >>logfile, "No date/time for: " + utf_filename
             logfile.close()
             return -1
@@ -218,9 +220,22 @@ def getExifData(filename, doGeocode):
                     tag = re.sub(r'' + googVisionPrefix, '', tagOrig)
                     tag = re.sub(r'' + clarifaiPrefix, '', tag)
                     if re.search(r'_', tag):
-                        (name, val) = tag.split('_')
-                        name = name.decode('utf-8')
-                        tagPair = (name, val)
+                        try:
+                            (comment, val) = tag.split('_')
+                        except ValueError as ve:
+                            logfile = open(os.path.join(script_path, 'tagSplitErrors.out'), 'a')
+                            print >>logfile, 'Tag was ill-formed in file ' + str(filename) + ' ' + tag
+                            continue
+                        try:
+                            comment = comment.decode('utf-8')
+                        except UnicodeDecodeError as ude:
+                            print comment
+                            print "Unicode Error in this file: " + str(filename)
+
+                            logfile = open(script_path + '/unicodeTagErrors.out', 'a')
+                            print >>logfile, "Unicode Tag Error in this file: " + str(filename)
+                            # exit(1)
+                        tagPair = (comment, val)
                         if not (re.search('METADATA-START', tagOrig) or (tagOrig in nameList)):
                             # print tagPair[0]
                             if re.search(googVisionPrefix, tagOrig):
@@ -281,7 +296,7 @@ if __name__ == '__main__':
                 fullPath =  os.path.join(root, file)
                 print getExifData(fullPath, True)
     else:
-        fullPath = "/home/lewis/test.jpg"
+        fullPath = "/mnt/NAS/Jessica Pictures/Laptop/Peru/Uros Islands/Other/20160502_104348.jpg"
         print getExifData(fullPath, True)
 
 

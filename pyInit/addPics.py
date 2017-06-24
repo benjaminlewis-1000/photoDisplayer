@@ -261,12 +261,19 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
     rootDirRows = getRoots(conn, args, params)
+
+    # rootDirRows = {}
+    # rootDirRows['/mnt/NAS/Jessica Pictures'] = 2
+
     print rootDirRows
+    # print rootDirRows.keys()[rootDirRows.values().index(2)] 
 
     # Reverse rootDirRows for key to dir translation
-    rootDirReverse = {}
-    for key in rootDirRows.keys():
-        rootDirReverse[rootDirRows[key]] = key
+    # rootDirReverse = {}
+    # for key in rootDirRows.keys():
+    #     print key
+    #     val = rootDirRows[key]
+    #     rootDirReverse[val] = key
 
     photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
     photoCols = params['params']['photoDatabase']['tables']['photoTable']['Columns']
@@ -284,7 +291,7 @@ if __name__ == '__main__':
             filename = row[0]
             modDate = row[1]
             rootDirKey = row[2]
-            rootDir = rootDirReverse[rootDirKey]
+            rootDir = rootDirRows.keys()[rootDirRows.values().index(rootDirKey)] 
             fullpath = os.path.join(rootDir, filename)
             d[fullpath] = modDate
         return d
@@ -306,7 +313,6 @@ if __name__ == '__main__':
     conn.row_factory = sqlite3.Row
 
     rootSubdirs = getUniqueSubDirs( list(rootDirRows.keys() ) )
-
 
     personNameDict = {}
 
@@ -332,12 +338,12 @@ if __name__ == '__main__':
                 if filepath in dateDict and (dateDict[filepath] >= last_modified_date):
                     pass
                 else:
-                    try:
-                        photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
-                    except Exception as e:
-                        print "Error! " + str(e)
-                        raise e
-                        exit(1)
+                    # try:
+                    photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
+                    # except Exception as e:
+                    #     print "Error! " + str(e)
+                    #     raise e
+                    #     exit(1)
                 if filesProcessed % 500 == 0 and filesProcessed > 0:
                     print "{} files processed already.".format(filesProcessed)
 
