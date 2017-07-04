@@ -1,0 +1,45 @@
+#! /bin/bash
+
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+echo $THIS_DIR
+
+sudo cp $THIS_DIR/keyboard /etc/default/keyboard
+
+sudo apt-get update
+sudo apt-get install vim
+
+# Install CEC packages - these let you, in theory, control the TV from the computer.
+
+sudo apt-get install cec-utils libcec-dev libraspberrypi-dev -y
+
+# Install Expect scripting - allows us to use GUIs automatically 
+
+sudo apt-get install expect -y
+
+sudo expect $THIS_DIR/expect_scripts/ssh.exp
+sudo expect $THIS_DIR/expect_scripts/boot.exp
+sudo expect $THIS_DIR/expect_scripts/timezone.exp
+
+# Install packages for web server
+
+sudo apt-get install apache2 apache2-utils libapache2-mod-python libapache2-mod-php5 php5 php5-mcrypt php5-sqlite php-symfony-yaml -y
+
+# Install packages for feh, the photo program
+
+sudo apt-get install libcurl4-openssl-dev libx11-dev libxt-dev libimlib2-dev libxinerama-dev libexif-dev libjpeg-progs -y
+
+
+# Install feh and assorted tools
+
+wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O ~/feh.tar.bz2 
+
+pushd
+cd ~
+mkdir feh
+tar -xjf feh.tar.bz2 -C feh --strip-components 1
+cd feh
+sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' config.mk 
+make
+sudo make install
+popd
