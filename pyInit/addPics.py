@@ -236,7 +236,7 @@ if __name__ == '__main__':
             process.terminate()
             break
 
-    proc = subprocess.Popen(["python", "/home/lewis/gitRepos/photoDisplayer/pyInit/geoServer.py", "8040"])
+    proc = subprocess.Popen(["python", os.path.join(script_path, "geoServer.py"), "8040"])
         # [] + self.commandArray + ["-f", self.fileListName])
         #sleep(5)
         #if not self.p.poll():

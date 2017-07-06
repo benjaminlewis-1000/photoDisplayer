@@ -7,7 +7,8 @@ echo $THIS_DIR
 sudo cp $THIS_DIR/keyboard /etc/default/keyboard
 
 sudo apt-get update
-sudo apt-get install vim
+sudo apt-get install vim -y
+sudo apt-get install nautilus -y
 
 # Install CEC packages - these let you, in theory, control the TV from the computer.
 
@@ -51,3 +52,5 @@ popd
 sudo sed -i 's/#xserver-command=X/xserver-command=X -s 0 -dpms/' /etc/lightdm/lightdm.conf
 
 sudo bash $THIS_DIR/serverInstall.sh
+
+sudo bash $THIS_DIR/pyInstall.sh
