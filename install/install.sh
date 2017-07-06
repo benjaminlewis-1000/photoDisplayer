@@ -42,4 +42,12 @@ cd feh
 sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' config.mk 
 make
 sudo make install
+cd ~
+rm -rf feh
+rm feh.tar.bz2
 popd
+
+# Disable screen blanking
+sudo sed -i 's/#xserver-command=X/xserver-command=X -s 0 -dpms/' /etc/lightdm/lightdm.conf
+
+sudo bash $THIS_DIR/serverInstall.sh
