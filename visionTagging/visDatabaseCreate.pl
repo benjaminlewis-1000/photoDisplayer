@@ -5,14 +5,14 @@
 use warnings;
 use strict;
 
-use Cwd;
+use Cwd qw(abs_path);
 use DBI;
 use Time::localtime;
 
 # use YAML::XS 'LoadFile';
 use XML::Simple qw(:strict);
 
-our $base_path = cwd();  # Get the directory of this module. 
+our $base_path = abs_path($0 . '/..');  # Get the directory of this module. 
 $base_path =~ m/(.*)\/.*$/;  # Regex to go up one directory.
 $base_path = $1 . "/";  # Capture the output and put it in $base_path.
 
@@ -110,7 +110,7 @@ sub populateMetadataTable{
 	my $newMonth = "$year-$month-$day";
 
 	my $googFieldsBase = $visionBase->{'database'}->[0]->{'Fields'}->[0]->{'googFields'}->[0];
-	my $clarifaiFieldsBase = $visionBase->{'database'}->[0]->{'Fields'}->[0]->{'googFields'}->[0];
+	my $clarifaiFieldsBase = $visionBase->{'database'}->[0]->{'Fields'}->[0]->{'clarifaiFields'}->[0];
 	my $metaBase = $visionBase->{'database'}->[0]->{'tables'}->[0]->{'visionMetaTable'}->[0];
 
 	my $populateQuery = qq/INSERT INTO $metaBase->{'Name'}->[0] 
@@ -121,7 +121,7 @@ sub populateMetadataTable{
 		('$clarifaiFieldsBase->{'DayLastRead'}->[0]', '$newMonth'),
 		('$clarifaiFieldsBase->{'DayOfNewMonth'}->[0]', '$day'),
 		('$googFieldsBase->{'ReadsThisMonth'}->[0]', '0'), 
-		('$googFieldsBase->{'ReadsPerMonth'}->[0]', '1000'),
+		('$googFieldsBase->{'ReadsPerMonth'}->[0]', '10000'),
 		('$googFieldsBase->{'NewMonthDate'}->[0]', '$newMonth'),
 		('$googFieldsBase->{'DayLastRead'}->[0]', '$newMonth'),
 		('$googFieldsBase->{'DayOfNewMonth'}->[0]', '$day'); 
