@@ -6,22 +6,26 @@ import sqlite3
 import xmltodict
 import argparse
 from Tkinter import Tk
+import Tkinter as tk
 import tkMessageBox
 from tkFileDialog import askdirectory
 from time import sleep
 import os
 import subprocess
-import psutil
+
 import signal
 import time
 
 import photoHandler
 
 import vars
+if vars.osType == vars.linuxType:
+    import psutil
+else:
+    raise OSError('This hasn''t been tested on Windows.')
 
 project_path = os.path.abspath(os.path.join(__file__,"../.."))
 script_path  = os.path.abspath(os.path.join(__file__,".."))
-
 
 def isSubDir(compDir, possibleSubDir):
     # print compDir
@@ -117,53 +121,84 @@ def getRoots(conn, args, params):
 
         row = c.fetchone()
 
-    if args.addRoot:
-        if args.addRoot == "":
+    if args.addRoot or args.addRootGUI:
+        finishedRoots = False
 
-            acceptedVal = 'No'
-            while acceptedVal != 'yes':
-                newDirName = askdirectory() # show an "Open" dialog box and return the path to the selected file
-                if newDirName == '':
-                    window.option_add('*Dialog.msg.width', 20)
-                    exitVal = tkMessageBox.askquestion("Confirmation", "Exit?", icon='warning')
-                    if exitVal == 'yes':
-                        exit(1)
-                    window.option_add('*Dialog.msg.width', 75)
-                else:
-                    acceptedVal = tkMessageBox.askquestion("Exit", vars.osType + " directory: "+ newDirName.encode('utf-8') , icon='warning')
-        else:
-            newDirName = args.addRoot
+        newRootsList = []
 
-        isdir = os.path.isdir(newDirName)
-        isabsdir = os.path.isabs(newDirName)
+        if args.addRootGUI:
+            root = tk.Tk()
+            root.withdraw()
+            while not finishedRoots:
 
-        if not os.path.isabs(newDirName):
-            newDirName = os.path.expanduser(newDirName)
-            newDirName = os.path.abspath(newDirName)
+                acceptedVal = 'No'
+                while acceptedVal != 'yes':
+                    # Get the home directory 
+                    home = os.curdir      
+                    if 'HOME' in os.environ:
+                        home = os.environ['HOME']
+                    elif os.name == 'posix':
+                        home = os.path.expanduser("~/")
+                    elif os.name == 'nt':
+                        if 'HOMEPATH' in os.environ and 'HOMEDRIVE' in os.environ:
+                            home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
+                    else:
+                        home = os.environ['HOMEPATH']
 
-        print newDirName
+                    dir_opt = {}
+                    dir_opt['initialdir'] = home
+                    newDirName = askdirectory(**dir_opt) # show an "Open" dialog box and return the path to the selected file
+                    if newDirName == '':
+                        window.option_add('*Dialog.msg.width', 20)
+                        exitVal = tkMessageBox.askquestion("Confirmation", "Exit?", icon='warning')
+                        if exitVal == 'yes':
+                            exit(1)
+                        window.option_add('*Dialog.msg.width', 75)
+                    else:
+                        acceptedVal = tkMessageBox.askquestion("Confirm", "Is " + vars.osType + " directory: "+ newDirName.encode('utf-8') + " acceptable?" , icon='warning')
 
-        isNewDirValid = os.path.isdir(newDirName) # Should be true if it's a directory
-        for root in list(rootDirRows.keys()):
-            if isSubDir(root, newDirName):
-                isNewDirValid = False
+                newRootsList.append(newDirName)
 
-        if isNewDirValid:
-            newRootQuery = '''INSERT INTO {} ({}) VALUES (?) '''.format(rootTable, rootPathFieldName)
+                continueVal = tkMessageBox.askquestion('Would you like to add more roots?', 'Would you like to add more roots?', icon='warning')
+                finishedRoots = (continueVal == 'no')
 
-            print "Inserting new dir : " + newDirName
-            try:
-                c.execute(newRootQuery, (unicode(str(newDirName), "utf-8", "ignore"),))
-                conn.commit()
-            except sqlite3.OperationalError as oe:
-                print "Operational error: " + str(oe)
-                print "Problem query:     " + str(newRootQuery)
-                print "Exiting. \n"
-                exit(1)
+        if args.addRoot:
+            newRootsList.append(args.addRoot)
 
-            # Get the root key of the new directory
-            rootKey = c.lastrowid  # SQLite function 
-            rootDirRows[newDirName] = rootKey
+        # print newRootsList
+
+        for newDirName in newRootsList:
+            # print "Adding root " + newDirName
+            isdir = os.path.isdir(newDirName)
+            isabsdir = os.path.isabs(newDirName)
+
+            if not os.path.isabs(newDirName):
+                newDirName = os.path.expanduser(newDirName)
+                newDirName = os.path.abspath(newDirName)
+
+            # print newDirName
+
+            isNewDirValid = os.path.isdir(newDirName) # Should be true if it's a directory
+            for root in list(rootDirRows.keys()):
+                if isSubDir(root, newDirName):
+                    isNewDirValid = False
+
+            if isNewDirValid:
+                newRootQuery = '''INSERT INTO {} ({}) VALUES (?) '''.format(rootTable, rootPathFieldName)
+
+                print "Inserting new dir : " + newDirName
+                try:
+                    c.execute(newRootQuery, (unicode(str(newDirName), "utf-8", "ignore"),))
+                    conn.commit()
+                except sqlite3.OperationalError as oe:
+                    print "Operational error: " + str(oe)
+                    print "Problem query:     " + str(newRootQuery)
+                    print "Exiting. \n"
+                    exit(1)
+
+                # Get the root key of the new directory
+                rootKey = c.lastrowid  # SQLite function 
+                rootDirRows[newDirName] = rootKey
 
     return rootDirRows
 
@@ -226,23 +261,25 @@ if __name__ == '__main__':
     geoServerPort = params['params']['serverParams']['geoServerPort']
 
     # Kill the previously running server on this port, if applicable
-    for process in psutil.process_iter():
-        # print process.cmdline
-        cmdline = process.cmdline
-        if re.search(r'geoServer', str(cmdline) ) :
-            print process.cmdline
-            if str(geoServerPort) in cmdline:
-                print "Killing previous version of geoServer..."
-            process.terminate()
-            break
+    if vars.osType == vars.linuxType:
+        for process in psutil.process_iter():
+            # print process.cmdline
+            cmdline = process.cmdline
+            if re.search(r'geoServer', str(cmdline) ) :
+                print process.cmdline
+                if str(geoServerPort) in cmdline:
+                    print "Killing previous version of geoServer..."
+                process.terminate()
+                break
 
-    proc = subprocess.Popen(["python", os.path.join(script_path, "geoServer.py"), "8040"])
+        proc = subprocess.Popen(["python", os.path.join(script_path, "geoServer.py"), "8040"])
         # [] + self.commandArray + ["-f", self.fileListName])
         #sleep(5)
         #if not self.p.poll():
 
     parser = argparse.ArgumentParser(description='Python version of the photo display program.')
     parser.add_argument('--addRoot', help='Add new image root directory.')
+    parser.add_argument('--addRootGUI', action='store_true', help='Add new image root directory using a GUI.')
 
     args = parser.parse_args()  
     dbName = params['params']['photoDatabase']['fileName']
@@ -349,7 +386,8 @@ if __name__ == '__main__':
 
     photoHandler.checkPhotosAtEnd(conn, params)
 
-    proc.terminate()
+    if vars.osType == vars.linuxType:
+        proc.terminate()
 
 
 
