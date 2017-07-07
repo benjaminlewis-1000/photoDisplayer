@@ -170,42 +170,6 @@
 	}
 </style>
 
-
-<!-- var text = jQuery.ajax({
-    type: "POST",
-    url: 'get_php.php',
-    dataType: 'text',
-    data: {functionname: 'add', arguments: [1, 2]},
-
-    success: function (obj, textstatus) {
-                  if( !('error' in obj) ) {
-                      yourVariable = obj.result;
-                  }
-                  else {
-                      console.log(obj.error);
-                  }
-            }
-
-            
-});
-
-var myData = "";
-
-function getData(response){
-	myData = response
-}
-
-$.ajaxSetup({async:false})
-$.post(
-	'get_php.php', {},
-	 function(data){
-	 	getData(data)
-	 	// Or here, I would create my field.
-	 }
-	)
-console.log(myData) -->
-<!-- New criteria line script -->
-
 <script type="text/javascript">
 
 	function addCriteriaLine(divOfFields){
@@ -283,10 +247,32 @@ console.log(myData) -->
 
 		//var lineDiv = document.getElementById('criteriaBox' + divNumber)
 		<?php 
-			try{
-				$db = new SQLite3('../databases/photos_master.db');
+			$parentDir = dirname(__FILE__, 2);
+			$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
+			//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
+			$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
+			
+			if (file_exists($photoDBpath) ){
+				//echo("<script> console.log(\"File exists\"); </script>\n");
+			}else{
+				//echo "File " . $photoDBpath . " not found. :( ";
+				//echo("<script> console.log(\"meh\"); </script>\n");
+				print_r("console.log('File $photoDBpath does not exist')\n");
+				//die('No such file');
+			}
+			function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+			    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
+			}
+			set_error_handler("exception_error_handler");
 
-				$results = $db->query('SELECT person_name FROM people');
+			try{
+				$db = new SQLite3($photoDBpath);
+				try{
+					$results = $db->query('SELECT person_name FROM people');
+				}catch(Exception $e){
+					//die('Table is ill-formed: ' . $e->getMessage() );
+					print_r("console.log('The table is not well-formed and probably wasn\'t initialized.')\n");
+				}
 				$people = array();
 				while ($row = $results->fetchArray()) {
 					if (!empty($row[0])){
@@ -294,7 +280,8 @@ console.log(myData) -->
 					}
 				}
 			}catch(Exception $e){
-				die('connection_unsuccessful: ' . $e->getMessage());
+				//die('connection_unsuccessful: ' . $e->getMessage());
+				print_r("console.log('Error when reading database')\n");
 			}
 			natcasesort ($people);
 
@@ -697,6 +684,8 @@ console.log(myData) -->
 		cal.setCssPrefix("Test");
 		cal.setYearSelectStartOffset(10);
 	</script>
+
+
 
 <!-- <form name="example">
 <input type="text" name="date1" value="" size="25">

@@ -9,12 +9,12 @@
 		echo("Not ok");
 		exit;
 	}
-        $winFile = 'C:\Users\Benjamin\Dropbox\Perl Code\photoDisplayer\config\params.xml';
-	$linFile = '/home/pi/photoDisplayer/config/params.xml';
+	
+	$parentDir = dirname(__FILE__, 2);
 
-	$xml_params = simplexml_load_file('/home/pi/photoDisplayer/config/params.xml') or die("Can't load this file!");
+	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
-	$photoDBname = $xml_params->photoDatabase->fileName;
+	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
 	
 	$jsonArray = json_decode($jsonText, true);
 
@@ -22,7 +22,7 @@
 
 	try{
 		//echo '../databases/' . $photoDBname;
-		$db = new SQLite3('../databases/' . $photoDBname);
+		$db = new SQLite3($photoDBpath);
 
 		$fieldBasestruct = $xml_params->photoDatabase->tables;
 		//$results = $db->query('SELECT person_name FROM people');

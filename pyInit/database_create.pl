@@ -36,7 +36,9 @@ create_comments_table();
 
 update_metadata();
 
-# $dbhandle->disconnect;
+# Vacuum the database
+$dbhandle->do('VACUUM');
+$dbhandle->disconnect;
 
 # End creation of tables.
 
