@@ -335,6 +335,7 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime, metada
 					print "No history, but clearly been done in this method..."
 					print tagFields
 					updateFileHistory(filename, currentTime, sourceTuple, metadata)
+					logInDatabase(filename, sourceTuple, currentTime, databasePointer)
 					return False
 
 			return True
