@@ -196,7 +196,7 @@ def getExifData(filename, doGeocode):
                 # print nameSplit
                 name = nameSplit[0]
                 bogusNames = ["Custom", "Medium Contrast"]
-                if not re.search(r'^\.', name) and not name.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])) and not name in bogusNames:
+                if not re.search(r'^\.', name) and not name.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])) and not name in bogusNames and not re.search(r'NIKKOR', name) and not re.search(r'NIKON', name):
                     # Not ending in JPEG because we get the filename from this list in the pitc values sometimes. 
                     name = name.rstrip()
                     name = ' '.join([s[0].upper() + s[1:] for s in name.split(' ')])
