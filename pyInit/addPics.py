@@ -280,6 +280,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Python version of the photo display program.')
     parser.add_argument('--addRoot', help='Add new image root directory.')
     parser.add_argument('--addRootGUI', action='store_true', help='Add new image root directory using a GUI.')
+    parser.add_argument('--noPhotoAdd', action='store_true', help='Don\'t add photos to the directory; simply add the root directories.')
 
     args = parser.parse_args()  
     dbName = params['params']['photoDatabase']['fileName']
@@ -298,6 +299,9 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
 
     rootDirRows = getRoots(conn, args, params)
+
+    if args.noPhotoAdd:
+        exit(0)
 
     # rootDirRows = {}
     # rootDirRows['/mnt/NAS/Jessica Pictures'] = 2
@@ -354,6 +358,7 @@ if __name__ == '__main__':
     personNameDict = {}
 
     filesProcessed = 0
+
 
     for eachRoot in list(rootDirRows.keys() ):
         print eachRoot
