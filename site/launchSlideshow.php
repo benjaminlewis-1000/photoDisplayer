@@ -9,8 +9,17 @@
 		echo("Not ok");
 		exit;
 	}
+
+	function dirname_r($path, $count=1){
+	    if ($count > 1){
+	       return dirname(dirname_r($path, --$count));
+	    }else{
+	       return dirname($path);
+	    }
+	}
+
 	
-	$parentDir = dirname(__FILE__, 2);
+	$parentDir = dirname_r(__FILE__, 2);
 
 	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";

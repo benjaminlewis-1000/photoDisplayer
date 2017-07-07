@@ -54,3 +54,5 @@ sudo sed -i 's/#xserver-command=X/xserver-command=X -s 0 -dpms/' /etc/lightdm/li
 sudo bash $THIS_DIR/serverInstall.sh
 
 sudo bash $THIS_DIR/pyInstall.sh
+
+sudo bash $THIS_DIR/populateDB.sh

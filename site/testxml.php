@@ -19,7 +19,16 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 }
 set_error_handler("exception_error_handler");
 
-			$parentDir = dirname(__FILE__,2);
+function dirname_r($path, $count=1){
+    if ($count > 1){
+       return dirname(dirname_r($path, --$count));
+    }else{
+       return dirname($path);
+    }
+}
+echo dirname_r(__FILE__, 2);
+
+			$parentDir = dirname_r(__FILE__,2);
 echo $parentDir;
 			$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 			//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
