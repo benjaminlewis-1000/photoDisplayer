@@ -52,7 +52,7 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 	else:
 		return
 
-	print "Existing tags are " + existingTags
+	# print "Existing tags are " + existingTags
 
 	invalidMatch = re.search(r'UUUUU', existingTags)
 	if (invalidMatch):
@@ -81,7 +81,7 @@ def removePreviousTags(filename, apiLabelTuple, metadata, databasePointer):
 	final3 = re.sub(r"charset=\".*\"\s?,?\s?", "", final2)
 	final4 = re.sub(r"II", "", final3)
 
-	print "Final tag is : " + final4
+	# print "Final tag is : " + final4
 
 	metadata[userCommentTagKey] = final4
 	metadata.write()
@@ -328,6 +328,15 @@ def decideIfNeedToDo(filename, sourceTuple, databasePointer, currentTime, metada
 		else:
 			# No history for that method and not in database - needs to be done. 
 			# print "No image history for this method, not in database"
+
+			if 'Exif.Photo.UserComment' in metadata:
+				tagFields = str(metadata['Exif.Photo.UserComment'].raw_value)
+				if re.search(r'' + sourceTuple[1], tagFields):
+					print "No history, but clearly been done in this method..."
+					print tagFields
+					updateFileHistory(filename, currentTime, sourceTuple, metadata)
+					return False
+
 			return True
 
 	if 'Exif.Photo.UserComment' in metadata:
