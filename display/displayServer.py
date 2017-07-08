@@ -42,8 +42,10 @@ class displayServer:
                                     requestHandler=RequestHandler)
         self.server.register_introspection_functions()
 
-        # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate"
-        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate"]
+        self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
+        # self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+        # print self.commandArray
+        print self.commandString
 
         self.masterQuery = ""
 
@@ -128,7 +130,9 @@ class displayServer:
 #        if cont:
         stream = open(rootDir + '/serverLog.txt', 'a') 
         print >>stream, "I am here,  starting the slideshow"
-        self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+#        self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+        self.p = subprocess.call("/usr/local/bin/feh " + self.commandString + " -f " + self.fileListName, shell=True)
+        print "launching..."
         #sleep(5)
         #if not self.p.poll():
         #    print >>stream, self.p.communicate()
@@ -426,7 +430,7 @@ class displayServer:
                     photo_file = fileResults[i][1]
                     photo_root_key = fileResults[i][2]
                     photo_taken_date = fileResults[i][3]
-                    print >>file, rootDict[photo_root_key] + photo_file
+                    print >>file, os.path.join(rootDict[photo_root_key], photo_file)
 
                     print >>f, '{0: <90}'.format( rootDict[photo_root_key] + photo_file)  +  '{0:>15}'.format(photo_taken_date)
 

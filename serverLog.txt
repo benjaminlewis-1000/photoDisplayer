@@ -159,3 +159,179 @@ I am here,  #1
 I am here,  #2
 I am here,  starting the slideshow
 <subprocess.Popen object at 0x76552f10>
+Building a query... []
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  #3
+I am here,  #4
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76595730>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76595ff0>
+Building a query... []
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  #3
+I am here,  #4
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76550990>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76550890>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam\
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"AdamLewis"}]
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam"}]
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764bf990>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764bf830>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76575990>
+Building a query... [{"criteriaType":"Date Range","booleanValue":"2017/04/03","criteriaVal":"/04/25"},{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2001"}]
+I am here,  #0
+I am here,  #1
+I am here,  #1
+I am here,  #2
+I am here,  #3
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+Building a query... [{"criteriaType":"Date Range","booleanValue":"2017/04/03","criteriaVal":"/04/25"},{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2001"}]
+I am here,  #0
+I am here,  #1
+I am here,  #1
+I am here,  #2
+I am here,  #3
+Building a query... []
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  #3
+I am here,  #4
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2001"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76566990>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2001"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76566b90>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76566a50>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x7655c9b0>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764bc990>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+1
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+1
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+1
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+0

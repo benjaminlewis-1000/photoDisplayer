@@ -1,5 +1,7 @@
 #! /bin/bash
 
+sleep 20
+
 remote_id=$(
 	xinput list |
 	sed -n 's/.*HID.*id=\([0-9]*\).*keyboard.*/\1/p'
@@ -28,8 +30,8 @@ xkb_symbols "remote" {
     key <AB05>  {  type= "ALPHABETIC", symbols[Group1]= [ h, H ]  };
     key <PGDN> {   [     Right ] };
     key <PGUP> {   [     Left ] };
-    key <FK05>   { [ parenright, 0 ] };
-    key <ESC>   { [ 0, parenright ] };
+    key <FK05>   { [ parenright, 1 ] };
+    key <ESC>   { [ 1, parenright ] };
 };
 EOF
 

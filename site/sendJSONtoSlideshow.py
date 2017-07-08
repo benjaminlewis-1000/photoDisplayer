@@ -17,7 +17,7 @@ def doit(json):
             exit(1)
 #    with open('received.out', 'w+') as f:
 #        print >>f, json
-
+#    print params['params']['serverParams']['displayServerPort']
 
     proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + str(params['params']['serverParams']['displayServerPort']) + "/")
 

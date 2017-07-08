@@ -17,6 +17,7 @@ sudo apt-get install cec-utils libcec-dev libraspberrypi-dev -y
 # Install Expect scripting - allows us to use GUIs automatically 
 
 sudo apt-get install expect -y
+sudo apt-get install xinput -y 
 
 sudo expect $THIS_DIR/expect_scripts/ssh.exp
 sudo expect $THIS_DIR/expect_scripts/boot.exp
