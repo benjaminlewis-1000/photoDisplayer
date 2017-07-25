@@ -57,3 +57,5 @@ sudo bash $THIS_DIR/serverInstall.sh
 sudo bash $THIS_DIR/pyInstall.sh
 
 sudo bash $THIS_DIR/populateDB.sh
+
+sudo bash $THIS_DIR/cronInstall.sh
