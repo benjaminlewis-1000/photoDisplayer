@@ -67,9 +67,7 @@
 	$photoDBpath = $siteDir . '/savedSlideshows.db';
 
 
-	if (file_exists($photoDBpath) ){
-	}else{
-		//print_r("console.log('File $photoDBpath does not exist')\n");
+	if (! file_exists($photoDBpath) ){
 		$exceptions[] = 'File $photoDBpath does not exist';
 	}
 	function exception_error_handler($errno, $errstr, $errfile, $errline ) {

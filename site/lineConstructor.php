@@ -48,14 +48,12 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 		$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 		$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
 		
-		if (file_exists($photoDBpath) ){
-			//echo("<script> console.log(\"File exists\"); </script>\n");
-		}else{
-			//echo "File " . $photoDBpath . " not found. :( ";
-			//echo("<script> console.log(\"meh\"); </script>\n");
-			print_r("console.log('File $photoDBpath does not exist')\n");
-			//die('No such file');
+		$exceptions = array();
+
+		if (! file_exists($photoDBpath) ){
+			$exceptions[] = 'File $photoDBpath does not exist';
 		}
+
 		function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 		    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
 		}
@@ -66,8 +64,7 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 			try{
 				$results = $db->query('SELECT person_name FROM people');
 			}catch(Exception $e){
-				//die('Table is ill-formed: ' . $e->getMessage() );
-				print_r("console.log('The table is not well-formed and probably wasn\'t initialized.')\n");
+				$exceptions[] = 'The table is not well-formed and probably wasn\'t initialized.';
 			}
 			$people = array();
 			while ($row = $results->fetchArray()) {
@@ -77,7 +74,7 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 			}
 		}catch(Exception $e){
 			//die('connection_unsuccessful: ' . $e->getMessage());
-			print_r("console.log('Error when reading database')\n");
+			$exceptions[] = 'Error when reading database';
 		}
 		natcasesort ($people);
 
@@ -86,9 +83,20 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 			$personNames[] = $person;
 		}
 
-		echo 'var personNames = ' . json_encode($personNames) . ';';
+		$retArray = array('personNames' => $personNames, 'exceptions' => $exceptions);
+
+		echo 'var retArray = ' . json_encode($retArray) . ';';
 	?>
 	/* TODO : Keep working on what happens when there is no file. */
+
+	console.log(retArray)
+
+	personNames = retArray['personNames']
+	exceptions = retArray['exceptions']
+    for (i = 0; i < exceptions.length; i++){
+    	console.log(exceptions[i]);
+    }
+
 
 
 	/* Clear anything that was previously on the line */
