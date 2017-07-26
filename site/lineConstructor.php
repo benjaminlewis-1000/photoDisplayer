@@ -72,11 +72,11 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 					$people[] = $row[0];
 				}
 			}
+			natcasesort ($people);
 		}catch(Exception $e){
 			//die('connection_unsuccessful: ' . $e->getMessage());
 			$exceptions[] = 'Error when reading database';
 		}
-		natcasesort ($people);
 
 		$personNames = array();
 		foreach ($people as $person){
