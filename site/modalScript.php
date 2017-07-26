@@ -6,6 +6,8 @@ header("Content-type: application/javascript");
 	imported.src = 'lineAdd.js';
 	document.head.appendChild(imported);
 
+	var loadSelectIdx = 0;
+
 	// Get the modal
 	var savemodal = document.getElementById('saveModal');
 	var loadmodal = document.getElementById('loadModal');
@@ -93,7 +95,7 @@ header("Content-type: application/javascript");
 					select.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
 				}
 
-				select.selectedIndex = 0;
+				select.selectedIndex = loadSelectIdx;
 			}
 		});
 
@@ -105,6 +107,7 @@ header("Content-type: application/javascript");
 		slideshowSaveName = select.value
 		queryType = 'loadJSONofName'
 		formField.value = slideshowSaveName;
+		loadSelectIdx = select.selectedIndex
 
 		$.ajax({
 			type: 'POST',
