@@ -1,0 +1,102 @@
+.fieldParent{
+		position:relative;
+	    min-height: 70px;
+	    max-width: 1200px;
+	    /*border: 4px solid black;*/
+		margin 20px auto;
+		padding: 10px;
+		border: none;/*solid blue 2px;*/
+		--webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		overflow: hidden
+	}
+
+	.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions{
+	    border: 20px;
+	    cursor: pointer;
+
+	    font-size: 16px;
+	    text-align: center;
+
+	    /*left: 20px;*/
+	    flex: 1;
+	    height: 50px;
+	    border-radius: 15px;
+
+	    margin-left: 10px;
+	    margin-right: 10px;
+
+	    transition: 1.5s ease;
+	    position:relative;
+	    z-index: 1;
+	    /*float:left;*/
+
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+		display: inline-block;
+	}
+
+	.criteriaType{
+     	width: 150px;
+     	width: 15%;
+	    background-color: #FFFCE0;
+	    color: #200954;
+	}
+
+	.dropdownOptions{
+		width: 415px;
+		width: 41%;
+	    background-color: #FFFCE0;
+	    color: #200954;
+	    margin-left: 5px;
+	}
+
+	.binaryField{
+		width: 265px;
+		width: 18%;
+	    background-color: #FFFCE0;
+	    color: #200954;
+	    text-align: center;
+	}
+
+	.fieldChild{
+	    background-color: #FFFCE0;
+	    color: #200954;
+	    width: 8%;
+	}
+
+	.fieldChild:hover {
+	    background-color: #eeefba;
+	}
+
+	#spacing{
+	    height: 50px;
+	}
+
+	.labelText{
+		font-size:20px;
+		font-style: oblique;
+		width: 10%;
+	}
+
+	.calendarBox{
+
+	    /*left: 40px;
+	    right: 40px;*/
+	    text-align: center;
+	    width:210px;
+	    width: 15%;
+
+	    margin-right: 5px;
+	    font-style: oblique;
+	    font-size: 20px;
+	}
+
+	.calSelect{
+		box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
+		width: 70px;
+		width: 9%;
+	    background-color: #FFFCE0;
+
+	}

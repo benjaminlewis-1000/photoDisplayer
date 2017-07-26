@@ -1,66 +1,82 @@
-<!DOCTYPE html>
 <html>
+
 <head>
-<style>
-button.accordion {
-    background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: 0.4s;
-}
-
-button.accordion.active, button.accordion:hover {
-    background-color: #ddd; 
-}
-
-div.panel {
-    padding: 0 18px;
-    display: none;
-    background-color: white;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="test.css" media="screen">
 </head>
+
+<script src="test.js"></script>
+
 <body>
 
-<h2>Accordion</h2>
+	<div id=newCriteriaDiv class="head_div">
+			<script src="buttonsScript.js"></script>
+		<button id="newCriteria" class="taskButton" onclick="addCriteriaLine('criteriaFieldsDiv')">
+			New criteria
+		</button>
+		<button id="saveCriteria" class="taskButton" onclick="saveCriteriaToDB()">Save criteria</button>
+		<button id="launchSlideshow", class="taskButton", onclick="launchSlideshow()">Launch Slideshow</button>
+	</div>
 
-<button class="accordion">Section 1</button>
-<div class="panel">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
 
-<button class="accordion">Section 2</button>
-<div class="panel">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
+	<button class="accordion">Picture Criteria Selection
+		<script type="text/javascript" src="test.js"></script>
+	</button>
 
-<button class="accordion">Section 3</button>
-<div class="panel">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
+	<div class="panel" id="criteriaFieldsDiv">
+		<p> hey </p>
+	</div>
 
-<script>
-var acc = document.getElementsByClassName("accordion");
-var i;
 
-for (i = 0; i < acc.length; i++) {
-    acc[i].onclick = function(){
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
-        } else {
-            panel.style.display = "block";
-        }
-    }
-}
-</script>
+	<!-- https://www.w3schools.com/howto/howto_js_accordion.asp -->
+
+
+	<button class="accordion">Slideshow Options
+		<script type="text/javascript" src="test.js"></script>
+	</button>
+	<!-- 
+	<script>
+	window.onload = function() {
+	  $("active").unhide();
+	};
+	</script> -->
+
+
+
+	<div class="panel" id="active" onload="toggleOnLoad(); toggleFunction();">
+		<form class="form-validation" method="post" action="script.php">
+		    <div class="sub-entry">
+		        <ul>
+					<li>
+					  	<input class="option_chk" type="checkbox" name="options" value="Fullscreen"> Fullscreen<br> <!-- -FxZ -->
+					</li>
+					<li>
+					  	<input class="option_chk" type="checkbox" name="options" value="Randomize"> Randomize<br>  <!-- -z -->
+					</li>
+					<li>
+					  	<input class="option_chk" type="checkbox" name="options" value="Date Order"> Sort by date, beginnng to end<br>  <!-- -z -->
+					</li>
+				</ul>
+		    </div>
+		    <div class="sub-entry">
+		        <ul>
+					<li>
+					  	<input class="option_chk" type="checkbox" name="options" value="Hide"> Hide Menus and Pointer<br> <!-- -Y, -N -->
+					</li>
+					<li>
+						<input class="option_chk" type="checkbox" name="options" value="Delay"> Delay between images: 
+						<input id="delayForm" name="delayVal" style="width: 40px; height: 25px"></input>
+						seconds
+						<br>
+					</li>
+				</ul>
+		    </div>
+		</form>
+	</div>
+	<div class="button">
+	    <button name="submit">Submit both forms</button>
+	</div>
 
 </body>
+
+
 </html>

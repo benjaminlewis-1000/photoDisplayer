@@ -82,7 +82,7 @@
 	    /*border: 4px solid black;*/
 		margin 20px auto;
 		padding: 10px;
-		border: solid blue 2px;
+		border: none;/*solid blue 2px;*/
 		--webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
@@ -308,12 +308,12 @@
 		var subdiv2 = document.getElementById('binarySelect' + divNumber)
 		var subdiv3 = document.getElementById('selectionDiv' + divNumber)
 
-		while (subdiv2.firstChild) {
+	/*	while (subdiv2.firstChild) {
 		    subdiv2.removeChild(subdiv2.firstChild);
 		}
 		while (subdiv3.firstChild) {
 		    subdiv3.removeChild(subdiv3.firstChild);
-		}
+		}*/
 
 		switch(selectionValue){
 			case "Date Range":
