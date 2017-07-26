@@ -49,6 +49,7 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 		$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
 		
 		$exceptions = array();
+		$personNames = array();
 
 		if (! file_exists($photoDBpath) ){
 			$exceptions[] = 'File $photoDBpath does not exist';
@@ -73,14 +74,12 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 				}
 			}
 			natcasesort ($people);
+			foreach ($people as $person){
+				$personNames[] = $person;
+			}
 		}catch(Exception $e){
 			//die('connection_unsuccessful: ' . $e->getMessage());
 			$exceptions[] = 'Error when reading database';
-		}
-
-		$personNames = array();
-		foreach ($people as $person){
-			$personNames[] = $person;
 		}
 
 		$retArray = array('personNames' => $personNames, 'exceptions' => $exceptions);
