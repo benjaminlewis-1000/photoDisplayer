@@ -46,7 +46,7 @@ header("Content-type: application/javascript");
 		if (confirmed == true){
 			$.ajax({
 				type: 'POST',
-				url: 'getDatabase.php',
+				url: 'scripts_controlpanel/getDatabase.php',
 				data: {'queryType': queryType, 'selectedVal': slideshowSaveName},
 				success: function(data){
 
@@ -75,7 +75,7 @@ header("Content-type: application/javascript");
 
 	    $.ajax({
 			type: 'POST',
-			url: 'getDatabase.php',
+			url: 'scripts_controlpanel/getDatabase.php',
 			data: {'queryType': queryType, selectedVal: ''},
 			success: function(data){
 		        decodedData = JSON.parse(data);
@@ -114,7 +114,7 @@ header("Content-type: application/javascript");
 
 		$.ajax({
 			type: 'POST',
-			url: 'getDatabase.php',
+			url: 'scripts_controlpanel/getDatabase.php',
 			data: {'queryType': queryType, 'selectedVal': slideshowSaveName},
 			success: function(data){
 		        decodedData = JSON.parse(data);
@@ -167,7 +167,7 @@ header("Content-type: application/javascript");
 
 		$.ajax({
 			type: 'POST',
-			url: 'getDatabase.php',
+			url: 'scripts_controlpanel/getDatabase.php',
 			data: {'queryType': queryType, 'selectedVal': jsonOfParams, 'name': saveName},
 			success: function(data){
 		        decodedData = JSON.parse(data);

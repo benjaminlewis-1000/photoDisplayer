@@ -19,7 +19,7 @@
 	}
 
 	
-	$parentDir = dirname_r(__FILE__, 2);
+	$parentDir = dirname_r(__FILE__, 3);
 
 	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
