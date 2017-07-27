@@ -78,11 +78,10 @@
 	try{
 		$db = new SQLite3($photoDBpath);
 	}catch(Exception $e){
-		if ($db = sqlite_open($photoDBpath,  0666, $sqliteerror) ){
-
-		}else{
-			$exceptions[] = "Unable to create new database in " . $photoDBpath;
-		}
+		$exceptions[] = "Unable to create new database in " . $photoDBpath;
+		$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+		echo json_encode($retArray);
+		exit;
 	}
 	$arrayOfSavedShows = array();
 
