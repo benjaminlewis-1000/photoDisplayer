@@ -75,7 +75,15 @@
 	}
 	set_error_handler("exception_error_handler");
 
-	$db = new SQLite3($photoDBpath);
+	try{
+		$db = new SQLite3($photoDBpath);
+	}catch(Exception $e){
+		if ($db = sqlite_open($photoDBpath,  0666, $sqliteerror) ){
+
+		}else{
+			$exceptions[] = "Unable to create new database in " . $photoDBpath;
+		}
+	}
 	$arrayOfSavedShows = array();
 
 	for ($i = 0; $i < count($queries); $i++){
