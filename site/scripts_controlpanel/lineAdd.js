@@ -66,23 +66,34 @@ var emptyCal = '<none>'
 		lineDiv.appendChild(removeSubdiv);
 		removeSubdiv.id = 'removeSubdiv' + num;
 
-			var removeLineButton = document.createElement('BUTTON');
-			removeLineButton.id = 'button';
-			var t = document.createTextNode('Remove ');
-			removeLineButton.appendChild(t);
+		var removeLineButton = document.createElement('BUTTON');
+		removeLineButton.id = 'button';
+		var t = document.createTextNode('Remove ');
+		removeLineButton.appendChild(t);
 
-			removeLineButton.className = "fieldChild";
-			removeSubdiv.appendChild(removeLineButton);
+		removeLineButton.className = "fieldChild";
+		removeSubdiv.appendChild(removeLineButton);
 
-			var name = 'removeButton' + num
-			var re = /.?(\d+)$/
+		var name = 'removeButton' + num
+		var re = /.?(\d+)$/
 
-			var num1 = re.exec(name)
-			var value = num1[1]
-			//console.log(value)
+		var num1 = re.exec(name)
+		var value = num1[1]
 
-			removeLineButton.onclick = function() { removeElement(removeSubdiv.id);};//removeElement//(subdiv3.id)
+		removeLineButton.onclick = function() { 
+			removeElement(removeSubdiv.id);
+		};
 
+		// Grow the accordion if it is in display mode.
+		var acc = document.getElementById("criteriaAccordion");
+	    var panel = acc.nextElementSibling;
+	    if (acc.className == "accordion"){  
+	    // Toggle the criteria div on; it's clearly advantageous to see what you're adding.
+	    	acc.classList.toggle("active");
+	    }
+	    if (acc.className == "accordion active"){
+		    panel.style.maxHeight = panel.scrollHeight + "px";
+		}
 	}
 /*
 	function listenMetaCategory(subdivName){

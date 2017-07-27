@@ -43,7 +43,7 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 		}
 
 		/* Get the name of the directory where the project lives */
-		$parentDir = dirname_r(__FILE__, 2);
+		$parentDir = dirname_r(__FILE__, 3);
 
 		$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 		$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
@@ -87,8 +87,6 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 		echo 'var retArray = ' . json_encode($retArray) . ';';
 	?>
 	/* TODO : Keep working on what happens when there is no file. */
-
-	console.log(retArray)
 
 	personNames = retArray['personNames']
 	exceptions = retArray['exceptions']
