@@ -3,6 +3,7 @@
 /* dirname_r is for compatibility in PHP 5.0 (available on Raspberry Pi) */
 
 	$exceptions = array();
+	$debug = array();
 
 	if (isset($_POST['queryType'])){
 		$queryType = $_POST['queryType'];
@@ -79,7 +80,7 @@
 		$db = new SQLite3($photoDBpath);
 	}catch(Exception $e){
 		$exceptions[] = "Unable to create new database in " . $photoDBpath;
-		$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+		$retArray = array('exceptions' => $exceptions);
 		echo json_encode($retArray);
 		exit;
 	}
