@@ -55,7 +55,7 @@ header("Content-type: application/javascript");
 
 			        exceptions = decodedData['exceptions']
 			        for (i = 0; i < exceptions.length; i++){
-			        	console.log(exceptions[i]);
+			        	console.log("Error in deleting slideshow (modalScript.php): " + exceptions[i]);
 			        }
 
 			        selectVals = select.options;
@@ -83,7 +83,7 @@ header("Content-type: application/javascript");
 
 		        exceptions = decodedData['exceptions']
 		        for (i = 0; i < exceptions.length; i++){
-		        	console.log(exceptions[i]);
+		        	console.log("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
 		        }
 
 			    var select = document.getElementById("savedSlideshowSelect");
@@ -122,7 +122,7 @@ header("Content-type: application/javascript");
 
 		        exceptions = decodedData['exceptions']
 		        for (i = 0; i < exceptions.length; i++){
-		        	console.log(exceptions[i]);
+		        	console.log("Error in loading slideshow (modalScript.php): " + exceptions[i]);
 		        }
 
 		        if (exceptions.length == 0){

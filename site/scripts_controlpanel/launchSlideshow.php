@@ -1,12 +1,24 @@
 <?php
 
+
+	$exceptions = array();
+	$debug = array();
+
+	// Set the error handler
+
+	function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+	    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
+	}
+	set_error_handler("exception_error_handler");
+
 	if (isset($_POST['json'])){
 		$jsonText = $_POST['json'];
 	}else if (isset($_GET['json'])){
 		$jsonText = $_GET['json'];
 	}else{
-		echo("<script>console.log(\"Invalid JSON\")</script>");
-		echo("Not ok");
+		$exceptions[] = "Invalid JSON -- Not OK";
+		$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+		echo json_encode($retArray);
 		exit;
 	}
 
@@ -18,10 +30,16 @@
 	    }
 	}
 
-	
 	$parentDir = dirname_r(__FILE__, 3);
 
-	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
+	try{
+		$xml_params = simplexml_load_file($parentDir . '/config/params.xml');
+	}catch(Exception $e){
+		$exceptions[] = 'Can\'t load the parameter file...';
+		$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+		echo json_encode($retArray);
+		exit;		
+	}
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
 	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
 	
@@ -43,7 +61,10 @@
 			}
 		}
 	}catch(Exception $e){
-		die('connection_unsuccessful: ' . $e->getMessage() . '. File = ' . '../databases/' . $photoDBname);
+		$exceptions[] = 'connection_unsuccessful: ' . $e->getMessage() . '. File = ' . '../databases/' . $photoDBname;
+		$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+		echo json_encode($retArray);
+		exit;
 	}
 
 	$formedArray = array();
@@ -71,7 +92,7 @@
 				$validity = $validStrings && $validDMY1 && $validDMY2;
 
 				if ($validity){
-					echo "$boolVal, $criteriaVal not valid in Date_range\n";
+					$exceptions[] = "$boolVal, $criteriaVal not valid in Date_range\n";
 					$allValid = 0;
 				}
 
@@ -100,7 +121,7 @@
 				//echo($valid1);
 				//echo($valid2);
 				if (!($valid1 and $valid2)){
-					echo("$boolVal, $criteriaVal not valid in Person");
+					$exceptions[] = "$boolVal, $criteriaVal not valid in Person";
 					$allValid = 0;
 				}
 
@@ -115,7 +136,7 @@
 				$year = $criteriaVal;
 
 				if (!$valid1 or !$yearValid){
-					echo "$boolVal, $criteriaVal not valid in Year";
+					//echo "$boolVal, $criteriaVal not valid in Year";
 					$allValid = 0;
 					break;
 				}
@@ -138,8 +159,8 @@
 				$month = $criteriaVal < 13 && $criteriaVal > 0 && ctype_digit($criteriaVal) ;
 
 				if (!$valid1 or !$month){
-					print_r($month);
-					echo("$boolVal, $criteriaVal not valid in Month");
+					//print_r($month);
+					$exceptions[] = "$boolVal, $criteriaVal not valid in Month";
 					$allValid = 0;
 				}
 				$data = array("\"criteriaType\"" =>"\"Month\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" =>"\"$criteriaVal\"");
@@ -150,22 +171,30 @@
 
 	}
 
-print_r($formedArray);
+
+//print_r($formedArray);
 	$parsed_text =  json_encode($formedArray, JSON_UNESCAPED_SLASHES);
 	//echo $parsed_text;
 	
 	if (!$allValid){
-		echo "Not all criteria in the JSON were valid. See console for more info.\n";
-		echo 'var valid=0';
+		$exceptions[] = "Not all criteria in the JSON were valid. See console for more info.";
+		//echo 'var valid=0';
 	}else{
 		// We're good to go! All these have been validated to be good JSON. 
-                echo "OK";
-                echo $parsed_text;
+        $debug[] = "All parsed arguments are valid: " . $parsed_text;
 		exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
 		//exec("python sendJSONtoSlideshow.py text");
-		if ( (count($output) > 0 && $output[0] != "Success" )|| count($output == 0)){
-			echo "Not a success... " . $output[0];
+		try{
+			if ( (count($output) > 0 && $output[0] != "Success" )|| count($output == 0)){
+				$exceptions[] = "Not a success... " . $output[0];
+			}
+		}catch(Exception $e){
+			$exceptions[] = "Something didn't go right in running sendJSONtoSlideshow.py";
 		}
+	
 	}
+
+	$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+	echo json_encode($retArray);
 
 ?>
