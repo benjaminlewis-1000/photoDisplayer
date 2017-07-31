@@ -4,6 +4,7 @@
 
 	$exceptions = array();
 	$debug = array();
+	$arrayOfSavedShows = array();
 
 	if (isset($_POST['queryType'])){
 		$queryType = $_POST['queryType'];
@@ -69,7 +70,7 @@
 
 
 	if (! file_exists($photoDBpath) ){
-		$exceptions[] = 'File $photoDBpath does not exist';
+		$exceptions[] = 'File ' . $photoDBpath . ' does not exist';
 	}
 	function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 	    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
@@ -79,12 +80,11 @@
 	try{
 		$db = new SQLite3($photoDBpath);
 	}catch(Exception $e){
-		$exceptions[] = "Unable to create new database in " . $photoDBpath;
-		$retArray = array('exceptions' => $exceptions);
+		$exceptions[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'".;
+		$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions);
 		echo json_encode($retArray);
 		exit;
 	}
-	$arrayOfSavedShows = array();
 
 	for ($i = 0; $i < count($queries); $i++){
 		// Iterate through all the queries sequentially. 

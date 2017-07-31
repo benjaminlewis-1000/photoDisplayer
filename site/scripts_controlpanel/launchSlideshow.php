@@ -108,7 +108,7 @@
 					$end_formatted = $date_end['year'] . '/' . str_pad($date_end['month'], 2, "0", STR_PAD_LEFT) . '/' . str_pad($date_end['day'], 2, "0", STR_PAD_LEFT);
 				}
 
-				$data = array("\"criteriaType\"" =>"\"Date Range\"", "\"booleanValue\"" => "\"$start_formatted\"", "\"criteriaVal\"" => "\"$end_formatted\"");
+				$data = array("criteriaType" =>"Date Range", "booleanValue" => "$start_formatted", "criteriaVal" => "$end_formatted");
 				array_push($formedArray, $data);
 				break;
 			case "Person":
@@ -125,7 +125,7 @@
 					$allValid = 0;
 				}
 
-				$data = array("\"criteriaType\"" =>"\"Person\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" => "\"$criteriaVal\"");
+				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal");
 				array_push($formedArray, $data);
 				break;
 			case "Year":
@@ -151,7 +151,7 @@
 				$year = strval($year);
 
 				//print_r($year);
-				$data = array("\"criteriaType\"" =>"\"Year\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" =>"\"$year\"");
+				$data = array("criteriaType" =>"Year", "booleanValue" => "$boolVal", "criteriaVal" =>"$year");
 				array_push($formedArray, $data);
 				break;
 			case "Month":
@@ -163,7 +163,7 @@
 					$exceptions[] = "$boolVal, $criteriaVal not valid in Month";
 					$allValid = 0;
 				}
-				$data = array("\"criteriaType\"" =>"\"Month\"", "\"booleanValue\"" => "\"$boolVal\"", "\"criteriaVal\"" =>"\"$criteriaVal\"");
+				$data = array("criteriaType" =>"Month", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal");
 				array_push($formedArray, $data);
 
 				break;
@@ -182,16 +182,24 @@
 	}else{
 		// We're good to go! All these have been validated to be good JSON. 
         $debug[] = "All parsed arguments are valid: " . $parsed_text;
-		exec("python sendJSONtoSlideshow.py $parsed_text", $output, $ret);
-		//exec("python sendJSONtoSlideshow.py text");
-		try{
-			if ( (count($output) > 0 && $output[0] != "Success" )|| count($output == 0)){
-				$exceptions[] = "Not a success... " . $output[0];
-			}
-		}catch(Exception $e){
-			$exceptions[] = "Something didn't go right in running sendJSONtoSlideshow.py";
-		}
+
+        $request = xmlrpc_encode_request("buildQuery" , array($parsed_text));
+		$context = stream_context_create(array('http' => array(
+		    'method' => "POST",
+		    'header' => "Content-Type: text/xml",
+		    'content' => $request
+		)));
+
+		$url = "http://127.0.0.1:" . $xml_params->serverParams->displayServerPort;
+		$file = file_get_contents($url, false, $context);
+		$response = xmlrpc_decode($file);
+		//$debug[] = "Full response was: " . $response;
 	
+		$jsonArray = json_decode($response, true);
+		$errs = $jsonArray['errs'];
+		$debugs = $jsonArray['debug'];
+		$debug = array_merge($debug, $debugs);
+		$exceptions = array_merge($exceptions, $errs);
 	}
 
 	$retArray = array('exceptions' => $exceptions, 'debug' => $debug );

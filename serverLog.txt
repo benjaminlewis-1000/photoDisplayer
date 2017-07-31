@@ -335,3 +335,421 @@ I am here,  #0
 I am here,  #0
 I am here,  starting the slideshow
 0
+Building a query... [{"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"None"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"None"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"None"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"None"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"None"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2000"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is after\"","\"criteriaVal\"":"\"2000\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Person\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"Alayna Crandall\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Person\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"Alayna Crandall\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Person\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"Alayna Crandall\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Person\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"Alayna Crandall\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"None\"","\"criteriaVal\"":"\"None\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"None\"","\"criteriaVal\"":"\"None\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"None\"","\"criteriaVal\"":"\"None\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"None\"","\"criteriaVal\"":"\"None\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"None\"","\"criteriaVal\"":"\"None\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Date Range\"","\"booleanValue\"":"\"None\"","\"criteriaVal\"":"\"None\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"\"criteriaType\"":"\"Year\"","\"booleanValue\"":"\"is\"","\"criteriaVal\"":"\"2015\""}]
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaaa"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Ben Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Ben Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... []
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  #3
+I am here,  #4
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0

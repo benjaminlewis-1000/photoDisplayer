@@ -74,6 +74,8 @@ class displayServer:
         # Borderless window  | -x
         # Fullscreen  | -F
 
+        print propertiesJSON
+
         # Hide pointer  | -Y
         # Randomize     | -z
         # Delay (sec)   | -D (int)
@@ -92,9 +94,11 @@ class displayServer:
                         "showFilename": " -d", "noMenus": " -N", "quiet": " -q", "sort": " -S ", "stretch": " -s"  }
 
         properties = json.loads(propertiesJSON)
+        print properties
 
         self.commandArray = []
         for i in range(len(properties)):
+            print i
             propertyType = properties[i]['property']
             propertyVal = unicode(properties[i]['enabled'])
             assert propertyType in commandDict.keys()
@@ -119,7 +123,7 @@ class displayServer:
                     # self.commandString += commandDict[propertyType.lower()]
                     self.commandArray.append(commandDict[propertyType.lower()])
 
-        # print self.commandString
+        print self.commandString
 
     def startSlideshow(self):
         if currentOS != self.xmlParams['params']['ostypes']['linuxType']:
@@ -148,8 +152,18 @@ class displayServer:
 
 
     def buildQuery(self, criteriaJSON):
+
+
+        returnDict = {};
+        errs = [];
+        debug = [];
+
+        # returnDict['errs'] = errs;
+        # returnDict['debug'] = debug;
+        # return json.dumps(returnDict);
+
         stream = open(rootDir + '/serverLog.txt', 'a') 
-        print rootDir
+        debug.append("Root directory was: " + rootDir);
         print >>stream, "Building a query... {}".format(criteriaJSON)
         i = 0
 
@@ -163,7 +177,7 @@ class displayServer:
         ## IMPORTANT NOTE: When building a query that will be INTERSECTED with something else but has UNIONS in it,
         ## it must be wrapped in '''SELECT * FROM ( <the query> ).
         ## Assume that we're only passing vetted JSON to the server here. 
-        print criteriaJSON
+        debug.append('JSON criteria was: ' + criteriaJSON);
         slideshowParams = json.loads(str(criteriaJSON))
 
         people = [ ]
@@ -188,6 +202,10 @@ class displayServer:
             if critType == 'Month':
                 selectedMonths.append( (critVal, boolVal) )
             if critType not in ['Year', 'Date Range', "Date%20Range", 'Person', 'Month']:
+                errs.append('Criteria type {} was not found.'.format(critType) );
+                returnDict['errs'] = errs;
+                returnDict['debug'] = debug;
+                return json.dumps(returnDict);
                 raise TypeError
 
         # Build year limits
@@ -288,6 +306,8 @@ class displayServer:
         orIndex = 1
 
         for i in range(len(selectedYears)):
+
+            print "year"
             year = selectedYears[i][0]
             modifier = selectedYears[i][1]
             if modifier.lower() in ['is before', 'is after']:
@@ -313,7 +333,7 @@ class displayServer:
 
         ### Date ranges - must be or'd. It doesn't make sense to AND date ranges, because the date
         ### range could be changed or another date range selected to get the appropriate values. 
-        print "Here"
+
         stream.close()
         orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(phKey, phTableName, phTakenDate)
         for i in range(len(dateRangeVals)):
@@ -409,6 +429,7 @@ class displayServer:
             else:
                 rtPath = rootTable['Columns']['windowsRootPath']
 
+
             rootPathQuery = '''SELECT {}, {} FROM {}'''.format(rtKey, rtPath, rtName)
             c.execute(rootPathQuery)
             rootDirQueryResults = c.fetchall()
@@ -424,7 +445,7 @@ class displayServer:
                 rootDict[rootKey] = rootPath
 
             f = open('fileListDebug.out', 'w')
-            print str(len(fileResults)) + " files returned"
+            debug.append(str(len(fileResults)) + " files returned.")
             with open(str(self.fileListName), 'w') as file:
                 for i in range(len(fileResults)):
                     photo_file = fileResults[i][1]
@@ -440,12 +461,16 @@ class displayServer:
                 self.startSlideshow()
             except:
                 pass
-            print self.masterQuery
         else:
-            print "Invalid request."
+            errs.append('Invalid request.')
+            
+        debug.append("Final query was: " + self.masterQuery)
 
+        returnDict['errs'] = errs;
+        returnDict['debug'] = debug;
+        return json.dumps(returnDict);
 
-        return self.xmlParams['params']['serverParams']['successVal']
+        # return self.xmlParams['params']['serverParams']['successVal']
 
     def run(self):
         self.server.register_function(self.startSlideshow, 'startSlideshow')
