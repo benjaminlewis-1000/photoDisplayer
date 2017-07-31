@@ -753,3 +753,15 @@ I am here,  #0
 I am here,  #0
 I am here,  #0
 I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0

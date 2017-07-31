@@ -181,7 +181,7 @@
 		//echo 'var valid=0';
 	}else{
 		// We're good to go! All these have been validated to be good JSON. 
-        $debug[] = "All parsed arguments are valid: " . $parsed_text;
+        $debug[] = "All parsed arguments were valid: " . $parsed_text;
 
         $request = xmlrpc_encode_request("buildQuery" , array($parsed_text));
 		$context = stream_context_create(array('http' => array(
@@ -191,9 +191,15 @@
 		)));
 
 		$url = "http://127.0.0.1:" . $xml_params->serverParams->displayServerPort;
-		$file = file_get_contents($url, false, $context);
+		try{
+			$file = file_get_contents($url, false, $context);
+		}catch (Exception $e){
+			$exceptions[] = "It appears that the display server isn't running.";
+			$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+			echo json_encode($retArray);
+			return;
+		}
 		$response = xmlrpc_decode($file);
-		//$debug[] = "Full response was: " . $response;
 	
 		$jsonArray = json_decode($response, true);
 		$errs = $jsonArray['errs'];
