@@ -1,6 +1,11 @@
 #! /bin/bash
 
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+
+# Give permissions to create files from the web interface - used to create database files. 
+chmod 777 $PROJECT_ROOT_DIR/site
+chmod 777 $PROJECT_ROOT_DIR/site/scripts_controlpanel
 
 echo $THIS_DIR
 

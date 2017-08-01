@@ -78,6 +78,7 @@ header("Content-type: application/javascript");
 			url: 'scripts_controlpanel/getDatabase.php',
 			data: {'queryType': queryType, selectedVal: ''},
 			success: function(data){
+console.log(data);
 		        decodedData = JSON.parse(data);
 		        definedSlideshows = decodedData['savedVals'];
 

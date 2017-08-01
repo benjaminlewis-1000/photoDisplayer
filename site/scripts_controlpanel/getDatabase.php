@@ -80,7 +80,7 @@
 	try{
 		$db = new SQLite3($photoDBpath);
 	}catch(Exception $e){
-		$exceptions[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'".;
+		$exceptions[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'";
 		$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions);
 		echo json_encode($retArray);
 		exit;

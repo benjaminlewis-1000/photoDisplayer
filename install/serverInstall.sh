@@ -2,6 +2,8 @@
   
 # Change apache configurations so that the site contained in this project is the default site. 
 
+sudo apt-get install php5-xmlrpc
+
 ONE_DIR_UP="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"   
 PROJECT_ROOT_DIR=$(echo $ONE_DIR_UP | sed 's/\//\\\//g')
 

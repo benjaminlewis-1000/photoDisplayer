@@ -5726,3 +5726,33 @@ Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2013/Feb 2013/Family
 Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2014/11-30-14/_DSC0206.JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
 Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
 Clarifai - IO Error in file /mnt/NAS/Photos/Mission/arapiraca/zone conference print/Imagem 068.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/2017/Lewis Family Ohio Visit/DSC_3434.jpg has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/Ben's Pictures/Hawaii/DSCN4280.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+File /mnt/NAS/Photos/2017/Toronto/DSC_2286.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+File /mnt/NAS/Photos/Family Pictures/2012/11-2012/DSC_0004 (2).JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported
+File /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg was not able to open for classification in scaleEncodeImageB64.
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2012/4-2012/Adam Play (7).JPG (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+Clarifai - IO Error in file /mnt/NAS/Photos/Lewis_pics/emily0013.jpg (most likely caused by inability to open) : <class 'requests.exceptions.ConnectionError'>,  (ProtocolError('Connection aborted.', gaierror(-2, 'Name or service not known')),),  ('Connection aborted.', gaierror(-2, 'Name or service not known'))
+File /mnt/NAS/Photos/Family Pictures/2015/Fall 2015 (2)/_DSC0869.JPG has no labelAnnotations, and may or may not have a landmarkAnnotation.
+...{}
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported
+Clarifai - IO Error in file /mnt/NAS/Photos/Family Pictures/2015/Erica GEO Peru 2015/Phone Pictures/IMG_20150502_102517.jpg (most likely caused by inability to open) : <type 'exceptions.IOError'>,  ('image file is truncated (33 bytes not processed)',),  image file is truncated (33 bytes not processed)
+clarifai - error in file /mnt/NAS/Photos/2016/Meagan Mission/DSCN8498.JPG: <type 'exceptions.TypeError'>,  ('decoding Unicode is not supported',),  decoding Unicode is not supported

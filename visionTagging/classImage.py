@@ -409,7 +409,10 @@ def updateFileHistory(filename, currentTime, apiLabelTuple, metadata):
 		replaceRegex = "\s?" + apiLabelTuple[2] + "\d+-\d+-\d+ \d+:\d+:\d+" + ", orientation is \d. "
 		newData = " " + apiLabelTuple[2] + currentTime + ", orientation is " + str(checkIfIsPortrait(filename)) + ". "
 		intermediate = re.sub(r"" +  replaceRegex + "" , newData, imHistory)
-		metadata[imHistoryKey] = unicode(intermediate, "utf-8")
+                print intermediate
+                if not isinstance(intermediate, unicode):
+                    intermediate = unicode(intermediate, 'utf-8')
+		metadata[imHistoryKey] = intermediate
 		metadata.write()
 		return
 
