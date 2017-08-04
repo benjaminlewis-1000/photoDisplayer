@@ -800,3 +800,255 @@ I am here,  #1
 I am here,  starting the slideshow
 0
 Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jessica Lewis"},{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2014"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+0
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764f2a30>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764f2bb0>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x7655fa30>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x7655fbb0>
+Building a query... [{"criteriaType":"Year","booleanValue":"is","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x7655fab0>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jessica Lewis"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x764b8a30>

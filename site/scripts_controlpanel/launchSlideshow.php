@@ -200,12 +200,15 @@
 			return;
 		}
 		$response = xmlrpc_decode($file);
-	
+try{	
 		$jsonArray = json_decode($response, true);
 		$errs = $jsonArray['errs'];
 		$debugs = $jsonArray['debug'];
 		$debug = array_merge($debug, $debugs);
 		$exceptions = array_merge($exceptions, $errs);
+}catch (Exception $e){
+	$exceptions[] = $response;
+}
 	}
 
 	$retArray = array('exceptions' => $exceptions, 'debug' => $debug );

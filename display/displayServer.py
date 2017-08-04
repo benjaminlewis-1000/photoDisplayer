@@ -42,10 +42,10 @@ class displayServer:
                                     requestHandler=RequestHandler)
         self.server.register_introspection_functions()
 
-        self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
-        # self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+        # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
+        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
         # print self.commandArray
-        print self.commandString
+        # print self.commandString
 
         self.masterQuery = ""
 
@@ -134,8 +134,8 @@ class displayServer:
 #        if cont:
         stream = open(rootDir + '/serverLog.txt', 'a') 
         print >>stream, "I am here,  starting the slideshow"
-#        self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
-        self.p = subprocess.call("/usr/local/bin/feh " + self.commandString + " -f " + self.fileListName, shell=True)
+        self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+#        self.p = subprocess.call("/usr/local/bin/feh " + self.commandString + " -f " + self.fileListName, shell=True)
         print "launching..."
         #sleep(5)
         #if not self.p.poll():
@@ -154,6 +154,8 @@ class displayServer:
     def buildQuery(self, criteriaJSON):
 
 
+        print criteriaJSON 
+
         returnDict = {};
         errs = [];
         debug = [];
@@ -170,7 +172,13 @@ class displayServer:
         ## feh, the display program, locks the file in self.fileListName.
         ## Therefore, it is necessary to kill the subprocess that is running
         ## feh, if there is one, before overwriting the file.
-        if self.p != None:
+
+        #if self.p != None:
+        #    poll = self.p.poll()
+        #else:
+        #    poll = 1
+
+        if self.p != None: 
             self.p.terminate()
             self.p.wait()
 
@@ -460,7 +468,7 @@ class displayServer:
             try:
                 self.startSlideshow()
             except:
-                pass
+                print "Error!" 
         else:
             errs.append('Invalid request.')
             
