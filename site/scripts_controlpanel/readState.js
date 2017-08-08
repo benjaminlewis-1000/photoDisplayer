@@ -25,18 +25,27 @@ function criteriaToJSON(){
 	return criteriaJSON;
 }
 
-function readShowOptions(){
+function readShowOptions(relaunch){
 	buttonIdsList = [];
 
 	var buttons = document.getElementsByClassName("option_chk");
 	var i;
+	
+	var optionDictionary = {}
 
 	for (i = 0; i < buttons.length; i++) {
-		console.log(buttons[i].value)
-	    console.log(buttons[i].checked)
+		//console.log(buttons[i].value)
+	    //console.log(buttons[i].checked)
 	    if (buttons[i].value == 'Delay'){
 	    	delayField = document.getElementById('delayForm')
-	    	console.log(delayField.value)
+	    	//console.log(delayField.value)
+	    	optionDictionary[buttons[i].value] = delayField.value;
+	    }else{
+	    	optionDictionary[buttons[i].value] = buttons[i].checked;
 	    }
 	}
+	optionDictionary['Relaunch'] = relaunch;
+
+	var optionsJSON = JSON.stringify(optionDictionary);
+	return optionsJSON;
 }

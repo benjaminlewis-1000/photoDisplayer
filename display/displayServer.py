@@ -65,16 +65,22 @@ class displayServer:
 
     ###### Slideshow function, avaliable as server call
     def setSlideshowProperties(self, propertiesJSON):
-        ## Set properties, according to page https://linux.die.net/man/1/feh
+
+        returnDict = {};
+        errs = [];
+        debug = [];
+
+        # # Set properties, according to page https://linux.die.net/man/1/feh
         # Default, read from file | -f <filename>
 
         # Action   |  -A
-        ## Set to zoom fully with no borders: 
+        # # Set to zoom fully with no borders: 
         # Auto-Zoom    |   -Z
         # Borderless window  | -x
         # Fullscreen  | -F
 
-        print propertiesJSON
+        debug.append("Args passed: " + str(propertiesJSON)  )
+        properties = json.loads(propertiesJSON)
 
         # Hide pointer  | -Y
         # Randomize     | -z
@@ -90,77 +96,82 @@ class displayServer:
 
         #  "-YFxZNz", "-D", "2", "--auto-rotate", "-d",
 
-        commandDict = {"fullZoom": " -ZxF", "hidePointer": " -Y", "randomize": " -z", "delay": " -D ", "autorotate": " --auto-rotate", \
-                        "showFilename": " -d", "noMenus": " -N", "quiet": " -q", "sort": " -S ", "stretch": " -s"  }
+        self.commandArray = ["--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+        self.commandArray.append('--auto-rotate')
 
-        properties = json.loads(propertiesJSON)
-        print properties
+        # self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
 
-        self.commandArray = []
-        for i in range(len(properties)):
-            print i
-            propertyType = properties[i]['property']
-            propertyVal = unicode(properties[i]['enabled'])
-            assert propertyType in commandDict.keys()
-            if propertyType.lower() == 'delay':
-                try:
-                    val = float(propertyVal)
-                except:
-                    print "Value for delay is not a float"
-                assert val >= 0
-                if val > 0:
-                    # Let the maximum delay be 5 minutes.
-                    # self.commandString += commandDict['delay'] + str(min(val, 300.0))
-                    self.commandArray.append(commandDict['delay'] + str(min(val, 300.0)))
-            if propertyType.lower() == 'sort':
-                assert propertyVal.lower() in ['0', 'none', 'name', 'filename', 'mtime', 'width', 'height', 'pixels', 'size', 'format']
-                if propertyVal.lower() not in ['0', 'none']:
-                    # self.commandString += commandDict['sort'] + propertyVal.lower()
-                    self.commandArray.append(commandDict['sort'] + propertyVal.lower())
-            if propertyType.lower() in ['fullZoom', 'hidePointer', 'randomize', 'autorotate', 'showFilename', 'noMenus', 'quiet', 'stretch']:
-                assert propertyVal.isnumeric() or propertyVal.lower() in ['true', 'false']
-                if propertyVal != 0:
-                    # self.commandString += commandDict[propertyType.lower()]
-                    self.commandArray.append(commandDict[propertyType.lower()])
+        if properties['Fullscreen']:
+            self.commandArray.append('-ZxF')
 
-        print self.commandString
+        if properties['Randomize']:
+            self.commandArray.append('-z')
+
+        if properties['Hide']:
+            self.commandArray.append('-qNY')
+
+        if "Delay" in properties:
+            dly = properties["Delay"]
+            if dly <= 0:
+                dly = 1.0
+            try:
+                dly = float(dly)
+            except ValueError:
+                dly = 1.0
+            argVal = "-D " + str(dly)
+            self.commandArray.append(argVal)
+        else:
+            self.commandArray.append("-D 1")
+
+        debug.append("Command array: " + str(self.commandArray) )
+
+        if properties["Relaunch"]:
+            rDict = self.startSlideshow();
+            errs += rDict['exceptions']
+            debug += rDict['debug']
+
+        returnDict['exceptions'] = errs
+        returnDict['debug'] = debug
+
+        retVal = json.dumps(returnDict)
+        print retVal
+        return retVal
 
     def startSlideshow(self):
-        if currentOS != self.xmlParams['params']['ostypes']['linuxType']:
-            raise Exception('The current OS is not supported as a slideshow type.')
 
-#        if os.path.isfile(self.fileListName):
-#            cont = True
-#        if cont:
+        returnDict = {}
+        errs = []
+        debug = []
+
+        if currentOS != self.xmlParams['params']['ostypes']['linuxType']:
+            errs.append('The current OS is not supported as a slideshow type.')
+            returnDict['exceptions'] = errs;
+            returnDict['debug'] = debug;
+            return returnDict;
+
         stream = open(rootDir + '/serverLog.txt', 'a') 
         print >>stream, "I am here,  starting the slideshow"
         self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
-#        self.p = subprocess.call("/usr/local/bin/feh " + self.commandString + " -f " + self.fileListName, shell=True)
-        print "launching..."
-        #sleep(5)
-        #if not self.p.poll():
-        #    print >>stream, self.p.communicate()
-        #stdout, stderr = self.p.communicate()
+
+        debug.append("Slideshow is launching...")
         print >>stream, self.p
-        #print >>stream, stdout
-        #print >>stream, stderr
+
         stream.close()
-#        else:
-#             print >>stream, "Exception, can't find file!"
-#             stream.close()
-#            raise Exception('File doesn\'t exist! This is solvable, I just haven\'t done it yet.')
+
+        print debug
+        returnDict['exceptions'] = errs;
+        returnDict['debug'] = debug;
+        return returnDict;
 
 
     def buildQuery(self, criteriaJSON):
-
-
         print criteriaJSON 
 
         returnDict = {};
         errs = [];
         debug = [];
 
-        # returnDict['errs'] = errs;
+        # returnDict['exceptions'] = errs;
         # returnDict['debug'] = debug;
         # return json.dumps(returnDict);
 
@@ -211,7 +222,7 @@ class displayServer:
                 selectedMonths.append( (critVal, boolVal) )
             if critType not in ['Year', 'Date Range', "Date%20Range", 'Person', 'Month']:
                 errs.append('Criteria type {} was not found.'.format(critType) );
-                returnDict['errs'] = errs;
+                returnDict['exceptions'] = errs;
                 returnDict['debug'] = debug;
                 return json.dumps(returnDict);
                 raise TypeError
@@ -466,7 +477,9 @@ class displayServer:
             f.close()
 
             try:
-                self.startSlideshow()
+                rDict = self.startSlideshow()
+                errs += rDict['exceptions']
+                debug += rDict['debug']
             except:
                 print "Error!" 
         else:
@@ -474,7 +487,7 @@ class displayServer:
             
         debug.append("Final query was: " + self.masterQuery)
 
-        returnDict['errs'] = errs;
+        returnDict['exceptions'] = errs;
         returnDict['debug'] = debug;
         return json.dumps(returnDict);
 

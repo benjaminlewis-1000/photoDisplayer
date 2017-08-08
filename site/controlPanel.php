@@ -158,9 +158,12 @@
 		</form>
 	</div>
 
-	<button id='asd' onclick=readShowOptions()> Click me! </button>
+<!-- 	<button id='asd' onclick="console.log(readShowOptions())"> Click me! </button> -->
 
-
+<!--					<button id=sendOptions onclick="sendToPi()">Relaunch!</button> -->
+					<button id="newCriteria1" class="taskButton" onclick="relaunchWithOptions()">
+						New criteria
+					</button>
 
 
 
