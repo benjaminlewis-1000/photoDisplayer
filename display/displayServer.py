@@ -502,13 +502,13 @@ class displayServer:
         else:
             statusString = ""
 
-            
+
         if re.search('power status: standby', statusString) or onJSON['On'] == "True":
             print "Turning on TV"
             debug.append(statusString)
             debug.append("Turning on TV")
             os.system('echo on 0 | cec-client -s -d 1')
-        elif onJSON['On'] == 'Off':
+        elif onJSON['On'] == 'End Slideshow':
             print "Ending slideshow and turning off TV"
             if self.p != None: 
                 self.p.terminate()

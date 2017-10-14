@@ -35,9 +35,9 @@
     border: none;
     outline: none;
     display: flex;
-    height: 70px;
+    height: 40px;
     justify-content: center;
-    margin: 40px auto 8px auto;
+    margin: 30px auto 30px auto;
 }
 
 /* Shared styles */

@@ -64,12 +64,6 @@
 
 
 	<div id=newCriteriaDiv class="head_div">
-		<button id="tvToggle" class="taskButton" title="Toggle TV power - turn off TV if on, turn TV on if off" onclick="turnOnTV('Toggle')">
-			Toggle TV Power
-		</button>
-		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')">
-			New Criteria
-		</button>
 		<button id="loadShow" title="Load a saved slideshow by name; the &#013criteria fields will automatically populate &#013according to the defined show and any &#013existing criteria will be deleted." class="taskButton">
 			Load Slideshow
 		</button>
@@ -79,7 +73,15 @@
 		<button id="launchSlideshow" title="Launch the slideshow with images filtered&#013 by the current criteria. The TV will turn &#013on if it is not already (although the HDMI&#013 input will not automatically change)" class="taskButton", onclick="sendToPi()">
 			Launch Slideshow
 		</button>
-		<button id="showOff" class="taskButton" title="Turn off the TV and end the slideshow" onclick="turnOnTV('Off')">
+	</div>
+	<div id=onOffDiv class="head_div">
+		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')">
+			New Criteria
+		</button>
+		<button id="tvToggle" class="taskButton" title="Toggle TV power - turn off TV if on, turn TV on if off" onclick="turnOnTV('Toggle')">
+			Toggle TV Power
+		</button>
+		<button id="showOff" class="taskButton" title="Turn off the TV and end the slideshow" onclick="turnOnTV('End Slideshow')">
 			End Slideshow
 		</button>
 	</div>
@@ -126,8 +128,7 @@
 	</div>
 
 	<button class="accordion" id="criteriaAccordion">
-		
-	Picture Criteria Selection
+		Picture Criteria Selection
 		<script type="text/javascript" src="scripts_controlpanel/controlPanelAccordion.js"></script>
 	</button>
 
