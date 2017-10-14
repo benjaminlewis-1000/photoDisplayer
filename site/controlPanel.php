@@ -64,7 +64,7 @@
 
 
 	<div id=newCriteriaDiv class="head_div">
-		<button id="newCriteria" class="taskButton" onclick="turnOnTV()">
+		<button id="newCriteria" class="taskButton" onclick="turnOnTV('Toggle')">
 			Turn on TV
 		</button>
 		<button id="newCriteria" class="taskButton" onclick="addCriteriaLine('criteriaFieldsDiv')">

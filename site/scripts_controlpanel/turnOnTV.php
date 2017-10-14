@@ -6,6 +6,14 @@
 
 	// Set the error handler
 
+	if (isset($_POST['onState'])){
+		$jsonText = $_POST['onState'];
+	}else if (isset($_GET['onState'])){
+		$jsonText = $_GET['onState'];
+	}else{
+		$jsonText = "Toggle";
+	}
+
 	function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 	    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
 	}
@@ -46,7 +54,7 @@
     // Request that we set the slideshow properties
 
     $requestArray = array();        
-    $optionRequest = xmlrpc_encode_request("turnOnTV" , array("On" => "Toggle"));
+    $optionRequest = xmlrpc_encode_request("turnOnTV" , array("On" => "$jsonText"));
 
     $requestArray[] = $optionRequest;
 

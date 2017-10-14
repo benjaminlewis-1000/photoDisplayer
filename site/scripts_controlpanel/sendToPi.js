@@ -23,13 +23,15 @@ function sendToPi(){
 
 }
 
-function turnOnTV(){
+function turnOnTV(onState){
+	console.log('hi')
 	var callback = $.ajax({
 		type: 'POST',
 		url: 'scripts_controlpanel/turnOnTV.php',
-		data: {},
+		data: {'onState': onState},
 		success: function(data){
 			data = JSON.parse(data)
+			console.log(data)
 	        exceptions = data['exceptions']
 	        for (i = 0; i < exceptions.length; i++){
 	        	console.log("Error in relaunchWithOptions: " + exceptions[i]);
