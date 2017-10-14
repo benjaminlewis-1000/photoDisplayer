@@ -136,6 +136,7 @@ header("Content-type: application/javascript");
 		        	jdata = JSON.parse(jsonOfSavedShow);
 		        	removeAllCriteria(); // Clear the criteria
 		        	for (j = 0; j < jdata.length; j++){
+		        		// addCriteriaLine defined in lineAdd.js
 		        		addCriteriaLine('criteriaFieldsDiv', jdata[j])
 		        	}
 		        }
@@ -168,7 +169,10 @@ header("Content-type: application/javascript");
 		saveName = formField.value;
 		formField.value = '';
 		savemodal.style.display = "none";
+		/*criteriaToJSON is defined in readState.js*/
 		jsonOfParams = criteriaToJSON();
+
+		console.log(jsonOfParams)
 
 		queryType = 'saveValue'
 

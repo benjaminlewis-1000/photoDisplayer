@@ -3,6 +3,7 @@ header("Content-type: application/javascript");
 ?>  /*<!-- Do this because of https://stackoverflow.com/questions/23574306/executing-php-code-inside-a-js-file -->*/
 
 function getNamesThenMakeLine(divNumber, lineDiv, jsonTemplate){
+	// Take in a JSON template of the form 
 
 	numPhotosField = document.getElementById("minPhotos")
 	minNumPhotos = numPhotosField.value
@@ -14,7 +15,7 @@ function getNamesThenMakeLine(divNumber, lineDiv, jsonTemplate){
 		url: 'scripts_controlpanel/listPeople.php',
 		data: {'minPhotos': minNumPhotos},
 		success: function(data){
-			console.log(data)
+			//console.log(data)
 			decodedData = JSON.parse(data);
 			people = decodedData['personNames']
 			makeLineWithNames(divNumber, lineDiv, jsonTemplate, people)
@@ -31,13 +32,13 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 	/* jsonTemplate is a JSON of the form: {'selectType': <selection type>, 'binarySwitch': <switch value> , 'selection': <field val>} */
 
-	console.log("no diff here")
 	critMenuName = 'selectCriteriaMenu';
 	binaryFieldName = 'binarySelect';
 	firstSelectionFieldName = 'selectionDiv';
 
 
 	/* Parse the json template */
+
 	selectionValue = jsonTemplate['selectType']
 	if (jsonTemplate.hasOwnProperty('binarySwitch')){
 		binarySwitch = jsonTemplate['binarySwitch']
@@ -54,15 +55,15 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 	criteriaTypeField = critMenuName + divNumber
 	document.getElementById(criteriaTypeField).value = selectionValue
 
-	var subdiv2 = document.getElementById(binaryFieldName + divNumber)
-	var subdiv3 = document.getElementById(firstSelectionFieldName + divNumber)
+	var subdiv_qualifier = document.getElementById(binaryFieldName + divNumber)
+	var subdiv_filter_criteria = document.getElementById(firstSelectionFieldName + divNumber)
 
 	/* Clear anything that was previously on the line */
-	while (subdiv2.firstChild) {
-	    subdiv2.removeChild(subdiv2.firstChild);
+	while (subdiv_qualifier.firstChild) {
+	    subdiv_qualifier.removeChild(subdiv_qualifier.firstChild);
 	}
-	while (subdiv3.firstChild) {
-	    subdiv3.removeChild(subdiv3.firstChild);
+		while (subdiv_filter_criteria.firstChild) {
+	    subdiv_filter_criteria.removeChild(subdiv_filter_criteria.firstChild);
 	}
 
 	switch(selectionValue){
@@ -95,9 +96,9 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 			s1.setAttribute('type', 'button')
 			//s1.style.height="30px"
 
-			subdiv2.appendChild(startLabel)
-			subdiv2.appendChild(i1);
-			subdiv2.appendChild(s1);
+			subdiv_qualifier.appendChild(startLabel)
+			subdiv_qualifier.appendChild(i1);
+			subdiv_qualifier.appendChild(s1);
 
 			s1.onclick=function(){
 				cal.select(i1,'anchor1_'+ divNumber,'MM/dd/yyyy')
@@ -128,9 +129,9 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 			s2.setAttribute('type', 'button')
 			//s2.style.height="30px"
 
-			subdiv3.appendChild(endLabel)
-			subdiv3.appendChild(i2);
-			subdiv3.appendChild(s2);
+			subdiv_filter_criteria.appendChild(endLabel)
+			subdiv_filter_criteria.appendChild(i2);
+			subdiv_filter_criteria.appendChild(s2);
 
 			s2.onclick=function(){
 				cal.select(i2,'anchor2_'+ divNumber,'MM/dd/yyyy')
@@ -141,13 +142,14 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 		case "Person":
 			var binarySelect = document.createElement('select')
 			binarySelect.id = 'binarySelectValues' + divNumber
-			subdiv2.appendChild(binarySelect)
+			subdiv_qualifier.appendChild(binarySelect)
 			binarySelect.className = "binaryField"
 
 			binarySelect.options.add(new Option("is", "is", true, true));
 			binarySelect.options.add(new Option("is not", "is not", true, true));
 			if (binarySwitch == null) {
 				binarySelect.selectedIndex = 0
+				console.log("Switch value registered as null")
 			}else{
 				possVals = ['is', 'is not']
 				if (possVals.indexOf(binarySwitch) < 0){
@@ -160,7 +162,7 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 			var personSelect = document.createElement('select')
 			personSelect.id = 'selectionValue' + divNumber
-			subdiv3.appendChild(personSelect)
+			subdiv_filter_criteria.appendChild(personSelect)
 			personSelect.className = "dropdownOptions"
 
 			for (var i = 0; i < personNames.length; i++){
@@ -184,7 +186,7 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 			var binarySelect = document.createElement('select')
 			binarySelect.id = 'binarySelectValues' + divNumber
-			subdiv2.appendChild(binarySelect)
+			subdiv_qualifier.appendChild(binarySelect)
 			binarySelect.className = "binaryField"
 
 			binarySelect.options.add(new Option("is", "is", true, true));
@@ -196,7 +198,7 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 			if (binarySwitch == null) {
 				binarySelect.selectedIndex = 0
 			}else{
-				possVals = ['is', 'is not', 'is before', 'is after']
+				possVals = ["is", "is not", "is before", "is after"]
 				if (possVals.indexOf(binarySwitch) < 0){
 					console.log("Error in function constructSelectionLine: Unknown binary switch value for Person. ")
 					binarySelect.selectedIndex = 0
@@ -216,7 +218,7 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 				yearSelect.value = selection
 			}
 
-			subdiv3.appendChild(yearSelect)
+			subdiv_filter_criteria.appendChild(yearSelect)
 
 			break;
 
@@ -224,7 +226,7 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 			var binarySelect = document.createElement('select')
 			binarySelect.id = 'binarySelectValues' + divNumber
-			subdiv2.appendChild(binarySelect)
+			subdiv_qualifier.appendChild(binarySelect)
 			binarySelect.className = "binaryField"
 
 			binarySelect.options.add(new Option("is", "is", true, true));
@@ -245,7 +247,7 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 			var monthSelect = document.createElement('select')
 			monthSelect.id = 'selectionValue' + divNumber
-			subdiv3.appendChild(monthSelect)
+			subdiv_filter_criteria.appendChild(monthSelect)
 			monthSelect.className = "dropdownOptions"
 
 			for (var i = 0; i < months.length; i++){

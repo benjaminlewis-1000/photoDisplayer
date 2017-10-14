@@ -70,13 +70,18 @@ button.accordion {
 
     /* Box shadows */
     height: 45px;
+    position: relative;
+    z-index:0;
 }
 
 .accordion {
+    position:relative;
     width: 200px;
     text-align: center;
     font-size: 25px;
     font-variant: small-caps;
+    display:flex;
+    justify-content: center;
 }
 
 button.accordion:after {

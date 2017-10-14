@@ -11,7 +11,7 @@ var emptyCal = '<none>'
 		construct = {'selectType': 'Date Range'}
 		if (arguments.length > 1){
 			criteria = arguments[1];
-			construct = {'selectType': criteria['criteriaType'], 'binarySwitch': criteria['booleanVal'], 'selection': criteria['criteriaVal']}
+			construct = {'selectType': criteria['criteriaType'], 'binarySwitch': criteria['booleanValue'], 'selection': criteria['criteriaVal']}
 		}
 
 		var mainDiv = document.getElementById(divOfFields);
@@ -25,9 +25,9 @@ var emptyCal = '<none>'
 		lineDiv.id = 'criteriaBox' + num;
 		lineDiv.className = "fieldParent";
 
-		var subdiv1 = document.createElement('span');
-			lineDiv.appendChild(subdiv1);
-			subdiv1.id = 'typeBox' + num
+		var subdiv_criteria_type = document.createElement('span');
+			lineDiv.appendChild(subdiv_criteria_type);
+			subdiv_criteria_type.id = 'typeBox' + num
 
 			var select = document.createElement("select");
 
@@ -41,8 +41,9 @@ var emptyCal = '<none>'
 			select.className = "criteriaType";
 			select.id = critMenuName + num
 
-			subdiv1.appendChild(select);
+			subdiv_criteria_type.appendChild(select);
 
+			// Add a listener - if the first field (type box) changes, then change the rest of the line accordingly.
 			select.addEventListener("change", function(){
 				// Get the new field, create a construct for it, and construct the selection line again. 
 				classType = select.value;
@@ -51,13 +52,13 @@ var emptyCal = '<none>'
 			})
 
 
-		var subdiv2 = document.createElement('span')
-		subdiv2.id = 'binarySelect' + num
-		lineDiv.appendChild(subdiv2)
+		var subdiv_qualifier = document.createElement('span')
+		subdiv_qualifier.id = 'binarySelect' + num
+		lineDiv.appendChild(subdiv_qualifier)
 
-		var subdiv3 = document.createElement('span')
-		subdiv3.id = 'selectionDiv' + num
-		lineDiv.appendChild(subdiv3)
+		var subdiv_filter_criteria = document.createElement('span')
+		subdiv_filter_criteria.id = 'selectionDiv' + num
+		lineDiv.appendChild(subdiv_filter_criteria)
 
 		getNamesThenMakeLine(num, lineDiv, construct)
 
