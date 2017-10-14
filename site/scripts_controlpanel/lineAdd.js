@@ -47,7 +47,7 @@ var emptyCal = '<none>'
 				// Get the new field, create a construct for it, and construct the selection line again. 
 				classType = select.value;
 				construct = {'selectType': classType}
-				constructSelectionLine(num, lineDiv, construct)
+				getNamesThenMakeLine(num, lineDiv, construct)
 			})
 
 
@@ -59,7 +59,7 @@ var emptyCal = '<none>'
 		subdiv3.id = 'selectionDiv' + num
 		lineDiv.appendChild(subdiv3)
 
-		constructSelectionLine(num, lineDiv, construct)
+		getNamesThenMakeLine(num, lineDiv, construct)
 
 
 		var removeSubdiv = document.createElement('span');

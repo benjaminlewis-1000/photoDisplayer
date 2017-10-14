@@ -493,10 +493,20 @@ class displayServer:
 
         # return self.xmlParams['params']['serverParams']['successVal']
 
+    def turnOnTV(self, onJSON):
+        params = json.loads(str(onJSON))
+        onBool = params[0]['On']
+
+        if onBool:
+            os.system('echo on 0 | cec-client -s -d 1')
+        else:
+            os.system('echo standby 0 | cec-client -s -d 1')
+
     def run(self):
         self.server.register_function(self.startSlideshow, 'startSlideshow')
         self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
         self.server.register_function(self.buildQuery, 'buildQuery')
+        self.server.register_function(self.turnOnTV, 'turnOnTV')
         self.server.serve_forever()
 
 

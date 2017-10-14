@@ -2,10 +2,36 @@
 header("Content-type: application/javascript");
 ?>  /*<!-- Do this because of https://stackoverflow.com/questions/23574306/executing-php-code-inside-a-js-file -->*/
 
-function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
+function getNamesThenMakeLine(divNumber, lineDiv, jsonTemplate){
+
+	numPhotosField = document.getElementById("minPhotos")
+	minNumPhotos = numPhotosField.value
+
+/*	 Load the database using PHP */
+
+	$.ajax({
+		type: 'POST',
+		url: 'scripts_controlpanel/listPeople.php',
+		data: {'minPhotos': minNumPhotos},
+		success: function(data){
+			console.log(data)
+			decodedData = JSON.parse(data);
+			people = decodedData['personNames']
+			makeLineWithNames(divNumber, lineDiv, jsonTemplate, people)
+
+	        exceptions = decodedData['exceptions']
+	        for (i = 0; i < exceptions.length; i++){
+	        	console.log("Error in deleting slideshow (modalScript.php): " + exceptions[i]);
+	        }
+	    }
+	});
+}
+
+function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 	/* jsonTemplate is a JSON of the form: {'selectType': <selection type>, 'binarySwitch': <switch value> , 'selection': <field val>} */
 
+	console.log("no diff here")
 	critMenuName = 'selectCriteriaMenu';
 	binaryFieldName = 'binarySelect';
 	firstSelectionFieldName = 'selectionDiv';
@@ -31,71 +57,6 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 	var subdiv2 = document.getElementById(binaryFieldName + divNumber)
 	var subdiv3 = document.getElementById(firstSelectionFieldName + divNumber)
 
-/*	 Load the database using PHP */
-	<?php 
-	/* dirname_r is for compatibility in PHP 5.0 (available on Raspberry Pi) */
-		function dirname_r($path, $count=1){
-		    if ($count > 1){
-		       return dirname(dirname_r($path, --$count));
-		    }else{
-		       return dirname($path);
-		    }
-		}
-
-		/* Get the name of the directory where the project lives */
-		$parentDir = dirname_r(__FILE__, 3);
-
-		$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
-		$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
-		
-		$exceptions = array();
-		$personNames = array();
-
-		if (! file_exists($photoDBpath) ){
-			$exceptions[] = 'File $photoDBpath does not exist';
-		}
-
-		function exception_error_handler($errno, $errstr, $errfile, $errline ) {
-		    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
-		}
-		set_error_handler("exception_error_handler");
-
-		try{
-			$db = new SQLite3($photoDBpath);
-			try{
-				$results = $db->query('SELECT person_name FROM people');
-			}catch(Exception $e){
-				$exceptions[] = 'The table is not well-formed and probably wasn\'t initialized.';
-			}
-			$people = array();
-			while ($row = $results->fetchArray()) {
-				if (!empty($row[0])){
-					$people[] = $row[0];
-				}
-			}
-			natcasesort ($people);
-			foreach ($people as $person){
-				$personNames[] = $person;
-			}
-		}catch(Exception $e){
-			//die('connection_unsuccessful: ' . $e->getMessage());
-			$exceptions[] = 'Error when reading database';
-		}
-
-		$retArray = array('personNames' => $personNames, 'exceptions' => $exceptions);
-
-		echo 'var retArray = ' . json_encode($retArray) . ';';
-	?>
-	/* TODO : Keep working on what happens when there is no file. */
-
-	personNames = retArray['personNames']
-	exceptions = retArray['exceptions']
-    for (i = 0; i < exceptions.length; i++){
-    	console.log(exceptions[i]);
-    }
-
-
-
 	/* Clear anything that was previously on the line */
 	while (subdiv2.firstChild) {
 	    subdiv2.removeChild(subdiv2.firstChild);
@@ -103,8 +64,6 @@ function constructSelectionLine(divNumber, lineDiv, jsonTemplate){
 	while (subdiv3.firstChild) {
 	    subdiv3.removeChild(subdiv3.firstChild);
 	}
-
-
 
 	switch(selectionValue){
 		case "Date Range":

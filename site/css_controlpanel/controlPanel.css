@@ -135,3 +135,16 @@ form ul {
     font-size: 20px;
     font-variant: small-caps;
 }
+
+#optionRelaunch{
+    width: 300px;
+    border-radius: 15px;
+    background-color: #eee;
+    padding: 6px;
+    font-size: 16px;
+    margin-left: 5%;
+    margin-right: 5%;
+    color: green;
+    font-size: 20px;
+    font-variant: small-caps;
+}

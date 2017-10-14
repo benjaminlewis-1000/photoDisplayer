@@ -64,8 +64,11 @@
 
 
 	<div id=newCriteriaDiv class="head_div">
+		<button id="newCriteria" class="taskButton" onclick="turnOnTV()">
+			Turn on TV
+		</button>
 		<button id="newCriteria" class="taskButton" onclick="addCriteriaLine('criteriaFieldsDiv')">
-			New criteria
+			New Criteria
 		</button>
 		<button id="loadShow" class="taskButton">
 			Load Slideshow
@@ -128,7 +131,7 @@
 
 
 	<div class="panel" id="active" onload="toggleOnLoad(); toggleFunction();">
-		<form class="form-validation" method="post" action="script.php">
+		<form class="form-validation" id="optionForm" action="#">
 		    <div class="sub-entry">
 		        <ul>
 					<li>
@@ -155,19 +158,23 @@
 					</li>
 				</ul>
 		    </div>
+			<button id="optionRelaunch"  onclick="relaunchWithOptions()">
+				Relaunch with these options
+			</button>
 		</form>
 	</div>
 
-<!-- 	<button id='asd' onclick="console.log(readShowOptions())"> Click me! </button> -->
-
-<!--					<button id=sendOptions onclick="sendToPi()">Relaunch!</button> -->
-					<button id="newCriteria1" class="taskButton" onclick="relaunchWithOptions()">
-						New criteria
-					</button>
+	<input id="minPhotos" style="width: 40px; height: 25px" value="1"></input>
 
 
 
 </body>
+
+<script type="text/javascript">
+	$('#optionForm').submit(function () {
+	 return false;
+	});
+</script>
 
 
 </html>

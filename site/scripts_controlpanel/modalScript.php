@@ -73,12 +73,12 @@ header("Content-type: application/javascript");
 
 	    queryType = 'loadShowNames'
 
+
 	    $.ajax({
 			type: 'POST',
 			url: 'scripts_controlpanel/getDatabase.php',
 			data: {'queryType': queryType, selectedVal: ''},
 			success: function(data){
-console.log(data);
 		        decodedData = JSON.parse(data);
 		        definedSlideshows = decodedData['savedVals'];
 
@@ -103,6 +103,7 @@ console.log(data);
 			}
 		});
 
+
 	}
 
 	loadSubmit.onclick = function() {
@@ -112,6 +113,11 @@ console.log(data);
 		queryType = 'loadJSONofName'
 		formField.value = slideshowSaveName;
 		loadSelectIdx = select.selectedIndex
+
+
+	    minNumField = document.getElementById("minPhotos")
+	    minVal = minNumField.value
+	    minNumField.value = 1
 
 		$.ajax({
 			type: 'POST',
@@ -133,7 +139,7 @@ console.log(data);
 		        		addCriteriaLine('criteriaFieldsDiv', jdata[j])
 		        	}
 		        }
-
+				minNumField.value = minVal
 			}
 		});
 
