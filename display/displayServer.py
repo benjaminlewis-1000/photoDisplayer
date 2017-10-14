@@ -193,6 +193,8 @@ class displayServer:
         if self.p != None: 
             self.p.terminate()
             self.p.wait()
+            
+        print "Done killing the window"
 
         ## IMPORTANT NOTE: When building a query that will be INTERSECTED with something else but has UNIONS in it,
         ## it must be wrapped in '''SELECT * FROM ( <the query> ).
@@ -512,7 +514,7 @@ class displayServer:
             print "Ending slideshow and turning off TV"
             if self.p != None: 
                 self.p.terminate()
-                self.p.wait()
+                #self.p.wait()
             debug.append("Ending slideshow and turning off TV")
             # os.system('echo standby 0 | cec-client -s -d 1')
         else:
@@ -523,7 +525,7 @@ class displayServer:
             os.system('echo standby 0 | cec-client -s -d 1')
 
         returnDict = {}
-        returnDict['exceptions'] = ["No exceptions in turning on TV"]
+        returnDict['exceptions'] = []
         returnDict['debug'] = debug
         print json.dumps(returnDict)
         return json.dumps(returnDict)
