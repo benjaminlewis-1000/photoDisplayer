@@ -511,12 +511,10 @@ class displayServer:
             debug.append("Turning on TV")
             os.system('echo on 0 | cec-client -s -d 1')
         elif onJSON['On'] == 'End Slideshow':
-            print "Ending slideshow and turning off TV"
+            print "Ending slideshow"
             if self.p != None: 
                 self.p.terminate()
-                #self.p.wait()
-            debug.append("Ending slideshow and turning off TV")
-            # os.system('echo standby 0 | cec-client -s -d 1')
+            debug.append("Ending slideshow")
         else:
             # The power is on already
             print "Turning to standby"

@@ -114,7 +114,7 @@
 	</div>
 	<script type="text/javascript" src="scripts_controlpanel/modalScript.php"></script>
 
-	<div id="minPhotoDiv"  style="position: absolute; right:60%; width:30%; height:30px; font-size: 15px; z-index:999; margin-top: 10px; vertical-align: middle;">
+	<div id="minPhotoDiv"  style="position: absolute; right:60%; width:30%; height:30px; font-size: 15px; z-index:10; margin-top: 10px; vertical-align: middle;">
 		<span style="line-height: 30px; margin-right: 5px;">
 			Min Pictures Per Person:  
 		</span>
