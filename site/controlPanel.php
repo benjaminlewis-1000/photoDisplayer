@@ -64,7 +64,7 @@
 
 
 	<div id=newCriteriaDiv class="head_div">
-		<button id="newCriteria" class="taskButton" title="Toggle TV power - turn off TV if on, turn TV on if off" onclick="turnOnTV('Toggle')">
+		<button id="tvToggle" class="taskButton" title="Toggle TV power - turn off TV if on, turn TV on if off" onclick="turnOnTV('Toggle')">
 			Toggle TV Power
 		</button>
 		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')">
@@ -78,6 +78,9 @@
 		</button>
 		<button id="launchSlideshow" title="Launch the slideshow with images filtered&#013 by the current criteria. The TV will turn &#013on if it is not already (although the HDMI&#013 input will not automatically change)" class="taskButton", onclick="sendToPi()">
 			Launch Slideshow
+		</button>
+		<button id="showOff" class="taskButton" title="Turn off the TV and end the slideshow" onclick="turnOnTV('Off')">
+			End Slideshow
 		</button>
 	</div>
 
@@ -169,7 +172,7 @@
 					</li>
 					<li>
 						<input class="option_chk" type="checkbox" name="options" value="Delay" checked=True title="Seconds between each image, minimum."> Delay between images: 
-						<input id="delayForm" name="delayVal" style="width: 40px; height: 25px" value="2.0"></input>
+						<input id="delayForm" name="delayVal" style="width: 40px; height: 25px" value="5.0"></input>
 						seconds
 						<br>
 					</li>

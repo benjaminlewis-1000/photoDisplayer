@@ -497,12 +497,24 @@ class displayServer:
     def turnOnTV(self, onJSON):
         debug = []
 
-        statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        if onJSON != "Off":
+            statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        else:
+            statusString = ""
+
+            
         if re.search('power status: standby', statusString) or onJSON['On'] == "True":
             print "Turning on TV"
             debug.append(statusString)
             debug.append("Turning on TV")
             os.system('echo on 0 | cec-client -s -d 1')
+        elif onJSON['On'] == 'Off':
+            print "Ending slideshow and turning off TV"
+            if self.p != None: 
+                self.p.terminate()
+                self.p.wait()
+            debug.append("Ending slideshow and turning off TV")
+            # os.system('echo standby 0 | cec-client -s -d 1')
         else:
             # The power is on already
             print "Turning to standby"
