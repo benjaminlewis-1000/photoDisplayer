@@ -46,7 +46,7 @@
     // Request that we set the slideshow properties
 
     $requestArray = array();        
-    $optionRequest = xmlrpc_encode_request("turnOnTV" , array("On" => "True"));
+    $optionRequest = xmlrpc_encode_request("turnOnTV" , array("On" => "Toggle"));
 
     $requestArray[] = $optionRequest;
 

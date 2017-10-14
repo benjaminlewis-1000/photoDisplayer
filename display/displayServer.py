@@ -16,6 +16,7 @@ from time import sleep
 import json
 import calendar
 import xmltodict
+import commands
 
 if len(sys.argv) > 1:
     debug = 1
@@ -494,13 +495,27 @@ class displayServer:
         # return self.xmlParams['params']['serverParams']['successVal']
 
     def turnOnTV(self, onJSON):
-        params = json.loads(str(onJSON))
-        onBool = params[0]['On']
+        debug = []
 
-        if onBool:
+        statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        if re.search('power status: standby', statusString) or onJSON['On'] == "True":
+            print "Turning on TV"
+            debug.append(statusString)
+            debug.append("Turning on TV")
             os.system('echo on 0 | cec-client -s -d 1')
         else:
+            # The power is on already
+            print "Turning to standby"
+            debug.append(statusString)
+            debug.append("Turning to standby")
             os.system('echo standby 0 | cec-client -s -d 1')
+
+        returnDict = {}
+        returnDict['exceptions'] = ["No exceptions in turning on TV"]
+        returnDict['debug'] = debug
+        print json.dumps(returnDict)
+        return json.dumps(returnDict)
+
 
     def run(self):
         self.server.register_function(self.startSlideshow, 'startSlideshow')
