@@ -4,6 +4,8 @@ function sendToPi(){
 	criteriaJSON = criteriaToJSON();
 	optionsJSON = readShowOptions(relaunchShow=false);
 
+	turnOnTV('True')
+
 	var callback = $.ajax({
 		type: 'POST',
 		url: 'scripts_controlpanel/launchSlideshow.php',
