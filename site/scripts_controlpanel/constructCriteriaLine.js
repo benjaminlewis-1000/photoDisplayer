@@ -192,7 +192,7 @@ console.log(criteriaType)
 			}else{
 				possVals = ['is', 'is not']
 				if (possVals.indexOf(binaryValue) < 0){
-					console.log("Error in function constructSelectionLine: Unknown binary switch value for Person. ")
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown binary switch value for Person. ")
 					binarySelect.selectedIndex = 0
 				}else{
 					binarySelect.value = binaryValue
@@ -218,7 +218,7 @@ console.log(criteriaType)
 
 			        exceptions = decodedData['exceptions']
 			        for (i = 0; i < exceptions.length; i++){
-			        	console.log("Error in deleting slideshow (modalScript.php): " + exceptions[i]);
+			        	console.log("Error in selecting people (constructCriteriaLine.js): " + exceptions[i]);
 			        }
 
 					personNames = decodedData['personNames']
@@ -232,7 +232,7 @@ console.log(criteriaType)
 						personSelect.selectedIndex = 0
 					}else{
 						if (personNames.indexOf(selectionValue) < 0){
-							console.log("Error in function constructSelectionLine: Unknown person selected for Person field. ")
+							console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
 							personSelect.selectedIndex = 0
 						}else{
 							personSelect.value = selectionValue
@@ -262,7 +262,7 @@ console.log(criteriaType)
 			}else{
 				possVals = ["is", "is not", "is before", "is after"]
 				if (possVals.indexOf(binaryValue) < 0){
-					console.log("Error in function constructSelectionLine: Unknown binary switch value for Person. ")
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown binary switch value for Person. ")
 					binarySelect.selectedIndex = 0
 				}else{
 					binarySelect.value = binaryValue
@@ -303,7 +303,7 @@ console.log(criteriaType)
 			}else{
 				possVals = ['is', 'is not']
 				if (possVals.indexOf(binaryValue) < 0){
-					console.log("Error in function constructSelectionLine: Unknown binary switch value for Person. ")
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown binary switch value for Person. ")
 					binarySelect.selectedIndex = 0
 				}else{
 					binarySelect.value = binaryValue
@@ -325,7 +325,7 @@ console.log(criteriaType)
 				monthSelect.selectedIndex = 0
 			}else{
 				if (months.indexOf(selectionValue) < 0){
-					console.log("Error in function constructSelectionLine: Unknown person selected for Person field. ")
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
 					monthSelect.selectedIndex = 0
 				}else{
 					/* VValues are numerical, so we need to choose the selected index rather than the month name. */

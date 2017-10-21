@@ -20,11 +20,3 @@ for (i = 0; i < acc.length; i++) {
     }
 
 }
-
-
-for (i = 0; i < slideshowButton.length; i++){
-	slideshowButton[i].onclick = function(){
-		this.classList.toggle("active");
-		addScheduleLine('slideshowScheduleFieldsDiv');
-	}
-}

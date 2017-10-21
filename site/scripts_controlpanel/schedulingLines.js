@@ -1,21 +1,22 @@
 
 
-
-function addScheduleLine(){
-
+function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName){
+	console.debug(divOfFields)
+	console.debug(daySelected)
+	console.debug(timeStart)
+	console.debug(timeStop)
+	console.debug(showName)
 
 	// Get the appropriate variable and increment it.
 	var num = (document.getElementById('scheduleNumID').value - 1)+ 2;
 	document.getElementById('scheduleNumID').value = num;
 
-	divOfFields = arguments[0];
-	console.log(divOfFields)
+	console.debug('Div number is ' + num)
+
 	var mainDiv = document.getElementById(divOfFields);
 	var lineDiv = document.createElement('div');
 
-	console.log(mainDiv.id)
 	mainDiv.appendChild(lineDiv);
-	console.log('asdf')
 
 	// Day of week drop-down button
 	var span_day_of_week = document.createElement('span');
@@ -23,9 +24,13 @@ function addScheduleLine(){
 	lineDiv.appendChild(span_day_of_week);
 	span_day_of_week.appendChild(select_day_of_week);
 
-	days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+	days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "On Given Day"];
 	for (var i = 0; i < days.length; i++){
 		select_day_of_week.options.add(new Option(days[i], days[i]));
+	}
+
+	if (daySelected != null && days.indexOf(daySelected) >= 0){
+		select_day_of_week.value = daySelected
 	}
 
 	lineDiv.className = "fieldParent";
@@ -49,6 +54,12 @@ function addScheduleLine(){
 	input_start_time.id = "showStartTime" + num;
 	input_start_time.setAttribute('type',"text");
 
+	console.debug('Start time is ' + timeStart)
+	console.debug(timeStart)
+	if (timeStart != null){
+		input_start_time.value = timeStart;
+	}
+
 	input_start_time.onchange = function(){checkTime(input_start_time.id) };
 
 	// Put the "to" label in
@@ -66,6 +77,10 @@ function addScheduleLine(){
 	input_stop_time.className = "timeInputBox";
 	input_stop_time.id = "showStopTime" + num;
 	input_stop_time.setAttribute('type',"text");
+
+	if (timeStop != null){
+		input_stop_time.value = timeStop;
+	}
 
 	input_stop_time.onchange = function(){checkTime(input_stop_time.id) };
 	

@@ -1,10 +1,10 @@
 .fieldParent{
 		position:relative;
 	    min-height: 70px;
-	    max-width: 90%;
+	    width: 100%;
 	    /*border: 4px solid black;*/
-		margin 20px auto;
-		padding: 10px;
+		padding-top: 10px;
+		padding-bottom: 10px;
 		border: none;/*solid blue 2px;*/
 		--webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
@@ -13,121 +13,114 @@
 	    z-index: 1;
 	}
 
-	.timeInputBox{
-	    background-color: #FFFCE0;
-	    position: relative;
+.timeInputBox{
+    background-color: #FFFCE0;
+    position: relative;
 
-	    border: 50px;
-	    cursor: pointer;
+    border: 50px;
+    cursor: pointer;
 
-	    font-size: 16px;
-	    text-align: center;
+    font-size: 16px;
+    text-align: center;
 
-	    /*left: 20px;*/
-	    flex: 1;
-	    height: 50px;
-	    border-radius: 15px;
+    /*left: 20px;*/
+    flex: 1;
+    height: 50px;
+    border-radius: 15px;
 
-	    margin-left: 15px;
-	    margin-right: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
 
-	    position:relative;
-	    z-index: 1;
-	    /*float:left;*/
+    position:relative;
+    z-index: 1;
+    /*float:left;*/
 
-		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
-		display: inline-block;
-	    width: 10%;
+	display: inline-block;
+    width: 10%;
 
-	    font-style: oblique;
-	    font-size: 20px;
-	}
+    font-style: oblique;
+    font-size: 20px;
+}
 
-	.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions{
-	    border: 20px;
-	    cursor: pointer;
+.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions{
+    border: 20px;
+    cursor: pointer;
 
-	    font-size: 16px;
-	    text-align: center;
+    font-size: 16px;
+    text-align: center;
 
-	    /*left: 20px;*/
-	    flex: 1;
-	    height: 50px;
-	    border-radius: 15px;
+    flex: 1;
+    height: 50px;
+    border-radius: 15px;
 
-	    margin-left: 10px;
-	    margin-right: 10px;
+    margin-left: 1%;
+    margin-right: 1%;
 
-	    transition: 1.5s ease;
-	    position:relative;
-	    z-index: 1;
-	    /*float:left;*/
+    transition: 1.5s ease;
+    position:relative;
+    z-index: 1;
+    /*float:left;*/
 
-		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
-		display: inline-block;
-	}
+	display: inline-block;
+}
 
 
-	.criteriaType{
-     	width: 150px;
-     	width: 15%;
-	    background-color: #FFFCE0;
-	    color: #200954;
-	}
+/* The four fields for a non-date criteria line*/
+.criteriaType{
+ 	width: 15%;
+    background-color: #FFFCE0;
+    color: #200954;
+}
 
-	.dropdownOptions{
-		width: 415px;
-		width: 41%;
-	    background-color: #FFFCE0;
-	    color: #200954;
-	    margin-left: 5px;
-	}
+.binaryField{
+	width: 20%;
+    background-color: #FFFCE0;
+    color: #200954;
+    text-align: center;
+}
 
-	.binaryField{
-		width: 265px;
-		width: 18%;
-	    background-color: #FFFCE0;
-	    color: #200954;
-	    text-align: center;
-	}
+.dropdownOptions{
+	width: 40%;
+    background-color: #FFFCE0;
+    color: #200954;
+}
 
-	.fieldChild{
-	    background-color: #FFFCE0;
-	    color: #200954;
-	    width: 8%;
-	}
 
-	.fieldChild:hover {
-	    background-color: #eeefba;
-	}
+.fieldChild{
+    width: 8%;
+    background-color: #FFFCE0;
+    color: #200954;
+}
 
-	.labelText{
-	    height: 50px;
-		font-size:20px;
-		font-style: oblique;
-		width: 9%;
-	    text-align: center;
-	}
+.fieldChild:hover {
+    background-color: #eeefba;
+}
 
-	.calendarBox{
+.labelText{
+	width: 9%;
+	font-style: oblique;
+    text-align: center;
+}
 
-	    /*left: 40px;
-	    right: 40px;*/
-	    text-align: center;
-	    width:210px;
-	    width: 15%;
+.calendarBox{
 
-	    margin-right: 5px;
-	    font-style: oblique;
-	    font-size: 20px;
-	}
+    /*left: 40px;
+    right: 40px;*/
+    text-align: center;
+    width: 15%;
 
-	.calSelect{
-		box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
-		width: 70px;
-		width: 9%;
-	    background-color: #FFFCE0;
+    font-style: oblique;
+    font-size: 20px;
+}
 
-	}
+.calSelect{
+	box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
+	width: 70px;
+	width: 9%;
+    background-color: #FFFCE0;
+
+}

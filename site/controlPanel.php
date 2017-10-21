@@ -147,7 +147,6 @@
 		</span>
 		<span>
 			<input id="minPhotos" 
-				style="position:absolute; font-family: 'Goudy Old Style'; height:30px; " 
 				value="1"
 				title="Establish a lower limit for number of photos a person&#013must be in to show in a 'Person' dropdown list. This only &#013applies for criteria that are created or refreshed after the &#013value is changed, because you may theoretically want to &#013include someone that's only been in 2 photos, then change &#013this box to make finding someone with a ton of photos easier &#013afterward.">
 			</input>
@@ -214,7 +213,18 @@
 
 
 	<div id="newScheduleDiv"  style="position: absolute; right:60%; width:30%; height:30px; font-size: 15px; z-index:10; vertical-align: middle;">
-		<button id="newShowButton" class="newShowClass" onclick="addScheduleLine('slideshowScheduleFieldsDiv')" >New schedule</button>
+		<button id="newShowButton" class="newShowClass" onclick="
+			/* Gets the button that this button is on (i.e. 'Slideshow Scheduling') and 
+			determines whether it is expanded or not. If it is not expanded, its state 
+			will toggle, and that of the button should as well. Otherwise, it's already 
+			toggled and we can leave it alone.*/
+			counterpart = document.getElementById('slideshowSchedulingAccordion');
+	    	panel = counterpart.nextElementSibling;
+	    	if (! panel.style.maxHeight){
+				this.classList.toggle('active'); 
+		    } 
+			addScheduleLine('slideshowScheduleFieldsDiv');
+		" >New schedule</button>
 	</div>
 	<button class="accordion" id="slideshowSchedulingAccordion">Slideshow Scheduling
 		<script type="text/javascript" src="scripts_controlpanel/controlPanelAccordion.js"></script>
