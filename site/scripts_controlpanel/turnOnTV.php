@@ -40,8 +40,6 @@
 		return ( ( $ip_decimal & $netmask_decimal ) == ( $range_decimal & $netmask_decimal ) );
 	}
 
-	echo $_SERVER['REMOTE_ADDR'];
-
 	// Check if the requesting IP is in the network; if not, ignore and give a polite message in the debug.
 	if (!ip_in_range($_SERVER['REMOTE_ADDR'], '192.168.0.0/16') && $_SERVER['REMOTE_ADDR'] != '::1'){
 		$exceptions[] = "Computer is not on local network";

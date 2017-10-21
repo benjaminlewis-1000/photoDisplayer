@@ -22,6 +22,9 @@
 <script type="text/javascript" src="scripts_controlpanel/AnchorPosition.js"></script>
 <!-- End Calendar JS files -->
 
+<!-- Link for the "Orbitron" font -->
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Orbitron" />
+
 <!-- Calendar javascript configuration -->
 <script type="text/javascript">
 	var cal = new CalendarPopup("testdiv1");
@@ -59,8 +62,9 @@
 
 	<!-- A global variable for incrementing and decrementing -->
 	<input type="hidden" value="0" id="divNumID" />
+	<input type="hidden" value="0" id="scheduleNumID" />
 	<!-- Floating div for calendar -->
-	<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
+	<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;z-index: 3;"></div>
 
 
 	<div id=newCriteriaDiv class="head_div">
@@ -74,6 +78,7 @@
 			Launch Slideshow
 		</button>
 	</div>
+
 	<div id=onOffDiv class="head_div">
 		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')">
 			New Criteria
@@ -85,6 +90,27 @@
 			End Slideshow
 		</button>
 	</div>
+
+	<div id="clockDiv">
+		<span id="time" class="digitalClock"></span>
+	</div>
+
+	<script type="text/javascript">
+		function pad(num, size) {
+		    var s = num+"";
+		    while (s.length < size) s = "0" + s;
+		    return s;
+		}
+		function Timer() {
+		   var dt=new Date()
+		   document.getElementById('time').innerHTML=dt.getHours() % 12+":"
+		   		+pad(dt.getMinutes(), 2)+":"
+		   		+pad(dt.getSeconds(),2)+ " " 
+		   		+(dt.getHours() > 12? 'PM': 'AM');
+		   setTimeout("Timer()",1000);
+		}
+		Timer();
+	</script>
 
 	<!-- Actions for the modal boxes are defined in scripts_controlpanel/modalScript.php -->
 	<!-- Defines the modal overlay that appears when the "Save Slideshow" button is pressed. -->
@@ -139,7 +165,7 @@
 	<!-- https://www.w3schools.com/howto/howto_js_accordion.asp -->
 
 
-	<button class="accordion">Slideshow Options
+	<button class="accordion" id="slideshowOptions">Slideshow Options
 		<script type="text/javascript" src="scripts_controlpanel/controlPanelAccordion.js"></script>
 	</button>
 	<!-- 
@@ -185,6 +211,16 @@
 		</form>
 	</div>
 
+	
+	<div id="newScheduleDiv"  style="position: absolute; right:60%; width:30%; height:30px; font-size: 15px; z-index:10; vertical-align: middle;">
+		<button id="newShowButton" class="newShowClass" >New schedule</button>
+	</div>
+	<button class="accordion" id="slideshowSchedulingAccordion">Slideshow Scheduling
+		<script type="text/javascript" src="scripts_controlpanel/controlPanelAccordion.js"></script>
+	</button>
+
+	<div class="panel" id="slideshowScheduleFieldsDiv">
+	</div>
 
 
 </body>

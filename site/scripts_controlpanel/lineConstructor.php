@@ -72,9 +72,8 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 
 			var startLabel = document.createElement('span')
 			startLabel.id = "spacing"
-			var startText = document.createTextNode("From: ")
+			startLabel.innerHTML = "From:"
 			startLabel.className = "labelText"
-			startLabel.appendChild(startText) 
 
 			/*Calendar #1*/
 			var i1 = document.createElement("input"); //input element, text
@@ -105,9 +104,8 @@ function makeLineWithNames(divNumber, lineDiv, jsonTemplate, personNames){
 			}
 
 			var endLabel = document.createElement('span')
-			var endText = document.createTextNode("To: ")
+			endLabel.innerHTML = "To:"
 			endLabel.className = "labelText"
-			endLabel.appendChild(endText)
 
 			/* Calendar #2 */
 			var i2 = document.createElement("input"); //input element, text

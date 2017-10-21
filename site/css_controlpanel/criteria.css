@@ -1,7 +1,7 @@
 .fieldParent{
 		position:relative;
 	    min-height: 70px;
-	    max-width: 1200px;
+	    max-width: 90%;
 	    /*border: 4px solid black;*/
 		margin 20px auto;
 		padding: 10px;
@@ -11,6 +11,37 @@
 		box-sizing: border-box;
 		overflow: hidden
 	    z-index: 1;
+	}
+
+	.timeInputBox{
+	    background-color: #FFFCE0;
+	    position: relative;
+
+	    border: 50px;
+	    cursor: pointer;
+
+	    font-size: 16px;
+	    text-align: center;
+
+	    /*left: 20px;*/
+	    flex: 1;
+	    height: 50px;
+	    border-radius: 15px;
+
+	    margin-left: 15px;
+	    margin-right: 15px;
+
+	    position:relative;
+	    z-index: 1;
+	    /*float:left;*/
+
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+		display: inline-block;
+	    width: 10%;
+
+	    font-style: oblique;
+	    font-size: 20px;
 	}
 
 	.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions{
@@ -37,6 +68,7 @@
 
 		display: inline-block;
 	}
+
 
 	.criteriaType{
      	width: 150px;
@@ -71,14 +103,12 @@
 	    background-color: #eeefba;
 	}
 
-	#spacing{
-	    height: 50px;
-	}
-
 	.labelText{
+	    height: 50px;
 		font-size:20px;
 		font-style: oblique;
-		width: 10%;
+		width: 9%;
+	    text-align: center;
 	}
 
 	.calendarBox{
