@@ -104,10 +104,10 @@
 		}
 		function Timer() {
 		   var dt=new Date()
-		   document.getElementById('time').innerHTML=dt.getHours() % 12+":"
+		   document.getElementById('time').innerHTML=(dt.getHours() + 11) % 12 + 1+":"
 		   		+pad(dt.getMinutes(), 2)+":"
 		   		+pad(dt.getSeconds(),2)+ " " 
-		   		+(dt.getHours() > 12? 'PM': 'AM');
+		   		+(dt.getHours() > 11? 'PM': 'AM');
 		   setTimeout("Timer()",1000);
 		}
 		Timer();

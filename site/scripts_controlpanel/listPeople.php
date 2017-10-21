@@ -46,6 +46,7 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';
 	}
 	set_error_handler("exception_error_handler");
 
+	$debug[] = 'Database located at $numPhotosQuery'
 	try{
 		$db = new SQLite3($photoDBpath);
 		try{

@@ -3,8 +3,6 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 	var mainDiv = document.getElementById(divOfFields);
 	var criteriaTypes = ["Date Range", "Person", "Year", "Month", "Special"]
 
-
-console.log(criteriaType)
 	if (isNew){
   		var divNumber = (document.getElementById('divNumID').value - 1)+ 2;
   		document.getElementById('divNumID').value = divNumber;
