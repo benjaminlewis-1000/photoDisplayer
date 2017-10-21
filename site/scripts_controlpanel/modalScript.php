@@ -73,7 +73,6 @@ header("Content-type: application/javascript");
 
 	    queryType = 'loadShowNames'
 
-
 	    $.ajax({
 			type: 'POST',
 			url: 'scripts_controlpanel/getDatabase.php',
@@ -136,8 +135,8 @@ header("Content-type: application/javascript");
 		        	jdata = JSON.parse(jsonOfSavedShow);
 		        	removeAllCriteria(); // Clear the criteria
 		        	for (j = 0; j < jdata.length; j++){
-		        		// addCriteriaLine defined in lineAdd.js
-		        		addCriteriaLine('criteriaFieldsDiv', jdata[j])
+		        		// constructOrUpdateCriteriaLine defined in constructCriteriaLine.js
+		        		constructOrUpdateCriteriaLine('criteriaFieldsDiv', "True", null, jdata[j]['criteriaType'], jdata[j]['booleanValue'], jdata[j]['criteriaVal'] )
 		        	}
 		        }
 				minNumField.value = minVal

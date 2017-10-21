@@ -13,7 +13,8 @@
 <!-- Functionality js files -->
 <script src="scripts_controlpanel/controlPanelAccordion.js"></script>
 <script src="scripts_controlpanel/readState.js"></script>
-<script type="text/javascript" src="scripts_controlpanel/lineAdd.js"></script>
+<script type="text/javascript" src="scripts_controlpanel/constructCriteriaLine.js"></script>
+<script type="text/javascript" src="scripts_controlpanel/schedulingLines.js"></script>
 <script type="text/javascript" src="scripts_controlpanel/sendToPi.js"></script>
 
 <!-- Calendar JS files -->
@@ -35,7 +36,6 @@
 <!-- End calendar JS config -->
 
 
-<script src='scripts_controlpanel/lineConstructor.php' type='text/javascript'></script>
 
 
 <body>
@@ -79,8 +79,9 @@
 		</button>
 	</div>
 
-	<div id=onOffDiv class="head_div">
-		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')">
+	<div id=onOffDiv class="head_div"><!-- 
+		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')"> -->
+		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="constructOrUpdateCriteriaLine('criteriaFieldsDiv', 'true', null, 'Person', null, null)">
 			New Criteria
 		</button>
 		<button id="tvToggle" class="taskButton" title="Toggle TV power - turn off TV if on, turn TV on if off" onclick="turnOnTV('Toggle')">
@@ -211,9 +212,9 @@
 		</form>
 	</div>
 
-	
+
 	<div id="newScheduleDiv"  style="position: absolute; right:60%; width:30%; height:30px; font-size: 15px; z-index:10; vertical-align: middle;">
-		<button id="newShowButton" class="newShowClass" >New schedule</button>
+		<button id="newShowButton" class="newShowClass" onclick="addScheduleLine('slideshowScheduleFieldsDiv')" >New schedule</button>
 	</div>
 	<button class="accordion" id="slideshowSchedulingAccordion">Slideshow Scheduling
 		<script type="text/javascript" src="scripts_controlpanel/controlPanelAccordion.js"></script>
