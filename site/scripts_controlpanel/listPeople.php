@@ -1,4 +1,17 @@
+
+
 <?php 
+
+	/* This function is designed to be run once, on the load of the page. Hitting the database too frequently
+	causes an issue on the raspberry pi (it looks like something along the lines of locking up the database
+	to future calls) and I don't know enough to fix it. So instead, this runs once on page load. The result is
+	fed into a Javascript variable on the page, which is then used by other processes.
+
+	Considering that, by design, the list of people changes on the order of a day (if there are new people in
+	a photo), one load per page load should be completely sufficient. 
+
+	This function returns an array with names as keys and the number of occurences of the name as the value 
+	for each key.  */
 	$exceptions = array();
 	$debug = array();
 	$arrayOfSavedShows = array();
@@ -15,9 +28,14 @@
 	if (! is_numeric($minPhotos) ){
 		$minPhotos = 1;
 	}
-
+/*
 	$numPhotosQuery = 'WITH lotsOfPhotos AS ( SELECT person FROM photolinker GROUP BY person HAVING count(*) > '. $minPhotos. ' )
-SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';
+SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
+	/* See https://www.w3schools.com/sql/sql_join_left.asp for info on left join.
+	This query selects the person and the count of the person from the People table, joining that data to the 
+	photoLinker table where people_key on People = person on photoLinker.
+	*/
+	$peoplePlusNumberQuery = 'SELECT People.person_name, count(people.person_name) FROM PEOPLE left join photolinker on people.people_key = photoLinker.person GROUP BY photoLinker.person ORDER BY people.person_name';
 
 /* dirname_r is for compatibility in PHP 5.0 (available on Raspberry Pi) */
 	function dirname_r($path, $count=1){
@@ -51,28 +69,23 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';
 	try{
 		$db = new SQLite3($photoDBpath);
 		try{
-			$results = $db->query($numPhotosQuery);
+			$results = $db->query($peoplePlusNumberQuery);
 		}catch(Exception $e){
 			$exceptions[] = 'The table is not well-formed and probably wasn\'t initialized.';
 		}
 		$people = array();
 		while ($row = $results->fetchArray()) {
 			if (!empty($row[0])){
-				$people[] = $row[0];
+				$people[$row[0]] = $row[1] ;
 			}
-		}
-		natcasesort ($people);
-		foreach ($people as $person){
-			$personNames[] = $person;
 		}
    
     $db->close();
 	}catch(Exception $e){
-		//die('connection_unsuccessful: ' . $e->getMessage());
 		$exceptions[] = 'Error when reading database';
 	}
 
-	$retArray = array('personNames' => $personNames, 'exceptions' => $exceptions, 'debug' => $debug);
+	$retArray = array('personNames' => $people, 'exceptions' => $exceptions, 'debug' => $debug);
 	echo json_encode($retArray);
 
 ?>

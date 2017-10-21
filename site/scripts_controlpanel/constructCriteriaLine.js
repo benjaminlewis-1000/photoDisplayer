@@ -205,44 +205,24 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			numPhotosField = document.getElementById("minPhotos")
 			minNumPhotos = numPhotosField.value
+			console.debug(personNames)
 
-			$.ajax({
-				type: 'POST',
-				url: 'scripts_controlpanel/listPeople.php',
-				data: {'minPhotos': minNumPhotos},
-				success: function(data){
-					//console.log(data)
-					decodedData = JSON.parse(data);
+/*
+			for (var i = 0; i < personNames.length; i++){
+				personSelect.options.add(new Option(personNames[i], personNames[i], true, true))
+			}
 
-			        exceptions = decodedData['exceptions']
-			        for (i = 0; i < exceptions.length; i++){
-			        	console.log("Error in selecting people (constructCriteriaLine.js): " + exceptions[i]);
-			        }
-			        debugs = decodedData['debug']
-			        for (i = 0; i < debugs.length; i++){
-			        	console.debug("Debug, selecting people (constructCriteriaLine.js): " + debugs[i]);
-			        }
-
-					personNames = decodedData['personNames']
-
-
-					for (var i = 0; i < personNames.length; i++){
-						personSelect.options.add(new Option(personNames[i], personNames[i], true, true))
-					}
-
-					if (selectionValue == null) {
-						personSelect.selectedIndex = 0
-					}else{
-						if (personNames.indexOf(selectionValue) < 0){
-							console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
-							personSelect.selectedIndex = 0
-						}else{
-							personSelect.value = selectionValue
-						}
-					}
-			    }
-			});
-
+			if (selectionValue == null) {
+				personSelect.selectedIndex = 0
+			}else{
+				if (personNames.indexOf(selectionValue) < 0){
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
+					personSelect.selectedIndex = 0
+				}else{
+					personSelect.value = selectionValue
+				}
+			}
+*/
 
 
 			break;

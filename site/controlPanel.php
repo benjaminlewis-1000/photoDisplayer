@@ -40,6 +40,28 @@
 
 <body>
 
+	<script type="text/javascript">
+		$.ajax({
+				type: 'POST',
+				url: 'scripts_controlpanel/listPeople.php',
+				data: {'minPhotos': 1},
+				success: function(data){
+					//console.log(data)
+					decodedData = JSON.parse(data);
+
+			        exceptions = decodedData['exceptions']
+			        for (i = 0; i < exceptions.length; i++){
+			        	console.log("Error in selecting people (constructCriteriaLine.js): " + exceptions[i]);
+			        }
+
+					personNames = decodedData['personNames']
+
+
+			    }
+			});
+
+	</script>
+
 	<style type="text/css">
 		
 		/*Implement the nice grayscale background*/
@@ -223,8 +245,10 @@
 	    	if (! panel.style.maxHeight){
 				this.classList.toggle('active'); 
 		    } 
-			addScheduleLine('slideshowScheduleFieldsDiv');
-		" >New schedule</button>
+			addScheduleLine('slideshowScheduleFieldsDiv');" 
+		>
+		New schedule
+		</button>
 	</div>
 	<button class="accordion" id="slideshowSchedulingAccordion">Slideshow Scheduling
 		<script type="text/javascript" src="scripts_controlpanel/controlPanelAccordion.js"></script>
