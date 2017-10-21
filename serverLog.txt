@@ -1656,3 +1656,83 @@ I am here,  #1
 I am here,  #2
 I am here,  starting the slideshow
 <subprocess.Popen object at 0x7653c950>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alex Wilson"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Steven McKnight"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Brian Davis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jeff Powell"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jace Quebbeman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Matt Bohman"}]
+I am here,  #0
+I am here,  #5
+I am here,  #5
+I am here,  #5
+I am here,  #5
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76580910>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alex Wilson"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Steven McKnight"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Brian Davis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jeff Powell"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jace Quebbeman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Matt Bohman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Myles Varns"}]
+I am here,  #0
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x765da650>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alex Wilson"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Steven McKnight"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Brian Davis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jeff Powell"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jace Quebbeman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Matt Bohman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Myles Varns"}]
+I am here,  #0
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76580910>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alex Wilson"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Steven McKnight"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Brian Davis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jeff Powell"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jace Quebbeman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Matt Bohman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Myles Varns"}]
+I am here,  #0
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x765da650>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alex Wilson"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Steven McKnight"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Brian Davis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jeff Powell"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jace Quebbeman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Matt Bohman"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Myles Varns"}]
+I am here,  #0
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  #6
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76580910>
+Building a query... [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis"},{"criteriaType":"Person","booleanValue":"is","criteriaVal":"Jessica Lewis"},{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2014"}]
+I am here,  #0
+I am here,  #2
+I am here,  #2
+I am here,  #1
+I am here,  #1
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x765da650>
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2016"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76580910>
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x765da650>
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x76580910>
+Building a query... [{"criteriaType":"Year","booleanValue":"is after","criteriaVal":"2015"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+I am here,  #2
+I am here,  starting the slideshow
+<subprocess.Popen object at 0x765da650>

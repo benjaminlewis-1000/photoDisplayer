@@ -218,6 +218,10 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			        for (i = 0; i < exceptions.length; i++){
 			        	console.log("Error in selecting people (constructCriteriaLine.js): " + exceptions[i]);
 			        }
+			        debugs = decodedData['debug']
+			        for (i = 0; i < debugs.length; i++){
+			        	console.debug("Debug, selecting people (constructCriteriaLine.js): " + debugs[i]);
+			        }
 
 					personNames = decodedData['personNames']
 

@@ -38,7 +38,7 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';
 	$personNames = array();
 
 	if (! file_exists($photoDBpath) ){
-		$exceptions[] = 'File $photoDBpath does not exist';
+		$exceptions[] = 'File ' . $photoDBpath . ' does not exist';
 	}
 
 	function exception_error_handler($errno, $errstr, $errfile, $errline ) {
@@ -46,7 +46,8 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';
 	}
 	set_error_handler("exception_error_handler");
 
-	$debug[] = 'Database located at $numPhotosQuery'
+	$debug[] = 'Database located at ' . $photoDBpath;
+
 	try{
 		$db = new SQLite3($photoDBpath);
 		try{
@@ -64,12 +65,14 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';
 		foreach ($people as $person){
 			$personNames[] = $person;
 		}
+   
+    $db->close();
 	}catch(Exception $e){
 		//die('connection_unsuccessful: ' . $e->getMessage());
 		$exceptions[] = 'Error when reading database';
 	}
 
-	$retArray = array('personNames' => $personNames, 'exceptions' => $exceptions);
+	$retArray = array('personNames' => $personNames, 'exceptions' => $exceptions, 'debug' => $debug);
 	echo json_encode($retArray);
 
 ?>
