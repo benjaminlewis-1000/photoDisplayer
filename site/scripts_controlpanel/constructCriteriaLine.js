@@ -1,3 +1,5 @@
+
+
 function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaType, binaryValue, selectionValue){
 
 	var mainDiv = document.getElementById(divOfFields);
@@ -205,27 +207,40 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			numPhotosField = document.getElementById("minPhotos")
 			minNumPhotos = numPhotosField.value
-			console.debug(personNames)
+			console.debug(personNames[Object.keys(personNames)[1]])
 
-/*
-			for (var i = 0; i < personNames.length; i++){
-				personSelect.options.add(new Option(personNames[i], personNames[i], true, true))
+			personSubArray = []
+
+			if (minNumPhotos == 1){
+				personSubArray = Object.keys(personNames)
+			}else{
+				i = 0;
+				while( personNames[Object.keys(personNames)[i]] >= minNumPhotos){
+					personSubArray.push( Object.keys(personNames)[i] ) 
+					i = i + 1;
+				}
+			}
+
+			personSubArray = personSubArray.sort()
+			//personSubArray = personSubArray.unshift('<photos with no people>')
+
+			for (var i = 0; i < personSubArray.length; i++){
+				personSelect.options.add(new Option(personSubArray[i], personSubArray[i], true, true))
 			}
 
 			if (selectionValue == null) {
 				personSelect.selectedIndex = 0
 			}else{
-				if (personNames.indexOf(selectionValue) < 0){
+				if (personSubArray.indexOf(selectionValue) < 0){
 					console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
 					personSelect.selectedIndex = 0
 				}else{
 					personSelect.value = selectionValue
 				}
 			}
-*/
-
 
 			break;
+
 		case "Year":
 
 			var binarySelect = document.createElement('select')

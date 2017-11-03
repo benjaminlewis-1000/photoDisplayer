@@ -40,27 +40,6 @@
 
 <body>
 
-	<script type="text/javascript">
-		$.ajax({
-				type: 'POST',
-				url: 'scripts_controlpanel/listPeople.php',
-				data: {'minPhotos': 1},
-				success: function(data){
-					//console.log(data)
-					decodedData = JSON.parse(data);
-
-			        exceptions = decodedData['exceptions']
-			        for (i = 0; i < exceptions.length; i++){
-			        	console.log("Error in selecting people (constructCriteriaLine.js): " + exceptions[i]);
-			        }
-
-					personNames = decodedData['personNames']
-
-
-			    }
-			});
-
-	</script>
 
 	<style type="text/css">
 		
@@ -264,6 +243,32 @@
 	$('#optionForm').submit(function () {
 	 return false;
 	});
+</script>
+
+
+<script type="text/javascript" src="scripts_controlpanel/modalScript.php"></script>
+<script type="text/javascript">
+	$.ajax({
+			type: 'POST',
+			url: 'scripts_controlpanel/listPeople.php',
+			data: {'minPhotos': 1},
+			success: function(data){
+				//console.log(data)
+				decodedData = JSON.parse(data);
+
+		        exceptions = decodedData['exceptions']
+		        for (i = 0; i < exceptions.length; i++){
+		        	console.log("Error in selecting people (constructCriteriaLine.js): " + exceptions[i]);
+		        }
+
+				personNames = decodedData['personNames']
+
+
+		    }
+		});
+
+	getListOfSavedSlideshows();
+
 </script>
 
 

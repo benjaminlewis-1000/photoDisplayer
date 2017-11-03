@@ -9,6 +9,26 @@ header("Content-type: application/javascript");
 	imported2.src = 'readState.js';
 	document.head.appendChild(imported2);*/
 
+
+	function getListOfSavedSlideshows(){
+		$.ajax({
+			type: 'POST',
+			url: 'scripts_controlpanel/getDatabase.php',
+			data: {'queryType': 'loadShowNames'},
+			success: function(data){
+		        decodedData = JSON.parse(data);
+
+		        exceptions = decodedData['exceptions']
+		        for (i = 0; i < exceptions.length; i++){
+		        	console.log("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
+		        }
+		        
+		        definedSlideshows = decodedData['savedVals'];
+
+			}
+		});
+	}
+
 	var loadSelectIdx = 0;
 
 	// Get the modal
@@ -64,8 +84,10 @@ header("Content-type: application/javascript");
 				     		select.remove(i);
 				  		}
 					}
+
 			});
 		}
+		getListOfSavedSlideshows();
 	}
 
 	loadShowStartBtn.onclick = function(){
@@ -181,7 +203,7 @@ header("Content-type: application/javascript");
 			data: {'queryType': queryType, 'selectedVal': jsonOfParams, 'name': saveName},
 			success: function(data){
 		        decodedData = JSON.parse(data);
-		        
+		     	getListOfSavedSlideshows();   
 			}
 		});
 	}

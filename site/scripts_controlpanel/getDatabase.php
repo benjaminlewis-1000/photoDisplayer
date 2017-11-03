@@ -62,10 +62,10 @@
 	}
 
 	/* Get the name of the directory where the project lives */
-	$parentDir = dirname_r(__FILE__, 2);
-	$siteDir = dirname_r(__FILE__, 1);
+	$parentDir = dirname_r(__FILE__, 3);
+	$siteDir = dirname_r(__FILE__, 2);
 
-	//$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
+	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
 	$photoDBpath = $siteDir . '/savedSlideshows.db';
 
 
@@ -79,6 +79,8 @@
 
 	try{
 		$db = new SQLite3($photoDBpath);
+		// Give time for the database to connect
+		$db->busyTimeout(1000);
 	}catch(Exception $e){
 		$exceptions[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'";
 		$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions);

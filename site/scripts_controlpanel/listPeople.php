@@ -28,6 +28,13 @@
 	if (! is_numeric($minPhotos) ){
 		$minPhotos = 1;
 	}
+
+	$parentDir = dirname_r(__FILE__, 3);
+
+	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
+	$site_xml_params = simplexml_load_file(dirname_r(__FILE__, 2) . '/siteConfig.xml') or die("Can't load the site config file!");
+	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
+
 /*
 	$numPhotosQuery = 'WITH lotsOfPhotos AS ( SELECT person FROM photolinker GROUP BY person HAVING count(*) > '. $minPhotos. ' )
 SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
@@ -35,7 +42,17 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 	This query selects the person and the count of the person from the People table, joining that data to the 
 	photoLinker table where people_key on People = person on photoLinker.
 	*/
-	$peoplePlusNumberQuery = 'SELECT People.person_name, count(people.person_name) FROM PEOPLE left join photolinker on people.people_key = photoLinker.person GROUP BY photoLinker.person ORDER BY people.person_name';
+
+	$peopleTableName = $xml_params->photoDatabase->tables->peopleTable->Name; // "People"
+	$peopleTablePersonName = $xml_params->photoDatabase->tables->peopleTable->Columns->personName; // "person_name"
+	$peopleTablePersonKey = $xml_params->photoDatabase->tables->peopleTable->Columns->peopleKey; // "people_key"
+	$people_personName = $peopleTableName . '.' . $peopleTablePersonName; // People.person_name
+	$people_personKey = $peopleTableName . '.' . $peopleTablePersonKey; //People.people_key
+	$photoLinkerTableName = $xml_params->photoDatabase->tables->photoLinkerTable->Name; // photoLinker
+	$photoLinker_person = $photoLinkerTableName . '.' . $xml_params->photoDatabase->tables->photoLinkerTable->Columns->linkerPeople; // photoLinker.person
+
+	$peoplePlusNumberQuery = 'SELECT ' . $people_personName . ', count('. $people_personName . ') FROM '. $peopleTableName . ' left join ' . $photoLinkerTableName . ' on ' . $people_personKey . ' = '. $photoLinker_person . ' GROUP BY '. $photoLinker_person . ' ORDER BY ' . $people_personName ;
+
 
 /* dirname_r is for compatibility in PHP 5.0 (available on Raspberry Pi) */
 	function dirname_r($path, $count=1){
@@ -47,10 +64,9 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 	}
 
 	/* Get the name of the directory where the project lives */
-	$parentDir = dirname_r(__FILE__, 3);
 
-	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
-	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
+	$excluded_xml_names = preg_split('/,/', $site_xml_params->excludedNames);
+	$excluded_xml_patterns = preg_split('/,/', $site_xml_params->excludedPatterns);
 	
 	$exceptions = array();
 	$personNames = array();
@@ -68,6 +84,8 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 
 	try{
 		$db = new SQLite3($photoDBpath);
+	    // Give time for the database to connect - this was causing issues.
+	    $db->busyTimeout(1000);
 		try{
 			$results = $db->query($peoplePlusNumberQuery);
 		}catch(Exception $e){
@@ -85,6 +103,23 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 		$exceptions[] = 'Error when reading database';
 	}
 
+	arsort($people);
+
+	foreach($excluded_xml_names as $excludedName){
+		$excludedName = trim($excludedName);
+		if (isset($people[$excludedName]) ){
+			unset($people[$excludedName]);
+		}
+	}
+
+	foreach($excluded_xml_patterns as $excludedPattern){
+		$excludedPattern = trim($excludedPattern);
+		foreach ($people as $key => $value){
+			if (preg_match("/$excludedPattern/", $key)){
+				unset($people[$key]);
+			}
+		}
+	}
 	$retArray = array('personNames' => $people, 'exceptions' => $exceptions, 'debug' => $debug);
 	echo json_encode($retArray);
 

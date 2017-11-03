@@ -1,11 +1,6 @@
 
 
 function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName){
-	console.debug(divOfFields)
-	console.debug(daySelected)
-	console.debug(timeStart)
-	console.debug(timeStop)
-	console.debug(showName)
 
 	// Get the appropriate variable and increment it.
 	var num = (document.getElementById('scheduleNumID').value - 1)+ 2;
@@ -94,36 +89,36 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 	select_show_name.className = "dropdownOptions";
 	select_show_name.style.width=31 + "%"
 
-	queryType = 'loadShowNames'
 
-    $.ajax({
-		type: 'POST',
-		url: 'scripts_controlpanel/getDatabase.php',
-		data: {'queryType': queryType, selectedVal: ''},
-		success: function(data){
-	        decodedData = JSON.parse(data);
-	        definedSlideshows = decodedData['savedVals'];
+	// The value of 'definedSlideshows' is managed over in modalScript.php and updates dynamically
+	// every time we have a new or deleted slideshow. The theory is to have few calls to the database
+	// and then rebuild the list when necessary.
+	var i;
+    for(i = select_show_name.options.length - 1 ; i >= 0 ; i--)
+    {
+        select_show_name.remove(i);
+    }
 
-	        exceptions = decodedData['exceptions']
-	        for (i = 0; i < exceptions.length; i++){
-	        	console.log("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
-	        }
+	for (var i = 0; i < definedSlideshows.length; i++){	
+		select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
+	}
 
-			var i;
-		    for(i = select_show_name.options.length - 1 ; i >= 0 ; i--)
-		    {
-		        select_show_name.remove(i);
-		    }
+	select_show_name.onclick = function(){
+		// The value of 'definedSlideshows' is managed over in modalScript.php and updates dynamically
+		// every time we have a new or deleted slideshow. The theory is to have few calls to the database
+		// and then rebuild the list when necessary.
 
-			for (var i = 0; i < definedSlideshows.length; i++){	
-				select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
-			}
+		console.error('TODO: This should only update if the slideshow array has changed...')
+		var i;
+	    for(i = select_show_name.options.length - 1 ; i >= 0 ; i--)
+	    {
+	        select_show_name.remove(i);
+	    }
 
+		for (var i = 0; i < definedSlideshows.length; i++){	
+			select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
 		}
-	});
-
-
-
+	}
 
 	// Remove button
 

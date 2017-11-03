@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<siteParams>
+	<excludedNames>
+		Linear,Aaaa
+	</excludedNames>
+	<excludedPatterns>
+		.*.CR2,\(Canon EF 85mm F\/1.8 USM\)
+	</excludedPatterns>
+	<showDatabase>
+	</showDatabase>
+</siteParams>

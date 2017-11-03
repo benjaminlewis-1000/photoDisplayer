@@ -110,6 +110,7 @@ div.panel {
     /* Center the button on the page */
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 40px;
 
 /*
     background: linear-gradient(to right, white ,#f4fcff 5%, #f4fcff 95%, white); *//* Standard syntax (must be last) */
