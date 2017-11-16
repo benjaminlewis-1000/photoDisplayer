@@ -1,0 +1,4 @@
+In /etc/ssh/sshd_config:
+
+-Change line to PermitRootLogin yes
+- sudo service ssh restart

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-sudo pip install xmltodict geopy clarifai configparser future jsonschema 
+sudo pip install clarifai configparser future jsonschema 
 
 sudo apt-get install exiv2 python-pyexiv2 -y
 
@@ -13,3 +13,5 @@ sudo cpan install DBD::SQLite
 sudo pip install functools32
 sudo pip install pyyaml
 sudo pip install enum
+pip install xmltodict 
+pip install geopy 
