@@ -1,6 +1,6 @@
 #! /bin/bash
 
-
+# Get the current working directory as well as the one two up (assume that the file heiarchy is still in place)
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
