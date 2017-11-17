@@ -150,7 +150,10 @@ def getExifData(filename, doGeocode):
                     if val == -1:
                         return -1
                     else:
-                        val = json.loads(val.encode('utf-8'))
+                        try:
+                            val = json.loads(val.encode('utf-8'))
+                        except Exception as e :
+                            print "No JSON Object..."
                     passed = True
                 except Exception as e :
                     return str(e)

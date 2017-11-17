@@ -3,6 +3,8 @@
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
+sudo bash $THIS_DIR/subscripts/mountHardDrive.sh
+
 # Apt-get install all the package manager programs I can use. 
 sudo bash $THIS_DIR/subscripts/aptGetInstall.sh
 
@@ -25,7 +27,6 @@ sudo bash $THIS_DIR/populateDB.sh
 
 sudo bash $THIS_DIR/cronInstall.sh
 
-sudo bash $THIS_DIR/subscripts/mountHardDrive.sh
 
 
 

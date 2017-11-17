@@ -53,8 +53,8 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
     except Exception as e:
         print "File: " + fullPath
         print exifData
-        print "Error! : " + str(e)
-        exit(1)
+        print "Error in photoHandler! : " + str(e)
+        return
 
     photoDateColumn  = photoCols['photoDate']
     rootDirNumColumn  = photoCols['rootDirNum']
