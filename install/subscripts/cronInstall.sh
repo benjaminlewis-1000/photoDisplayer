@@ -6,10 +6,17 @@ PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
 PHOTO_STR='15 23 * * * /usr/bin/python $PROJECT_ROOT_DIR/pyInit/addPics.py'
 
-CL_STR="15 1 * * * /bin/bash $PROJECT_ROOT_DIR/clTag.sh"
-GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/googTag.sh"
+CL_STR="15 1 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/clTag.sh"
+GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/googTag.sh"
 
-GIT_PULL_STR="* * * * * su -s /bin/sh nobody -c 'cd $PROJECT_ROOT_DIR && /usr/bin/git pull origin master"
+GIT_PULL_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/gitpull.sh"
+
+echo "#! /bin/bash" > $PROJECT_ROOT_DIR/scripts/gitpull.sh
+echo "cd $PROJECT_ROOT_DIR" >> $PROJECT_ROOT_DIR/scripts/gitpull.sh
+echo "git pull" >> $PROJECT_ROOT_DIR/scripts/gitpull.sh
+chmod +x $PROJECT_ROOT_DIR/scripts/gitpull.sh
+
+echo "gitpull.sh" >> $PROJECT_ROOT_DIR/.gitignore
 
 #crontab -l ; echo "$CL_STR"    | crontab -
 #crontab -l ; echo "$GOOG_STR"  | crontab - 

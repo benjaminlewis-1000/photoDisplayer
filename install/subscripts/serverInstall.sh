@@ -41,7 +41,7 @@ sudo sed -i 's/DocumentRoot \/var\/www\/html/'"$DEFAULT_000_VAR"'/g' /etc/apache
 
 read -r -d '' MOD_DIR_VAR << EOM
 <IfModule mod\_dir.c>
-    DirectoryIndex mainPage.php info.php mainPage.html index.html index.cgi index.pl index.php index.xhtml index.htm
+    DirectoryIndex controlPanel.php mainPage.php info.php mainPage.html index.html index.cgi index.pl index.php index.xhtml index.htm
 <\/IfModule>
 EOM
 

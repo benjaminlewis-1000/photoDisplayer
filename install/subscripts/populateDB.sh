@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
 # Kill any process running python geoServer.py (not necessary on install, but nevertheless kills it off nicely and this is a nice line to have around.
 GEOSERVER_PID=$(ps aux | grep geoServer.py | head -1 | awk '{print $2}')

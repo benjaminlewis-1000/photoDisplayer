@@ -21,5 +21,8 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 # m h  dom mon dow   command
+MAILTO=""
 15 23 * * * /usr/bin/python $PROJECT_ROOT_DIR/pyInit/addPics.py
-* * * * * su -s /bin/sh nobody -c 'cd /home/pi/pdisp && /usr/bin/git pull origin master
+0 1 * * * /home/pi/pdisp/gitpull.sh
+15 23 * * * /usr/bin/python $PROJECT_ROOT_DIR/pyInit/addPics.py
+0 1 * * * /home/pi/pdisp/scripts/gitpull.sh

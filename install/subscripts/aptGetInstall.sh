@@ -21,7 +21,10 @@ sudo apt-get install xinput -y
 # Install packages for web server
 
 sudo apt-get install apache2 apache2-utils libapache2-mod-python libapache2-mod-php5 php5 php5-mcrypt php5-sqlite php-symfony-yaml -y
+sudo apt-get install php-sqlite3 -y
 sudo apt-get install php-xmlrpc -y
+sudo apt-get install libapache2-mod-php -y
+sudo apt-get install php -y
 
 # Install packages for feh, the photo program
 

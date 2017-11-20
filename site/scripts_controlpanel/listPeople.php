@@ -82,8 +82,9 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 
 	$debug[] = 'Database located at ' . $photoDBpath;
 
-	try{
-		$db = new SQLite3($photoDBpath);
+
+	try{	
+	    $db = new SQLite3($photoDBpath);
 	    // Give time for the database to connect - this was causing issues.
 	    $db->busyTimeout(1000);
 		try{
@@ -120,6 +121,7 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 			}
 		}
 	}
+
 	$retArray = array('personNames' => $people, 'exceptions' => $exceptions, 'debug' => $debug);
 	echo json_encode($retArray);
 
