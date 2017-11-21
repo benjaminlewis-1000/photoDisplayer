@@ -19,15 +19,15 @@ sudo bash $THIS_DIR/subscripts/fehInstall.sh
 # Disable screen blanking
 sudo sed -i 's/#xserver-command=X/xserver-command=X -s 0 -dpms/' /etc/lightdm/lightdm.conf
 
-sudo bash $THIS_DIR/serverInstall.sh
+sudo bash $THIS_DIR/subscripts/serverInstall.sh
 
-sudo bash $THIS_DIR/pyInstall.sh
+sudo bash $THIS_DIR/subscripts/pyInstall.sh
 
-sudo bash $THIS_DIR/populateDB.sh
+sudo bash $THIS_DIR/subscripts/populateDB.sh
 
-sudo bash $THIS_DIR/cronInstall.sh
+sudo bash $THIS_DIR/subscripts/cronInstall.sh
 
-
+sudo bash $THIS_DIR/subscripts/autostart_install.sh
 
 
 

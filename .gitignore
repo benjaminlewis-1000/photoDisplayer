@@ -62,5 +62,4 @@ Temporary Items
 init/unhandled_files.txt
 *.log
 gitpull.sh
-
-gitpull.sh
+scripts/displayRestart.sh

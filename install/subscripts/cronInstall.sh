@@ -10,13 +10,14 @@ CL_STR="15 1 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/clTag.sh"
 GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/googTag.sh"
 
 GIT_PULL_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/gitpull.sh"
+RESTART_DISPLAY_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/displayRestart.sh"
 
 echo "#! /bin/bash" > $PROJECT_ROOT_DIR/scripts/gitpull.sh
 echo "cd $PROJECT_ROOT_DIR" >> $PROJECT_ROOT_DIR/scripts/gitpull.sh
 echo "git pull" >> $PROJECT_ROOT_DIR/scripts/gitpull.sh
 chmod +x $PROJECT_ROOT_DIR/scripts/gitpull.sh
 
-echo "gitpull.sh" >> $PROJECT_ROOT_DIR/.gitignore
+# echo "gitpull.sh" >> $PROJECT_ROOT_DIR/.gitignore
 
 #crontab -l ; echo "$CL_STR"    | crontab -
 #crontab -l ; echo "$GOOG_STR"  | crontab - 
@@ -29,6 +30,12 @@ crontab -l > $THIS_DIR/ccc.cron
 # echo "$GOOG_STR" >> $THIS_DIR/ccc.cron
 echo "$PHOTO_STR" >> $THIS_DIR/ccc.cron
 echo "$GIT_PULL_STR" >> $THIS_DIR/ccc.cron
+echo "$RESTART_DISPLAY_STR" >> $THIS_DIR/ccc.cron
+
+
+cp $THIS_DIR/displayRestart.sh $PROJECT_ROOT_DIR/scripts/displayRestart.sh
+# use commas because we don't want to cue on slashes
+sed -i  "s,<ROOTDIR>,$PROJECT_ROOT_DIR," $PROJECT_ROOT_DIR/scripts/displayRestart.sh
+
 
 crontab $THIS_DIR/ccc.cron
-# rm ccc.cron
