@@ -299,14 +299,14 @@ if __name__ == '__main__':
                 fullPath =  os.path.join(root, file)
                 print getExifData(fullPath, True)
     else:
-        fullPath = "/mnt/NAS/Jessica Pictures/Laptop/Peru/Uros Islands/Other/20160502_104348.jpg"
+        fullPath = "D:\\Pictures\\Emily's Pictures\\3-30-2009\\DSCN0456.JPG"
         print getExifData(fullPath, True)
 
 
 
-    if True:
+    if False:
         # testImage = "/home/lewis/Pictures/chicago_sept (3).jpg"
-        testImage = "/home/lewis/test.jpg"
+        testImage = "D:\Pictures\Emily's Pictures\3-30-2009\4-27-08 403.jpg"
 
         metadata = pyexiv2.ImageMetadata(testImage)
         try:

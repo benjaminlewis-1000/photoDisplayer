@@ -7,5 +7,55 @@
 		.*.CR2,\(Canon EF 85mm F\/1.8 USM\)
 	</excludedPatterns>
 	<showDatabase>
+
 	</showDatabase>
+	<nameAliases>
+		<!-- 
+		// A section in which names in a list can be aggregated in one or renamed. The format is as follows:
+		<displayName>
+			<display>Benjamin Lewis</display> // The name that you want to have displayed
+			<aka>Ben Lewis</aka> // Other names. These are the names that are actually tagged in the photo,
+			<aka>Ben</aka>  	 // but you don't want in your list (duplicates, poorly thought out names,
+								 // name changed for marriage, etc. Note that you can have as many '<aka>' tags
+								 // as desired. 
+		</displayName>
+
+		// There can be as many displayName groups in nameAliases as you desire, but they *must* be in the 
+		// nameAliases group (as these are)
+
+		// Also note that the names in aka tags are case-sensitive.
+
+		 -->
+		<displayName>
+			<display>Benjamin Lewis</display> <!-- Does not have to be a name that's already there. -->
+			<aka>Ben Lewis</aka>
+			<aka>Ben</aka><!-- Technically not true, but it's 3 pictures.  -->
+		</displayName>
+		<displayName>
+			<display>Emily Wilson</display>
+			<aka>Emily Lewis</aka>
+		</displayName>
+		<displayName>
+			<display>Elder Cole Cason</display>
+			<aka>Cole Cason</aka>
+		</displayName>
+		<displayName>
+			<display>Angie Johnson</display>
+			<aka>Angie</aka>
+		</displayName>
+		<displayName>
+			<display>David Johnson</display>
+			<aka>David De Angie</aka>
+		</displayName>
+		<!-- Copy-paste block for you to use. Copy-paste and remove the comment block. -->
+
+		<!-- 
+		<displayName>
+			<display>new_name_to_display</display>
+			<aka>name_from_tag_1</aka>
+			<aka>name_From_tag_2</aka>
+		</displayName>
+ 		-->
+
+	</nameAliases>
 </siteParams>

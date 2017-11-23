@@ -2,7 +2,7 @@
 
 # Install feh and assorted tools
 wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O ~/feh.tar.bz2 
-# test 222
+
 pushd
 cd ~
 mkdir feh

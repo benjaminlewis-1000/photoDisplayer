@@ -104,8 +104,6 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 		$exceptions[] = 'Error when reading database';
 	}
 
-	arsort($people);
-
 	foreach($excluded_xml_names as $excludedName){
 		$excludedName = trim($excludedName);
 		if (isset($people[$excludedName]) ){
@@ -121,6 +119,52 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 			}
 		}
 	}
+
+	/* Get the names of aliases, i.e. the person is in there twice under different names, but you only want one display name and the backend will take care of the muliple names. */
+
+	$nameAliasRoot = $site_xml_params->nameAliases;
+	$numDisplayNames = count($nameAliasRoot->children() );
+
+	$strikeOutNames = [];
+	$substituteNames = [];
+
+	for ($i = 0; $i < $numDisplayNames; $i++){
+		$numAlternateNames = count( $nameAliasRoot->displayName[$i]->children() );
+		$alternate_count = 0;
+		$displayName = trim($nameAliasRoot->displayName[$i]->display);
+		//echo $displayName;
+		for ($j = 0; $j < $numAlternateNames; $j++){
+			$alternateName = trim($nameAliasRoot->displayName[$i]->aka[$j]);
+			//echo $alternateName
+
+			# Check if the alternate name is in the array. If so, we want to get its value and
+			# add it to the display name. 
+			if ( array_key_exists($alternateName, $people)  ){
+				$alternate_count += $people[$alternateName];
+				// names that are in substituteNames should be put in if they aren't already there
+				unset($people[$alternateName]);
+			}
+		}
+
+		# Add in the count for other alternate names to the display name; that way, the total
+		# number is accounted in thresholding number of photos.
+		if ( array_key_exists($displayName, $people) ){
+			$people[$displayName] += $alternate_count;
+		}else{
+			$people[$displayName] = $alternate_count;
+		}
+
+		$substituteNames[] = $nameAliasRoot->displayName[$i]->display;
+	}
+
+	// strikeOutNames has a list of names that should be removed from the list
+	for ($i = 0; $i < count($strikeOutNames); $i++){
+		$excludedName = trim($strikeOutNames[$i]);
+		unset($people[$excludedName]);
+	}
+
+	// Sort the list by number of photos with that person.
+	arsort($people);
 
 	$retArray = array('personNames' => $people, 'exceptions' => $exceptions, 'debug' => $debug);
 	echo json_encode($retArray);
