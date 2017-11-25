@@ -36,8 +36,6 @@
 <!-- End calendar JS config -->
 
 
-
-
 <body>
 
 
@@ -268,8 +266,11 @@
 		});
 
 	getListOfSavedSlideshows();
+	populateSlideshowTimes();
 
 </script>
+
+<button id="testShow" title="test" onclick="readSchedules()">Test</button>
 
 
 </html>

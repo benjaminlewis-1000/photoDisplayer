@@ -19,7 +19,7 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 	lineDiv.appendChild(span_day_of_week);
 	span_day_of_week.appendChild(select_day_of_week);
 
-	days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "On Given Day"];
+	days = ["Every Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "On Given Day"];
 	for (var i = 0; i < days.length; i++){
 		select_day_of_week.options.add(new Option(days[i], days[i]));
 	}
@@ -32,6 +32,9 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 	select_day_of_week.className = "criteriaType";
 	lineDiv.id = 'scheduleBox' + num;
 	select_day_of_week.id = 'dayOfWeekBox' + num;
+	select_day_of_week.onchange = function(){
+		checkAllDefined(num)
+	}
 
 	// Put the "From" label on the time 
 	var startLabel = document.createElement('span')
@@ -49,13 +52,11 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 	input_start_time.id = "showStartTime" + num;
 	input_start_time.setAttribute('type',"text");
 
-	console.debug('Start time is ' + timeStart)
-	console.debug(timeStart)
 	if (timeStart != null){
-		input_start_time.value = timeStart;
+		input_start_time.value = standardizeTimeAMPM(timeStart);
 	}
 
-	input_start_time.onchange = function(){checkTime(input_start_time.id) };
+	input_start_time.onchange = function(){checkTime('start', num) };
 
 	// Put the "to" label in
 	var stopLabel = document.createElement('span')
@@ -74,10 +75,10 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 	input_stop_time.setAttribute('type',"text");
 
 	if (timeStop != null){
-		input_stop_time.value = timeStop;
+		input_stop_time.value = standardizeTimeAMPM(timeStop);
 	}
 
-	input_stop_time.onchange = function(){checkTime(input_stop_time.id) };
+	input_stop_time.onchange = function(){checkTime('stop', num) };
 	
 	// Show name field 
 	var span_show_name = document.createElement('span');
@@ -101,6 +102,13 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 
 	for (var i = 0; i < definedSlideshows.length; i++){	
 		select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
+		if (showName == definedSlideshows[i]){
+			select_show_name.value = showName
+		}
+	}
+
+	select_show_name.onchange = function(){
+		checkAllDefined(num)
 	}
 
 	select_show_name.onclick = function(){
@@ -108,8 +116,9 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 		// every time we have a new or deleted slideshow. The theory is to have few calls to the database
 		// and then rebuild the list when necessary.
 
-		console.error('TODO: This should only update if the slideshow array has changed...')
+		console.log('TODO: This should only update if the slideshow array has changed...')
 		var i;
+		current_val = select_show_name.value;
 	    for(i = select_show_name.options.length - 1 ; i >= 0 ; i--)
 	    {
 	        select_show_name.remove(i);
@@ -117,6 +126,9 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 
 		for (var i = 0; i < definedSlideshows.length; i++){	
 			select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
+			if (current_val == definedSlideshows[i]){
+				select_show_name.value = current_val
+			}
 		}
 	}
 
@@ -135,6 +147,7 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 
 	removeLineButton.onclick = function() { 
 		removeElement(lineDiv.id);
+		checkAllDefined(num)
 	};
 
 	// Grow the accordion if it is in display mode. Take the name of the accordion div (which
@@ -159,28 +172,18 @@ function removeElement(parentName){
 
 }
 
-function checkTime(elementId){
-
-
-	element = document.getElementById(elementId);
-	time = element.value;
-
-	var timePat = /^((\d{1,2})[:]?(\d{2})?)(\s?(AM|am|PM|pm)?)$/;
-
-	//([0-2]?[0-9]):?([0-5][0-9])(\s?(AM|am|PM|pm)?)
+function standardizeTimeAMPM(inputTime){
 
 	var milTimePat = /^([01]?\d|2[0-3]):?([0-5]\d)$/;
 	var twelveHTimPat = /^([0]?[0-9]|1[0-2]):?([0-5][0-9])?\s?(AM|am|PM|pm)?$/;
-//([0-9]|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])?(AM|am|PM|pm)
-
-	var milTimeMatch = time.match(milTimePat);
-	var twelveTimeMatch = time.match(twelveHTimPat);
+	
+	var milTimeMatch = inputTime.match(milTimePat);
+	var twelveTimeMatch = inputTime.match(twelveHTimPat);
 
 	if (milTimeMatch == null && twelveTimeMatch == null) {
 		//alert("Time is not in a valid format.");
-		console.log('time not valid')
-		element.value = '';
-		return false;
+		console.debug('time ' + inputTime + ' not in a valid format')
+		return '';
 	}
 
 	if (milTimeMatch != null){
@@ -201,7 +204,7 @@ function checkTime(elementId){
 		}else{
 			minutes = 0;
 		}
-		if (twelveTimeMatch.length > 3){
+		if (twelveTimeMatch.length > 3 && twelveTimeMatch[3] != null){
 			ampm = twelveTimeMatch[3].toUpperCase();
 		}else{
 			ampm = 'AM'
@@ -213,5 +216,117 @@ function checkTime(elementId){
 		minutes = '0' + minutes
 	}
 
-	element.value = hours + ':' + minutes + ' ' + ampm;
+	return hours + ':' + minutes + ' ' + ampm;
+}
+
+function checkTime(whichField, divNum){
+
+	stopElementID = 'showStopTime' + divNum;
+	startElementID = 'showStartTime' + divNum;
+
+	if (whichField == 'start'){
+		elementId = startElementID;
+	}else{
+		elementId = stopElementID;
+	}
+
+	element = document.getElementById(elementId);
+	time = element.value;
+	standardTime = standardizeTimeAMPM(time);
+
+	element.value = standardTime;
+
+	if (whichField == 'start'){
+		startTime = timeTo24h(standardTime);
+		element = document.getElementById(stopElementID);
+		stopTime = timeTo24h(element.value);
+	}else{
+		element = document.getElementById(startElementID);
+		startTime = timeTo24h(element.value); // Defined in readState.js
+		stopTime = timeTo24h(standardTime);
+	}
+
+	if (stopTime == false || startTime == false){
+		return
+	}
+
+	// Depending on which time was just changed and if they are backwards,
+	// get the other time and put it in the field. So yes,
+	// it's correct to get the changing time = stopTime when the start field
+	// was just changed: we want the start time == stop time.
+
+	// Also, yes, I know 
+	if (stopTime < startTime){
+		if (whichField == 'start'){
+			changingTime = stopTime;
+			element = document.getElementById(startElementID);
+		}else{
+			changingTime = startTime;
+			element = document.getElementById(stopElementID);
+		}
+		element.value = standardizeTimeAMPM(changingTime);
+	}
+
+	checkAllDefined(divNum)
+}
+
+function checkAllDefined(divNum){
+	// Check if all the fields have values. If so, save all the schedules off to a database. 
+	stopElementID = 'showStopTime' + divNum;
+	startElementID = 'showStartTime' + divNum;
+	showNameID = 'showNameSelect' + divNum;
+
+	startEl = document.getElementById(startElementID)
+	stopEl = document.getElementById(stopElementID)
+	nameEl = document.getElementById(showNameID)
+
+	// Trigger a save if all values in the form are defined or if the line has been deleted
+	// and the elements are no longer defined. 
+	if (startEl != null){
+		triggerSave = startEl.value != '' && stopEl.value != '' && nameEl.value != '';
+	}else{
+		triggerSave = true;
+	}
+
+	if (triggerSave){
+
+		schedules = readSchedules();
+
+		var callback = $.ajax({
+			type: 'POST',
+			url: 'scripts_controlpanel/getDatabase.php',
+			data: {'queryType': "saveSchedule", 'selectedVal': schedules},
+			success: function(data){
+				data = JSON.parse(data)
+		        exceptions = data['exceptions']
+		        console.log(data)
+		        for (i = 0; i < exceptions.length; i++){
+		        	console.error("Error in checkAllDefined: " + exceptions[i]);
+		        }
+		        debugMsgs = data['debug']
+		        for (i = 0; i < debugMsgs.length; i++){
+		        	console.debug("Debug message in checkAllDefined: " + debugMsgs[i]);
+		        }
+			}
+		});
+	}
+}
+
+function populateSlideshowTimes(){
+	// Get a list of slideshow schedules
+	var callback = $.ajax({
+		type: 'POST',
+		url: 'scripts_controlpanel/getDatabase.php',
+		data: {'queryType' : "getShowSchedule"},
+		success: function(data){
+			data = JSON.parse(data)
+			savedTimes =  JSON.parse(data['savedVals'])
+			console.log(savedTimes)
+			for (i = 0; i < savedTimes.length; i++){
+				curSch =savedTimes[i]; // current schedule
+
+				addScheduleLine('slideshowScheduleFieldsDiv', curSch['dayOfWeek'], curSch['startTime'], curSch['stopTime'], curSch['showName'])
+			}
+		}
+	})
 }

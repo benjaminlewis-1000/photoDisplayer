@@ -105,7 +105,7 @@ header("Content-type: application/javascript");
 
 		        exceptions = decodedData['exceptions']
 		        for (i = 0; i < exceptions.length; i++){
-		        	console.log("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
+		        	console.error("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
 		        }
 
 			    var select = document.getElementById("savedSlideshowSelect");

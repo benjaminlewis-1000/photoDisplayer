@@ -49,9 +49,16 @@
 		$queries = array($query1, $query2);
 	}elseif ($queryType == "removeShow"){
 		$query = 'DELETE FROM Slideshows WHERE showNames = "' . $selectedVal . '"';
-
+		$queries = array($query);
+	}elseif ($queryType == "saveSchedule"){
+		$query1 = 'DELETE FROM ShowSchedules WHERE paramName = "showSchedule"';
+		$query2 = 'INSERT INTO ShowSchedules (paramName, savedJSON) VALUES ("showSchedule", \'' . $selectedVal . '\')';
+		$queries = array($query1, $query2);
+	}elseif ($queryType == "getShowSchedule"){
+		$query = 'SELECT savedJSON FROM ShowSchedules WHERE paramName = "showSchedule"';
 		$queries = array($query);
 	}
+
 
 	function dirname_r($path, $count=1){
 	    if ($count > 1){
@@ -92,6 +99,7 @@
 		// Iterate through all the queries sequentially. 
 
 		$query = $queries[$i];
+		$debug[] = "Query # " . $i . ": " . $query;
 		try{
 			$results = $db->query($query);
 			if ($queryType != "saveValue"){
@@ -104,27 +112,27 @@
 			//print_r("console.log('The table is not well-formed and probably wasn\'t initialized.')\n");
 			//$exceptions[] = 'The table is not well-formed and probably wasn\'t initialized.';
 			$errmesg = $e->getMessage();
-			if (strpos($errmesg, 'Unable to execute statement: UNIQUE constraint failed') !== false) {
-				$exceptions[] = 'Key is not unique.';
-			}else{
+			$newTable = false;
+			if (strpos($errmesg, 'Unable to execute statement: UNIQUE constraint failed') != false) {
+				// do nothing
+			}elseif (strpos($errmesg, 'no such table: ShowSchedules') != false){
+				$newTable = true;
+				$exceptions[] = $errmesg;
+				$makeTableQuery = 'CREATE TABLE ShowSchedules (  paramName TEXT,  savedJSON TEXT);';
+			}elseif (strpos($errmesg, 'no such table: Slideshows') != false){
+				$newTable = true;
+				$exceptions[] = $errmesg;
+				$makeTableQuery = 'CREATE TABLE Slideshows (  showNames  TEXT UNIQUE,  savedJSON TEXT);';
+			}
+			else{
 				$exceptions[] = $errmesg;
 			}
-			$query = 'SELECT name FROM sqlite_master WHERE type=\'table\'';
-			//print_r("console.log(\"$query\");\n");
-			$exceptions[] = $query;
-			$existingTables = $db->query($query);
 
-			$row = $existingTables->fetchArray();
-			$tableName = $row[0];
-			if (!empty($row[0])){
-				if ($tableName != 'Slideshows'){
-					$makeTableQuery = 'CREATE TABLE Slideshows (   showNames  TEXT UNIQUE,  savedJSON TEXT);';
-					$db->query($makeTableQuery);					
-				}
-			}else{
-				$makeTableQuery = 'CREATE TABLE Slideshows (   showNames  TEXT UNIQUE,  savedJSON TEXT);';
-				$db->query($makeTableQuery);
+			if ($newTable){
+				$db->query($makeTableQuery);	
+				$i -= 1;  // Retry the query			
 			}
+
 			$arrayOfSavedShows[] = '';
 		}
 	}
@@ -133,7 +141,7 @@
 	/// At this point, we have an array of saved shows that we can pass back to javascript. 
 	//echo 'var savedShows = ' . json_encode($arrayOfSavedShows) . ';';
 
-	$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions);
+	$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions, 'debug' => $debug);
 	echo json_encode($retArray);
 
 ?>
