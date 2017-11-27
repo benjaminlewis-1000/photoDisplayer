@@ -166,7 +166,7 @@ class displayServer:
 
 
     def buildQuery(self, criteriaJSON):
-        print criteriaJSON 
+        print criteriaJSON
 
         returnDict = {};
         errs = [];
@@ -209,37 +209,7 @@ class displayServer:
         print >>stream, "I am here,  #{}".format(i)
         i = i + 1
 
-        for i in range(len(slideshowParams)):
-            critType = slideshowParams[i]['criteriaType']
-            boolVal = slideshowParams[i]['booleanValue']
-            critVal = slideshowParams[i]['criteriaVal']
-            if critType == 'Year':
-                assert unicode(critVal).isnumeric()
-                selectedYears.append( (critVal, boolVal) )
-            if str(critType) == 'Date Range' or str(critType) == "Date%20Range":
-                if not (boolVal == "None" and critVal == "None"):
-                    dateRangeVals.append( (boolVal, critVal) )
-            if critType == 'Person':
-                people.append(critVal)
-            if critType == 'Month':
-                selectedMonths.append( (critVal, boolVal) )
-            if critType not in ['Year', 'Date Range', "Date%20Range", 'Person', 'Month']:
-                errs.append('Criteria type {} was not found.'.format(critType) );
-                returnDict['exceptions'] = errs;
-                returnDict['debug'] = debug;
-                return json.dumps(returnDict);
-                raise TypeError
-
-        # Build year limits
-        print >>stream, "I am here,  #{}".format(i)
-        i = i + 1
-
-        for i in range(len(slideshowParams)):
-            # print slideshowParams[i]
-            paramType = slideshowParams[i]['criteriaType']
-            start_Limit = slideshowParams[i]['booleanValue']
-            end_Criteria = slideshowParams[i]['criteriaVal']
-
+        # Get all of the parameters for the different relevant tables
         photoLinkerTable =  self.xmlParams['params']['photoDatabase']['tables']['photoLinkerTable']
         plTableName      =  photoLinkerTable['Name']
         plPerson         =  photoLinkerTable['Columns']['linkerPeople']
@@ -260,8 +230,41 @@ class displayServer:
         phTakenDate   =  photosTable['Columns']['photoDate']
         phFile        =  photosTable['Columns']['photoFile']
         phRootDir     =  photosTable['Columns']['rootDirNum']
+
+        getAll = False
+
+        for i in range(len(slideshowParams)):
+            critType = slideshowParams[i]['criteriaType']
+            boolVal = slideshowParams[i]['booleanValue']
+            critVal = slideshowParams[i]['criteriaVal']
+            if critType.lower() == 'year':
+                assert unicode(critVal).isnumeric()
+                selectedYears.append( (critVal, boolVal) )
+            if str(critType) == 'Date Range' or str(critType) == "Date%20Range":
+                if not (boolVal == "None" and critVal == "None"):
+                    dateRangeVals.append( (boolVal, critVal) )
+            if critType.lower() == 'person':
+                people.append(critVal)
+            if critType.lower() == 'month':
+                selectedMonths.append( (critVal, boolVal) )
+            if critType.lower() == 'all':
+                getAll = True
+            if critType.lower() not in ['year', 'date range', "date%20Range", 'person', 'month', 'all']:
+                errs.append('Criteria type {} was not found.'.format(critType) );
+                returnDict['exceptions'] = errs;
+                returnDict['debug'] = debug;
+                return json.dumps(returnDict);
+                raise TypeError
+
+        # Build year limits
         print >>stream, "I am here,  #{}".format(i)
         i = i + 1
+
+        for i in range(len(slideshowParams)):
+            # print slideshowParams[i]
+            paramType = slideshowParams[i]['criteriaType']
+            start_Limit = slideshowParams[i]['booleanValue']
+            end_Criteria = slideshowParams[i]['criteriaVal']
 
         ### OR SQL person query
         # orPersonQuery = '''SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = '''
@@ -436,6 +439,10 @@ class displayServer:
         else:
             with open('queryTest.out', 'w+') as f:
                 print >>f, self.masterQuery
+
+        if getAll: # Defined as one of the criteria requesting "all", meaning all photos:
+            # Override the built query and just request a list of all photos.
+            self.masterQuery = '''SELECT {}, {}, {}, {} FROM {} '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName)
 
         if self.masterQuery != "":
             c = self.conn.cursor()
