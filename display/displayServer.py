@@ -535,15 +535,51 @@ class displayServer:
         print json.dumps(returnDict)
         return json.dumps(returnDict)
 
+    def loadSavedShow(self, requestedShow):
+
+        # Obtain all of the parameters for the database where the website defines slideshows.
+        siteDatabasePath = os.path.join(rootDir, 'site', self.xmlParams['params']['websiteParams']['siteDBname'])
+        dbSchemaParams = self.xmlParams['params']['websiteParams']['siteDBschema']
+
+        showDefTableName = dbSchemaParams['slideshowDefTable']['name']
+        showNameCol = dbSchemaParams['slideshowDefTable']['showNameCol']
+        showJsonCol = dbSchemaParams['slideshowDefTable']['jsonCol']
+
+        getShowNamesQuery = '''SELECT {} FROM {}'''.format(showNameCol, showDefTableName)
+
+        conn = sqlite3.connect(siteDatabasePath)
+
+        c = conn.cursor()
+        c.execute(getShowNamesQuery)
+        fileResults = c.fetchall()
+        # Convert the results to a list
+        fileResults = [i[0] for i in fileResults]
+
+        requestInListOfShows = (unicode(requestedShow) in set(fileResults))
+
+        print "Here"
+        print fileResults
+
+        if requestInListOfShows:
+            # Get the corresponding JSON:
+            getShowJSON = '''SELECT {} FROM {} WHERE {} = "{}"'''.format(showJsonCol, showDefTableName, showNameCol, unicode(requestedShow))
+            c.execute(getShowJSON)
+            jsonResult = c.fetchall()[0][0]
+        else:
+            # assert 1 == 0, "Need to implement a 'get all' function."
+            jsonResult = '[{"num":0, "criteriaType":"All","booleanValue":"is", "criteriaVal":"all"}]'
+
+        report = self.buildQuery(jsonResult)
+        return report
+
 
     def run(self):
         self.server.register_function(self.startSlideshow, 'startSlideshow')
         self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
         self.server.register_function(self.buildQuery, 'buildQuery')
         self.server.register_function(self.turnOnTV, 'turnOnTV')
+        self.server.register_function(self.loadSavedShow, 'loadSavedShow')
         self.server.serve_forever()
-
-
 
 
 if __name__ == '__main__':

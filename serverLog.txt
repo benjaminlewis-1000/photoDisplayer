@@ -1800,3 +1800,38 @@ I am here,  #2
 I am here,  #2
 I am here,  #2
 I am here,  #2
+Building a query... [{"num":0,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":1,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":2,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"}]
+I am here,  #0
+I am here,  #2
+I am here,  #2
+I am here,  #2
+Building a query... [{"num":0,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":1,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":2,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"}]
+I am here,  #0
+I am here,  #2
+I am here,  #2
+I am here,  #2
+Building a query... [{"num":0,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":1,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":2,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"}]
+I am here,  #0
+I am here,  #2
+I am here,  #2
+I am here,  #2
+Building a query... [{"num":0, "criteriaType":"All","booleanValue":"is", "criteriaVal":"all"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
+Building a query... [{"num":0,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":1,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":2,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"}]
+I am here,  #0
+I am here,  #2
+I am here,  #2
+I am here,  #2
+Building a query... [{"num":0,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":1,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"},{"num":2,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Aaron Swenson"}]
+I am here,  #0
+I am here,  #2
+I am here,  #2
+I am here,  #2
+Building a query... [{"num":0, "criteriaType":"All","booleanValue":"is", "criteriaVal":"all"}]
+I am here,  #0
+I am here,  #0
+I am here,  #0
+I am here,  #1
