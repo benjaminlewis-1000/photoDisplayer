@@ -1,0 +1,1054 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"exclu",
+				"excludedPatterns"
+			],
+			[
+				"slidesh",
+				"slideshowSchedulingAccordion"
+			],
+			[
+				"twel",
+				"twelveTimeMatch"
+			],
+			[
+				"tw",
+				"twelveTimeMatch"
+			],
+			[
+				"padi",
+				"padding-right"
+			],
+			[
+				"rig",
+				"border-right"
+			],
+			[
+				"left",
+				"border-left"
+			],
+			[
+				"exce",
+				"$exceptions〔variable〕"
+			],
+			[
+				"arr",
+				"$arrayOfSavedShows〔variable〕"
+			],
+			[
+				"constr",
+				"constructSelectionLine"
+			],
+			[
+				"addRo",
+				"addRootGUI"
+			],
+			[
+				"Exi",
+				"Exif.Photo.DateTimeDigitized"
+			],
+			[
+				"Iptc",
+				"Iptc.Application2.DateCreated"
+			],
+			[
+				"json_",
+				"json_encode〔function〕"
+			],
+			[
+				"A",
+				"Application2.Keywords"
+			],
+			[
+				"criter",
+				"$criteriaVal〔variable〕"
+			],
+			[
+				"binar",
+				"binarySelectValues"
+			],
+			[
+				"fieldChidl",
+				"fieldChildColorless"
+			],
+			[
+				"doc",
+				"document.getElementById"
+			],
+			[
+				"document",
+				"document.createElement(\"div"
+			],
+			[
+				"sub",
+				"subdiv3〔variable〕"
+			],
+			[
+				"selec",
+				"selectionValue"
+			],
+			[
+				"conos",
+				"console.log"
+			],
+			[
+				"js",
+				"json_encode"
+			],
+			[
+				"cons",
+				"console.log"
+			],
+			[
+				"But",
+				"BUTTON"
+			],
+			[
+				"sele",
+				"selectionVals"
+			],
+			[
+				"select",
+				"selectionFields"
+			],
+			[
+				"deb",
+				"debugNewRoot〔$variable〕"
+			],
+			[
+				"pra",
+				"params::debug_readXMP"
+			],
+			[
+				"pram",
+				"params::debug"
+			],
+			[
+				"para",
+				"params::debug_readXMP"
+			],
+			[
+				"chec",
+				"checkPhotoInTable"
+			],
+			[
+				"fect",
+				"fetchrow_arrayref"
+			],
+			[
+				"fet",
+				"fetchrow_arrayref"
+			],
+			[
+				"root",
+				"root_dir"
+			],
+			[
+				"directo",
+				"directoryKeyVal"
+			],
+			[
+				"pohto",
+				"photoKeyVal"
+			],
+			[
+				"name",
+				"namesWithLargeAreas"
+			],
+			[
+				"pers",
+				"person_name"
+			],
+			[
+				"perspica",
+				"personPicasaID"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "readState.js",
+			"settings":
+			{
+				"buffer_size": 3622,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/controlPanel.php",
+			"settings":
+			{
+				"buffer_size": 10644,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "schedulingLines.js",
+			"settings":
+			{
+				"buffer_size": 10349,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "modalScript.php",
+			"settings":
+			{
+				"buffer_size": 6855,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "getDatabase.php",
+			"settings":
+			{
+				"buffer_size": 4809,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "sendToPi.js",
+			"settings":
+			{
+				"buffer_size": 1884,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "launchSlideshow.php",
+			"settings":
+			{
+				"buffer_size": 8825,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
+			"settings":
+			{
+				"buffer_size": 23662,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "controlPanelAccordion.js",
+			"settings":
+			{
+				"buffer_size": 711,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "constructCriteriaLine.js",
+			"settings":
+			{
+				"buffer_size": 11051,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "function constructCriteriaLine(){"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"package ",
+				"Package Control: Install Package"
+			],
+			[
+				"perl",
+				"Set Syntax: Perl"
+			]
+		],
+		"width": 540.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/turnOnTV.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/modal.css",
+		"/C/PHP/php.ini",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/queryTest.out",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/mainPage.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/page2.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/modalScript.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/controlPanel.css",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/criteria.css",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/listPeople.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/siteConfig.xml",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/pyInit/getExif.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/test1.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.yaml",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/install/install.sh",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/install/aptGetInstall.sh",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/install/fehInstall.sh",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/CalendarPopup.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/lineAdd.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/lineConstructor.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/cal_styles.css",
+		"/C/ProgramData/Backblaze/bzdata/bzexcluderules_editable.xml",
+		"/F/Programs to Install/0_Descriptions of all these programs.txt",
+		"/C/Users/Benjamin/Documents/linode-dyn-dns/New Text Document.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/sendOptions.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/exivTest.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/pyInit/addPics.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/pyInit/database_create.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/readState.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/sendJSONtoSlideshow.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/sendJSONtoSlideshow.py",
+		"/C/PHP7.0/php.ini",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/controlPanelAccordion.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/sendToPi.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/getDatabase.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/launchSlideshow.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/pyRunTest.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/modal.scc",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/modal.css",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/criteria.css",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/js_controlpanel/readState.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/testxml.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/test.html",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/jTest.out",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/get-pip.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/get_php.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/modalScript.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/modalScript.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/lineAdd.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/lineConstructor.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/readState.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/controlPanelAccordion.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/bs.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/test.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/test.css",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/sline.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/test.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/logNoDates.out",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/blah.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/classImage.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/classifyMain.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/geoServer.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/directories.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/readInImages.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/xmp_link.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/params.pm",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/database_create.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/getExif.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/addNewRoot.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/updateDatabase.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/filesFromBaseFinder.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/dirsWindows.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/directoriesOrig.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/getDate.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/display.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/junk/server.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/read_xmp.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/test.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/testPy.out",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/test.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/init/testHash.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/extractKeywords.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/third_page.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/second_page.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/first_page.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/logLandmarks.out",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/landmarkKeywords.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/read_xmp_repeat.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/file_infos/extensions.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/junk/googDevel.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/googDevel.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/useClassify.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/visionTagging/key.key",
+		"/C/Users/Benjamin/Downloads/visionTest.py",
+		"/C/Apache24/htdocs/test.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/file_infos/filetypes.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/server.pl",
+		"/C/Apache24/conf/httpd.conf",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/info.php",
+		"/D/Users/Benjamin/Documents/BYU 2015 Winter/computer_vision/tennis_ball/tennis_ball.cpp",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css/cal_styles.css",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/tmp.html",
+		"/C/Users/Benjamin/Downloads/test.html",
+		"/D/Users/Benjamin/Documents/BYU 2015 Winter/computer_vision/tennis_ball/CMakeFiles/TargetDirectories.txt",
+		"/D/Users/Benjamin/Documents/BYU 2015 Winter/computer_vision/tennis_ball/CMakeFiles/tennis.dir/tennis_ball.cpp.o",
+		"/D/Users/Benjamin/Documents/BYU 2015 Winter/computer_vision/tennis_ball/tennis",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/page2.html",
+		"/C/Users/Benjamin/Desktop/site/page2.html",
+		"/C/Users/Benjamin/Desktop/site/dbAccess.py",
+		"/C/Users/Benjamin/Desktop/site/mainPage.html",
+		"/C/Users/Benjamin/Desktop/site/test.html",
+		"/C/Users/Benjamin/Desktop/site/test2.html",
+		"/C/Users/Benjamin/Desktop/site/photos.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/time_tracker/timeTrack.pl",
+		"/F/dvd todos.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/feh_args.txt",
+		"/C/Users/Benjamin/Desktop/site/Online HTML Editor.html",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/params.pm",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/getFileList.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/addImages.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/threadTest.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitignore",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/loadTest.pl",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitattributes",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/params.pm",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/database_create.pl"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"return",
+			"console.log",
+			"alldefined",
+			"console.log",
+			"remove",
+			"options",
+			"timeStart",
+			"debug",
+			"schedulinglines",
+			"echo",
+			"standardizeTime",
+			"timePat",
+			"checkTime",
+			");\n",
+			"criteriatojson",
+			"return",
+			"echo",
+			"sort",
+			"echo",
+			"site_xml_params",
+			"dirname_r",
+			"getListOfSavedSlideshows",
+			"panel",
+			"slidesh",
+			"s",
+			"slideshowsched",
+			"getlistof",
+			"savecriteria",
+			"saveCriteria",
+			"onclick",
+			"getlistof",
+			"getlistof//",
+			"modalscript.php",
+			"updateSavedShows",
+			"removeAllcr",
+			"updatesave",
+			"updateSavedShow",
+			"save slideshow",
+			"ajax",
+			"echo",
+			"shownames",
+			"xml_params",
+			"config/params",
+			"personnames",
+			"person",
+			"\",",
+			"preg_match",
+			"onclick",
+			"throw",
+			"personNames",
+			"constructCriteriaLine.js",
+			"constructOrUpdateCriteriaLine",
+			"constructcriterialine",
+			"constructorupdate",
+			"numpho",
+			"addScheduleLine",
+			"try",
+			"debug",
+			"exceptions",
+			"error when reading data",
+			"console.log",
+			"person",
+			"am",
+			"timeStop",
+			"onclick=",
+			"addScheduleLine",
+			"onclick",
+			"addScheduleLine",
+			"timeStart",
+			"addsche",
+			"showstarttime",
+			"console.log",
+			"calenda",
+			"labelText",
+			"fieldChil",
+			"dropdown",
+			"fieldParent",
+			"criteriaTy",
+			"width",
+			"binaryFie",
+			"calendaRBo",
+			"binaryField",
+			"binaryFiel",
+			"criteriaTy",
+			"fieldpare",
+			"console.log",
+			"year",
+			"load slideshow",
+			"addschedule",
+			"new schedule",
+			"event",
+			"personNames",
+			"addcriter",
+			"subdiv_filter_criteria",
+			"subdiv_qualifier",
+			"selectCriteriaMenu",
+			"lineDiv",
+			"load slideshow",
+			"makelinewith",
+			"input_st",
+			"checkTime",
+			"length",
+			"&&",
+			"input",
+			"removeelement(",
+			"linediv.id",
+			"linediv",
+			"parent",
+			"from",
+			"value",
+			"remove",
+			"line",
+			"spacing",
+			"labelte",
+			"labelText",
+			"\n    cursor: pointer;",
+			"hover",
+			"taskbutton",
+			"hover",
+			"active",
+			"font",
+			"min picture",
+			"accordion",
+			"taskbutton",
+			"head_div",
+			".style",
+			"5px",
+			"margi"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"standardizeTimeAMPM",
+			"getListOfSavedSlideshows",
+			"span_filter_criteria",
+			"span_qualifier",
+			"select_criteria_type",
+			"span_criteria_type",
+			"subdiv_filter_criteria",
+			"subdiv_qualifier",
+			"subdiv_filter_criteria",
+			"subdiv_qualifier",
+			"subdiv_criteria_type",
+			"",
+			"scripts_controlpanel",
+			"critMenuName",
+			"returnData",
+			"s2.",
+			"s1.",
+			"i2.",
+			"i1.",
+			"calendarForm1",
+			"\\\"",
+			"localDBHandle",
+			"divNumber",
+			"localDBHandle",
+			"dbhandle2",
+			"$params::photoDateColumn ",
+			"$params::photoMonthColumn ",
+			"$params::linkerPeopleColumn ",
+			"$params::photoYearColumn ",
+			"$params::photoTableName ",
+			"$params::photoKeyColumn ",
+			"$params::linkerTableName ",
+			"$params::linkerPhotoColumn ",
+			"$params::linkerPhotoColumn",
+			"params",
+			"$params::linkerTableName",
+			"$params::linkerPhotoColumn",
+			"$params::photoMonthColumn",
+			"$params::photoYearColumn",
+			"$args->{nameHash}->",
+			"$\\n",
+			"dirNameRelativeToRootHash",
+			"numberOfPhotos",
+			"numberOfNames",
+			"peopleKeyVal",
+			"params::peopleTableName",
+			"params::linkerTableName",
+			"params::photoTableName",
+			"infoHash",
+			"Column"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "readState.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3622,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3041,
+								3041
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1482.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/controlPanel.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10644,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10164,
+								10175
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1240.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "schedulingLines.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10349,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								763,
+								763
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "modalScript.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6855,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3136,
+								3136
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1596.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "getDatabase.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4809,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1833,
+								1848
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 399.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "sendToPi.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1884,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24,
+								36
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "launchSlideshow.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8825,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								696,
+								696
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 38.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23662,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4368,
+								4368
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 300.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "controlPanelAccordion.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 711,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								304,
+								304
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "constructCriteriaLine.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11051,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6342,
+								6343
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"auto_name": "function constructCriteriaLine(){",
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 97.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "website.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\Benjamin\\Dropbox\\Perl Code\\photoDisplayer\\display\\display.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 204.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

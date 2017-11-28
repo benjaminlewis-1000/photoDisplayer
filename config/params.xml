@@ -143,4 +143,19 @@
 		<displayServerPort>8001</displayServerPort>
 		<successVal>Success</successVal>
 	</serverParams>
+	<websiteParams>
+		<siteDBname>savedSlideshows.db</siteDBname>
+		<siteDBschema>
+			<scheduleTable>
+				<name>ShowSchedules</name>
+				<paramNameCol>paramName</paramNameCol>
+				<jsonCol>savedJSON</jsonCol>
+			</scheduleTable>
+			<slideshowDefTable>
+				<name>Slideshows</name>
+				<showNameCol>showNames</showNameCol>
+				<jsonCol>savedJSON</jsonCol>
+			</slideshowDefTable>
+		</siteDBschema>
+	</websiteParams>
 </params>

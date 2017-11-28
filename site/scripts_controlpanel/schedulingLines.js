@@ -2,6 +2,18 @@
 
 function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName){
 
+	// If the show no longer exists, we will not make the line. 
+	var makeLine = false;
+	for (var i = 0; i < definedSlideshows.length; i++){	
+		if (showName == definedSlideshows[i]){
+			makeLine = true;
+		}
+	}
+	if (makeLine == false && showName != null){
+		console.log('not making line')
+		return
+	}
+
 	// Get the appropriate variable and increment it.
 	var num = (document.getElementById('scheduleNumID').value - 1)+ 2;
 	document.getElementById('scheduleNumID').value = num;
@@ -126,6 +138,7 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 
 		for (var i = 0; i < definedSlideshows.length; i++){	
 			select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
+			console.log(current_val + "  " + definedSlideshows[i])
 			if (current_val == definedSlideshows[i]){
 				select_show_name.value = current_val
 			}
