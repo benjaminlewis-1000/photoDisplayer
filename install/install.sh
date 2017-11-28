@@ -29,5 +29,5 @@ sudo bash $THIS_DIR/subscripts/cronInstall.sh
 
 sudo bash $THIS_DIR/subscripts/autostart_install.sh
 
-
+sudo bash $THIS_DIR/subscripts/sambaSetup.sh
 

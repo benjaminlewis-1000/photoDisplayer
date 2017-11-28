@@ -63,3 +63,4 @@ init/unhandled_files.txt
 *.log
 gitpull.sh
 scripts/displayRestart.sh
+serverLog.txt
