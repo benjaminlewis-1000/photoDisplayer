@@ -9,9 +9,13 @@ sudo apt-get update
 sudo apt-get install vim -y
 sudo apt-get install nautilus -y
 
+sudo apt-get install aptitude -y
+
 # Install CEC packages - these let you, in theory, control the TV from the computer.
 
-sudo apt-get install cec-utils libcec-dev libraspberrypi-dev -y
+sudo apt-get install libcec4 -y
+sudo apt-get install cec-utils -y
+sudo apt-get install libraspberrypi-dev -y
 
 # Install Expect scripting - allows us to use GUIs automatically 
 

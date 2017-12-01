@@ -505,6 +505,7 @@ class displayServer:
 
     def turnOnTV(self, onJSON):
         debug = []
+        print onJSON
 
         if onJSON != "Off":
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
@@ -536,6 +537,12 @@ class displayServer:
         return json.dumps(returnDict)
 
     def loadSavedShow(self, requestedShow):
+
+        print "turning"
+        onStruct = {}
+        onStruct['On'] = 'True'
+        self.turnOnTV(onStruct)
+        print "on"
 
         # Obtain all of the parameters for the database where the website defines slideshows.
         siteDatabasePath = os.path.join(rootDir, 'site', self.xmlParams['params']['websiteParams']['siteDBname'])
