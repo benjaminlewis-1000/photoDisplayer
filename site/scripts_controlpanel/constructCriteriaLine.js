@@ -207,6 +207,9 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			numPhotosField = document.getElementById("minPhotos")
 			minNumPhotos = numPhotosField.value
+
+			waitForPersonNames(function() {
+
 			console.debug(personNames[Object.keys(personNames)[1]])
 
 			personSubArray = []
@@ -238,6 +241,8 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 					personSelect.value = selectionValue
 				}
 			}
+
+			})
 
 			break;
 
@@ -336,4 +341,14 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 	}
 
+}
+
+function waitForPersonNames(callback){
+	if (typeof personNames !== 'undefined'){
+
+		callback()
+	}else{
+		console.log('waiting...')
+		setTimeout(function(){ waitForPersonNames(callback)} , 750) 
+	}
 }
