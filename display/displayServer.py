@@ -505,7 +505,6 @@ class displayServer:
 
     def turnOnTV(self, onJSON):
         debug = []
-        print onJSON
 
         if onJSON != "Off":
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
@@ -514,27 +513,46 @@ class displayServer:
 
 
         if re.search('power status: standby', statusString) or onJSON['On'] == "True":
-            print "Turning on TV"
             debug.append(statusString)
             debug.append("Turning on TV")
-            os.system('echo on 0 | cec-client -s -d 1')
+            thread.start_new_thread(self.tvOn)
         elif onJSON['On'] == 'End Slideshow':
             print "Ending slideshow"
             if self.p != None: 
                 self.p.terminate()
             debug.append("Ending slideshow")
+            thread.start_new_thread(self.tvOff)
         else:
             # The power is on already
             print "Turning to standby"
             debug.append(statusString)
             debug.append("Turning to standby")
-            os.system('echo standby 0 | cec-client -s -d 1')
+            thread.start_new_thread(self.tvOff)
+            # os.system('echo standby 0 | cec-client -s -d 1')
 
         returnDict = {}
         returnDict['exceptions'] = []
         returnDict['debug'] = debug
         print json.dumps(returnDict)
         return json.dumps(returnDict)
+
+    def tvOn(self):
+        statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        while not re.search('power status: on', statusString):
+            os.system('echo on 0 | cec-client -s -d 1')
+            sleep(1)
+            statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+
+    def tvOff(self):
+        statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        while not re.search('power status: standby', statusString):
+            os.system('echo standby 0 | cec-client -s -d 1')
+            sleep(1)
+            statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        pass
+
+    def tvToggle(self):
+        pass
 
     def loadSavedShow(self, requestedShow):
 
