@@ -66,7 +66,7 @@
 	<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;z-index: 3;"></div>
 
 	<div id="loading">
-	  <img id="loading-image" src="ajax-loader.gif" alt="Loading..." />
+	  <img id="loading-image" src="ajax_loader.gif" alt="Loading..." />
 	</div>
 
 	<script type="text/javascript">

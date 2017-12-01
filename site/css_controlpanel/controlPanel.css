@@ -219,6 +219,19 @@ button#slideshowSchedulingAccordion:hover + button#newShowButton  {
   background: radial-gradient(#ccffff, #ddd); 
 }*/
 
-#loading {width: 100%;height: 100%;top: 0px;left: 0px;position: fixed;display: block; z-index: 99}
+#loading {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    display: block;
+    z-index: 99
+}
 
-#loading-image {position: absolute;top: 40%;left: 45%;z-index: 100} 
+#loading-image {
+    position: absolute;
+    top: 40%;
+    left: 45%;
+    z-index: 100
+} 
