@@ -65,7 +65,7 @@
 	<!-- Floating div for calendar -->
 	<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;z-index: 3;"></div>
 
-	<div id="loading">
+	<div id="loading" class="modal" style="text-align: center">
 	  <img id="loading-image" src="ajax_loader.gif" alt="Loading..." />
 	</div>
 
