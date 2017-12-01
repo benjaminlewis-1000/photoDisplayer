@@ -89,7 +89,7 @@ function timeTo24h(time){
 
 	if (timeMatch == null) {
 		//alert("Time is not in a valid format.");
-		console.error('Time not valid')
+		console.error('Time ' + time + ' not valid format')
 		return false;
 	}
 	else{

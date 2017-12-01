@@ -140,7 +140,7 @@ function addScheduleLine(divOfFields, daySelected, timeStart, timeStop, showName
 
 			for (var i = 0; i < definedSlideshows.length; i++){	
 				select_show_name.options.add(new Option(definedSlideshows[i], definedSlideshows[i]));
-				console.log(current_val + "  " + definedSlideshows[i])
+				console.debug(current_val + "  " + definedSlideshows[i])
 				if (current_val == definedSlideshows[i]){
 					select_show_name.value = current_val
 				}
@@ -307,7 +307,7 @@ function checkAllDefined(divNum){
 	if (triggerSave){
 
 		schedules = readSchedules();
-		console.log(schedules)
+		console.debug('Schedules have changed. We fill save the following to the database: ' + schedules)
 
 		var callback = $.ajax({
 			type: 'POST',
@@ -316,7 +316,6 @@ function checkAllDefined(divNum){
 			success: function(data){
 				data = JSON.parse(data)
 		        exceptions = data['exceptions']
-		        console.log(data)
 		        for (i = 0; i < exceptions.length; i++){
 		        	console.error("Error in checkAllDefined: " + exceptions[i]);
 		        }
@@ -336,15 +335,13 @@ function populateSlideshowTimes(){
 		url: 'scripts_controlpanel/getDatabase.php',
 		data: {'queryType' : "getShowSchedule"},
 		success: function(data){
-			console.log(data)
 			data = JSON.parse(data)
-			console.log(data)
+			console.debug(data)
 
-			console.log(data['savedVals'].length)
 			if (data['savedVals'].length != 0 ){
-				console.log(data['savedVals'])
+				//console.debug('Saved values for the slideshow schedule are: ' + data['savedVals'])
 				savedTimes =  JSON.parse(data['savedVals'])
-				console.log(savedTimes)
+				console.debug('Saved slideshow times are: ' + savedTimes)
 				for (i = 0; i < savedTimes.length; i++){
 					curSch =savedTimes[i]; // current schedule
 
@@ -358,10 +355,12 @@ function populateSlideshowTimes(){
 
 function waitForDefinedSlideshows(callback){
 	if (typeof definedSlideshows !== 'undefined'){
+	 	document.getElementById("loading").style.display = "none" 
 
 		callback()
 	}else{
 		console.log('waiting...')
+		document.getElementById("loading").style.display = "block" 
 		setTimeout(function(){ waitForPersonNames(callback)} , 750) 
 	}
 }

@@ -65,6 +65,13 @@
 	<!-- Floating div for calendar -->
 	<div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;z-index: 3;"></div>
 
+	<div id="loading">
+	  <img id="loading-image" src="ajax-loader.gif" alt="Loading..." />
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function(){ document.getElementById("loading").style.display = "none" }   
+	</script>
 
 	<div id=newCriteriaDiv class="head_div">
 		<button id="loadShow" title="Load a saved slideshow by name; the &#013criteria fields will automatically populate &#013according to the defined show and any &#013existing criteria will be deleted." class="taskButton">

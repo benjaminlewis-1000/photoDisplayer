@@ -348,10 +348,12 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 function waitForPersonNames(callback){
 	if (typeof personNames !== 'undefined'){
+	 	document.getElementById("loading").style.display = "none" 
 
 		callback()
 	}else{
 		console.log('waiting...')
+		document.getElementById("loading").style.display = "block" 
 		setTimeout(function(){ waitForPersonNames(callback)} , 750) 
 	}
 }
