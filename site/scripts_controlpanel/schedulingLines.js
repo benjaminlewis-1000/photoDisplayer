@@ -332,7 +332,10 @@ function populateSlideshowTimes(){
 		url: 'scripts_controlpanel/getDatabase.php',
 		data: {'queryType' : "getShowSchedule"},
 		success: function(data){
+			console.log(data)
 			data = JSON.parse(data)
+			console.log(data)
+			console.log(data['savedVals'])
 			savedTimes =  JSON.parse(data['savedVals'])
 			console.log(savedTimes)
 			for (i = 0; i < savedTimes.length; i++){
