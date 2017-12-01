@@ -16,6 +16,7 @@ from time import sleep
 import json
 import calendar
 import xmltodict
+import thread
 import commands
 
 if len(sys.argv) > 1:
@@ -63,6 +64,8 @@ class displayServer:
             os.remove(self.fileListName)
 
         self.p = None
+
+        self.powerCycling = False
 
     ###### Slideshow function, avaliable as server call
     def setSlideshowProperties(self, propertiesJSON):
@@ -515,19 +518,31 @@ class displayServer:
         if re.search('power status: standby', statusString) or onJSON['On'] == "True":
             debug.append(statusString)
             debug.append("Turning on TV")
-            thread.start_new_thread(self.tvOn)
+            try:
+                if not self.powerCycling:
+                    thread.start_new_thread(self.tvOn, ())
+            except Exception as e:
+                print e
         elif onJSON['On'] == 'End Slideshow':
             print "Ending slideshow"
             if self.p != None: 
                 self.p.terminate()
             debug.append("Ending slideshow")
-            thread.start_new_thread(self.tvOff)
+            try:
+                if not self.powerCycling:
+                    thread.start_new_thread(self.tvOff, ())
+            except Exception as e:
+                print e
         else:
             # The power is on already
             print "Turning to standby"
             debug.append(statusString)
             debug.append("Turning to standby")
-            thread.start_new_thread(self.tvOff)
+            try:
+                if not self.powerCycling:
+                    thread.start_new_thread(self.tvOff, ())
+            except Exception as e:
+                print e
             # os.system('echo standby 0 | cec-client -s -d 1')
 
         returnDict = {}
@@ -537,19 +552,28 @@ class displayServer:
         return json.dumps(returnDict)
 
     def tvOn(self):
+        self.powerCycling = True
+        print "on called"
         statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
-        while not re.search('power status: on', statusString):
+        while not (re.search('power status: on', statusString) or re.search('from standby to on', statusString)):
             os.system('echo on 0 | cec-client -s -d 1')
+            print "trying on"
             sleep(1)
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+            print statusString
+        self.powerCycling = False
 
     def tvOff(self):
+        self.powerCycling = True
+        print "off called"
         statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
         while not re.search('power status: standby', statusString):
             os.system('echo standby 0 | cec-client -s -d 1')
+            print "trying off"
             sleep(1)
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
-        pass
+            print statusString
+        self.powerCycling = False
 
     def tvToggle(self):
         pass
