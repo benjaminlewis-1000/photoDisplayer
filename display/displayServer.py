@@ -142,7 +142,15 @@ class displayServer:
         return retVal
 
     def startSlideshow(self):
+        
+        while self.powerCycling:
+            sleep(1)
 
+        try:
+            thread.start_new_thread(self.tvOn, ())
+        except Exception as e:
+            print e
+         
         returnDict = {}
         errs = []
         debug = []
@@ -580,11 +588,16 @@ class displayServer:
 
     def loadSavedShow(self, requestedShow):
 
-        print "turning"
-        onStruct = {}
-        onStruct['On'] = 'True'
-        self.turnOnTV(onStruct)
-        print "on"
+        while self.powerCycling:
+            sleep(1)
+
+        try:
+            thread.start_new_thread(self.tvOn, ())
+        except Exception as e:
+            print e
+         
+
+        print "turning on TV"
 
         # Obtain all of the parameters for the database where the website defines slideshows.
         siteDatabasePath = os.path.join(rootDir, 'site', self.xmlParams['params']['websiteParams']['siteDBname'])
