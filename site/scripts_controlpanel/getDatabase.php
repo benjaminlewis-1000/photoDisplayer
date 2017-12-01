@@ -51,9 +51,8 @@
 		$query = 'DELETE FROM Slideshows WHERE showNames = "' . $selectedVal . '"';
 		$queries = array($query);
 	}elseif ($queryType == "saveSchedule"){
-		$query1 = 'DELETE FROM ShowSchedules WHERE paramName = "showSchedule"';
-		$query2 = 'INSERT INTO ShowSchedules (paramName, savedJSON) VALUES ("showSchedule", \'' . $selectedVal . '\')';
-		$queries = array($query1, $query2);
+		$query = 'INSERT OR REPLACE INTO ShowSchedules(paramName, savedJSON) VALUES ("showSchedule", \'' . $selectedVal . '\')';
+		$queries = array($query);
 	}elseif ($queryType == "getShowSchedule"){
 		$query = 'SELECT savedJSON FROM ShowSchedules WHERE paramName = "showSchedule"';
 		$queries = array($query);
@@ -118,7 +117,8 @@
 			}elseif (strpos($errmesg, 'no such table: ShowSchedules') != false){
 				$newTable = true;
 				$exceptions[] = $errmesg;
-				$makeTableQuery = 'CREATE TABLE ShowSchedules (  paramName TEXT,  savedJSON TEXT);';
+				# Need to have a UNIQUE field for the paramName so that there will only be one copy
+				$makeTableQuery = 'CREATE TABLE ShowSchedules (  paramName TEXT UNIQUE,  savedJSON TEXT);';
 			}elseif (strpos($errmesg, 'no such table: Slideshows') != false){
 				$newTable = true;
 				$exceptions[] = $errmesg;
@@ -130,7 +130,7 @@
 
 			if ($newTable){
 				$db->query($makeTableQuery);	
-				$i -= 1;  // Retry the query			
+			 	$i -= 1;  // Retry the query			
 			}
 
 			$arrayOfSavedShows[] = '';

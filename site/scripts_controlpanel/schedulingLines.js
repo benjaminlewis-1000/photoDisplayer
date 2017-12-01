@@ -304,6 +304,7 @@ function checkAllDefined(divNum){
 	if (triggerSave){
 
 		schedules = readSchedules();
+		console.log(schedules)
 
 		var callback = $.ajax({
 			type: 'POST',
@@ -335,13 +336,17 @@ function populateSlideshowTimes(){
 			console.log(data)
 			data = JSON.parse(data)
 			console.log(data)
-			console.log(data['savedVals'])
-			savedTimes =  JSON.parse(data['savedVals'])
-			console.log(savedTimes)
-			for (i = 0; i < savedTimes.length; i++){
-				curSch =savedTimes[i]; // current schedule
 
-				addScheduleLine('slideshowScheduleFieldsDiv', curSch['dayOfWeek'], curSch['startTime'], curSch['stopTime'], curSch['showName'])
+			console.log(data['savedVals'].length)
+			if (data['savedVals'].length != 0 ){
+				console.log(data['savedVals'])
+				savedTimes =  JSON.parse(data['savedVals'])
+				console.log(savedTimes)
+				for (i = 0; i < savedTimes.length; i++){
+					curSch =savedTimes[i]; // current schedule
+
+					addScheduleLine('slideshowScheduleFieldsDiv', curSch['dayOfWeek'], curSch['startTime'], curSch['stopTime'], curSch['showName'])
+				}
 			}
 		}
 	})
