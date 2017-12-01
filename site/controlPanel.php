@@ -280,7 +280,4 @@
 
 </script>
 
-<button id="testShow" title="test" onclick="readSchedules()">Test</button>
-
-
 </html>
