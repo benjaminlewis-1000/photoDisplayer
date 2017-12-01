@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="css_controlpanel/modal.css" media="all"/>
 	<link rel="stylesheet" type="text/css" href="css_controlpanel/criteria.css" media="all"/>
 	<link rel="stylesheet" type="text/css" href="css_controlpanel/cal_styles.css"/>
+	<link rel="shortcut icon" type="image/x-icon" href="frame.ico" />
 </head>
 
 <!-- For using AJAX -->
@@ -87,7 +88,9 @@
 
 	<div id=onOffDiv class="head_div"><!-- 
 		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')"> -->
-		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="constructOrUpdateCriteriaLine('criteriaFieldsDiv', 'true', null, 'Person', null, null)">
+		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="/*constructOrUpdateCriteriaLine('criteriaFieldsDiv', 'true', null, 'Person', null, null)*/
+
+			waitForPersonNames(function() {constructOrUpdateCriteriaLine( 'criteriaFieldsDiv', 'true', null, 'Person', null, null)})">
 			New Criteria
 		</button>
 		<button id="tvToggle" class="taskButton" title="Toggle TV power - turn off TV if on, turn TV on if off" onclick="turnOnTV('Toggle')">

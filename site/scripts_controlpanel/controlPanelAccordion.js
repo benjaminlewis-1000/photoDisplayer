@@ -1,3 +1,6 @@
+
+
+// I mostly copied this off StackOverflow; opens and closes accordion divs. 
 var acc = document.getElementsByClassName("accordion");
 var slideshowButton = document.getElementsByClassName("newShowClass");
 var i;

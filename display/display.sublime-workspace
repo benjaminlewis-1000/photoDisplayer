@@ -175,7 +175,26 @@
 			"file": "displayServer.py",
 			"settings":
 			{
-				"buffer_size": 23662,
+				"buffer_size": 27664,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
+			"settings":
+			{
+				"buffer_size": 1538,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "#! /usr/bin/env python"
+			}
+		},
+		{
+			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
+			"settings":
+			{
+				"buffer_size": 5144,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		}
@@ -365,7 +384,7 @@
 	],
 	"find":
 	{
-		"height": 27.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -379,6 +398,21 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"is after",
+			"buildquer",
+			"loadsavedsh",
+			"self.startslid",
+			"self.xmlp",
+			"params",
+			"os.path.join",
+			"phRootDir",
+			"startslide",
+			"final",
+			"self.conn",
+			"select",
+			".db",
+			"displayServer",
+			"xmlParams"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -405,28 +439,88 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23662,
+						"buffer_size": 27664,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								247,
-								247
+								13929,
+								13937
 							]
 						],
 						"settings":
 						{
+							"auto_complete": false,
 							"syntax": "Packages/Python/Python.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6210.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1538,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								628,
+								628
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"auto_name": "#! /usr/bin/env python",
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 216.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4789,
+								4801
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2193.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -434,7 +528,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 26.0
 	},
 	"input":
 	{
@@ -471,7 +565,7 @@
 	"project": "display.sublime-project",
 	"replace":
 	{
-		"height": 50.0
+		"height": 48.0
 	},
 	"save_all_on_build": true,
 	"select_file":
