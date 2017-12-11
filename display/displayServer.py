@@ -564,13 +564,14 @@ class displayServer:
         self.powerCycling = True
         print >>self.stream, "on called"
         statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
+        print >>self.stream, "Status run #1"
         while not (re.search('power status: on', statusString) or re.search('from standby to on', statusString)):
             os.system('echo on 0 | cec-client -s -d 1')
-            print "trying on"
             sleep(1)
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
-            print statusString
+            print >>self.stream, statusString
         self.powerCycling = False
+        print >>self.stream, "TV turn on was successfull"
 
     def tvOff(self):
         self.powerCycling = True
@@ -583,6 +584,7 @@ class displayServer:
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
             print >>self.stream, statusString
         self.powerCycling = False
+        print >>self.stream, "Off was successful"
 
     def tvToggle(self):
         pass
