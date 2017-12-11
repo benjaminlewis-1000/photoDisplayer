@@ -518,7 +518,8 @@ class displayServer:
         debug = []
 
         if onJSON != "Off":
-            statusString = os.popen('echo pow 0 | cec-client -d 1 -s').read()
+            out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
+            statusString = out.communicate()
 
         else:
             statusString = ""
@@ -563,12 +564,14 @@ class displayServer:
     def tvOn(self):
         self.powerCycling = True
         print >>self.stream, "on called"
-        statusString = os.popen('echo pow 0 | cec-client -d 1 -s').read()
+        out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
+        statusString = out.communicate()
         print >>self.stream, "Status run #1"
         while not (re.search('power status: on', statusString) or re.search('from standby to on', statusString)):
             os.system('echo on 0 | cec-client -s -d 1')
             sleep(1)
-            statusString = os.popen('echo pow 0 | cec-client -d 1 -s').read()
+            out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
+            statusString = out.communicate()
             print >>self.stream, statusString
         self.powerCycling = False
         print >>self.stream, "TV turn on was successfull"
@@ -576,12 +579,14 @@ class displayServer:
     def tvOff(self):
         self.powerCycling = True
         print >>self.stream, "off called"
-        statusString = os.popen('echo pow 0 | cec-client -d 1 -s').read()
+        out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
+        statusString = out.communicate()
         while not re.search('power status: standby', statusString):
             os.system('echo standby 0 | cec-client -s -d 1')
             print "trying off"
             sleep(1)
-            statusString = os.popen('echo pow 0 | cec-client -d 1 -s').read()
+            out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
+            statusString = out.communicate()
             print >>self.stream, statusString
         self.powerCycling = False
         print >>self.stream, "Off was successful"
