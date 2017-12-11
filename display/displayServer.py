@@ -66,6 +66,8 @@ class displayServer:
         self.p = None
 
         self.powerCycling = False
+        self.stream = open(rootDir + '/serverLog.txt', 'w') 
+        print >>self.stream, "Server log file opened."
 
     ###### Slideshow function, avaliable as server call
     def setSlideshowProperties(self, propertiesJSON):
@@ -161,23 +163,23 @@ class displayServer:
             returnDict['debug'] = debug;
             return returnDict;
 
-        stream = open(rootDir + '/serverLog.txt', 'a') 
-        print >>stream, "I am here,  starting the slideshow"
+        print >>self.stream, "I am here,  starting the slideshow"
         self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
 
         debug.append("Slideshow is launching...")
-        print >>stream, self.p
+        print >>self.stream, self.p
 
         stream.close()
 
-        print debug
+        print >>self.stream, debug
         returnDict['exceptions'] = errs;
         returnDict['debug'] = debug;
+        print >>self.stream, "The slideshow has launched"
         return returnDict;
 
 
     def buildQuery(self, criteriaJSON):
-        print criteriaJSON
+        print >>self.stream, criteriaJSON
 
         returnDict = {};
         errs = [];
@@ -187,9 +189,8 @@ class displayServer:
         # returnDict['debug'] = debug;
         # return json.dumps(returnDict);
 
-        stream = open(rootDir + '/serverLog.txt', 'a') 
         debug.append("Root directory was: " + rootDir);
-        print >>stream, "Building a query... {}".format(criteriaJSON)
+        print >>self.stream, "Building a query... {}".format(criteriaJSON)
         i = 0
 
         ## feh, the display program, locks the file in self.fileListName.
@@ -217,7 +218,7 @@ class displayServer:
         selectedYears = [ ]
         selectedMonths = [ ]
         dateRangeVals = [ ]
-        print >>stream, "I am here,  #{}".format(i)
+        print >>self.stream, "I am here,  #{}".format(i)
         i = i + 1
 
         # Get all of the parameters for the different relevant tables
@@ -268,7 +269,7 @@ class displayServer:
                 raise TypeError
 
         # Build year limits
-        print >>stream, "I am here,  #{}".format(i)
+        print >>self.stream, "I am here,  #{}".format(i)
         i = i + 1
 
         for i in range(len(slideshowParams)):
@@ -287,7 +288,7 @@ class displayServer:
                 orPersonQuery += ''' ) UNION SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(plPhoto, plTableName, plPerson, ppKey, ppTableName, ppName)
 
         orPersonQuery += " ) )"
-        print >>stream, "I am here,  #{}".format(i)
+        print >>self.stream, "I am here,  #{}".format(i)
         i = i + 1
 
         # print orPersonQuery
@@ -308,7 +309,7 @@ class displayServer:
                 andPersonQuery += ''' INTERSECT SELECT {} AS {} FROM {} WHERE {} = '''.format(plPhoto, phKey, plTableName, plPerson)
 
         andPersonQuery += " ) AS linker_tmp_var ON photo_key_and_var.{} = linker_tmp_var.{}".format(phKey, phKey)
-        print >>stream, "I am here,  #{}".format(i)
+        print >>self.stream, "I am here,  #{}".format(i)
         i = i + 1
 
 
@@ -561,7 +562,7 @@ class displayServer:
 
     def tvOn(self):
         self.powerCycling = True
-        print "on called"
+        print >>self.stream, "on called"
         statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
         while not (re.search('power status: on', statusString) or re.search('from standby to on', statusString)):
             os.system('echo on 0 | cec-client -s -d 1')
@@ -573,14 +574,14 @@ class displayServer:
 
     def tvOff(self):
         self.powerCycling = True
-        print "off called"
+        print >>self.stream, "off called"
         statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
         while not re.search('power status: standby', statusString):
             os.system('echo standby 0 | cec-client -s -d 1')
             print "trying off"
             sleep(1)
             statusString = commands.getoutput('echo pow 0 | cec-client -d 1 -s')
-            print statusString
+            print >>self.stream, statusString
         self.powerCycling = False
 
     def tvToggle(self):
@@ -597,7 +598,7 @@ class displayServer:
             print e
          
 
-        print "turning on TV"
+        print >>self.stream, "turning on TV"
 
         # Obtain all of the parameters for the database where the website defines slideshows.
         siteDatabasePath = os.path.join(rootDir, 'site', self.xmlParams['params']['websiteParams']['siteDBname'])
@@ -620,7 +621,7 @@ class displayServer:
         requestInListOfShows = (unicode(requestedShow) in set(fileResults))
 
         print "Here"
-        print fileResults
+        print >>self.stream, fileResults
 
         if requestInListOfShows:
             # Get the corresponding JSON:
