@@ -16,6 +16,7 @@ from time import sleep
 import json
 import calendar
 import xmltodict
+import shlex
 import thread
 
 if len(sys.argv) > 1:
@@ -514,12 +515,18 @@ class displayServer:
 
         # return self.xmlParams['params']['serverParams']['successVal']
 
+    def checkDisplayStatus():
+        commandString = 'echo pow 0 | cec-client -d 1 -s'
+        args = shlex.split(commandString)
+        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr = subprocess.PIPE)
+        output = p.communicate()
+        return output
+
     def turnOnTV(self, onJSON):
         debug = []
 
         if onJSON != "Off":
-            out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
-            statusString = out.communicate()
+            statusString = self.checkDisplayStatus()
 
         else:
             statusString = ""
@@ -564,14 +571,12 @@ class displayServer:
     def tvOn(self):
         self.powerCycling = True
         print >>self.stream, "on called"
-        out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
-        statusString = out.communicate()
+        statusString = self.checkDisplayStatus()
         print >>self.stream, "Status run #1"
         while not (re.search('power status: on', statusString) or re.search('from standby to on', statusString)):
             os.system('echo on 0 | cec-client -s -d 1')
             sleep(1)
-            out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
-            statusString = out.communicate()
+            statusString = self.checkDisplayStatus()
             print >>self.stream, statusString
         self.powerCycling = False
         print >>self.stream, "TV turn on was successfull"
@@ -579,14 +584,12 @@ class displayServer:
     def tvOff(self):
         self.powerCycling = True
         print >>self.stream, "off called"
-        out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
-        statusString = out.communicate()
+        statusString = self.checkDisplayStatus()
         while not re.search('power status: standby', statusString):
             os.system('echo standby 0 | cec-client -s -d 1')
             print "trying off"
             sleep(1)
-            out = subprocess.Popen('echo pow 0 | cec-client -d 1 -s', stdout=subprocess.PIPE, shell=True)
-            statusString = out.communicate()
+            statusString = self.checkDisplayStatus()
             print >>self.stream, statusString
         self.powerCycling = False
         print >>self.stream, "Off was successful"
