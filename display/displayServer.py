@@ -515,12 +515,15 @@ class displayServer:
 
         # return self.xmlParams['params']['serverParams']['successVal']
 
-    def checkDisplayStatus():
+    def checkDisplayStatus(self):
         commandString = 'echo pow 0 | cec-client -d 1 -s'
         args = shlex.split(commandString)
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr = subprocess.PIPE)
-        output = p.communicate()
-        return output
+        echoProc = subprocess.Popen(['echo', 'pow 0'], stdout = subprocess.PIPE)
+        cecProc = subprocess.Popen(['cec-client' , '-d', '1', '-s'], stdin=echoProc.stdout, stdout=subprocess.PIPE)
+        print "processes defined" 
+        output = cecProc.communicate()
+        print "Output of display status is : " + str(output)
+        return str(output)
 
     def turnOnTV(self, onJSON):
         debug = []
