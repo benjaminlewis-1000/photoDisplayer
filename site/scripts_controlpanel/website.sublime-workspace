@@ -184,7 +184,7 @@
 			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/controlPanel.php",
 			"settings":
 			{
-				"buffer_size": 11050,
+				"buffer_size": 11040,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -220,7 +220,7 @@
 			"file": "sendToPi.js",
 			"settings":
 			{
-				"buffer_size": 1884,
+				"buffer_size": 1886,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -232,34 +232,6 @@
 				"buffer_size": 8825,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
-			"settings":
-			{
-				"buffer_size": 27664,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "controlPanelAccordion.js",
-			"settings":
-			{
-				"buffer_size": 711,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "constructCriteriaLine.js",
-			"settings":
-			{
-				"buffer_size": 16545,
-				"encoding": "UTF-8",
-				"line_ending": "Windows",
-				"name": "function constructCriteriaLine(){"
 			}
 		}
 	],
@@ -312,12 +284,24 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/misformedFiles.txt",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/dbUpdate.sh",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/understandPath.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/tag.sh",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/exivTest.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/dbAccess.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/xmlrpctest.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/saveToDB.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/mainPage.php",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/controlPanelAccordion.js",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/constructCriteriaLine.js",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/turnOnTV.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/modal.css",
 		"/C/PHP/php.ini",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/queryTest.out",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/mainPage.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/page2.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/modalScript.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/controlPanel.css",
@@ -338,15 +322,12 @@
 		"/F/Programs to Install/0_Descriptions of all these programs.txt",
 		"/C/Users/Benjamin/Documents/linode-dyn-dns/New Text Document.txt",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/sendOptions.php",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/exivTest.py",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/pyInit/addPics.py",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/pyInit/database_create.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/readState.js",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/sendJSONtoSlideshow.py",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/sendJSONtoSlideshow.py",
 		"/C/PHP7.0/php.ini",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/controlPanelAccordion.js",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/sendToPi.js",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/getDatabase.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/launchSlideshow.php",
@@ -430,16 +411,7 @@
 		"/C/Users/Benjamin/Dropbox/Perl Code/time_tracker/timeTrack.pl",
 		"/F/dvd todos.txt",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/feh_args.txt",
-		"/C/Users/Benjamin/Desktop/site/Online HTML Editor.html",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/params.pm",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/getFileList.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/addImages.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/threadTest.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitignore",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/loadTest.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitattributes",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/params.pm",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/database_create.pl"
+		"/C/Users/Benjamin/Desktop/site/Online HTML Editor.html"
 	],
 	"find":
 	{
@@ -652,7 +624,7 @@
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -692,15 +664,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11050,
+						"buffer_size": 11040,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4194,
-								4211
+								8538,
+								8538
 							]
 						],
 						"settings":
@@ -711,10 +683,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1566.0,
+						"translation.y": 3798.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -814,7 +786,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1884,
+						"buffer_size": 1886,
 						"regions":
 						{
 						},
@@ -852,8 +824,8 @@
 						"selection":
 						[
 							[
-								696,
-								696
+								1516,
+								1550
 							]
 						],
 						"settings":
@@ -864,102 +836,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 38.0,
+						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServer.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 27664,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 300.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "controlPanelAccordion.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 711,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								304,
-								304
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "constructCriteriaLine.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 16545,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13449,
-								13449
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"auto_name": "function constructCriteriaLine(){",
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 5455.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

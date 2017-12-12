@@ -179,6 +179,32 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			}
 			i1.className = "calendarBox"
 
+			i1.onchange = function(){
+				var regexYear = /^[0-9]+$/;
+				if( regexYear.test(i1.value) ) {
+					i1.value = '01/01/' + i1.value
+				}
+				var regexMDY = /^([0-1]?[0-9])[-/]([0-3]?[0-9])[-/]([0-9]+)/;
+				mdyMatch = i1.value.match(regexMDY)
+				month = parseInt(mdyMatch[1]).toString()
+				day = parseInt(mdyMatch[2]).toString()
+				year = parseInt(mdyMatch[3]).toString()
+
+				while (month.length < 2){
+					month = '0' + month
+				}
+				while (day.length < 2){
+					day = '0' + day
+				}
+				if (year < 100  && year > 60){
+					year = '19' + year
+				}else if (year < 100 ){
+					year = '20' + year
+				}
+				date = month + '/' + day + '/' + year
+				i1.value = date
+			}
+
 			// Create a button that can be used to open the calendar
 			var s1 = document.createElement('button'); //input element, Submit button
 			s1.id = "anchor1_" + divNumber
@@ -213,6 +239,32 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			}
 			i2.className = "calendarBox"
 			//i2.setAttribute('size','25')
+
+			i2.onchange = function(){
+				var regexYear = /^[0-9]+$/;
+				if( regexYear.test(i2.value) ) {
+					i2.value = '12/31/' + i2.value
+				}
+				var regexMDY = /^([0-1]?[0-9])[-/]([0-3]?[0-9])[-/]([0-9]+)/;
+				mdyMatch = i2.value.match(regexMDY)
+				month = parseInt(mdyMatch[1]).toString()
+				day = parseInt(mdyMatch[2]).toString()
+				year = parseInt(mdyMatch[3]).toString()
+
+				while (month.length < 2){
+					month = '0' + month
+				}
+				while (day.length < 2){
+					day = '0' + day
+				}
+				if (year < 100  && year > 60){
+					year = '19' + year
+				}else if (year < 100 ){
+					year = '20' + year
+				}
+				date = month + '/' + day + '/' + year
+				i2.value = date
+			}
 
 			var s2 = document.createElement('button'); //input element, Submit button
 			s2.id = "anchor2_" + divNumber
@@ -429,4 +481,18 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 	}
 
+}
+
+
+function dateValidate(divNumber, startOrEndDate){
+	startVal = document.getElementById("binarySelectValues" + divNumber)
+	console.log(startVal)
+	startVal = startVal.value;
+
+	console.log(startVal)
+	if (startOrEndDate == 'begin'){
+
+	}else{
+
+	}
 }

@@ -175,18 +175,8 @@
 			"file": "displayServer.py",
 			"settings":
 			{
-				"buffer_size": 27664,
+				"buffer_size": 28950,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
-			"settings":
-			{
-				"buffer_size": 1538,
-				"encoding": "UTF-8",
-				"line_ending": "Windows",
-				"name": "#! /usr/bin/env python"
 			}
 		},
 		{
@@ -253,6 +243,7 @@
 	],
 	"file_history":
 	[
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/turnOnTV.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/modal.css",
 		"/C/PHP/php.ini",
@@ -379,8 +370,7 @@
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitignore",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/loadTest.pl",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitattributes",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/params.pm",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/database_create.pl"
+		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/params.pm"
 	],
 	"find":
 	{
@@ -439,15 +429,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 27664,
+						"buffer_size": 28950,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13929,
-								13937
+								0,
+								0
 							]
 						],
 						"settings":
@@ -458,7 +448,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 6210.0,
+						"translation.y": 6228.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -466,36 +456,6 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1538,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								628,
-								628
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"auto_name": "#! /usr/bin/env python",
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 216.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
 					"semi_transient": false,
 					"settings":
@@ -520,7 +480,7 @@
 						"translation.y": 2193.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
