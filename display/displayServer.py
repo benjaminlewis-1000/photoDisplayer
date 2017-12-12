@@ -151,8 +151,8 @@ class displayServer:
 
         try:
             print >>self.stream, "or maybe here?"
-            # thread.start_new_thread(self.tvOn, ())
-            self.tvOn()
+            thread.start_new_thread(self.tvOn, ())
+            # self.tvOn()
         except Exception as e:
             print e
 
@@ -550,9 +550,9 @@ class displayServer:
             debug.append("Turning on TV")
             try:
                 if not self.powerCycling:
-                    # thread.start_new_thread(self.tvOn, ())
+                    thread.start_new_thread(self.tvOn, ())
                     print >>self.stream, "tv on here?"
-                    self.tvOn()
+                    # self.tvOn()
             except Exception as e:
                 print e
         elif onJSON['On'] == 'End Slideshow':
@@ -562,8 +562,8 @@ class displayServer:
             debug.append("Ending slideshow")
             try:
                 if not self.powerCycling:
-                    # thread.start_new_thread(self.tvOff, ())
-                    self.tvOff()
+                    thread.start_new_thread(self.tvOff, ())
+                    # self.tvOff()
             except Exception as e:
                 print e
         else:
@@ -619,9 +619,9 @@ class displayServer:
             sleep(1)
 
         try:
-            # thread.start_new_thread(self.tvOn, ())
+            thread.start_new_thread(self.tvOn, ())
             print >>self.stream, "or on here?"
-            self.tvOn()
+            # self.tvOn()
         except Exception as e:
             print e
          
