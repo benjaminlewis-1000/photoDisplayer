@@ -8,4 +8,4 @@ echo $DISPLAY_SERVER_PID
 
 kill -9 $DISPLAY_SERVER_PID
 
-(<ROOTDIR>/display/displayServer.py &)
+nohup bash -c "(<ROOTDIR>/display/displayServer.py)" &
