@@ -145,10 +145,12 @@ class displayServer:
 
     def startSlideshow(self):
         
+        print >>self.stream, 'Starting slideshow'
         while self.powerCycling:
             sleep(1)
 
         try:
+            print >>self.stream, "or maybe here?"
             # thread.start_new_thread(self.tvOn, ())
             self.tvOn()
         except Exception as e:
@@ -549,6 +551,7 @@ class displayServer:
             try:
                 if not self.powerCycling:
                     # thread.start_new_thread(self.tvOn, ())
+                    print >>self.stream, "tv on here?"
                     self.tvOn()
             except Exception as e:
                 print e
@@ -617,6 +620,7 @@ class displayServer:
 
         try:
             # thread.start_new_thread(self.tvOn, ())
+            print >>self.stream, "or on here?"
             self.tvOn()
         except Exception as e:
             print e

@@ -4,7 +4,7 @@ function sendToPi(){
 	criteriaJSON = criteriaToJSON();
 	optionsJSON = readShowOptions(relaunchShow=false);
 
-	turnOnTV('True')
+//	turnOnTV('True')
 
 	var callback = $.ajax({
 		type: 'POST',
