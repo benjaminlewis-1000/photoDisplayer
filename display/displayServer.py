@@ -541,7 +541,7 @@ class displayServer:
             statusString = ""
 
 
-        if re.search('power status: standby', statusString) or onJSON['On'] == "True": # and not re.search('power status: on', statusString)
+        if re.search('power status: standby', statusString) or onJSON['On'] == "True" and not re.search('power status: on', statusString)
             debug.append(statusString)
             debug.append("Turning on TV")
             try:
