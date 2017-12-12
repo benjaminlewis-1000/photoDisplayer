@@ -149,7 +149,8 @@ class displayServer:
             sleep(1)
 
         try:
-            thread.start_new_thread(self.tvOn, ())
+            # thread.start_new_thread(self.tvOn, ())
+            self.tvOn()
         except Exception as e:
             print e
          
@@ -540,12 +541,13 @@ class displayServer:
             statusString = ""
 
 
-        if re.search('power status: standby', statusString) or onJSON['On'] == "True":
+        if re.search('power status: standby', statusString) or onJSON['On'] == "True": # and not re.search('power status: on', statusString)
             debug.append(statusString)
             debug.append("Turning on TV")
             try:
                 if not self.powerCycling:
-                    thread.start_new_thread(self.tvOn, ())
+                    # thread.start_new_thread(self.tvOn, ())
+                    self.tvOn()
             except Exception as e:
                 print e
         elif onJSON['On'] == 'End Slideshow':
@@ -555,7 +557,8 @@ class displayServer:
             debug.append("Ending slideshow")
             try:
                 if not self.powerCycling:
-                    thread.start_new_thread(self.tvOff, ())
+                    # thread.start_new_thread(self.tvOff, ())
+                    self.tvOff()
             except Exception as e:
                 print e
         else:
@@ -565,7 +568,7 @@ class displayServer:
             debug.append("Turning to standby")
             try:
                 if not self.powerCycling:
-                    thread.start_new_thread(self.tvOff, ())
+                    self.tvOff()
             except Exception as e:
                 print e
             # os.system('echo standby 0 | cec-client -s -d 1')
@@ -611,7 +614,8 @@ class displayServer:
             sleep(1)
 
         try:
-            thread.start_new_thread(self.tvOn, ())
+            # thread.start_new_thread(self.tvOn, ())
+            self.tvOn()
         except Exception as e:
             print e
          
