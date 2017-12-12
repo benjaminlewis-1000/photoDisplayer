@@ -153,6 +153,8 @@ class displayServer:
             self.tvOn()
         except Exception as e:
             print e
+
+        print >>self.stream, "Done turning on TV, starting slideshow"
          
         returnDict = {}
         errs = []
@@ -590,7 +592,7 @@ class displayServer:
             statusString = self.checkDisplayStatus()
             print >>self.stream, statusString
         self.powerCycling = False
-        print >>self.stream, "TV turn on was successfull"
+        print >>self.stream, "TV turn on was successful"
 
     def tvOff(self):
         self.powerCycling = True
