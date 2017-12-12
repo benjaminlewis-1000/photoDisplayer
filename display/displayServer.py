@@ -520,9 +520,12 @@ class displayServer:
         args = shlex.split(commandString)
         echoProc = subprocess.Popen(['echo', 'pow 0'], stdout = subprocess.PIPE)
         cecProc = subprocess.Popen(['cec-client' , '-d', '1', '-s'], stdin=echoProc.stdout, stdout=subprocess.PIPE)
-        print "processes defined" 
-        output = cecProc.communicate()
-        print "Output of display status is : " + str(output)
+        print >>self.stream, "processes defined" 
+        try:
+            output = cecProc.communicate()
+        except Exception as e:
+            print >>self.stream, e
+        print >>self.stream, "Output of display status is : " + str(output)
         return str(output)
 
     def turnOnTV(self, onJSON):
