@@ -56,7 +56,7 @@ class displayServer:
         self.printDebug = True
 
         ### Connect to the database
-        self.conn = sqlite3.connect(rootDir + "/databases/" + self.xmlParams['params']['photoDatabase']['fileName'])
+        self.conn = sqlite3.connect(os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName']) )
         self.conn.text_factory = str  # For UTF-8 compatibility
 
         self.fileListName = '.slideshowFileList.txt'

@@ -150,6 +150,7 @@
 				<name>ShowSchedules</name>
 				<paramNameCol>paramName</paramNameCol>
 				<jsonCol>savedJSON</jsonCol>
+				<scheduleParamName>showSchedule</scheduleParamName>
 			</scheduleTable>
 			<slideshowDefTable>
 				<name>Slideshows</name>
