@@ -19,6 +19,9 @@ class showScheduler():
         # Initially, there are no shows running.
         self.showRunning = False;
 
+        print "imported this"
+        print "HOWEVER, I need to know if a show has been cancelled..."
+
         # Get the path to the root directory and open the XML parameter file
         self.rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
         with open(self.rootDir + '/config/params.xml') as stream:
@@ -182,7 +185,7 @@ class showScheduler():
         #     print self.currentRunningShowName
 
 
-        threading.Timer(30.0, self.intervalShowStatusChecker).start()
+        threading.Timer(1.0, self.intervalShowStatusChecker).start()
 
     def clientManager(self):
         # Manages the client actions, including error handling, so I don't have to copy-paste
@@ -204,10 +207,10 @@ class showScheduler():
         while not threadComplete:
             try:
                 if self.clientAction == self.endShowVar:
-                    # print "ending show"
+                    print "ending show"
                     self.client.endSlideshow()
                 elif self.clientAction == self.loadShowVar:
-                    # print "loading show " + self.currentRunningShowName
+                    print "loading show " + self.currentRunningShowName
                     self.client.loadSavedShow(self.currentRunningShowName)
                 else:
                     print "Unknown client action"

@@ -717,5 +717,5 @@ if __name__ == '__main__':
     # myServer.buildQuery(criteriaJSON)
     # myServer.setSlideshowProperties(propertiesJSON)
 
-    myServer.run()
     scheduleObj = showScheduler()
+    myServer.run()

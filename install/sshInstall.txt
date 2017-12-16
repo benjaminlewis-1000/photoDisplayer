@@ -2,3 +2,7 @@ In /etc/ssh/sshd_config:
 
 -Change line to PermitRootLogin yes
 - sudo service ssh restart
+
+- SSH server doesn't start automatically; easiest to put the line
+''' service ssh start '''
+in /etc/rc.local
