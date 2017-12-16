@@ -18,6 +18,7 @@ import calendar
 import xmltodict
 import shlex
 import thread
+from scheduleRunner import showScheduler
 
 if len(sys.argv) > 1:
     debug = 1
@@ -535,6 +536,18 @@ class displayServer:
         print >>self.stream, "Output of display status is : " + str(output)
         return str(output)
 
+    def endSlideshow(self):
+        print "Ending slideshow"
+        if self.p != None: 
+            self.p.terminate()
+        debug.append("Ending slideshow")
+        try:
+            if not self.powerCycling:
+                thread.start_new_thread(self.tvOff, ())
+                # self.tvOff()
+        except Exception as e:
+            print e
+
     def turnOnTV(self, onJSON):
         debug = []
 
@@ -556,16 +569,7 @@ class displayServer:
             except Exception as e:
                 print e
         elif onJSON['On'] == 'End Slideshow':
-            print "Ending slideshow"
-            if self.p != None: 
-                self.p.terminate()
-            debug.append("Ending slideshow")
-            try:
-                if not self.powerCycling:
-                    thread.start_new_thread(self.tvOff, ())
-                    # self.tvOff()
-            except Exception as e:
-                print e
+            self.endSlideshow()
         else:
             # The power is on already
             print "Turning to standby"
@@ -670,6 +674,7 @@ class displayServer:
         self.server.register_function(self.buildQuery, 'buildQuery')
         self.server.register_function(self.turnOnTV, 'turnOnTV')
         self.server.register_function(self.loadSavedShow, 'loadSavedShow')
+        self.server.register_function(self.endSlideshow, 'endSlideshow')
         self.server.serve_forever()
 
 
@@ -713,3 +718,4 @@ if __name__ == '__main__':
     # myServer.setSlideshowProperties(propertiesJSON)
 
     myServer.run()
+    scheduleObj = showScheduler()
