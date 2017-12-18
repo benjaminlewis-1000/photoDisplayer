@@ -173,7 +173,7 @@ class showScheduler():
             startTime = self.schedule[1]
             endTime = self.schedule[2]
             showName = self.schedule[3]
-            if (hhmm >= str(endTime) ):
+            if (hhmm >= str(endTime) and self.showRunning ):
                 print "Show stopping! Quit the show now. "
                 self.clientAction = self.endShowVar
                 self.clientManager()
@@ -207,11 +207,21 @@ class showScheduler():
         while not threadComplete:
             try:
                 if self.clientAction == self.endShowVar:
+<<<<<<< HEAD
                     print "ending show"
                     # self.client.endSlideshow()
                 elif self.clientAction == self.loadShowVar:
                     print "loading show " + self.currentRunningShowName
                     # self.client.loadSavedShow(self.currentRunningShowName)
+=======
+                    print "ending show" + str(threadNumber)
+                    self.client.endSlideshow()
+                    print "done ending show"
+                elif self.clientAction == self.loadShowVar:
+                    print "loading show " + self.currentRunningShowName
+                    self.client.loadSavedShow(self.currentRunningShowName)
+                    print "Done loading show"
+>>>>>>> origin/master
                 else:
                     print "Unknown client action"
                 threadComplete = True
