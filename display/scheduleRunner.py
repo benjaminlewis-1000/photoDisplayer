@@ -208,10 +208,10 @@ class showScheduler():
             try:
                 if self.clientAction == self.endShowVar:
                     print "ending show"
-                    self.client.endSlideshow()
+                    # self.client.endSlideshow()
                 elif self.clientAction == self.loadShowVar:
                     print "loading show " + self.currentRunningShowName
-                    self.client.loadSavedShow(self.currentRunningShowName)
+                    # self.client.loadSavedShow(self.currentRunningShowName)
                 else:
                     print "Unknown client action"
                 threadComplete = True
