@@ -151,6 +151,8 @@ class showScheduler():
                     # but with the same show name won't cause a restart, and that a change
                     # to the time such that the time is valid won't cause a restart. 
                     self.schedule = schedule
+                    checkShowRunning = self.client.getShowRunningState()
+                    print checkShowRunning
                     if showName != self.currentRunningShowName or not self.showRunning:
                         # Only if the show to run is different than the current running show
                         # (which may be null) do we start a new show. 
@@ -216,13 +218,6 @@ class showScheduler():
             print "not complete thread"
             try:
                 if self.clientAction == self.endShowVar:
-<<<<<<< HEAD
-                    print "ending show"
-                    # self.client.endSlideshow()
-                elif self.clientAction == self.loadShowVar:
-                    print "loading show " + self.currentRunningShowName
-                    # self.client.loadSavedShow(self.currentRunningShowName)
-=======
                     print "ending show" + str(threadNumber)
                     self.client.endSlideshow()
                     print "done ending show"
@@ -230,7 +225,6 @@ class showScheduler():
                     print "loading show " + self.currentRunningShowName
                     self.client.loadSavedShow(self.currentRunningShowName)
                     print "Done loading show"
->>>>>>> origin/master
                 else:
                     print "Unknown client action"
                 threadComplete = True

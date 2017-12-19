@@ -66,6 +66,8 @@ class displayServer:
 
         self.p = None
 
+        self.showRunning = False
+
         self.powerCycling = False
         self.stream = open(rootDir + '/serverLog.txt', 'w') 
         print >>self.stream, "Server log file opened."
@@ -178,10 +180,14 @@ class displayServer:
         stream.close()
 
         print >>self.stream, debug
+        self.showRunning = True
         returnDict['exceptions'] = errs;
         returnDict['debug'] = debug;
         print >>self.stream, "The slideshow has launched"
         return returnDict;
+
+    def getShowRunningState(self):
+        return self.showRunning
 
 
     def buildQuery(self, criteriaJSON):
@@ -548,6 +554,7 @@ class displayServer:
         returnDict = {}
         returnDict['exceptions'] = []
         returnDict['debug'] = debug
+        self.showRunning = False
         print json.dumps(returnDict)
         return json.dumps(returnDict)
 
@@ -679,6 +686,7 @@ class displayServer:
         self.server.register_function(self.turnOnTV, 'turnOnTV')
         self.server.register_function(self.loadSavedShow, 'loadSavedShow')
         self.server.register_function(self.endSlideshow, 'endSlideshow')
+        self.server.register_function(self.getShowRunningState, 'getShowRunningState')
         self.server.serve_forever()
 
 
