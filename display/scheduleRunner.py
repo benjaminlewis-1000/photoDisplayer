@@ -123,6 +123,8 @@ class showScheduler():
         currentTime = datetime.now().timetuple()
         currentDayNum = datetime.weekday(datetime.now())
         hhmm = '{:02}{:02}'.format(currentTime[3], currentTime[4])
+ #       print hhmm
+        print self.showRunning
 
         if not self.showRunning or self.dbUpdated:
             # Determine whether a show should be running. Takes the first
@@ -138,6 +140,10 @@ class showScheduler():
                 endTime = schedule[2]
                 showName = schedule[3]
 
+#                print "Test conditions: " 
+#                print hhmm >= str(startTime)
+#                print hhmm < str(endTime)
+#                print dowNumber == currentDayNum
                 # For each saved show, check if the time and date are such that that
                 # show schedule is in the valid time. 
                 if (hhmm >= str(startTime) and hhmm < str(endTime) and dowNumber == currentDayNum):
@@ -145,14 +151,14 @@ class showScheduler():
                     # but with the same show name won't cause a restart, and that a change
                     # to the time such that the time is valid won't cause a restart. 
                     self.schedule = schedule
-                    self.showRunning = True
-                    if showName != self.currentRunningShowName:
+                    if showName != self.currentRunningShowName or not self.showRunning:
                         # Only if the show to run is different than the current running show
                         # (which may be null) do we start a new show. 
                         print "show starting: " + showName
                         self.clientAction = self.loadShowVar
                         self.clientManager()
                     self.currentRunningShowName = showName
+                    self.showRunning = True
                     quitShow = False
                     # If a valid show is found, break the for loop. 
                     break
@@ -161,9 +167,9 @@ class showScheduler():
             # running), stop the show. 
             if quitShow and self.showRunning:
                 print "quit the show"
+                self.showRunning = False
                 self.clientAction = self.endShowVar
                 self.clientManager()
-                self.showRunning = False
 
         else:
             # Show is running and nothing has changed in the database; see if it should stop
@@ -191,12 +197,14 @@ class showScheduler():
         # Manages the client actions, including error handling, so I don't have to copy-paste
         # everywhere. Should be called as a thread so as not to delay the main threaded function.
         
+        print "in client manager"
         self.clientQ.put(self.clientCount) 
         # thread.start_new_thread(self.clientThreader, ())
         thread.start_new_thread(self.clientThreader, (self.clientCount, ))
         self.clientCount += 1
 
     def clientThreader(self, threadNumber):
+        print "in client threader"
         # Flush the queue for communication when starting the thread. We don't
         # want old stop commands interfering with the most recent command.
         # First, though, sleep for a second so that the running 
@@ -205,6 +213,7 @@ class showScheduler():
         threadComplete = False
 
         while not threadComplete:
+            print "not complete thread"
             try:
                 if self.clientAction == self.endShowVar:
                     print "ending show" + str(threadNumber)

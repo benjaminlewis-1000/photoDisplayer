@@ -538,6 +538,7 @@ class displayServer:
 
     def endSlideshow(self):
         print "Ending slideshow"
+        debug = []
         if self.p != None: 
             self.p.terminate()
         debug.append("Ending slideshow")
@@ -547,6 +548,12 @@ class displayServer:
                 # self.tvOff()
         except Exception as e:
             print e
+        returnDict = {}
+        returnDict['exceptions'] = []
+        returnDict['debug'] = debug
+        print json.dumps(returnDict)
+        return json.dumps(returnDict)
+
 
     def turnOnTV(self, onJSON):
         debug = []
