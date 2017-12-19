@@ -187,6 +187,7 @@ class displayServer:
         return returnDict;
 
     def getShowRunningState(self):
+        print 'Getting show running state'
         return self.showRunning
 
 

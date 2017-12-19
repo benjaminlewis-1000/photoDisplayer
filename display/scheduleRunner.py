@@ -44,7 +44,6 @@ class showScheduler():
         self.loadShowVar = 'Load Show'
         self.clientQ = Queue.Queue()
 
-
         # Start the periodic show status checker, which will call checkForSchedules
         # and run logic of what show, if any, should be running currently; it will
         # then sleep for a predetermined length of time (60sec in production) and run
@@ -151,8 +150,7 @@ class showScheduler():
                     # but with the same show name won't cause a restart, and that a change
                     # to the time such that the time is valid won't cause a restart. 
                     self.schedule = schedule
-                    checkShowRunning = self.client.getShowRunningState()
-                    print checkShowRunning
+                    print "check if show is running..."
                     if showName != self.currentRunningShowName or not self.showRunning:
                         # Only if the show to run is different than the current running show
                         # (which may be null) do we start a new show. 
@@ -213,6 +211,7 @@ class showScheduler():
         # thread (if any) can read the stop message off the queue and quit.
 
         threadComplete = False
+        print "Show state = " + str(self.client.getShowRunningState())
 
         while not threadComplete:
             print "not complete thread"
