@@ -113,8 +113,6 @@ class showScheduler():
 
             print self.showSchedule
 
-
-
     def intervalShowStatusChecker(self):
         # Get the list of shows as necessary from the database. 
         self.checkForSchedules()
@@ -139,10 +137,6 @@ class showScheduler():
                 endTime = schedule[2]
                 showName = schedule[3]
 
-#                print "Test conditions: " 
-#                print hhmm >= str(startTime)
-#                print hhmm < str(endTime)
-#                print dowNumber == currentDayNum
                 # For each saved show, check if the time and date are such that that
                 # show schedule is in the valid time. 
                 if (hhmm >= str(startTime) and hhmm < str(endTime) and dowNumber == currentDayNum):
@@ -150,14 +144,9 @@ class showScheduler():
                     # but with the same show name won't cause a restart, and that a change
                     # to the time such that the time is valid won't cause a restart. 
                     self.schedule = schedule
-                    print "check if show is running..."
-                    if showName != self.currentRunningShowName or not self.showRunning:
-                        # Only if the show to run is different than the current running show
-                        # (which may be null) do we start a new show. 
-                        print "show starting: " + showName
-                        self.clientAction = self.loadShowVar
-                        self.clientManager()
-                    self.currentRunningShowName = showName
+                    # Let the logic in the show runner thread determine if a show must be started.
+                    print "show may be starting: " + showName
+                    self.clientManager(self.loadShowVar, showName)
                     self.showRunning = True
                     quitShow = False
                     # If a valid show is found, break the for loop. 
@@ -168,8 +157,7 @@ class showScheduler():
             if quitShow and self.showRunning:
                 print "quit the show"
                 self.showRunning = False
-                self.clientAction = self.endShowVar
-                self.clientManager()
+                self.clientManager(self.endShowVar, None)
 
         else:
             # Show is running and nothing has changed in the database; see if it should stop
@@ -181,29 +169,25 @@ class showScheduler():
             showName = self.schedule[3]
             if (hhmm >= str(endTime) and self.showRunning ):
                 print "Show stopping! Quit the show now. "
-                self.clientAction = self.endShowVar
-                self.clientManager()
+                self.clientManager(self.endShowVar, None)
                 self.showRunning = False
                 self.schedule = []
                 self.currentRunningShowName = None
 
-        # if self.showRunning:
-        #     print self.currentRunningShowName
-
 
         threading.Timer(1.0, self.intervalShowStatusChecker).start()
 
-    def clientManager(self):
+    def clientManager(self, actionType, showName):
         # Manages the client actions, including error handling, so I don't have to copy-paste
         # everywhere. Should be called as a thread so as not to delay the main threaded function.
         
         print "in client manager"
         self.clientQ.put(self.clientCount) 
         # thread.start_new_thread(self.clientThreader, ())
-        thread.start_new_thread(self.clientThreader, (self.clientCount, ))
+        thread.start_new_thread(self.clientThreader, (self.clientCount, actionType, showName))
         self.clientCount += 1
 
-    def clientThreader(self, threadNumber):
+    def clientThreader(self, threadNumber, actionType, showName):
         print "in client threader"
         # Flush the queue for communication when starting the thread. We don't
         # want old stop commands interfering with the most recent command.
@@ -211,18 +195,36 @@ class showScheduler():
         # thread (if any) can read the stop message off the queue and quit.
 
         threadComplete = False
-        print "Show state = " + str(self.client.getShowRunningState())
 
         while not threadComplete:
             print "not complete thread"
+            [showIsRunning, showRunningName] = self.client.getShowRunningState()
             try:
-                if self.clientAction == self.endShowVar:
-                    print "ending show" + str(threadNumber)
-                    self.client.endSlideshow()
-                    print "done ending show"
-                elif self.clientAction == self.loadShowVar:
-                    print "loading show " + self.currentRunningShowName
-                    self.client.loadSavedShow(self.currentRunningShowName)
+                if actionType == self.endShowVar:
+                    if showIsRunning and showRunningName == self.currentRunningShowName:
+                        print "ending show" + str(threadNumber)
+                        self.client.endSlideshow()
+                        print "done ending show"
+                    else:
+                        # Do nothing - there's nothing to kill, and we don't want to
+                        # randomly turn off the TV. 
+                        break
+                elif actionType == self.loadShowVar:
+                    print "loading show " + showName
+                    print "Current show running is " + str(showRunningName)
+                    if (showIsRunning):
+                        # Saved shows are only called from here, and only shows called 
+                        # from here will return a non-'None' showRunningName. 
+                        if showRunningName is None or showRunningName == showName:
+                            # do nothing, break. We are already running this show.
+                            print "Running a user-defined show." 
+                            break
+                        else:
+                            self.client.loadSavedShow(showName)
+                            self.currentRunningShowName = showName
+                    else: # There is no show running. 
+                        self.client.loadSavedShow(showName)
+                        self.currentRunningShowName = showName
                     print "Done loading show"
                 else:
                     print "Unknown client action"
