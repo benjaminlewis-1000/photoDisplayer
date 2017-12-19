@@ -1,6 +1,9 @@
 #! /usr/bin/env python
 
-def buildQueryFromJSON():
+import json
+
+def buildQueryFromJSON(criteriaJSON, xmlParams):
+    slideshowParams = json.loads(str(criteriaJSON))
 
     people = [ ]
     selectedYears = [ ]
@@ -8,17 +11,17 @@ def buildQueryFromJSON():
     dateRangeVals = [ ]
 
     # Get all of the parameters for the different relevant tables
-    photoLinkerTable =  self.xmlParams['params']['photoDatabase']['tables']['photoLinkerTable']
+    photoLinkerTable =  xmlParams['params']['photoDatabase']['tables']['photoLinkerTable']
     plTableName      =  photoLinkerTable['Name']
     plPerson         =  photoLinkerTable['Columns']['linkerPeople']
     plPhoto          =  photoLinkerTable['Columns']['linkerPhoto']
 
-    peopleTable   =  self.xmlParams['params']['photoDatabase']['tables']['peopleTable']
+    peopleTable   =  xmlParams['params']['photoDatabase']['tables']['peopleTable']
     ppTableName   =  peopleTable['Name']
     ppKey         =  peopleTable['Columns']['peopleKey']
     ppName        =  peopleTable['Columns']['personName']
 
-    photosTable   =  self.xmlParams['params']['photoDatabase']['tables']['photoTable']
+    photosTable   =  xmlParams['params']['photoDatabase']['tables']['photoTable']
     phTableName   =  photosTable['Name']
     phKey         =  photosTable['Columns']['photoKey']
     phTableName   =  photosTable['Name']
@@ -149,7 +152,6 @@ def buildQueryFromJSON():
     ### Date ranges - must be or'd. It doesn't make sense to AND date ranges, because the date
     ### range could be changed or another date range selected to get the appropriate values. 
 
-    stream.close()
     orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(phKey, phTableName, phTakenDate)
     for i in range(len(dateRangeVals)):
         startDate = dateRangeVals[i][0]
@@ -179,7 +181,6 @@ def buildQueryFromJSON():
 
         if i != len(dateRangeVals) - 1:
             orDateRangeQuery += " OR {} ".format(phTakenDate)
-
 
     masterQuery = ""
     ### Build a query that encapsulates all of the date ranges and specifics that were requested. 
@@ -216,5 +217,9 @@ def buildQueryFromJSON():
         #### Preliminary:
         prelimQuery = '''SELECT {}, {}, {}, {} FROM {} WHERE {} IN \n '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName, phKey)
         masterQuery = prelimQuery +  "(" +  masterQuery + ")" 
+
+
+    if getAll:
+        masterQuery = '''SELECT {}, {}, {}, {} FROM {} '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName)
 
     return masterQuery

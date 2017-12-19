@@ -190,7 +190,7 @@ class displayServer:
 
     def getShowRunningState(self):
         print 'Getting show running state'
-        return [self.showRunning, self.showRunningName]
+        return [self.showRunning, str(self.showRunningName)]
 
 
     def buildQuery(self, criteriaJSON, **optionalParams):
@@ -235,24 +235,20 @@ class displayServer:
         debug.append('JSON criteria was: ' + criteriaJSON);
         slideshowParams = json.loads(str(criteriaJSON))
 
-        self.masterQuery = buildQueryFromJSON(slideshowParams)
+        self.masterQuery = buildQueryFromJSON(criteriaJSON, self.xmlParams)
 
-        if self.printDebug:
-            with open('queryTest.out', 'w+') as f:
-                print >>f, orPersonQuery
-                print >>f, andPersonQuery
-                print >>f, andYearQuery
-                print >>f, orYearQuery
-                print >>f, orDateRangeQuery
-                print >>f, buildDates
-                print >>f, self.masterQuery
-        else:
-            with open('queryTest.out', 'w+') as f:
-                print >>f, self.masterQuery
-
-        if getAll: # Defined as one of the criteria requesting "all", meaning all photos:
-            # Override the built query and just request a list of all photos.
-            self.masterQuery = '''SELECT {}, {}, {}, {} FROM {} '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName)
+#        if self.printDebug:
+# u          with open('queryTest.out', 'w+') as f:
+#                print >>f, orPersonQuery
+#                print >>f, andPersonQuery
+#                print >>f, andYearQuery
+#                print >>f, orYearQuery
+#                print >>f, orDateRangeQuery
+#                print >>f, buildDates
+#                print >>f, self.masterQuery
+#        else:
+#            with open('queryTest.out', 'w+') as f:
+#                print >>f, self.masterQuery
 
         if self.masterQuery != "":
             c = self.conn.cursor()
