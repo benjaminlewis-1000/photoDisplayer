@@ -523,9 +523,6 @@ class displayServer:
 
     def checkDisplayStatus(self):
         print >>self.stream, 'checkDisplayStatus was called.'
-        commandString = 'echo pow 0 | cec-client -d 1 -s'
-        args = shlex.split(commandString)
-        print >>self.stream, "Args are " + str(args)
         echoProc = subprocess.Popen(['echo', 'pow 0'], stdout = subprocess.PIPE)
         cecProc = subprocess.Popen(['cec-client' , '-d', '1', '-s'], stdin=echoProc.stdout, stdout=subprocess.PIPE)
         print >>self.stream, "processes defined" 
