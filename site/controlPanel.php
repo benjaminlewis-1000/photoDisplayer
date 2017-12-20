@@ -74,6 +74,16 @@
 		window.onload = function(){ document.getElementById("loading").style.display = "none" }   
 	</script>
 
+	<script type="text/javascript">
+		var callback = $.ajax({
+			type: 'POST',
+			url: 'scripts_controlpanel/serverTZ.php',
+			success: function(data){
+				console.debug(data)
+			}
+		})
+	</script>
+
 	<div id=newCriteriaDiv class="head_div">
 		<button id="loadShow" title="Load a saved slideshow by name; the &#013criteria fields will automatically populate &#013according to the defined show and any &#013existing criteria will be deleted." class="taskButton">
 			Load Slideshow
@@ -113,6 +123,8 @@
 		}
 		function Timer() {
 		   var dt=new Date()
+		   tzOffset = dt.getTimezoneOffset() / 60;  // Need to add this many minutes to get to GST
+		   console.log( (dt.getHours() + tzOffset + 24) % 24)
 		   document.getElementById('time').innerHTML=(dt.getHours() + 11) % 12 + 1+":"
 		   		+pad(dt.getMinutes(), 2)+":"
 		   		+pad(dt.getSeconds(),2)+ " " 
