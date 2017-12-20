@@ -14,11 +14,11 @@ function sendToPi(){
 			data = JSON.parse(data)
 	        exceptions = data['exceptions']
 	        for (i = 0; i < exceptions.length; i++){
-	        	console.log("Error in sendToPi: " + exceptions[i]);
+	        	console.error("Error in sendToPi: " + exceptions[i]);
 	        }
 	        debugMsgs = data['debug']
 	        for (i = 0; i < debugMsgs.length; i++){
-	        	console.log("Debug message in sendToPi: " + debugMsgs[i]);
+	        	console.debug("Debug message in sendToPi: " + debugMsgs[i]);
 	        }
 		}
 	});
@@ -26,21 +26,19 @@ function sendToPi(){
 }
 
 function turnOnTV(onState){
-	console.log('hi')
 	var callback = $.ajax({
 		type: 'POST',
 		url: 'scripts_controlpanel/turnOnTV.php',
 		data: {'onState': onState},
 		success: function(data){
 			data = JSON.parse(data)
-			console.log(data)
 	        exceptions = data['exceptions']
 	        for (i = 0; i < exceptions.length; i++){
-	        	console.log("Error in relaunchWithOptions: " + exceptions[i]);
+	        	console.error("Error in relaunchWithOptions: " + exceptions[i]);
 	        }
 	        debugMsgs = data['debug']
 	        for (i = 0; i < debugMsgs.length; i++){
-	        	console.log("Debug message in relaunchWithOptions: " + debugMsgs[i]);
+	        	console.debug("Debug message in relaunchWithOptions: " + debugMsgs[i]);
 	        }
 		}
 	});
@@ -57,11 +55,11 @@ function relaunchWithOptions(){
 			data = JSON.parse(data)
 	        exceptions = data['exceptions']
 	        for (i = 0; i < exceptions.length; i++){
-	        	console.log("Error in relaunchWithOptions: " + exceptions[i]);
+	        	console.error("Error in relaunchWithOptions: " + exceptions[i]);
 	        }
 	        debugMsgs = data['debug']
 	        for (i = 0; i < debugMsgs.length; i++){
-	        	console.log("Debug message in relaunchWithOptions: " + debugMsgs[i]);
+	        	console.debug("Debug message in relaunchWithOptions: " + debugMsgs[i]);
 	        }
 		}
 	});
