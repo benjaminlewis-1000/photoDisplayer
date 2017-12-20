@@ -188,48 +188,48 @@ class showScheduler():
         thread.start_new_thread(self.clientThreader, (self.clientCount, actionType, showName))
         self.clientCount += 1
 
-    def clientThreader(self, threadNumber, actionType, showName):
+    def clientThreader(self, threadNumber, actionType, desiredShowName):
         # Flush the queue for communication when starting the thread. We don't
         # want old stop commands interfering with the most recent command.
         # First, though, sleep for a second so that the running 
         # thread (if any) can read the stop message off the queue and quit.
 
         threadComplete = False
-        currentShowName = self.currentRunningShow()
-        print "scheduler thinks {} is running".format(currentShowName)
+        currentSchedulerShowName = self.currentRunningShow()
 
         while not threadComplete:
             showState = self.client.getShowRunningState()
             showStateArray = json.loads(showState)
             showIsRunning = showStateArray[0]
-            showRunningName = showStateArray[1]
+            serverRunningShowName = showStateArray[1]
+            print "Show running: {}. Server thinks {} is running, scheduler thinks {}".format(showIsRunning, serverRunningShowName, currentSchedulerShowName)
             try:
                 if actionType == self.endShowVar:
-                    if showIsRunning and showRunningName == currentShowName:
+                    if showIsRunning and serverRunningShowName == currentSchedulerShowName:
                         print "ending show" + str(threadNumber)
                         self.client.endSlideshow()
                         print "done ending show"
                     else:
                         # Do nothing - there's nothing to kill, and we don't want to
                         # randomly turn off the TV. 
-                        break
                         self.currentRunningShow(None)
+                        break
                 elif actionType == self.loadShowVar:
-                    print "loading show " + showName
-                    print "Current show running is " + str(showRunningName)
+                    print "loading show " + desiredShowName
+                    print "Current show running is " + str(serverRunningShowName)
                     if (showIsRunning):
                         # Saved shows are only called from here, and only shows called 
-                        # from here will return a non-'None' showRunningName. 
-                        if showRunningName is None or showRunningName == showName:
+                        # from here will return a non-'None' serverRunningShowName. 
+                        if serverRunningShowName is None or serverRunningShowName == desiredShowName:
                             # do nothing, break. We are already running this show.
                             print "Running a user-defined show." 
                             break
                         else:
-                            self.client.loadSavedShow(showName)
-                            self.currentRunningShow(showName)
+                            self.client.loadSavedShow(desiredShowName)
+                            self.currentRunningShow(desiredShowName)
                     else: # There is no show running. 
-                        self.client.loadSavedShow(showName)
-                        self.currentRunningShow(showName)
+                        self.client.loadSavedShow(desiredShowName)
+                        self.currentRunningShow(desiredShowName)
                     print "Done loading show"
                 else:
                     print "Unknown client action"
