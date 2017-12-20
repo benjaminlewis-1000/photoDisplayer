@@ -43,6 +43,7 @@ class showScheduler():
         self.endShowVar = 'End Show'
         self.loadShowVar = 'Load Show'
         self.clientQ = Queue.Queue()
+        self.threadToServerQ = Queue.Queue()
 
         # Start the periodic show status checker, which will call checkForSchedules
         # and run logic of what show, if any, should be running currently; it will
@@ -175,6 +176,8 @@ class showScheduler():
                 self.currentRunningShowName = None
 
 
+        if not self.threadToServerQ.empty():
+            self.currentRunningShowName = self.threadToServerQ.get()
         threading.Timer(1.0, self.intervalShowStatusChecker).start()
 
     def clientManager(self, actionType, showName):
@@ -198,9 +201,17 @@ class showScheduler():
 
         while not threadComplete:
             print "not complete thread"
-            [showIsRunning, showRunningName] = self.client.getShowRunningState()
+            showState = self.client.getShowRunningState()
+            print showState
+            showStateArray = json.loads(showState)
+            print showStateArray
+            showIsRunning = showStateArray[0]
+            showRunningName = showStateArray[1]
             try:
                 if actionType == self.endShowVar:
+                    print showIsRunning
+                    print showRunningName
+                    print self.currentRunningShowName
                     if showIsRunning and showRunningName == self.currentRunningShowName:
                         print "ending show" + str(threadNumber)
                         self.client.endSlideshow()
@@ -209,6 +220,7 @@ class showScheduler():
                         # Do nothing - there's nothing to kill, and we don't want to
                         # randomly turn off the TV. 
                         break
+                    self.currentRunningShowName = None
                 elif actionType == self.loadShowVar:
                     print "loading show " + showName
                     print "Current show running is " + str(showRunningName)
@@ -246,6 +258,7 @@ class showScheduler():
                 # Put it back on the queue
                 self.clientQ.put(threadNumber)
             sleep(0.5)
+        self.threadToServerQ.put(self.currentRunningShowName)
 
 if __name__ == "__main__":
     aa = showScheduler()

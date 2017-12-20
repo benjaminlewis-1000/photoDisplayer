@@ -190,7 +190,8 @@ class displayServer:
 
     def getShowRunningState(self):
         print 'Getting show running state'
-        return [self.showRunning, str(self.showRunningName)]
+        print "running name in server: " +  str(self.showRunningName)
+        return json.dumps([self.showRunning, self.showRunningName])
 
 
     def buildQuery(self, criteriaJSON, **optionalParams):
@@ -302,6 +303,7 @@ class displayServer:
             errs.append('Invalid request.')
             
         debug.append("Final query was: " + self.masterQuery)
+        print "Show running name is " + self.showRunningName
 
         returnDict['exceptions'] = errs;
         returnDict['debug'] = debug;
@@ -338,6 +340,7 @@ class displayServer:
         returnDict['debug'] = debug
         self.showRunning = False
         self.showRunningName = None
+        print "Show has now stopped, showServer"
         print json.dumps(returnDict)
         return json.dumps(returnDict)
 
