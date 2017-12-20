@@ -181,7 +181,6 @@
 				{
 				   $displayName = $item->display;
 				   if ($displayName == $criteriaVal){
-				   	  print_r("match!");
 				   	    foreach($item->aka as $akaPerson){
 							$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$akaPerson");
 							array_push($formedArray, $data);
