@@ -4,7 +4,7 @@
 		Linear,Aaaa
 	</excludedNames>
 	<excludedPatterns>
-		.*.CR2,\(Canon EF 85mm F\/1.8 USM\)
+		.*.CR2,\(Canon EF 85mm F\/1.8 USM\),Canon EOS
 	</excludedPatterns>
 	<showDatabase>
 

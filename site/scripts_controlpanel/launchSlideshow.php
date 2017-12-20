@@ -81,6 +81,16 @@
 		echo json_encode($retArray);
 		exit;		
 	}
+
+	try{
+		$site_params = simplexml_load_file($parentDir . '/site/siteConfig.xml');
+	}catch(Exception $e){
+		$exceptions[] = 'Can\'t load the parameter file siteConfig.xml...';
+		$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
+		echo json_encode($retArray);
+		exit;		
+	}
+
 	//echo $xml_params->photoDatabase->tables->photoTable->Name . "<br>";
 	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
 	
@@ -164,6 +174,19 @@
 				if (!($valid1 and $valid2)){
 					$exceptions[] = "$boolVal, $criteriaVal not valid in Person";
 					$allValid = 0;
+				}
+
+				$nameAliasRoot = $site_params->nameAliases;
+				foreach($nameAliasRoot->displayName as $item)
+				{
+				   $displayName = $item->display;
+				   if ($displayName == $criteriaVal){
+				   	  print_r("match!");
+				   	    foreach($item->aka as $akaPerson){
+							$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$akaPerson");
+							array_push($formedArray, $data);
+				   	    }
+				   }
 				}
 
 				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal");
@@ -268,6 +291,7 @@
 
 	}
 
+	$debug[] = $_POST;
 	$retArray = array('exceptions' => $exceptions, 'debug' => $debug );
 	echo json_encode($retArray);
 
