@@ -75,11 +75,13 @@
 	</script>
 
 	<script type="text/javascript">
+		hm_offset = 0
 		var callback = $.ajax({
 			type: 'POST',
 			url: 'scripts_controlpanel/serverTZ.php',
 			success: function(data){
-				console.debug(data)
+				hm = data.split(':')
+				hm_offset = parseInt(hm[0]) * 60 + parseInt(hm[1]) 
 			}
 		})
 	</script>
@@ -123,12 +125,24 @@
 		}
 		function Timer() {
 		   var dt=new Date()
-		   tzOffset = dt.getTimezoneOffset() / 60;  // Need to add this many minutes to get to GST
-		   console.log( (dt.getHours() + tzOffset + 24) % 24)
-		   document.getElementById('time').innerHTML=(dt.getHours() + 11) % 12 + 1+":"
-		   		+pad(dt.getMinutes(), 2)+":"
+		   tzOffset = dt.getTimezoneOffset();  // Need to add this many minutes to get to GST
+		   serverOffset = -1 * hm_offset;
+
+		   currentDiff = (tzOffset - serverOffset)
+		   hourDiff = Math.floor( (currentDiff + 1) / 60 );
+		   minDiff = currentDiff % 60 
+		   serverHours = ( dt.getHours() + hourDiff + 24 ) % 24
+		   serverMinutes = dt.getMinutes() - minDiff
+		   if (serverMinutes > 60){
+		        serverHours = (serverHours + 1) % 24
+		   }
+		   if (serverMinutes < 0){
+			serverHours = (serverHours - 1) % 24
+		   }
+		   document.getElementById('time').innerHTML="Server time: " + ( (serverHours + 11) % 12 + 1 ) +":"
+		   		+pad(serverMinutes, 2)+":"
 		   		+pad(dt.getSeconds(),2)+ " " 
-		   		+(dt.getHours() > 11? 'PM': 'AM');
+		   		+(serverHours > 11? 'PM': 'AM');
 		   setTimeout("Timer()",1000);
 		}
 		Timer();
