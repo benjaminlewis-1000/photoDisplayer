@@ -123,7 +123,6 @@ class showScheduler():
         currentDayNum = datetime.weekday(datetime.now())
         hhmm = '{:02}{:02}'.format(currentTime[3], currentTime[4])
  #       print hhmm
-        print self.showRunning
 
         if not self.showRunning or self.dbUpdated:
             # Determine whether a show should be running. Takes the first
@@ -205,6 +204,7 @@ class showScheduler():
             print "Show running: {}. Server thinks {} is running, scheduler thinks {}".format(showIsRunning, serverRunningShowName, currentSchedulerShowName)
             try:
                 if actionType == self.endShowVar:
+                    self.currentRunningShow(None)
                     if showIsRunning and serverRunningShowName == currentSchedulerShowName:
                         print "ending show" + str(threadNumber)
                         self.client.endSlideshow()
@@ -212,11 +212,13 @@ class showScheduler():
                     else:
                         # Do nothing - there's nothing to kill, and we don't want to
                         # randomly turn off the TV. 
-                        self.currentRunningShow(None)
+    #                    self.currentRunningShow(None)
                         break
                 elif actionType == self.loadShowVar:
                     print "loading show " + desiredShowName
                     print "Current show running is " + str(serverRunningShowName)
+                    self.currentRunningShow(desiredShowName)
+
                     if (showIsRunning):
                         # Saved shows are only called from here, and only shows called 
                         # from here will return a non-'None' serverRunningShowName. 
@@ -226,10 +228,8 @@ class showScheduler():
                             break
                         else:
                             self.client.loadSavedShow(desiredShowName)
-                            self.currentRunningShow(desiredShowName)
                     else: # There is no show running. 
                         self.client.loadSavedShow(desiredShowName)
-                        self.currentRunningShow(desiredShowName)
                     print "Done loading show"
                 else:
                     print "Unknown client action"
@@ -251,6 +251,12 @@ class showScheduler():
                 # Put it back on the queue
                 self.clientQ.put(threadNumber)
             sleep(0.5)
+        currentSchedulerShowName = self.currentRunningShow()
+        showState = self.client.getShowRunningState()
+        showStateArray = json.loads(showState)
+        showIsRunning = showStateArray[0]
+        serverRunningShowName = showStateArray[1]
+        print "Show running: {}. Server thinks {} is running, scheduler thinks {} shoule be running".format(showIsRunning, serverRunningShowName, currentSchedulerShowName)
 
     def currentRunningShow(self, *inputs):
 
@@ -265,6 +271,7 @@ class showScheduler():
             currentRunningShowName = inputs[0]
 
         self.threadToServerQ.put(currentRunningShowName)
+        print "Running show is now {}".format(currentRunningShowName)
         return currentRunningShowName
 
 if __name__ == "__main__":
