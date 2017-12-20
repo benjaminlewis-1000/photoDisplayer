@@ -183,35 +183,28 @@ class showScheduler():
         # Manages the client actions, including error handling, so I don't have to copy-paste
         # everywhere. Should be called as a thread so as not to delay the main threaded function.
         
-        print "in client manager"
         self.clientQ.put(self.clientCount) 
         # thread.start_new_thread(self.clientThreader, ())
         thread.start_new_thread(self.clientThreader, (self.clientCount, actionType, showName))
         self.clientCount += 1
 
     def clientThreader(self, threadNumber, actionType, showName):
-        print "in client threader"
         # Flush the queue for communication when starting the thread. We don't
         # want old stop commands interfering with the most recent command.
         # First, though, sleep for a second so that the running 
         # thread (if any) can read the stop message off the queue and quit.
 
         threadComplete = False
-        currentShowName = currentRunningShow()
+        currentShowName = self.currentRunningShow()
+        print "scheduler thinks {} is running".format(currentShowName)
 
         while not threadComplete:
-            print "not complete thread"
             showState = self.client.getShowRunningState()
-            print showState
             showStateArray = json.loads(showState)
-            print showStateArray
             showIsRunning = showStateArray[0]
             showRunningName = showStateArray[1]
             try:
                 if actionType == self.endShowVar:
-                    print showIsRunning
-                    print showRunningName
-                    print currentShowName
                     if showIsRunning and showRunningName == currentShowName:
                         print "ending show" + str(threadNumber)
                         self.client.endSlideshow()
@@ -220,7 +213,7 @@ class showScheduler():
                         # Do nothing - there's nothing to kill, and we don't want to
                         # randomly turn off the TV. 
                         break
-                    currentRunningShow(None)
+                        self.currentRunningShow(None)
                 elif actionType == self.loadShowVar:
                     print "loading show " + showName
                     print "Current show running is " + str(showRunningName)
@@ -233,10 +226,10 @@ class showScheduler():
                             break
                         else:
                             self.client.loadSavedShow(showName)
-                            currentRunningShow(showName)
+                            self.currentRunningShow(showName)
                     else: # There is no show running. 
                         self.client.loadSavedShow(showName)
-                        currentRunningShow(showName)
+                        self.currentRunningShow(showName)
                     print "Done loading show"
                 else:
                     print "Unknown client action"
@@ -258,9 +251,8 @@ class showScheduler():
                 # Put it back on the queue
                 self.clientQ.put(threadNumber)
             sleep(0.5)
-        self.threadToServerQ.put(self.currentRunningShowName)
 
-    def currentRunningShow(**inputs):
+    def currentRunningShow(self, *inputs):
 
         if len(inputs) == 0:
 
@@ -268,12 +260,11 @@ class showScheduler():
                 currentRunningShowName = self.threadToServerQ.get()
             else:
                 currentRunningShowName = None
-        else
+        else:
             self.threadToServerQ.queue.clear()
             currentRunningShowName = inputs[0]
 
         self.threadToServerQ.put(currentRunningShowName)
-        print currentRunningShowName
         return currentRunningShowName
 
 if __name__ == "__main__":
