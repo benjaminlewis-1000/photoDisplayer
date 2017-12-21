@@ -1,0 +1,247 @@
+pi@raspberrypi:~ $ cec-client
+No device type given. Using 'recording device'
+CEC Parser created - libCEC version 4.0.2
+no serial port given. trying autodetect:
+ path:     Raspberry Pi
+ com port: RPI
+
+#### Starting cec-client into Active Source (HDMI2)
+opening a connection to the CEC adapter...
+DEBUG:   [             294]     Broadcast (F): osd name set to 'Broadcast'
+DEBUG:   [             295]     logical address changed to Free use (e)
+DEBUG:   [             296]     Open - vc_cec initialised
+NOTICE:  [             296]     connection opened
+DEBUG:   [             297]     processor thread started
+DEBUG:   [             297]     << Broadcast (F) -> TV (0): POLL
+DEBUG:   [             297]     initiator 'Broadcast' is not supported by the CEC adapter. using 'Free use' instead
+TRAFFIC: [             297]     << e0
+DEBUG:   [             358]     >> POLL sent
+DEBUG:   [             358]     TV (0): device status changed into 'present'
+DEBUG:   [             358]     << requesting vendor ID of 'TV' (0)
+TRAFFIC: [             358]     << e0:8c
+TRAFFIC: [             601]     >> 0f:87:00:00:f0
+DEBUG:   [             601]     TV (0): vendor = Samsung (0000f0)
+DEBUG:   [             602]     >> TV (0) -> Broadcast (F): device vendor id (87)
+DEBUG:   [             602]     expected response received (87: device vendor id)
+DEBUG:   [             602]     replacing the command handler for device 'TV' (0)
+NOTICE:  [             602]     registering new CEC client - v4.0.2
+DEBUG:   [             602]     detecting logical address for type 'recording device'
+DEBUG:   [             602]     trying logical address 'Recorder 1'
+DEBUG:   [             603]     << Recorder 1 (1) -> Recorder 1 (1): POLL
+TRAFFIC: [             603]     << 11
+TRAFFIC: [             874]     << 11
+DEBUG:   [            1144]     >> POLL not sent
+DEBUG:   [            1145]     using logical address 'Recorder 1'
+DEBUG:   [            1145]     Recorder 1 (1): device status changed into 'handled by libCEC'
+DEBUG:   [            1145]     Recorder 1 (1): power status changed from 'unknown' to 'on'
+DEBUG:   [            1145]     Recorder 1 (1): vendor = Pulse Eight (001582)
+DEBUG:   [            1146]     Recorder 1 (1): CEC version 1.4
+DEBUG:   [            1146]     AllocateLogicalAddresses - device '0', type 'recording device', LA '1'
+DEBUG:   [            1146]     logical address changed to Recorder 1 (1)
+DEBUG:   [            1147]     Recorder 1 (1): osd name set to 'CECTester'
+DEBUG:   [            1147]     Recorder 1 (1): menu language set to 'eng'
+DEBUG:   [            1147]     GetPhysicalAddress - physical address = 2000
+DEBUG:   [            1148]     AutodetectPhysicalAddress - autodetected physical address '2000'
+DEBUG:   [            1148]     Recorder 1 (1): physical address changed from ffff to 2000
+DEBUG:   [            1148]     << Recorder 1 (1) -> broadcast (F): physical address 2000
+TRAFFIC: [            1148]     << 1f:84:20:00:01
+NOTICE:  [            1299]     CEC client registered: libCEC version = 4.0.2, client version = 4.0.2, firmware version = 1, logical address(es) = Recorder 1 (1) , physical address: 2.0.0.0, git revision: libcec-4.0.2+30-8adc786~dirty, compiled on Mon Aug 21 09:41:41 UTC 2017 by root@hostname: Name or service not known on Linux 4.4.0-92-generic (armv7l), features: P8_USB, DRM, P8_detect, randr, RPi
+DEBUG:   [            1299]     << Recorder 1 (1) -> TV (0): OSD name 'CECTester'
+TRAFFIC: [            1300]     << 10:47:43:45:43:54:65:73:74:65:72
+DEBUG:   [            1600]     << requesting power status of 'TV' (0)
+TRAFFIC: [            1600]     << 10:8f
+TRAFFIC: [            1802]     >> 01:90:00
+DEBUG:   [            1802]     TV (0): power status changed from 'unknown' to 'on'
+DEBUG:   [            1802]     >> TV (0) -> Recorder 1 (1): report power status (90)
+waiting for input
+DEBUG:   [            1802]     expected response received (90: report power status)
+
+
+### Move to HDMI1 (nonactive)
+TRAFFIC: [           10708]     >> 0f:82:00:00
+DEBUG:   [           10708]     making TV (0) the active source
+DEBUG:   [           10708]     >> TV (0) -> Broadcast (F): active source (82)
+TRAFFIC: [           11113]     >> 0f:80:20:00:10:00
+DEBUG:   [           11113]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+
+### Switch to Broadcast TV (nonactive)
+TRAFFIC: [           18176]     >> 0f:80:10:00:00:00
+DEBUG:   [           18177]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+
+### Back to HDMI1
+TRAFFIC: [           24168]     >> 0f:80:00:00:10:00
+DEBUG:   [           24169]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+### Back to HDMI2
+TRAFFIC: [           31509]     >> 01:8f
+DEBUG:   [           31509]     << Recorder 1 (1) -> TV (0): on
+TRAFFIC: [           31509]     << 10:90:00
+DEBUG:   [           31509]     >> TV (0) -> Recorder 1 (1): give device power status (8F)
+TRAFFIC: [           31823]     >> 0f:80:10:00:20:00
+DEBUG:   [           31823]     making Recorder 1 (1) the active source
+DEBUG:   [           31823]     marking TV (0) as inactive source
+DEBUG:   [           31823]     >> TV (0) -> Broadcast (F): routing change (80)
+NOTICE:  [           31823]     >> source activated: Recorder 1 (1)
+DEBUG:   [           31823]     sending active source message for 'Recorder 1'
+NOTICE:  [           31823]     << powering on 'TV' (0)
+TRAFFIC: [           31823]     << 10:04
+NOTICE:  [           31914]     << Recorder 1 (1) -> broadcast (F): active source (2000)
+TRAFFIC: [           31914]     << 1f:82:20:00
+DEBUG:   [           32034]     << Recorder 1 (1) -> TV (0): menu state 'activated'
+TRAFFIC: [           32034]     << 10:8e:00
+TRAFFIC: [           32245]     >> 01:83
+DEBUG:   [           32245]     << Recorder 1 (1) -> broadcast (F): physical address 2000
+TRAFFIC: [           32245]     << 1f:84:20:00:01
+DEBUG:   [           32246]     >> TV (0) -> Recorder 1 (1): give physical address (83)
+TRAFFIC: [           32478]     >> 01:1a:01
+DEBUG:   [           32478]     << Recorder 1 (1) -> TV (0): deck status 'stop'
+TRAFFIC: [           32478]     << 10:1b:1a
+DEBUG:   [           32479]     >> TV (0) -> Recorder 1 (1): give deck status (1A)
+TRAFFIC: [           32709]     >> 0f:86:20:00
+DEBUG:   [           32709]     >> TV (0) sets stream path to physical address 2000
+DEBUG:   [           32709]     Recorder 1 (1) was already marked as active source
+NOTICE:  [           32710]     >> source activated: Recorder 1 (1)
+NOTICE:  [           32710]     << Recorder 1 (1) -> broadcast (F): active source (2000)
+TRAFFIC: [           32710]     << 1f:82:20:00
+DEBUG:   [           32710]     >> TV (0) -> Broadcast (F): set stream path (86)
+signal caught: 2 - exiting
+
+## Quitting
+DEBUG:   [           36406]     unregistering all CEC clients
+NOTICE:  [           36406]     unregistering client: libCEC version = 4.0.2, client version = 4.0.2, firmware version = 1, logical address(es) = Recorder 1 (1) , physical address: 2.0.0.0, git revision: libcec-4.0.2+30-8adc786~dirty, compiled on Mon Aug 21 09:41:41 UTC 2017 by root@hostname: Name or service not known on Linux 4.4.0-92-generic (armv7l), features: P8_USB, DRM, P8_detect, randr, RPi
+DEBUG:   [           36407]     Recorder 1 (1): power status changed from 'on' to 'unknown'
+DEBUG:   [           36407]     Recorder 1 (1): vendor = Unknown (000000)
+DEBUG:   [           36407]     Recorder 1 (1): CEC version unknown
+DEBUG:   [           36407]     Recorder 1 (1): osd name set to 'Recorder 1'
+DEBUG:   [           36408]     marking Recorder 1 (1) as inactive source
+DEBUG:   [           36408]     Recorder 1 (1): device status changed into 'unknown'
+DEBUG:   [           36408]     unregistering all CEC clients
+DEBUG:   [           37302]     UnregisterLogicalAddress - releasing previous logical address
+DEBUG:   [           37303]     logical address changed to Broadcast (f)
+
+
+#### Run 2 - not starting in HDMI2
+
+No device type given. Using 'recording device'
+CEC Parser created - libCEC version 4.0.2
+no serial port given. trying autodetect:
+ path:     Raspberry Pi
+ com port: RPI
+
+opening a connection to the CEC adapter...
+DEBUG:   [             291]     Broadcast (F): osd name set to 'Broadcast'
+DEBUG:   [             292]     Open - vc_cec initialised
+DEBUG:   [             292]     logical address changed to Free use (e)
+NOTICE:  [             294]     connection opened
+DEBUG:   [             294]     processor thread started
+DEBUG:   [             294]     << Broadcast (F) -> TV (0): POLL
+DEBUG:   [             294]     initiator 'Broadcast' is not supported by the CEC adapter. using 'Free use' instead
+TRAFFIC: [             294]     << e0
+DEBUG:   [             355]     >> POLL sent
+DEBUG:   [             355]     TV (0): device status changed into 'present'
+DEBUG:   [             355]     << requesting vendor ID of 'TV' (0)
+TRAFFIC: [             355]     << e0:8c
+TRAFFIC: [             547]     >> 0f:87:00:00:f0
+DEBUG:   [             547]     TV (0): vendor = Samsung (0000f0)
+DEBUG:   [             547]     expected response received (87: device vendor id)
+DEBUG:   [             547]     replacing the command handler for device 'TV' (0)
+NOTICE:  [             547]     registering new CEC client - v4.0.2
+DEBUG:   [             547]     detecting logical address for type 'recording device'
+DEBUG:   [             547]     trying logical address 'Recorder 1'
+DEBUG:   [             547]     << Recorder 1 (1) -> Recorder 1 (1): POLL
+TRAFFIC: [             547]     << 11
+DEBUG:   [             548]     >> TV (0) -> Broadcast (F): device vendor id (87)
+TRAFFIC: [             818]     << 11
+DEBUG:   [            1089]     >> POLL not sent
+DEBUG:   [            1089]     using logical address 'Recorder 1'
+DEBUG:   [            1089]     Recorder 1 (1): device status changed into 'handled by libCEC'
+DEBUG:   [            1090]     Recorder 1 (1): power status changed from 'unknown' to 'on'
+DEBUG:   [            1090]     Recorder 1 (1): vendor = Pulse Eight (001582)
+DEBUG:   [            1090]     Recorder 1 (1): CEC version 1.4
+DEBUG:   [            1091]     AllocateLogicalAddresses - device '0', type 'recording device', LA '1'
+DEBUG:   [            1091]     logical address changed to Recorder 1 (1)
+DEBUG:   [            1092]     Recorder 1 (1): osd name set to 'CECTester'
+DEBUG:   [            1092]     Recorder 1 (1): menu language set to 'eng'
+DEBUG:   [            1093]     GetPhysicalAddress - physical address = 2000
+DEBUG:   [            1093]     AutodetectPhysicalAddress - autodetected physical address '2000'
+DEBUG:   [            1093]     Recorder 1 (1): physical address changed from ffff to 2000
+DEBUG:   [            1094]     << Recorder 1 (1) -> broadcast (F): physical address 2000
+TRAFFIC: [            1094]     << 1f:84:20:00:01
+NOTICE:  [            1245]     CEC client registered: libCEC version = 4.0.2, client version = 4.0.2, firmware version = 1, logical address(es) = Recorder 1 (1) , physical address: 2.0.0.0, git revision: libcec-4.0.2+30-8adc786~dirty, compiled on Mon Aug 21 09:41:41 UTC 2017 by root@hostname: Name or service not known on Linux 4.4.0-92-generic (armv7l), features: P8_USB, DRM, P8_detect, randr, RPi
+DEBUG:   [            1245]     << Recorder 1 (1) -> TV (0): OSD name 'CECTester'
+TRAFFIC: [            1246]     << 10:47:43:45:43:54:65:73:74:65:72
+DEBUG:   [            1546]     << requesting power status of 'TV' (0)
+TRAFFIC: [            1547]     << 10:8f
+TRAFFIC: [            1745]     >> 01:90:00
+DEBUG:   [            1745]     TV (0): power status changed from 'unknown' to 'on'
+DEBUG:   [            1746]     >> TV (0) -> Recorder 1 (1): report power status (90)
+DEBUG:   [            1748]     expected response received (90: report power status)
+waiting for input
+
+
+### Back and forth with HDMI1/TV
+TRAFFIC: [            9298]     >> 0f:80:10:00:00:00
+DEBUG:   [            9299]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+TRAFFIC: [           13439]     >> 0f:80:00:00:10:00
+DEBUG:   [           13441]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+TRAFFIC: [           21396]     >> 0f:80:10:00:00:00
+DEBUG:   [           21396]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+TRAFFIC: [           25010]     >> 0f:80:00:00:10:00
+DEBUG:   [           25010]     >> TV (0) -> Broadcast (F): routing change (80)
+
+
+TRAFFIC: [           26894]     >> 01:8f
+DEBUG:   [           26894]     << Recorder 1 (1) -> TV (0): on
+TRAFFIC: [           26895]     << 10:90:00
+DEBUG:   [           26895]     >> TV (0) -> Recorder 1 (1): give device power status (8F)
+TRAFFIC: [           27189]     >> 0f:80:10:00:20:00
+DEBUG:   [           27189]     making Recorder 1 (1) the active source
+NOTICE:  [           27189]     >> source activated: Recorder 1 (1)
+DEBUG:   [           27189]     sending active source message for 'Recorder 1'
+NOTICE:  [           27189]     << powering on 'TV' (0)
+TRAFFIC: [           27189]     << 10:04
+DEBUG:   [           27190]     >> TV (0) -> Broadcast (F): routing change (80)
+NOTICE:  [           27280]     << Recorder 1 (1) -> broadcast (F): active source (2000)
+TRAFFIC: [           27280]     << 1f:82:20:00
+DEBUG:   [           27400]     << Recorder 1 (1) -> TV (0): menu state 'activated'
+TRAFFIC: [           27400]     << 10:8e:00
+TRAFFIC: [           27611]     >> 01:83
+DEBUG:   [           27611]     << Recorder 1 (1) -> broadcast (F): physical address 2000
+TRAFFIC: [           27612]     << 1f:84:20:00:01
+DEBUG:   [           27612]     >> TV (0) -> Recorder 1 (1): give physical address (83)
+TRAFFIC: [           27845]     >> 01:1a:01
+DEBUG:   [           27845]     << Recorder 1 (1) -> TV (0): deck status 'stop'
+TRAFFIC: [           27845]     << 10:1b:1a
+DEBUG:   [           27845]     >> TV (0) -> Recorder 1 (1): give deck status (1A)
+TRAFFIC: [           28075]     >> 0f:86:20:00
+DEBUG:   [           28075]     >> TV (0) sets stream path to physical address 2000
+DEBUG:   [           28075]     Recorder 1 (1) was already marked as active source
+NOTICE:  [           28075]     >> source activated: Recorder 1 (1)
+NOTICE:  [           28075]     << Recorder 1 (1) -> broadcast (F): active source (2000)
+TRAFFIC: [           28075]     << 1f:82:20:00
+DEBUG:   [           28076]     >> TV (0) -> Broadcast (F): set stream path (86)
+
+
+signal caught: 2 - exiting
+DEBUG:   [           38408]     unregistering all CEC clients
+NOTICE:  [           38408]     unregistering client: libCEC version = 4.0.2, client version = 4.0.2, firmware version = 1, logical address(es) = Recorder 1 (1) , physical address: 2.0.0.0, git revision: libcec-4.0.2+30-8adc786~dirty, compiled on Mon Aug 21 09:41:41 UTC 2017 by root@hostname: Name or service not known on Linux 4.4.0-92-generic (armv7l), features: P8_USB, DRM, P8_detect, randr, RPi
+DEBUG:   [           38409]     Recorder 1 (1): power status changed from 'on' to 'unknown'
+DEBUG:   [           38409]     Recorder 1 (1): vendor = Unknown (000000)
+DEBUG:   [           38409]     Recorder 1 (1): CEC version unknown
+DEBUG:   [           38409]     Recorder 1 (1): osd name set to 'Recorder 1'
+DEBUG:   [           38409]     marking Recorder 1 (1) as inactive source
+DEBUG:   [           38409]     Recorder 1 (1): device status changed into 'unknown'
+DEBUG:   [           38409]     unregistering all CEC clients
+DEBUG:   [           39299]     UnregisterLogicalAddress - releasing previous logical address
+DEBUG:   [           39300]     logical address changed to Broadcast (f)
