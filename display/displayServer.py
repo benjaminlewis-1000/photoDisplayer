@@ -398,6 +398,7 @@ class displayServer:
         print >>self.stream, "TV turn on was successful"
 
     def tvOff(self):
+        print "turning off..."
         self.powerCycling = True
         print >>self.stream, "off called"
         statusString = self.checkDisplayStatus()
