@@ -386,12 +386,14 @@ class displayServer:
 
     def tvOn(self):
         self.powerCycling = True
+        numTries = 0
         print >>self.stream, "on called"
         statusString = self.checkDisplayStatus()
         print >>self.stream, "Status run #1"
-        while not (re.search('power status: on', statusString) or re.search('from standby to on', statusString)):
+        while (not (re.search('power status: on', statusString) or re.search('from standby to on', statusString) ) ) and numTries < 5:
             os.system('echo on 0 | cec-client -s -d 1')
             sleep(1)
+            numTries += 1
             statusString = self.checkDisplayStatus()
             print >>self.stream, statusString
         self.powerCycling = False
@@ -400,12 +402,14 @@ class displayServer:
     def tvOff(self):
         print "turning off..."
         self.powerCycling = True
+        numTries = 0
         print >>self.stream, "off called"
         statusString = self.checkDisplayStatus()
-        while not re.search('power status: standby', statusString):
+        while (not re.search('power status: standby', statusString) ) and numTries < 5 :
             os.system('echo standby 0 | cec-client -s -d 1')
             print "trying off"
             sleep(1)
+            numTries += 1
             statusString = self.checkDisplayStatus()
             print >>self.stream, statusString
         self.powerCycling = False
