@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Pi_Photo
-Exec=/home/pi/pdisp/display/displayServer.py
+Exec=/home/pi/phdisp/display/displayServer.py
 Type=application

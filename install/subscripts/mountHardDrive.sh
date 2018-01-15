@@ -52,5 +52,6 @@ echo $FSTAB_LINE
 echo $FSTAB_LINE | tee -a /etc/fstab
 
 # Mount the file.
+umount -a
 mount -a
 

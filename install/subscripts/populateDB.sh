@@ -9,6 +9,9 @@ kill -9 $GEOSERVER_PID
 # Create the photo database
 perl $PROJECT_ROOT_DIR/pyInit/database_create.pl
 
+sudo chown $USER $PROJECT_ROOT_DIR/databases/photos_master.db
+sudo chmod 755 $PROJECT_ROOT_DIR/databases/photos_master.db
+
 # Add pictures in the mount drive location (default). While the photo database software is capable of more than one root directory, this is the most simple root directory and we, in the end, want the pictures on that drive. 
 python $PROJECT_ROOT_DIR/pyInit/addPics.py --addRoot /mnt/photo_drive
 

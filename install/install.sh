@@ -11,7 +11,8 @@ sudo bash $THIS_DIR/subscripts/aptGetInstall.sh
 # Give permissions to create files from the web interface - used to create database files. 
 sudo bash $THIS_DIR/subscripts/chmodChange.sh
 
-sudo cp $THIS_DIR/keyboard /etc/default/keyboard
+# Set the keyboard
+sudo setxkbmap -rules xorg -layout us -model pc105
 
 # Install feh and assorted tools
 sudo bash $THIS_DIR/subscripts/fehInstall.sh
@@ -23,11 +24,10 @@ sudo bash $THIS_DIR/subscripts/serverInstall.sh
 
 sudo bash $THIS_DIR/subscripts/pyInstall.sh
 
-sudo bash $THIS_DIR/subscripts/populateDB.sh
-
 sudo bash $THIS_DIR/subscripts/cronInstall.sh
 
 sudo bash $THIS_DIR/subscripts/autostart_install.sh
 
 sudo bash $THIS_DIR/subscripts/sambaSetup.sh
 
+sudo bash $THIS_DIR/subscripts/populateDB.sh

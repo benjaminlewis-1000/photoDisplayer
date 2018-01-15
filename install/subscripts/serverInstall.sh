@@ -22,7 +22,7 @@ read -r -d '' APACHE_CONF_VAR << EOM
 <\/Directory>
 EOM
 
-sudo cp /etc/apache2/apache.conf /etc/apache2/apache.conf.bk
+sudo cp /etc/apache2/apache2.conf /etc/apache2/apache.conf.bk
 
 sudo perl -0777 -p -i -e 's/<Directory \/var\/www.*?<\/Directory>/'"$APACHE_CONF_VAR"'/gs' /etc/apache2/apache2.conf
 
@@ -32,10 +32,10 @@ read -r -d '' DEFAULT_000_VAR << EOM
 DocumentRoot $PROJECT_ROOT_DIR\/site
 EOM
 
-sudo cp /etc/apache2/sites-available/000-defaults.conf /etc/apache2/sites-available/000-defaults.conf.bk
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.bk
 
 echo $DEFAULT_000_VAR
-sudo sed -i 's/DocumentRoot \/var\/www\/html/'"$DEFAULT_000_VAR"'/g' /etc/apache2/sites-available/000-default.conf
+sudo sed -i "s|DocumentRoot \/var\/www\/html|${DEFAULT_000_VAR}|g" /etc/apache2/sites-available/000-default.conf
 
 # Change dir.conf to adapt the order of sites loaded
 

@@ -12,6 +12,8 @@ GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/googTag.sh"
 GIT_PULL_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/gitpull.sh"
 RESTART_DISPLAY_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/displayRestart.sh"
 
+sudo chown $USER $PROJECT_ROOT_DIR/scripts/gitpull.sh
+
 echo "#! /bin/bash" > $PROJECT_ROOT_DIR/scripts/gitpull.sh
 echo "cd $PROJECT_ROOT_DIR" >> $PROJECT_ROOT_DIR/scripts/gitpull.sh
 echo "git pull" >> $PROJECT_ROOT_DIR/scripts/gitpull.sh
