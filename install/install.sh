@@ -3,6 +3,9 @@
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
+# Default apt-get mirrors aren't working for this version of raspbian; so I wrote a script to update that.
+sudo bash $THIS_DIR/subscripts/mirrorSetup.sh
+
 sudo bash $THIS_DIR/subscripts/mountHardDrive.sh
 
 sudo dpkg-reconfigure tzdata
