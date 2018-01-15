@@ -1,5 +1,6 @@
 #! /bin/bash
 
+
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # The first input should be the path to a file (in the /media directory, i.e. on a USB disk) on the disk you want to mount.
@@ -50,6 +51,9 @@ FSTAB_LINE="UUID=$UUID $MOUNTPOINT $FILESYS_TYPE defaults,uid=0,gid=0,noatime,um
 # Append this line to /etc/fstab
 echo $FSTAB_LINE
 echo $FSTAB_LINE | tee -a /etc/fstab
+
+sudo apt-get update
+sudo apt-get install ntfs-3g -y 
 
 # Mount the file.
 umount -a
