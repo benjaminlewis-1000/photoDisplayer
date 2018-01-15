@@ -5,8 +5,13 @@ PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 sudo bash $THIS_DIR/subscripts/mountHardDrive.sh
 
+sudo dpkg-reconfigure tzdata
+
 # Apt-get install all the package manager programs I can use. 
 sudo bash $THIS_DIR/subscripts/aptGetInstall.sh
+
+#Enable ssh
+sudo bash $THIS_DIR/subscripts/sshEnable.sh
 
 # Give permissions to create files from the web interface - used to create database files. 
 sudo bash $THIS_DIR/subscripts/chmodChange.sh
