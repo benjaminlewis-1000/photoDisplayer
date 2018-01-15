@@ -75,12 +75,19 @@ class showScheduler():
         c = conn.cursor()
         c.execute(scheduleQuery)
         result = c.fetchall()
-        self.allSavedShows =  json.loads(result[0][0])
+
+        if len(result) > 0:
+            self.allSavedShows =  json.loads(result[0][0])
+        else:
+            self.allSavedShows = None
 
         # Check if the last retrieval from the database matches the current retrieval; if not,
         # then something has changed on the webpage and we need to re-process the output
         # into an array of arrays describing the show. 
-        if self.lastSavedShows != self.allSavedShows:
+        self.showSchedule = []
+
+
+        if self.allSavedShows is not None and self.lastSavedShows != self.allSavedShows:
             self.showSchedule = []
             # Save the retrieved show as the last show for future comparison.
             self.lastSavedShows = self.allSavedShows

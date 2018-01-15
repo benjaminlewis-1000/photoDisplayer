@@ -8,6 +8,8 @@ sudo bash $THIS_DIR/subscripts/mirrorSetup.sh
 
 sudo dpkg-reconfigure tzdata
 
+sudo bash $THIS_DIR/subscripts/keyboard.sh
+
 sudo bash $THIS_DIR/subscripts/mountHardDrive.sh
 
 # Apt-get install all the package manager programs I can use. 
@@ -39,3 +41,5 @@ sudo bash $THIS_DIR/subscripts/autostart_install.sh
 sudo bash $THIS_DIR/subscripts/sambaSetup.sh
 
 sudo bash $THIS_DIR/subscripts/populateDB.sh
+
+sudo reboot

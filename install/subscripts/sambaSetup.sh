@@ -1,8 +1,8 @@
 #! /bin/bash
 
-# sudo apt-get update -y
-# sudo apt-get upgrade -y 
-# sudo apt-get install samba samba-common-bin -y
+sudo apt-get update -y
+sudo apt-get upgrade -y 
+sudo apt-get install samba samba-common-bin -y
 
 SAMBA_SHARE="
 [share]
