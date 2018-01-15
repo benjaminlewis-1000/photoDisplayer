@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# sudo apt-get install ddclient -y
+sudo apt-get install ddclient -y
 
 USERNAME=benjaminlewis
 PASSWORD=throwawaydns
@@ -34,4 +34,4 @@ sudo chown $USER /etc/ddclient.conf
 
 rm ddclient.conf
 
-/usr/sbin/ddclient -daemon 300 -syslog
+sudo /usr/sbin/ddclient -daemon 300 -syslog
