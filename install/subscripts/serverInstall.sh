@@ -12,30 +12,30 @@ THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"   
 
 read -r -d '' APACHE_CONF_VAR << EOM
-<Directory $PROJECT_ROOT_DIR>
+<Directory $PROJECT_ROOT_DIR/site>
    Options Indexes FollowSymLinks
    AllowOverride None
    Require all granted
-   AddHandler mod\_python .py # Note the space before .py
-   PythonHandler mod\_python.publisher
+   AddHandler mod_python .py # Note the space before .py
+   PythonHandler mod_python.publisher
    PythonDebug on
-<\/Directory>
+</Directory>
 EOM
 
 sudo cp /etc/apache2/apache2.conf /etc/apache2/apache.conf.bk
 
-sudo perl -0777 -p -i -e 's/<Directory \/var\/www.*?<\/Directory>/'"$APACHE_CONF_VAR"'/gs' /etc/apache2/apache2.conf
+sudo perl -0777 -p -i -e 's|<Directory /var/www.*?</Directory>|'"$APACHE_CONF_VAR"'|gs' /etc/apache2/apache2.conf
 
 # Change the document root directory 
 
 read -r -d '' DEFAULT_000_VAR << EOM
-DocumentRoot $PROJECT_ROOT_DIR\/site
+DocumentRoot $PROJECT_ROOT_DIR/site
 EOM
 
 sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.bk
 
 echo $DEFAULT_000_VAR
-sudo sed -i "s|DocumentRoot \/var\/www\/html|${DEFAULT_000_VAR}|g" /etc/apache2/sites-available/000-default.conf
+sudo sed -i "s|DocumentRoot /var/www/html|${DEFAULT_000_VAR}|g" /etc/apache2/sites-available/000-default.conf
 
 # Change dir.conf to adapt the order of sites loaded
 
