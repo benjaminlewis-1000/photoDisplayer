@@ -37,5 +37,5 @@ sudo apt-get install libcurl4-openssl-dev libx11-dev libxt-dev libimlib2-dev lib
 # NTFS filesystem
 sudo apt-get install ntfs-3g -y
 
-
+sudo apt-get install imagemagick -y
 
