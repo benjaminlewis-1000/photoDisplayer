@@ -10,6 +10,7 @@ import termios
 import pexpect
 import threading
 from time import sleep
+import time
 import os
 
 class tvStateManager():
@@ -28,6 +29,7 @@ class tvStateManager():
         self.powerState = 'off'
         self.activeState = 'unknown'
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.safeToDetermineState = False
         
         thread.start_new_thread(self.__tv_state_monitor__, () )
         thread.start_new_thread(self.__command_reader__, (self.process,) )
@@ -83,15 +85,14 @@ class tvStateManager():
     def __command_reader__(self, process):
         # Only reads off data from the cec process, since it will block if there
         # is no new data
-        stdout = ''
         while 1:
             
             # Workaround to check if the queue is empty - see if there is
             # something to read with a nonblocking call   
                     
-            if not self.commandQueue.empty():
+            if not self.commandQueue.empty() :
                 
-                sleep(5)  # Wait a bit - cec-client takes a little while to update to current state, sometimes.
+                ## sleep(5)  # Wait a bit - cec-client takes a little while to update to current state, sometimes.
                 powerState = self.tvIsOn()
                 activeState = self.computerIsActive()
                 
@@ -135,9 +136,12 @@ class tvStateManager():
                     print 'Rejecting command because TV is not on computer input'
                         
     def __tv_state_monitor__(self):
-        print "state monitor"
+
+        lastRead = time.time()
         while 1:
             if not self.cecQueue.empty():
+                lastRead = time.time()
+                self.safeToDetermineState = False
                 stdout = self.cecQueue.get()
                 
                 if re.match(".*?power status changed.*to 'on'.*?", stdout):
@@ -170,9 +174,12 @@ class tvStateManager():
                         self.activeQueue.get()
                     # Put the latest state in the queue
                     self.activeQueue.put('raspi')
+            else:
+                if (time.time() - lastRead) == 2:
+                    self.safeToDetermineState = True`
                     
     def tvIsOn(self):
-        if not self.powerQueue.empty():
+        if not self.powerQueue.empty() and self.safeToDetermineState:
             self.powerState = self.powerQueue.get()
         # If nothing has changed, the queue will be empty and the state 
         # won't have changed
@@ -180,7 +187,7 @@ class tvStateManager():
         return self.powerState 
                 
     def computerIsActive(self):
-        if not self.activeQueue.empty():
+        if not self.activeQueue.empty() and self.safeToDetermineState:
             self.activeState = self.activeQueue.get()
         # If nothing has changed, the queue will be empty and the state 
         # won't have changed
