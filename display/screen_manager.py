@@ -37,7 +37,7 @@ class tvStateManager():
         self.__determine_unknown_state__()
         
     def __determine_unknown_state__(self):
-        sleep(15)
+        sleep(5)
         computerState = self.computerIsActive()
         powerState = self.tvIsOn()
         # Sleep 10 seconds if necessary
@@ -46,18 +46,18 @@ class tvStateManager():
         if powerState == 'on' or powerState == 'unknown': 
             # Don't want to mess with currently powered on TV - either it's
             # on the right input already or we don't want to hijack the TV from someone. 
-            threading.Timer(10, self.__determine_unknown_state__).start()
+            threading.Timer(5, self.__determine_unknown_state__).start()
         else: # Power is off
             if powerState == 'off':
                 imgname = os.path.join(self.dir_path, 'dontpanic.png')
                 imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
                 self.process.sendline('as')
-                sleep(15)
+                sleep(5)
                 computerState = self.computerIsActive()
                 if computerState == 'raspi' :
                     print "Computer state is known as raspi"
                     self.process.sendline('standby 0')
-                    
+
                 if computerState == 'raspi' or computerState == 'not_raspi':
                     imshow.terminate()
                     return
@@ -65,11 +65,11 @@ class tvStateManager():
                     print "Try, try again"
                     print "Comuter state is {}, power state is {}".format(computerState, powerState)
                     # Try, try again
-                    threading.Timer(10, self.__determine_unknown_state__).start()
+                    threading.Timer(5, self.__determine_unknown_state__).start()
                 
             else:  # Shoot, someone turned the TV back on. Try again later. 
                 # Try, try again
-                threading.Timer(10, self.__determine_unknown_state__).start()
+                threading.Timer(5, self.__determine_unknown_state__).start()
                         
     def __cec_output_consumer__(self, process):
         # This thread will block, but that's OK because the only thing it does is 
