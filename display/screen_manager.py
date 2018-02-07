@@ -52,7 +52,8 @@ class tvStateManager():
                 imgname = os.path.join(self.dir_path, 'dontpanic.png')
                 imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
                 self.process.sendline('as')
-                sleep(5)
+                while not self.safeToDetermineState:
+                    sleep(2)
                 computerState = self.computerIsActive()
                 if computerState == 'raspi' :
                     print "Computer state is known as raspi"
@@ -63,7 +64,7 @@ class tvStateManager():
                     return
                 else:
                     print "Try, try again"
-                    print "Comuter state is {}, power state is {}".format(computerState, powerState)
+                    print "Computer state is {}, power state is {}".format(computerState, powerState)
                     # Try, try again
                     threading.Timer(5, self.__determine_unknown_state__).start()
                 
@@ -167,6 +168,7 @@ class tvStateManager():
                     while not self.activeQueue.empty():
                         self.activeQueue.get()
                     # Put the latest state in the queue
+                    print "Putting not_raspi"
                     self.activeQueue.put('not_raspi')
                 elif re.match(".*?making recorder.* the active source.*?", stdout):
                     print "raspi is the active source"
@@ -174,6 +176,7 @@ class tvStateManager():
                     while not self.activeQueue.empty():
                         self.activeQueue.get()
                     # Put the latest state in the queue
+                    print "Putting raspi"
                     self.activeQueue.put('raspi')
             else:
                 if (time.time() - lastRead) == 2:
