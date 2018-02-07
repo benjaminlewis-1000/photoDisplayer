@@ -37,10 +37,10 @@ class tvStateManager():
         self.__determine_unknown_state__()
         
     def __determine_unknown_state__(self):
+        sleep(15)
         computerState = self.computerIsActive()
         powerState = self.tvIsOn()
         # Sleep 10 seconds if necessary
-        sleep(15)
         if computerState == 'raspi' or computerState == 'not_raspi':
             return # We have our answer 
         if powerState == 'on' or powerState == 'unknown': 
@@ -54,15 +54,16 @@ class tvStateManager():
                 self.process.sendline('as')
                 sleep(15)
                 computerState = self.computerIsActive()
-                if computerState == 'raspi' or computerState == 'unknown':
+                if computerState == 'raspi' :
+                    print "Computer state is known as raspi"
                     self.process.sendline('standby 0')
-                    sleep(15)
+                    
                 if computerState == 'raspi' or computerState == 'not_raspi':
-                    print "Computer state is good"
                     imshow.terminate()
                     return
                 else:
                     print "Try, try again"
+                    print "Comuter state is {}, power state is {}".format(computerState, powerState)
                     # Try, try again
                     threading.Timer(10, self.__determine_unknown_state__).start()
                 
@@ -176,7 +177,7 @@ class tvStateManager():
                     self.activeQueue.put('raspi')
             else:
                 if (time.time() - lastRead) == 2:
-                    self.safeToDetermineState = True`
+                    self.safeToDetermineState = True
                     
     def tvIsOn(self):
         if not self.powerQueue.empty() and self.safeToDetermineState:
@@ -225,20 +226,21 @@ class tvStateManager():
             print "Turning on TV as asked for"
             self.turnOnScreen()
             threading.Timer(nextNSeconds, self.turnOffScreen).start()
-            
-ccl = tvState()
+        
+if __name__ == "__main__":  
+    ccl = tvStateManager()
 
-while 1:
-    sys.stdout.flush()
-    termios.tcflush(sys.stdin, termios.TCIFLUSH)
-    filename = raw_input()
-    if filename.lower() == 'on':
-        ccl.turnOnScreen()
-    elif filename.lower() == 'toggle':
-        ccl.toggleScreen()
-    elif filename.lower() == 'off':
-        ccl.turnOffScreen()
-    elif filename.lower() == 'askon':
-        ccl.askForTvOn(60)
+    while 1:
+        sys.stdout.flush()
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
+        filename = raw_input()
+        if filename.lower() == 'on':
+            ccl.turnOnScreen()
+        elif filename.lower() == 'toggle':
+            ccl.toggleScreen()
+        elif filename.lower() == 'off':
+            ccl.turnOffScreen()
+        elif filename.lower() == 'askon':
+            ccl.askForTvOn(60)
 
 
