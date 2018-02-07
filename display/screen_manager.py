@@ -30,6 +30,8 @@ class tvStateManager():
         self.activeState = 'unknown'
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
         self.safeToDetermineState = False
+        
+        self.desiredState = 'off'
 
         self.stateSafeSemaphore = threading.Condition()
         
@@ -53,20 +55,20 @@ class tvStateManager():
             if powerState == 'off':
                 imgname = os.path.join(self.dir_path, 'dontpanic.png')
                 imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
+                self.process.sendline('as') 
                 self.process.sendline('as')
 
                 safeState = False
-                while not safeState:
-                    sleep(2)
-                    self.stateSafeSemaphore.acquire()
-                    safeState = self.safeToDetermineState 
-                    self.stateSafeSemaphore.release()
-                    print "State safety in loop is {}".format(safeState)
+                #while not safeState:
+                #    sleep(2)
+                #    self.stateSafeSemaphore.acquire()
+                #    safeState = self.safeToDetermineState 
+                #    self.stateSafeSemaphore.release()
 
                 computerState = self.computerIsActive()
                 if computerState == 'raspi' :
-                    print "Computer state is known as raspi"
-                    self.process.sendline('standby 0')
+                    print "Computer state is known as raspi - turning off screen"
+                    self.turnOffScreen()
 
                 if computerState == 'raspi' or computerState == 'not_raspi':
                     imshow.terminate()
@@ -101,62 +103,73 @@ class tvStateManager():
             # Workaround to check if the queue is empty - see if there is
             # something to read with a nonblocking call   
                     
-            if not self.commandQueue.empty() :
+            self.stateSafeSemaphore.acquire()
+            safeState = self.safeToDetermineState 
+            self.stateSafeSemaphore.release()
+            
+            if not self.commandQueue.empty():
                 
-                ## sleep(5)  # Wait a bit - cec-client takes a little while to update to current state, sometimes.
-                powerState = self.tvIsOn()
-                activeState = self.computerIsActive()
                 
                 command = self.commandQueue.get(False)
                 if command == 'toggle' and activeState == 'raspi':
                     if powerState == 'on':
-                        string = 'off'                    
+                        desiredPowerState = 'off'                    
                     else:
-                        string = 'on'
+                        desiredPowerState = 'on'
                     print "Command toggle received in thread - turning {}".format(string)
+                elif command == 'turnOn' and powerState == 'off':
+                    desiredPowerState = 'off'
+                elif command == 'turnOff' and activeState == 'raspi':
+                    desiredPowerState = 'on'
+                else:
+                    # Not in the right state or the command isn't valid
+                    print 'Rejecting command because TV is not on computer input'
+                
+                ## sleep(5)  # Wait a bit - cec-client takes a little while to update to current state, sometimes.
+                powerState = self.tvIsOn()
+                activeState = self.computerIsActive()
                     if powerState == 'on':
                         while powerState == 'on':
                             self.process.sendline('standby 0')
-                            sleep(5)
+                            sleep(7)
                             powerState = self.tvIsOn()
                             
                         # echo on 0
                     else:
                         while powerState == 'off':
                             self.process.sendline('as')
-                            sleep(5)
+                            self.process.sendline('as')
+                            sleep(7)
                             powerState = self.tvIsOn()
                     # Toggle screen
-                elif command == 'turnOn' and powerState == 'off':
                     print "Command turnon received in thread - turning on"
                     while powerState == 'off':
                         self.process.sendline('as')
-                        sleep(5)
+                        self.process.sendline('as')
+                        sleep(7)
                         powerState = self.tvIsOn()
                     # Else, don't change anything
                     # Turn on the screen if not on something else
-                elif command == 'turnOff' and activeState == 'raspi':
                     print "Command turnoff received in thread - turning off"
                     while powerState == 'on':
+                        print "Power state is on..."
                         self.process.sendline('standby 0')
-                        sleep(5)
+                        sleep(7)
                         powerState = self.tvIsOn()
                     # Turn off the screen if raspi is active
-                else:
-                    # Not in the right state or the command isn't valid
-                    print 'Rejecting command because TV is not on computer input'
                         
     def __tv_state_monitor__(self):
 
         lastRead = time.time()
         while 1:
             if not self.cecQueue.empty():
+            
                 lastRead = time.time()
                 self.stateSafeSemaphore.acquire()
                 self.safeToDetermineState = False
-                print "not safe to determine state"
                 self.stateSafeSemaphore.release()
                 stdout = self.cecQueue.get()
+                # print stdout
                 
                 if re.match(".*?power status changed.*to 'on'.*?", stdout):
                     # print "Power turned on"
@@ -164,6 +177,7 @@ class tvStateManager():
                     while not self.powerQueue.empty():
                         self.powerQueue.get()
                     # Put the latest state in the queue
+                    print "Putting power on"
                     self.powerQueue.put('on')
                     
                 elif re.match(".*?power status changed.*to 'standby'.*?", stdout):
@@ -172,6 +186,7 @@ class tvStateManager():
                     while not self.powerQueue.empty():
                         self.powerQueue.get()
                     # Put the latest state in the queue
+                    print "Putting power off"
                     self.powerQueue.put('off')
                     
                 elif re.match(".*?making tv.*the active source.*?", stdout):
@@ -191,21 +206,17 @@ class tvStateManager():
                     print "Putting raspi"
                     self.activeQueue.put('raspi')
             else:
-                if (time.time() - lastRead) == 2:
+                if (time.time() - lastRead) > 3.5:
                     self.stateSafeSemaphore.acquire()
                     self.safeToDetermineState = True
-                    print "safe to determine state"
                     self.stateSafeSemaphore.release()
-                else:
-                    print "Current time is {}, last read is {}, diff is {}".format(time.time(), lastRead, time.time() - lastRead)
                     
     def tvIsOn(self):
         self.stateSafeSemaphore.acquire()
         safeState = self.safeToDetermineState 
         self.stateSafeSemaphore.release()
 
-        print "State safety is {}".format(safeState)
-        if not self.powerQueue.empty() and safeState :
+        if not self.powerQueue.empty() :
             self.powerState = self.powerQueue.get()
         # If nothing has changed, the queue will be empty and the state 
         # won't have changed
@@ -218,9 +229,7 @@ class tvStateManager():
         safeState = self.safeToDetermineState 
         self.stateSafeSemaphore.release()
 
-        print "State safety is {}".format(safeState)
-
-        if not self.activeQueue.empty() and safeState:
+        if not self.activeQueue.empty() :
             self.activeState = self.activeQueue.get()
         # If nothing has changed, the queue will be empty and the state 
         # won't have changed
