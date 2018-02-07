@@ -18,12 +18,8 @@ import calendar
 import xmltodict
 import shlex
 import thread
-import threading
 from scheduleRunner import showScheduler
 from buildQuery import buildQueryFromJSON
-
-import queryMaker
-import screen_manager
 
 if len(sys.argv) > 1:
     debug = 1
@@ -32,6 +28,8 @@ else:
 
 #### Get our root path
 rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
+
+
 
 ######### Set up the actual server #####################################
 
@@ -44,21 +42,24 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 class displayServer:
 
     def __init__(self, xmlParams):
-
         self.server = SimpleXMLRPCServer(("127.0.0.1", int(xmlParams['params']['serverParams']['displayServerPort'])),
                                     requestHandler=RequestHandler)
         self.server.register_introspection_functions()
 
         # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
         self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
-       
+        # print self.commandArray
+        # print self.commandString
+
         self.masterQuery = ""
+
         self.xmlParams = xmlParams
-        self.printDebug = False
+
+        self.printDebug = True
 
         ### Connect to the database
-        self.photoDatabase = sqlite3.connect(os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName']) )
-        self.photoDatabase.text_factory = str  # For UTF-8 compatibility
+        self.conn = sqlite3.connect(os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName']) )
+        self.conn.text_factory = str  # For UTF-8 compatibility
 
         self.fileListName = '.slideshowFileList.txt'
         if (os.path.isfile(self.fileListName) ):
@@ -69,11 +70,9 @@ class displayServer:
         self.showRunning = False
         self.showRunningName = None
 
+        self.powerCycling = False
         self.stream = open(rootDir + '/serverLog.txt', 'w') 
         print >>self.stream, "Server log file opened."
-
-        self.queryMachine = queryMaker.QueryMaker(self.xmlParams)
-        self.screenManager = screen_manager.tvStateManager()
 
     ###### Slideshow function, avaliable as server call
     def setSlideshowProperties(self, propertiesJSON):
@@ -83,11 +82,17 @@ class displayServer:
         debug = [];
 
         # # Set properties, according to page https://linux.die.net/man/1/feh
+        # Default, read from file | -f <filename>
+
         # Action   |  -A
         # # Set to zoom fully with no borders: 
         # Auto-Zoom    |   -Z
         # Borderless window  | -x
         # Fullscreen  | -F
+
+        debug.append("Args passed: " + str(propertiesJSON)  )
+        properties = json.loads(propertiesJSON)
+
         # Hide pointer  | -Y
         # Randomize     | -z
         # Delay (sec)   | -D (int)
@@ -95,12 +100,12 @@ class displayServer:
         # Show filename  | -d
         # No menus   | -N
 
-        debug.append("Args passed: " + str(propertiesJSON)  )
-        properties = json.loads(propertiesJSON)
-
         #### As-yet unexplored properties:
+        # Quiet mode  | -q
         # Sort (with parameters) | -S <param> - name, filename, mtime, width, height, pixels, size, format. 
         # Stretch small images | -s
+
+        #  "-YFxZNz", "-D", "2", "--auto-rotate", "-d",
 
         self.commandArray = ["--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
         self.commandArray.append('--auto-rotate')
@@ -143,47 +148,51 @@ class displayServer:
         print retVal
         return retVal
 
-    def startSlideshow(self, runLengthSec=3600):
+    def startSlideshow(self):
+        
+        print >>self.stream, 'Starting slideshow'
+        while self.powerCycling:
+            sleep(1)
 
+        try:
+            print >>self.stream, "or maybe here?"
+            thread.start_new_thread(self.tvOn, ())
+            # self.tvOn()
+        except Exception as e:
+            print e
+
+        print >>self.stream, "Done turning on TV, starting slideshow"
+         
         returnDict = {}
         errs = []
         debug = []
-        
-        print >>self.stream, 'Starting slideshow'
 
-        self.screenManager.askForTvOn(runLengthSec)
-        
         if currentOS != self.xmlParams['params']['ostypes']['linuxType']:
             errs.append('The current OS is not supported as a slideshow type.')
             returnDict['exceptions'] = errs;
             returnDict['debug'] = debug;
             return returnDict;
 
+        print >>self.stream, "I am here,  starting the slideshow"
         self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
 
+        debug.append("Slideshow is launching...")
         print >>self.stream, self.p
 
+        stream.close()
+
+        print >>self.stream, debug
         self.showRunning = True
         returnDict['exceptions'] = errs;
         returnDict['debug'] = debug;
-        threading.Timer(runLengthSec, self.endSlideshow).start()
         print >>self.stream, "The slideshow has launched"
         return returnDict;
 
-    def endSlideshow(self):
-        print "Ending slideshow"
-        debug = []
-        if self.p != None: 
-            self.p.terminate()
-        debug.append("Ending slideshow")
-       
-        returnDict = {}
-        returnDict['exceptions'] = []
-        returnDict['debug'] = debug
-        self.showRunning = False
-        self.showRunningName = None
-        print "Show has now stopped, showServer"
-        return json.dumps(returnDict)
+    def getShowRunningState(self):
+        print 'Getting show running state'
+        print "running name in server: " +  str(self.showRunningName)
+        return json.dumps([self.showRunning, self.showRunningName])
+
 
     def buildQuery(self, criteriaJSON, **optionalParams):
         print >>self.stream, criteriaJSON
@@ -199,6 +208,10 @@ class displayServer:
         errs = [];
         debug = [];
 
+        # returnDict['exceptions'] = errs;
+        # returnDict['debug'] = debug;
+        # return json.dumps(returnDict);
+
         debug.append("Root directory was: " + rootDir);
         print >>self.stream, "Building a query... {}".format(criteriaJSON)
 
@@ -206,11 +219,16 @@ class displayServer:
         ## Therefore, it is necessary to kill the subprocess that is running
         ## feh, if there is one, before overwriting the file.
 
+        #if self.p != None:
+        #    poll = self.p.poll()
+        #else:
+        #    poll = 1
+
         if self.p != None: 
             self.p.terminate()
             self.p.wait()
             
-        print "Done killing the previous show"
+        print "Done killing the window"
 
         ## IMPORTANT NOTE: When building a query that will be INTERSECTED with something else but has UNIONS in it,
         ## it must be wrapped in '''SELECT * FROM ( <the query> ).
@@ -218,10 +236,23 @@ class displayServer:
         debug.append('JSON criteria was: ' + criteriaJSON);
         slideshowParams = json.loads(str(criteriaJSON))
 
-        self.masterQuery = self.queryMachine.buildQueryFromJSON(criteriaJSON)
+        self.masterQuery = buildQueryFromJSON(criteriaJSON, self.xmlParams)
+
+#        if self.printDebug:
+# u          with open('queryTest.out', 'w+') as f:
+#                print >>f, orPersonQuery
+#                print >>f, andPersonQuery
+#                print >>f, andYearQuery
+#                print >>f, orYearQuery
+#                print >>f, orDateRangeQuery
+#                print >>f, buildDates
+#                print >>f, self.masterQuery
+#        else:
+#            with open('queryTest.out', 'w+') as f:
+#                print >>f, self.masterQuery
 
         if self.masterQuery != "":
-            c = self.photoDatabase.cursor()
+            c = self.conn.cursor()
             c.execute(self.masterQuery)
             fileResults = c.fetchall()
 
@@ -270,8 +301,6 @@ class displayServer:
                 print "Error!" 
         else:
             errs.append('Invalid request.')
-
-        assert False, "Nothing is starting the show running after determining a filename."
             
         debug.append("Final query was: " + self.masterQuery)
         print "Show running name is " + self.showRunningName
@@ -280,12 +309,128 @@ class displayServer:
         returnDict['debug'] = debug;
         return json.dumps(returnDict);
 
+        # return self.xmlParams['params']['serverParams']['successVal']
+
+    def checkDisplayStatus(self):
+        print >>self.stream, 'checkDisplayStatus was called.'
+        echoProc = subprocess.Popen(['echo', 'pow 0'], stdout = subprocess.PIPE)
+        cecProc = subprocess.Popen(['cec-client' , '-d', '1', '-s'], stdin=echoProc.stdout, stdout=subprocess.PIPE)
+        print >>self.stream, "processes defined" 
+        try:
+            output = cecProc.communicate()
+        except Exception as e:
+            print >>self.stream, e
+        print >>self.stream, "Output of display status is : " + str(output)
+        return str(output)
+
+    def endSlideshow(self):
+        print "Ending slideshow"
+        debug = []
+        if self.p != None: 
+            self.p.terminate()
+        debug.append("Ending slideshow")
+        try:
+            if not self.powerCycling:
+                thread.start_new_thread(self.tvOff, ())
+                # self.tvOff()
+        except Exception as e:
+            print e
+        returnDict = {}
+        returnDict['exceptions'] = []
+        returnDict['debug'] = debug
+        self.showRunning = False
+        self.showRunningName = None
+        print "Show has now stopped, showServer"
+        print json.dumps(returnDict)
+        return json.dumps(returnDict)
+
+    def turnOnTV(self, onJSON):
+        debug = []
+
+        if onJSON != "Off":
+            statusString = self.checkDisplayStatus()
+
+        else:
+            statusString = ""
+
+
+        if re.search('power status: standby', statusString) or onJSON['On'] == "True":
+            debug.append(statusString)
+            debug.append("Turning on TV")
+            try:
+                if not self.powerCycling:
+                    thread.start_new_thread(self.tvOn, ())
+                    print >>self.stream, "tv on here?"
+                    # self.tvOn()
+            except Exception as e:
+                print e
+        elif onJSON['On'] == 'End Slideshow':
+            self.endSlideshow()
+        else:
+            # The power is on already
+            print "Turning to standby"
+            debug.append(statusString)
+            debug.append("Turning to standby")
+            try:
+                if not self.powerCycling:
+                    self.tvOff()
+            except Exception as e:
+                print e
+            # os.system('echo standby 0 | cec-client -s -d 1')
+
+        returnDict = {}
+        returnDict['exceptions'] = []
+        returnDict['debug'] = debug
+        print json.dumps(returnDict)
+        return json.dumps(returnDict)
+
+    def tvOn(self):
+        self.powerCycling = True
+        numTries = 0
+        print >>self.stream, "on called"
+        statusString = self.checkDisplayStatus()
+        print >>self.stream, "Status run #1"
+        while (not (re.search('power status: on', statusString) or re.search('from standby to on', statusString) ) ) and numTries < 5:
+            os.system('echo on 0 | cec-client -s -d 1')
+            sleep(1)
+            numTries += 1
+            statusString = self.checkDisplayStatus()
+            print >>self.stream, statusString
+        self.powerCycling = False
+        print >>self.stream, "TV turn on was successful"
+
+    def tvOff(self):
+        print "turning off..."
+        self.powerCycling = True
+        numTries = 0
+        print >>self.stream, "off called"
+        statusString = self.checkDisplayStatus()
+        while (not re.search('power status: standby', statusString) ) and numTries < 5 :
+            os.system('echo standby 0 | cec-client -s -d 1')
+            print "trying off"
+            sleep(1)
+            numTries += 1
+            statusString = self.checkDisplayStatus()
+            print >>self.stream, statusString
+        self.powerCycling = False
+        print >>self.stream, "Off was successful"
+
     def loadSavedShow(self, requestedShow):
 
         self.showRunningName = requestedShow
 
-        runLength = 3600
-        self.screenManager.askForTvOn(3600)
+        while self.powerCycling:
+            sleep(1)
+
+        try:
+            thread.start_new_thread(self.tvOn, ())
+            print >>self.stream, "or on here?"
+            # self.tvOn()
+        except Exception as e:
+            print e
+         
+
+        print >>self.stream, "turning on TV"
 
         # Obtain all of the parameters for the database where the website defines slideshows.
         siteDatabasePath = os.path.join(rootDir, 'site', self.xmlParams['params']['websiteParams']['siteDBname'])
@@ -322,15 +467,12 @@ class displayServer:
         report = self.buildQuery(jsonResult, loadingSavedShow=True)
         return report
 
-    def getShowRunningState(self):
-        print 'Getting show running state'
-        print "running name in server: " +  str(self.showRunningName)
-        return json.dumps([self.showRunning, self.showRunningName])
 
     def run(self):
         self.server.register_function(self.startSlideshow, 'startSlideshow')
         self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
         self.server.register_function(self.buildQuery, 'buildQuery')
+        self.server.register_function(self.turnOnTV, 'turnOnTV')
         self.server.register_function(self.loadSavedShow, 'loadSavedShow')
         self.server.register_function(self.endSlideshow, 'endSlideshow')
         self.server.register_function(self.getShowRunningState, 'getShowRunningState')
@@ -346,8 +488,6 @@ if __name__ == '__main__':
         except Exception as exc:
             print(exc)
             exit(1)
-
-
 
     ### Determine that we are on linux
     osRegex = re.search('.*nux.?', sys.platform)

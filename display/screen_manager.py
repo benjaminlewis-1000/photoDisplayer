@@ -12,7 +12,7 @@ import threading
 from time import sleep
 import os
 
-class tvState():
+class tvStateManager():
 
     def __init__(self):
         
