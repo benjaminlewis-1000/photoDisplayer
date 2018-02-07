@@ -154,6 +154,7 @@ class tvStateManager():
                 lastRead = time.time()
                 self.stateSafeSemaphore.acquire()
                 self.safeToDetermineState = False
+                print "not safe to determine state"
                 self.stateSafeSemaphore.release()
                 stdout = self.cecQueue.get()
                 
@@ -195,6 +196,8 @@ class tvStateManager():
                     self.safeToDetermineState = True
                     print "safe to determine state"
                     self.stateSafeSemaphore.release()
+                else:
+                    print "Current time is {}, last read is {}, diff is {}".format(time.time(), lastRead, time.time() - lastRead)
                     
     def tvIsOn(self):
         self.stateSafeSemaphore.acquire()
