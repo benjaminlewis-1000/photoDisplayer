@@ -61,7 +61,8 @@ class tvStateManager():
                     self.stateSafeSemaphore.acquire()
                     safeState = self.safeToDetermineState 
                     self.stateSafeSemaphore.release()
-                    
+                    print "State safety in loop is {}".format(safeState)
+
                 computerState = self.computerIsActive()
                 if computerState == 'raspi' :
                     print "Computer state is known as raspi"
@@ -192,6 +193,7 @@ class tvStateManager():
                 if (time.time() - lastRead) == 2:
                     self.stateSafeSemaphore.acquire()
                     self.safeToDetermineState = True
+                    print "safe to determine state"
                     self.stateSafeSemaphore.release()
                     
     def tvIsOn(self):
@@ -199,6 +201,7 @@ class tvStateManager():
         safeState = self.safeToDetermineState 
         self.stateSafeSemaphore.release()
 
+        print "State safety is {}".format(safeState)
         if not self.powerQueue.empty() and safeState :
             self.powerState = self.powerQueue.get()
         # If nothing has changed, the queue will be empty and the state 
@@ -211,6 +214,8 @@ class tvStateManager():
         self.stateSafeSemaphore.acquire()
         safeState = self.safeToDetermineState 
         self.stateSafeSemaphore.release()
+
+        print "State safety is {}".format(safeState)
 
         if not self.activeQueue.empty() and safeState:
             self.activeState = self.activeQueue.get()
