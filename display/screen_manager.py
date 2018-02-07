@@ -30,6 +30,8 @@ class tvStateManager():
         self.activeState = 'unknown'
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
         self.safeToDetermineState = False
+
+        self.stateSafeSemaphore = threading.Condition()
         
         thread.start_new_thread(self.__tv_state_monitor__, () )
         thread.start_new_thread(self.__command_reader__, (self.process,) )
@@ -52,8 +54,14 @@ class tvStateManager():
                 imgname = os.path.join(self.dir_path, 'dontpanic.png')
                 imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
                 self.process.sendline('as')
-                while not self.safeToDetermineState:
+
+                safeState = False
+                while not safeState:
                     sleep(2)
+                    self.stateSafeSemaphore.acquire()
+                    safeState = self.safeToDetermineState 
+                    self.stateSafeSemaphore.release()
+                    
                 computerState = self.computerIsActive()
                 if computerState == 'raspi' :
                     print "Computer state is known as raspi"
@@ -143,7 +151,9 @@ class tvStateManager():
         while 1:
             if not self.cecQueue.empty():
                 lastRead = time.time()
+                self.stateSafeSemaphore.acquire()
                 self.safeToDetermineState = False
+                self.stateSafeSemaphore.release()
                 stdout = self.cecQueue.get()
                 
                 if re.match(".*?power status changed.*to 'on'.*?", stdout):
@@ -180,10 +190,16 @@ class tvStateManager():
                     self.activeQueue.put('raspi')
             else:
                 if (time.time() - lastRead) == 2:
+                    self.stateSafeSemaphore.acquire()
                     self.safeToDetermineState = True
+                    self.stateSafeSemaphore.release()
                     
     def tvIsOn(self):
-        if not self.powerQueue.empty() and self.safeToDetermineState:
+        self.stateSafeSemaphore.acquire()
+        safeState = self.safeToDetermineState 
+        self.stateSafeSemaphore.release()
+
+        if not self.powerQueue.empty() and safeState :
             self.powerState = self.powerQueue.get()
         # If nothing has changed, the queue will be empty and the state 
         # won't have changed
@@ -191,7 +207,12 @@ class tvStateManager():
         return self.powerState 
                 
     def computerIsActive(self):
-        if not self.activeQueue.empty() and self.safeToDetermineState:
+
+        self.stateSafeSemaphore.acquire()
+        safeState = self.safeToDetermineState 
+        self.stateSafeSemaphore.release()
+
+        if not self.activeQueue.empty() and safeState:
             self.activeState = self.activeQueue.get()
         # If nothing has changed, the queue will be empty and the state 
         # won't have changed
