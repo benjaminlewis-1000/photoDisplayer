@@ -113,7 +113,7 @@ class tvStateManager():
       # desiredPowerState = 'off'
       while 1:
         
-        sleep(2)
+        sleep(1.5)
 
         # Workaround to check if the queue is empty - see if there is
         # something to read with a nonblocking call   
@@ -124,10 +124,11 @@ class tvStateManager():
         
         if not self.commandQueue.empty():
             
+            print "Power is {}, active is {}, desired is {}".format(powerState, activeState, desiredState)
             command = self.commandQueue.get(False)
-            if command == 'toggle' and activeState == 'raspi':
+            if command == 'toggle' and (activeState == 'raspi' or powerState == 'off'):
                 if powerState == 'on':
-                    self.__setDesiredPowerState__('off')            
+                    self.__setDesiredPowerState__('off')
                 else:
                     self.__setDesiredPowerState__('on')
                 print "Asked for power to toggle"
@@ -141,7 +142,7 @@ class tvStateManager():
                 # Not in the right state or the command isn't valid
                 print 'Rejecting command because TV is not on computer input'
               
-            print "Command received in thread - command was {}".format(command)
+            # print "Command received in thread - command was {}".format(command)
 
 
 
@@ -227,7 +228,7 @@ class tvStateManager():
                 print "standby requested"
                 standby_requested = True
             
-            if re.match(".*?power status changed.*to 'on'.*?", stdout):
+            if re.match(".*?power status changed.*to 'on'.*?", stdout) or re.match(".*in transition from standby to on.*", stdout):
                 # print "Power turned on"
                 # Clear the queue
                 self.__setPowerState__('on')
@@ -251,20 +252,14 @@ class tvStateManager():
               
             elif re.match(".*?making tv.*the active source.*?", stdout):
                 print "raspi is not the active source"
-                # Clear the queue
-                while not self.activeQueue.empty():
-                    self.activeQueue.get()
                 # Put the latest state in the queue
                 print "Putting not_raspi"
-                self.activeQueue.put('not_raspi')
+                self.__setActiveState__('not_raspi')
             elif re.match(".*?making recorder.* the active source.*?", stdout):
                 print "raspi is the active source"
-                # Clear the queue
-                while not self.activeQueue.empty():
-                    self.activeQueue.get()
                 # Put the latest state in the queue
                 print "Putting raspi"
-                self.activeQueue.put('raspi')
+                self.__setActiveState__('raspi')
         else:
             if (time.time() - lastRead) > 3.5:
                 pass            
@@ -298,55 +293,54 @@ class tvStateManager():
   #    return self.activeState
             
     def toggleScreen(self):
-      self.commandQueue.put('toggle', False)
-      pass
+        self.commandQueue.put('toggle', False)
+        pass
       
     def turnOnScreen(self):
-      self.commandQueue.put('turnOn', False)
+        self.commandQueue.put('turnOn', False)
       
     def turnOffScreen(self):
-      self.commandQueue.put('turnOff', False)
+        print "Turn off was asked for"
+        self.commandQueue.put('turnOff', False)
       
     def askForTvOn(self, nextNSeconds):
-      sleep(5)
-      self.stateSemaphore.acquire()
-      activeState = self.activeState
-      self.stateSemaphore.release()
-      self.powerSemaphore.acquire()
-      powerState = self.powerSemaphore
-      self.powerSemaphore.release()
-      
-      if powerState == 'on' and activeState == 'raspi':
-        # Good, we're in the state we need to be in. 
-        # Turn it off in nextNSeconds seconds
-        "TV is already on"
-        self.turnOnScreen()
-        threading.Timer(nextNSeconds, self.turnOffScreen).start()
-      elif activeState != 'raspi' and powerState == 'on':
-        # Not on the raspberry pi and TV is on
-        # Wait a minute and try again
-        waitTime = 10
-        print "Can't turn TV on, not active source"
-        threading.Timer(waitTime, self.askForTvOn, [nextNSeconds - waitTime]).start()
-      else: #  powerState == 'off'
-        print "Turning on TV as asked for"
-        self.turnOnScreen()
-        threading.Timer(nextNSeconds, self.turnOffScreen).start()
+        sleep(5)
+        powerState = self.__getPowerState__()
+        activeState = self.__getActiveState__()
+        
+        print "Power is {}, active is {} in askForTV".format(powerState, activeState)
+        
+        if powerState == 'on' and activeState == 'raspi':
+            # Good, we're in the state we need to be in. 
+            # Turn it off in nextNSeconds seconds
+            "TV is already on"
+            self.turnOnScreen()
+            threading.Timer(nextNSeconds, self.turnOffScreen).start()
+        elif activeState != 'raspi' and powerState == 'on':
+            # Not on the raspberry pi and TV is on
+            # Wait a minute and try again
+            waitTime = 3
+            print "Can't turn TV on, not active source"
+            threading.Timer(waitTime, self.askForTvOn, [nextNSeconds - waitTime]).start()
+        else: #  powerState == 'off'
+            print "Turning on TV as asked for"
+            self.turnOnScreen()
+            threading.Timer(nextNSeconds, self.turnOffScreen).start()
       
 if __name__ == "__main__":  
     ccl = tvStateManager()
 
     while 1:
-      sys.stdout.flush()
-      termios.tcflush(sys.stdin, termios.TCIFLUSH)
-      filename = raw_input()
-      if filename.lower() == 'on':
-        ccl.turnOnScreen()
-      elif filename.lower() == 'toggle':
-        ccl.toggleScreen()
-      elif filename.lower() == 'off':
-        ccl.turnOffScreen()
-      elif filename.lower() == 'askon':
-        ccl.askForTvOn(60)
+        sys.stdout.flush()
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
+        filename = raw_input()
+        if filename.lower() == 'on':
+            ccl.turnOnScreen()
+        elif filename.lower() == 'toggle':
+            ccl.toggleScreen()
+        elif filename.lower() == 'off':
+            ccl.turnOffScreen()
+        elif filename.lower() == 'askon':
+            ccl.askForTvOn(160)
 
 
