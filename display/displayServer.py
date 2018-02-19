@@ -200,7 +200,7 @@ class displayServer():
                 
                 print >>self.stream, "Done turning on TV, starting slideshow"
                  
-                self.p = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+                self.display_executable = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
 
                 debug.append("Slideshow is launching...")
 
@@ -222,6 +222,12 @@ class displayServer():
         return json.dumps(returnDict);
 
     def endSlideshow(self):
+        self.showRunningName = None
+        self.screenManager.turnOffScreen()
+        
+        if self.display_executable != None: 
+            self.display_executable.terminate()
+            self.display_executable.wait()
         pass
 
     def setSlideshowProperties(self, propertiesJSON):
