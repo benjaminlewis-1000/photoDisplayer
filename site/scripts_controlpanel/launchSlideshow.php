@@ -253,7 +253,7 @@
 
         $requestArray = array();        
         $optionRequest = xmlrpc_encode_request("setSlideshowProperties" , array($options));
-        $parameterRequest = xmlrpc_encode_request("buildQuery" , array($parsed_text));
+        $parameterRequest = xmlrpc_encode_request("startSlideshowWithQuery" , array($parsed_text));
 
         $requestArray[] = $optionRequest;
         $requestArray[] = $parameterRequest;

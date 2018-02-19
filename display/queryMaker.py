@@ -1,13 +1,23 @@
 #! /usr/bin/env python
 
 import json
+import xmltodict
+import datetime
 
 class QueryMaker():
 
-    def __init__(self, xmlParams):
-        self.xmlParams = xmlParams
+    def __init__(self, xmlParamFile):#, xmlParams):
+        print "Init query maker..."
+        self.xmlParams = xmlParamFile
         pass
-
+        
+      #  with open(xmlParamFile) as stream:
+      #      try:
+      #          self.xmlParams = xmltodict.parse(stream.read())
+      #      except Exception as exc:
+      #          print(exc)
+      #          exit(1)
+                
         # Get all of the parameters for the different relevant tables and columns in tables.
         # Used to build queries.
         photoLinkerTable =  self.xmlParams['params']['photoDatabase']['tables']['photoLinkerTable']
@@ -30,6 +40,8 @@ class QueryMaker():
         self.phTakenDate   =  photosTable['Columns']['photoDate']
         self.phFile        =  photosTable['Columns']['photoFile']
         self.phRootDir     =  photosTable['Columns']['rootDirNum']
+        
+        print "Init done!"
 
     def buildQueryFromJSON(self, criteriaJSON):
 
@@ -40,6 +52,7 @@ class QueryMaker():
         selectedYears = [ ]
         selectedMonths = [ ]
         dateRangeVals = [ ]
+        getAll = False
         
         for i in range(len(slideshowParams)):
             # Parse out the json for each parameter. Get the type of criteria,
@@ -72,46 +85,41 @@ class QueryMaker():
                 return json.dumps(returnDict);
                 raise TypeError
 
-
         if getAll:
             masterQuery = '''SELECT {}, {}, {}, {} FROM {} '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName)
         else:
-            orYearQuery, andYearQuery = self.__handleYear__(selectedYears)
+            yearQuery = self.__handleYear__(selectedYears)
             dateRangeQuery = self.__buildDateRange__(dateRangeVals)
             orPersonQuery = self.__buildPersonQueryOR__(people)
             monthQuery = self.__buildMonthQueryOR__(selectedMonths)
 
-
             masterQuery = ""
 
             ## From (Year AND Month) OR DateRange
-            if len(selectedYears) > 0:
-                # UNION the year range with the individual years
-                # (i.e. the andYearQuery with the orYearQuery) - but only if applicable.
-                if yearQueryStart[andIndex] and yearQueryStart[orIndex]:
-                    masterQuery += andYearQuery + " UNION " + orYearQuery + " "
-                else:
-                    if yearQueryStart[andIndex]:
-                        masterQuery += andYearQuery
-                    if yearQueryStart[orIndex]:
-                        masterQuery += orYearQuery
             if len(selectedMonths) > 0:
                 if masterQuery != "":
                     masterQuery += " INTERSECT "
-                masterQuery += orMonthQuery
+                masterQuery += monthQuery
             if len(dateRangeVals) > 0:
                 if masterQuery != "":
                     masterQuery += " UNION "
-                masterQuery += orDateRangeQuery
+                masterQuery += dateRangeQuery
 
             if len(people) > 0: #orPersonQuery != "":
                 if masterQuery != "":
                     masterQuery += " INTERSECT "
                 masterQuery += orPersonQuery
+            if len(selectedYears) > 0:
+                # UNION the year range with the individual years
+                # (i.e. the andYearQuery with the orYearQuery) - but only if applicable.
+                if masterQuery != "":
+                    masterQuery += " INTERSECT "
+                masterQuery += yearQuery
+                
 
             if masterQuery != "":
                 #### Preliminary:
-                prelimQuery = '''SELECT {}, {}, {}, {} FROM {} WHERE {} IN \n '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName, phKey)
+                prelimQuery = '''SELECT {}, {}, {}, {} FROM {} WHERE {} IN \n '''.format(self.phKey, self.phFile, self.phRootDir, self.phTakenDate, self.phTableName, self.phKey)
                 masterQuery = prelimQuery +  "(" +  masterQuery + ")" 
 
         return masterQuery
@@ -148,8 +156,17 @@ class QueryMaker():
                 yearQueryStart[orIndex] = True
             else:
                 raise Exception('Year modifier is not valid.')
+                
+        #returnQuery = ""
+        if yearQueryStart[andIndex] and yearQueryStart[orIndex]:
+            returnQuery = andYearQuery + " UNION " + orYearQuery + " "
+        else:
+            if yearQueryStart[andIndex]:
+                returnQuery = andYearQuery
+            if yearQueryStart[orIndex]:
+                returnQuery = orYearQuery
 
-        return orYearQuery, andYearQuery
+        return returnQuery
 
     def __buildDateRange__(self, dateRangeVals):
         orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenDate)
@@ -186,10 +203,12 @@ class QueryMaker():
         return orDateRangeQuery
 
     def __buildPersonQueryOR__(self, orPeople):
+    
         orPersonQuery = '''SELECT * FROM ( SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(self.plPhoto, self.plTableName, self.plPerson, self.ppKey, self.ppTableName, self.ppName)
 
-        for i in range(len(orPeople)):
-            orPersonQuery += "\"" + orPeople[i] + "\""
+        for i in range(len(orPeople)): #eachPerson in orPeople:
+            eachPerson = orPeople[i]
+            orPersonQuery += "\"" + eachPerson + "\""
             if i != len(orPeople) - 1:
                 ## orPersonQuery += ''' ) UNION SELECT photo AS c FROM photoLinker WHERE person = (SELECT people_key FROM people WHERE person_name = '''
                 orPersonQuery += ''' ) UNION SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(self.plPhoto, self.plTableName, self.plPerson, self.ppKey, self.ppTableName, self.ppName)
@@ -218,7 +237,7 @@ class QueryMaker():
 
     def __buildMonthQueryOR__(self, selectedMonths):
 
-        orMonthQuery = '''SELECT {} FROM {} WHERE {} '''.format(phKey, phTableName, phTakenMonth)
+        orMonthQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenMonth)
         months = {"January" : 1, "February" : 2, "March" : 3, "April" : 4, "May" : 5, "June" : 6, "July" : 7, "August" : 8, "September" : 9, "October" : 10, "November" : 11, "December" : 12}
         i = 0
         for i in range(len(selectedMonths)):
