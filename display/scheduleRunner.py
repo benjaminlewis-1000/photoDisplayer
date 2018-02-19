@@ -19,12 +19,9 @@ class showScheduler():
         # Initially, there are no shows running.
         self.showRunning = False;
 
-        print "imported this"
-        print "HOWEVER, I need to know if a show has been cancelled..."
-
         # Get the path to the root directory and open the XML parameter file
         self.rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
-        with open(self.rootDir + '/config/params.xml') as stream:
+        with open( os.path.join(self.rootDir, 'config', 'params.xml') ) as stream:
             try:
                 self.tparams = xmltodict.parse(stream.read())
             except Exception as exc:
@@ -103,6 +100,17 @@ class showScheduler():
                 startTime = currentShow['startTime']
                 stopTime = currentShow['stopTime']
 
+                startRegex = re.match('(\d\d)(\d\d)', startTime)
+                startHour = int(startRegex.group(1))
+                startMin = int(startRegex.group(2))
+
+                endRegex = re.match('(\d\d)(\d\d)', stopTime)
+                endHour = int(endRegex.group(1))
+                endMin = int(endRegex.group(2))
+
+                minutesInShow = ( 60 * endHour + endMin - (60 * startHour + startMin) )
+                secondsInShow = minutesInShow * 60
+
                 if dow.lower() == 'every day':
                     dowNum = self.everyDayNum
                 else:
@@ -113,7 +121,7 @@ class showScheduler():
                         print e
 
                 # Pack everything into the showSchedule array of arrays. 
-                self.showSchedule.append([dowNum, startTime, stopTime, showName])
+                self.showSchedule.append([dowNum, startTime, stopTime, showName, secondsInShow])
 
             # If the show is running and we found something new in the database that 
             # wasn't there, let the show schedule tracker know that something has changed. 
@@ -123,8 +131,10 @@ class showScheduler():
             print self.showSchedule
 
     def intervalShowStatusChecker(self):
-        # Get the list of shows as necessary from the database. 
+        # Get the list of shows as necessary from the database. The database can update, so it pays
+        # to check every time. 
         self.checkForSchedules()
+
         # Get relevant time and day of week. 
         currentTime = datetime.now().timetuple()
         currentDayNum = datetime.weekday(datetime.now())
@@ -144,6 +154,7 @@ class showScheduler():
                 startTime = schedule[1]
                 endTime = schedule[2]
                 showName = schedule[3]
+                secondsInShow = schedule[4]
 
                 # For each saved show, check if the time and date are such that that
                 # show schedule is in the valid time. 
@@ -154,7 +165,7 @@ class showScheduler():
                     self.schedule = schedule
                     # Let the logic in the show runner thread determine if a show must be started.
                     print "show may be starting: " + showName
-                    self.clientManager(self.loadShowVar, showName)
+                    self.clientManager(self.loadShowVar, showName, secondsInShow)
                     self.showRunning = True
                     quitShow = False
                     # If a valid show is found, break the for loop. 
@@ -185,20 +196,26 @@ class showScheduler():
 
         threading.Timer(1.0, self.intervalShowStatusChecker).start()
 
-    def clientManager(self, actionType, showName):
+    def clientManager(self, actionType, showName, secondsInShow = None):
         # Manages the client actions, including error handling, so I don't have to copy-paste
         # everywhere. Should be called as a thread so as not to delay the main threaded function.
+
+        if actionType == self.loadShowVar:
+            assert secondsInShow is not None, "Seconds in show requested should be defined when loading show"
         
         self.clientQ.put(self.clientCount) 
         # thread.start_new_thread(self.clientThreader, ())
-        thread.start_new_thread(self.clientThreader, (self.clientCount, actionType, showName))
+        thread.start_new_thread(self.clientThreader, (self.clientCount, actionType, showName, secondsInShow))
         self.clientCount += 1
 
-    def clientThreader(self, threadNumber, actionType, desiredShowName):
+    def clientThreader(self, threadNumber, actionType, desiredShowName, secondsInShow = None):
         # Flush the queue for communication when starting the thread. We don't
         # want old stop commands interfering with the most recent command.
         # First, though, sleep for a second so that the running 
         # thread (if any) can read the stop message off the queue and quit.
+
+        if actionType == self.loadShowVar:
+            assert secondsInShow is not None, "Seconds in show requested should be defined when loading show (client threader)"
 
         threadComplete = False
         currentSchedulerShowName = self.currentRunningShow()
@@ -236,10 +253,10 @@ class showScheduler():
                             break
                         else:
                             print "requesting show {}".format(desiredShowName)
-                            self.client.startNamedSlideshow(desiredShowName)
+                            self.client.startNamedSlideshow(desiredShowName, secondsInShow)
                     else: # There is no show running. 
                         print "requesting show {}".format(desiredShowName)
-                        self.client.startNamedSlideshow(desiredShowName)
+                        self.client.startNamedSlideshow(desiredShowName, secondsInShow)
                     print "Done loading show"
                 else:
                     print "Unknown client action"
