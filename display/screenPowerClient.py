@@ -23,5 +23,5 @@ class screenClient():
 
 if __name__ == "__main__":
     sc = screenClient()
-    # sc.askForTvOn(40)
-    sc.turnOffScreen()
+    sc.askForTvOn(40)
+#    sc.turnOffScreen()

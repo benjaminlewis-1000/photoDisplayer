@@ -283,7 +283,7 @@ class showScheduler():
         showStateArray = json.loads(showState)
         showIsRunning = showStateArray[0]
         serverRunningShowName = showStateArray[1]
-        print "Show running: {}. Server thinks {} is running, scheduler thinks {} shoule be running".format(showIsRunning, serverRunningShowName, currentSchedulerShowName)
+        print "Show running: {}. Server thinks {} is running, scheduler thinks {} should be running".format(showIsRunning, serverRunningShowName, currentSchedulerShowName)
 
     def currentRunningShow(self, *inputs):
 

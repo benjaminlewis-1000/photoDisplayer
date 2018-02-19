@@ -122,6 +122,7 @@ class displayServer():
             jsonResult = '[{"num":0, "criteriaType":"All","booleanValue":"is", "criteriaVal":"all"}]'
 
         sql_query = self.queryMachine.buildQueryFromJSON(jsonResult)
+        print "Starting the named show!"
         self.__startShow__(sql_query, runLength)
 
     def startSlideshowWithQuery(self, queryJSON, runLength=3600):
@@ -201,6 +202,7 @@ class displayServer():
                 print >>self.stream, "Done turning on TV, starting slideshow"
                  
                 self.display_executable = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+                print self.display_executable
 
                 debug.append("Slideshow is launching...")
 
@@ -222,7 +224,9 @@ class displayServer():
         return json.dumps(returnDict);
 
     def endSlideshow(self):
+        print "Ending the show..."
         self.showRunningName = None
+        self.showRunning = False
         self.screenManager.turnOffScreen()
         
         if self.display_executable != None: 
@@ -299,7 +303,7 @@ class displayServer():
         
     def getShowRunningState(self):
         print 'Getting show running state'
-        print "running name in server: " +  str(self.showRunningName)
+        print "running name in server: {}, Is show running? {}".format(self.showRunningName, self.showRunning)
         return json.dumps([self.showRunning, self.showRunningName])
 
     def run(self):

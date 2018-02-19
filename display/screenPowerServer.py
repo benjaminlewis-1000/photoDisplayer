@@ -277,8 +277,11 @@ class tvStateManager():
         self.commandQueue.put('turnOn', False)
         return True
       
-    def turnOffScreen(self):
+    def turnOffScreen(self, killRequest=True):
+        print "Turning off screen, kill request = {}".format(killRequest)
         self.commandQueue.put('turnOff', False)
+        if killRequest:
+            self.askOnQueue.put(-1)
         return True
         
     def askForTvOn(self, nextNSeconds):
@@ -303,14 +306,21 @@ class tvStateManager():
             if not self.askOnQueue.empty():
                 n_sec_request = self.askOnQueue.get()
                 # print "{} seconds requested".format(n_sec_request)
-                if n_sec_request > 0:
+                if n_sec_request > 0 or n_sec_request == -1:
                     next_n_seconds = n_sec_request
+                    
+                ## Edge case: if we request a turnOffScreen, it puts a -1 in the queue, and
+                # so the askTvOn should quit. The TV turnoff is already requested in turnOffScreen, though.
             
-            
+            # print "Next n seconds: {}".format(next_n_seconds)
+                
             if next_n_seconds > 0:
                 next_n_seconds -= waitTime
+                
+                ## This should be in this loop because otherwise it will trigger
+                ## the screen turning off every time this loop runs. Bad news. 
                 if next_n_seconds <= 0:
-                    self.turnOffScreen()
+                    self.turnOffScreen(False)
                 
                #  print "{} seconds left".format(next_n_seconds)
                 
