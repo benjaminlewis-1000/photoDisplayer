@@ -12,43 +12,62 @@ import threading
 from time import sleep
 import time
 import os
+from SimpleXMLRPCServer import SimpleXMLRPCServer
+from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+
+class RequestHandler(SimpleXMLRPCRequestHandler):
+    rpc_paths = ('/',)
+
 
 class tvStateManager():
 
     def __init__(self):
+        self.server = SimpleXMLRPCServer(("127.0.0.1", int(xmlParams['params']['serverParams']['displayServerPort'])),
+                                    requestHandler=RequestHandler)
+        self.server.register_introspection_functions()
       
-      self.process = pexpect.spawn('cec-client')
-      
-      self.commandQueue = Queue.Queue()
-      self.cecQueue = Queue.Queue()
-      self.powerQueue = Queue.Queue()
-      self.activeQueue = Queue.Queue()
-      self.askOnQueue = Queue.Queue()
-      
-      # self.powerQueue.put('unknown')
-      # self.activeQueue.put('unknown')
-      self.dir_path = os.path.dirname(os.path.realpath(__file__))
-      # self.safeToDetermineState = False
-      
-      self.desiredState = 'off'
+        self.process = pexpect.spawn('cec-client')
+        
+        self.commandQueue = Queue.Queue()
+        self.cecQueue = Queue.Queue()
+        self.powerQueue = Queue.Queue()
+        self.activeQueue = Queue.Queue()
+        self.askOnQueue = Queue.Queue()
+        
+        # self.powerQueue.put('unknown')
+        # self.activeQueue.put('unknown')
+        self.dir_path = os.path.dirname(os.path.realpath(__file__))
+        # self.safeToDetermineState = False
+        
+        self.desiredState = 'off'
 
-      self.stateSafeSemaphore = threading.Lock()
+        self.stateSafeSemaphore = threading.Lock()
+        
+        self.powerSemaphore = threading.Lock()
+        self.stateSemaphore = threading.Lock()
+        self.powerDesiredSemaphore = threading.Lock()
+        self.powerState = 'off'
+        self.activeState = 'unknown'
+        self.desiredPowerState = 'unknown'
+              
+        
+        thread.start_new_thread(self.__tv_state_monitor__, () )
+        thread.start_new_thread(self.__command_reader__, (self.process,) )
+        thread.start_new_thread(self.__cec_output_consumer__, (self.process,) )
+        thread.start_new_thread(self.__tvRequestedThread__, () )
+        
+        self.__determine_unknown_state__()
       
-      self.powerSemaphore = threading.Lock()
-      self.stateSemaphore = threading.Lock()
-      self.powerDesiredSemaphore = threading.Lock()
-      self.powerState = 'off'
-      self.activeState = 'unknown'
-      self.desiredPowerState = 'unknown'
-            
-      
-      thread.start_new_thread(self.__tv_state_monitor__, () )
-      thread.start_new_thread(self.__command_reader__, (self.process,) )
-      thread.start_new_thread(self.__cec_output_consumer__, (self.process,) )
-      thread.start_new_thread(self.__tvRequestedThread__, () )
-      
-      self.__determine_unknown_state__()
-      
+
+    def run(self):
+        self.server.register_function(self.toggleScreen, 'toggleScreen')
+        self.server.register_function(self.turnOnScreen, 'turnOnScreen')
+        self.server.register_function(self.turnOffScreen, 'turnOffScreen')
+        self.server.register_function(self.askForTvOn, 'askForTvOn')
+        self.server.serve_forever()
+
+
+
     def __determine_unknown_state__(self):
       # Initialization run
         sleep(10)
@@ -218,7 +237,6 @@ class tvStateManager():
         
         return activeState
     
-
     def __tv_state_monitor__(self):
 
       lastRead = time.time()
@@ -275,7 +293,7 @@ class tvStateManager():
             if (time.time() - lastRead) > 3.5:
                 pass   
                 
-            
+
     def toggleScreen(self):
         self.commandQueue.put('toggle', False)
         pass
@@ -340,18 +358,19 @@ class tvStateManager():
       
 if __name__ == "__main__":  
     ccl = tvStateManager()
+    ccl.run()
 
-    while 1:
-        sys.stdout.flush()
-        termios.tcflush(sys.stdin, termios.TCIFLUSH)
-        filename = raw_input()
-        if filename.lower() == 'on':
-            ccl.turnOnScreen()
-        elif filename.lower() == 'toggle':
-            ccl.toggleScreen()
-        elif filename.lower() == 'off':
-            ccl.turnOffScreen()
-        elif filename.lower() == 'askon':
-            ccl.askForTvOn(160)
+    # while 1:
+    #     sys.stdout.flush()
+    #     termios.tcflush(sys.stdin, termios.TCIFLUSH)
+    #     filename = raw_input()
+    #     if filename.lower() == 'on':
+    #         ccl.turnOnScreen()
+    #     elif filename.lower() == 'toggle':
+    #         ccl.toggleScreen()
+    #     elif filename.lower() == 'off':
+    #         ccl.turnOffScreen()
+    #     elif filename.lower() == 'askon':
+    #         ccl.askForTvOn(160)
 
 
