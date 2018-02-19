@@ -224,6 +224,7 @@ class showScheduler():
                 elif actionType == self.loadShowVar:
                     print "loading show " + desiredShowName
                     print "Current show running is " + str(serverRunningShowName)
+                    print "Show is running state: {}".format(showIsRunning)
                     self.currentRunningShow(desiredShowName)
 
                     if (showIsRunning):
@@ -234,9 +235,11 @@ class showScheduler():
                             print "Running a user-defined show." 
                             break
                         else:
-                            self.client.loadSavedShow(desiredShowName)
+                            print "requesting show {}".format(desiredShowName)
+                            self.client.startNamedSlideshow(desiredShowName)
                     else: # There is no show running. 
-                        self.client.loadSavedShow(desiredShowName)
+                        print "requesting show {}".format(desiredShowName)
+                        self.client.startNamedSlideshow(desiredShowName)
                     print "Done loading show"
                 else:
                     print "Unknown client action"
