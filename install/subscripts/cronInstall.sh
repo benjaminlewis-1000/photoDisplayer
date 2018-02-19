@@ -12,6 +12,8 @@ GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/googTag.sh"
 GIT_PULL_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/gitpull.sh"
 RESTART_DISPLAY_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/displayRestart.sh"
 
+SCREEN_SERVER_STR="@reboot python $PROJECT_ROOT_DIR/display/screen_manager.py &"
+
 sudo chown $USER $PROJECT_ROOT_DIR/scripts/gitpull.sh
 
 echo "#! /bin/bash" > $PROJECT_ROOT_DIR/scripts/gitpull.sh
@@ -33,6 +35,7 @@ crontab -l > $THIS_DIR/ccc.cron
 echo "$PHOTO_STR" >> $THIS_DIR/ccc.cron
 echo "$GIT_PULL_STR" >> $THIS_DIR/ccc.cron
 echo "$RESTART_DISPLAY_STR" >> $THIS_DIR/ccc.cron
+echo "$SCREEN_SERVER_STR" >> $THIS_DIR/ccc.cron
 
 
 cp $THIS_DIR/displayRestart.sh $PROJECT_ROOT_DIR/scripts/displayRestart.sh
