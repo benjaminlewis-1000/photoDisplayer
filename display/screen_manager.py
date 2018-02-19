@@ -23,6 +23,7 @@ class tvStateManager():
       self.cecQueue = Queue.Queue()
       self.powerQueue = Queue.Queue()
       self.activeQueue = Queue.Queue()
+      self.askOnQueue = Queue.Queue()
       
       # self.powerQueue.put('unknown')
       # self.activeQueue.put('unknown')
@@ -39,21 +40,31 @@ class tvStateManager():
       self.powerState = 'off'
       self.activeState = 'unknown'
       self.desiredPowerState = 'unknown'
+            
       
       thread.start_new_thread(self.__tv_state_monitor__, () )
       thread.start_new_thread(self.__command_reader__, (self.process,) )
       thread.start_new_thread(self.__cec_output_consumer__, (self.process,) )
-      # self.__determine_unknown_state__()
+      thread.start_new_thread(self.__tvRequestedThread__, () )
       
+      self.__determine_unknown_state__()
       
     def __determine_unknown_state__(self):
-        sleep(5)
-  
+      # Initialization run
+        sleep(10)
+        
+        print "starting determine state"
         powerState = self.__getPowerState__()
         activeState = self.__getActiveState__()
+        imgname = os.path.join(self.dir_path, 'dontpanic.png')
+        imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
         
         # Sleep 10 seconds if necessary
-        if computerState == 'raspi' or computerState == 'not_raspi':
+        if activeState == 'raspi' or activeState == 'not_raspi':
+            print "Have our answer"
+            imshow.kill()
+            # imshow.terminate()
+            self.turnOffScreen()
             return # We have our answer 
         if powerState == 'on' or powerState == 'unknown': 
             # Don't want to mess with currently powered on TV - either it's
@@ -61,33 +72,38 @@ class tvStateManager():
             threading.Timer(5, self.__determine_unknown_state__).start()
         else: # Power is off
             if powerState == 'off':
-                imgname = os.path.join(self.dir_path, 'dontpanic.png')
-                imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
-                self.commandQueue.put('turnOn')
-                self.process.sendline('as') 
-                sleep(1)
-                self.process.sendline('as')
+                # self.commandQueue.put('turnOn')
+                #self.process.sendline('as') 
+                #sleep(1)
+                #self.process.sendline('as')
+                self.turnOnScreen()
     
-                safeState = False
+                # safeState = False
                 #while not safeState:
                 #    sleep(2)
                 #    self.stateSafeSemaphore.acquire()
                 #    safeState = self.safeToDetermineState 
                 #    self.stateSafeSemaphore.release()
     
-                self.stateSemaphore.acquire()
-                activeState = self.activeState
-                self.stateSemaphore.release()
-                if computerState == 'raspi' :
+                # self.stateSemaphore.acquire()
+                # activeState = self.activeState
+                # self.stateSemaphore.release()
+                activeState = self.__getActiveState__()
+                powerState = self.__getPowerState__()
+    
+              #   print "Computer state is {}, power state is {}".format(activeState, powerState)
+                
+                if activeState == 'raspi' :
                   print "Computer state is known as raspi - turning off screen"
                   self.turnOffScreen()
     
-                if computerState == 'raspi' or computerState == 'not_raspi':
+                if activeState == 'raspi' or activeState == 'not_raspi':
+                  print "Done" 
                   imshow.terminate()
                   return
                 else:
                   print "Try, try again"
-                  print "Computer state is {}, power state is {}".format(computerState, powerState)
+                  print "Computer state is {}, power state is {}".format(activeState, powerState)
                   # Try, try again
                   threading.Timer(5, self.__determine_unknown_state__).start()
                 
@@ -97,7 +113,8 @@ class tvStateManager():
                   
     def __cec_output_consumer__(self, process):
       # This thread will block, but that's OK because the only thing it does is 
-      # consume and put on the queue
+      # consume and put on the queue.
+      # Reads the output of CEC-client and puts it on a queue.
       while 1:
         try:
             stdout = self.process.readline()
@@ -113,7 +130,8 @@ class tvStateManager():
       # desiredPowerState = 'off'
       while 1:
         
-        sleep(1.5)
+        # Not sure why, but we need this sleep for a bit at the very beginning.
+        sleep(1)
 
         # Workaround to check if the queue is empty - see if there is
         # something to read with a nonblocking call   
@@ -124,7 +142,7 @@ class tvStateManager():
         
         if not self.commandQueue.empty():
             
-            print "Power is {}, active is {}, desired is {}".format(powerState, activeState, desiredState)
+           # print "Power is {}, active is {}, desired is {}".format(powerState, activeState, desiredState)
             command = self.commandQueue.get(False)
             if command == 'toggle' and (activeState == 'raspi' or powerState == 'off'):
                 if powerState == 'on':
@@ -144,27 +162,22 @@ class tvStateManager():
               
             # print "Command received in thread - command was {}".format(command)
 
-
-
-      #  self.stateSafeSemaphore.acquire()
-      #  safeState = self.safeToDetermineState 
-      #  self.stateSafeSemaphore.release()
-
       #  if safeState:
         # print "In safe state"
         if powerState == 'on':
             if desiredState == 'off':
                 self.process.sendline('standby 0')
-                print "Turning off"
+              #  print "Turning off"
             else:
                 pass # Do nothing, we're where we want to be.
                # print "Doing nothing - power is already on"
         else:
-            if desiredState == 'off':
+          #  print desiredState
+            if desiredState != 'on' :
                 pass # do nothing 
               #  print "Doing nothing - power is already off"
             else:
-                print "Turning on"
+               # print "Turning on"
                 self.process.sendline('as')
        # else:
         #    print "Not safe state"
@@ -215,14 +228,12 @@ class tvStateManager():
         if not self.cecQueue.empty():
         
             lastRead = time.time()
-          #  self.stateSafeSemaphore.acquire()
-           # self.safeToDetermineState = False
-           # self.stateSafeSemaphore.release()
             stdout = self.cecQueue.get()
             # print stdout
             
-            if re.match(".*as.*", stdout):
-                #print "as requested"
+            if re.match(".*as$", stdout):
+                print stdout
+                print "as requested"
                 active_requested = True
             if re.match(".*standby 0.*", stdout):
                 print "standby requested"
@@ -262,35 +273,8 @@ class tvStateManager():
                 self.__setActiveState__('raspi')
         else:
             if (time.time() - lastRead) > 3.5:
-                pass            
-              #  self.stateSafeSemaphore.acquire()
-              #  self.safeToDetermineState = True
-              #  self.stateSafeSemaphore.release()
-              
-  #  def tvIsOn(self):
-   #     self.stateSafeSemaphore.acquire()
-    #    safeState = self.safeToDetermineState 
-    #    self.stateSafeSemaphore.release()
-#
-#      if not self.powerQueue.empty() :
-#        self.powerState = self.powerQueue.get()
-      # If nothing has changed, the queue will be empty and the state 
-      # won't have changed
-        
-#      return self.powerState 
-            
-#    def computerIsActive(self):
-
-#      self.stateSafeSemaphore.acquire()
-#      safeState = self.safeToDetermineState 
-#      self.stateSafeSemaphore.release()
-
- #     if not self.activeQueue.empty() :
- #         self.activeState = self.activeQueue.get()
-      # If nothing has changed, the queue will be empty and the state 
-      # won't have changed
-        
-  #    return self.activeState
+                pass   
+                
             
     def toggleScreen(self):
         self.commandQueue.put('toggle', False)
@@ -300,32 +284,59 @@ class tvStateManager():
         self.commandQueue.put('turnOn', False)
       
     def turnOffScreen(self):
-        print "Turn off was asked for"
         self.commandQueue.put('turnOff', False)
-      
+        
     def askForTvOn(self, nextNSeconds):
-        sleep(5)
-        powerState = self.__getPowerState__()
-        activeState = self.__getActiveState__()
+        self.askOnQueue.put(nextNSeconds)
+        pass
+      
+    ## This should be a thread with a loop, fed by a queue. 
+    def __tvRequestedThread__(self):
+        next_n_seconds = 0
+        waitTime = 3
+        sleep(10)
         
-        print "Power is {}, active is {} in askForTV".format(powerState, activeState)
-        
-        if powerState == 'on' and activeState == 'raspi':
-            # Good, we're in the state we need to be in. 
-            # Turn it off in nextNSeconds seconds
-            "TV is already on"
-            self.turnOnScreen()
-            threading.Timer(nextNSeconds, self.turnOffScreen).start()
-        elif activeState != 'raspi' and powerState == 'on':
-            # Not on the raspberry pi and TV is on
-            # Wait a minute and try again
-            waitTime = 3
-            print "Can't turn TV on, not active source"
-            threading.Timer(waitTime, self.askForTvOn, [nextNSeconds - waitTime]).start()
-        else: #  powerState == 'off'
-            print "Turning on TV as asked for"
-            self.turnOnScreen()
-            threading.Timer(nextNSeconds, self.turnOffScreen).start()
+        lastPowerState =  self.__getPowerState__()
+        lastActiveState = self.__getActiveState__()
+        while 1:
+            if not self.askOnQueue.empty():
+                n_sec_request = self.askOnQueue.get()
+                if n_sec_request > 0:
+                    next_n_seconds = n_sec_request
+            
+            if next_n_seconds > 0:
+                next_n_seconds -= waitTime
+                
+                
+                powerState = self.__getPowerState__()
+                activeState = self.__getActiveState__()
+                
+                # print "Power is {}, active is {} in askForTV".format(powerState, activeState)
+                
+                # print "Need to have something to override this if we turn off the tv with remote."
+                
+                if powerState == 'off' and lastPowerState == 'on' and activeState == 'raspi':
+                    next_n_seconds = -1  # Remote turned the TV off when doing the slideshow
+                elif powerState == 'on' and activeState == 'raspi':
+                    pass
+                    # Good, we're in the state we need to be in. 
+                    # Turn it off in nextNSeconds seconds
+                    # print "TV is already on"
+                   # threading.Timer(waitTime, self.askForTvOn, [nextNSeconds - waitTime]).start()
+                elif activeState != 'raspi' and powerState == 'on':
+                    pass
+                    # Not on the raspberry pi and TV is on
+                    # Wait a minute and try again
+                   #  print "Can't turn TV on, not active source"
+                   # threading.Timer(waitTime, self.askForTvOn, [nextNSeconds - waitTime]).start()
+                else: #  powerState == 'off'
+                    # print "Turning on TV as asked for"
+                    self.turnOnScreen()
+                   # threading.Timer(nextNSeconds, self.turnOffScreen).start()
+                    
+                lastActiveState = activeState
+                lastPowerState = powerState
+                sleep(3)
       
 if __name__ == "__main__":  
     ccl = tvStateManager()
