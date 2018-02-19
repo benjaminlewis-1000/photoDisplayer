@@ -89,6 +89,7 @@ class displayServer():
         self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
 
     def startNamedSlideshow(self, requestedShow, runLength=3600):
+        print "Asked for show {}".format(requestedShow)
 
         self.showRunningName = requestedShow
 
@@ -289,15 +290,20 @@ class displayServer():
         retVal = json.dumps(returnDict)
         print retVal
         return retVal
+        
+    def getShowRunningState(self):
+        print 'Getting show running state'
+        print "running name in server: " +  str(self.showRunningName)
+        return json.dumps([self.showRunning, self.showRunningName])
 
     def run(self):
         self.server.register_function(self.startSlideshowWithQuery, 'startSlideshowWithQuery')
-        self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
+        # self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
         self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
         # self.server.register_function(self.buildQueryFromJSON, 'buildQueryFromJSON')
         self.server.register_function(self.startNamedSlideshow, 'startNamedSlideshow')
         self.server.register_function(self.endSlideshow, 'endSlideshow')
-       # self.server.register_function(self.getShowRunningState, 'getShowRunningState')
+        self.server.register_function(self.getShowRunningState, 'getShowRunningState')
         print "Running"
         self.server.serve_forever()
         
@@ -323,6 +329,6 @@ if __name__ == '__main__':
     # myServer.buildQuery(criteriaJSON)
     # myServer.setSlideshowProperties(propertiesJSON)
 
-#    scheduleObj = showScheduler()
+    scheduleObj = showScheduler()
     myServer.run()
         
