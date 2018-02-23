@@ -155,7 +155,17 @@ class showScheduler():
                 startTime = schedule[1]
                 endTime = schedule[2]
                 showName = schedule[3]
-                secondsInShow = schedule[4]
+                # secondsInShow = schedule[4]
+                
+                currentTime = datetime.now().timetuple()
+                startHour = currentTime[3]
+                startMin = currentTime[4]
+                endRegex = re.match('(\d\d)(\d\d)', endTime)
+                endHour = int(endRegex.group(1))
+                endMin = int(endRegex.group(2))
+                minutesInShow = ( 60 * endHour + endMin - (60 * startHour + startMin) )
+                secondsInShow = minutesInShow * 60   
+                print "Seconds in show: {}".format(secondsInShow)
 
                 # For each saved show, check if the time and date are such that that
                 # show schedule is in the valid time. 
@@ -219,9 +229,9 @@ class showScheduler():
             assert secondsInShow is not None, "Seconds in show requested should be defined when loading show (client threader)"
 
         threadComplete = False
-        currentSchedulerShowName = self.currentRunningShow()
 
         while not threadComplete:
+            currentSchedulerShowName = self.currentRunningShow()
             showState = self.displayServer.getShowRunningState()
             showStateArray = json.loads(showState)
             showIsRunning = showStateArray[0]
@@ -231,18 +241,17 @@ class showScheduler():
                 if actionType == self.endShowVar:
                     self.currentRunningShow(None)
                     if showIsRunning and serverRunningShowName == currentSchedulerShowName:
-                        print "ending show" + str(threadNumber)
+                       # print "ending show" + str(threadNumber)
                         self.displayServer.endSlideshow()
-                        print "done ending show"
                     else:
                         # Do nothing - there's nothing to kill, and we don't want to
                         # randomly turn off the TV. 
     #                    self.currentRunningShow(None)
                         break
                 elif actionType == self.loadShowVar:
-                    print "loading show " + desiredShowName
-                    print "Current show running is " + str(serverRunningShowName)
-                    print "Show is running state: {}".format(showIsRunning)
+                 #   print "loading show " + desiredShowName
+                 #   print "Current show running is " + str(serverRunningShowName)
+                 #   print "Show is running state: {}".format(showIsRunning)
                     self.currentRunningShow(desiredShowName)
 
                     if (showIsRunning):
@@ -250,14 +259,18 @@ class showScheduler():
                         # from here will return a non-'None' serverRunningShowName. 
                         if serverRunningShowName is None or serverRunningShowName == desiredShowName:
                             # do nothing, break. We are already running this show.
-                            print "Running a user-defined show." 
+                            # print "Running a user-defined show." 
                             break
                         else:
-                            print "requesting show {}".format(desiredShowName)
+                            # print "requesting show {}".format(desiredShowName)
+                            threadComplete = True
                             self.displayServer.startNamedSlideshow(desiredShowName, secondsInShow)
+                            currentShedulerShowName = desiredShowName
                     else: # There is no show running. 
                         print "requesting show {}".format(desiredShowName)
+                        threadComplete = True
                         self.displayServer.startNamedSlideshow(desiredShowName, secondsInShow)
+                        currentShedulerShowName = desiredShowName
                     print "Done loading show"
                 else:
                     print "Unknown client action"

@@ -67,10 +67,8 @@ class displayServer():
         self.screenManager = screenPowerClient.screenClient()
         self.queryMachine = queryMaker.QueryMaker(self.xmlParams)
         ### Connect to the database
-        self.photoDatabase = sqlite3.connect(os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName']) )
-        self.photoDatabase.text_factory = str  # For UTF-8 compatibility
-        self.savedShowDatabase = sqlite3.connect(os.path.join(rootDir, "site", self.xmlParams['params']['websiteParams']['siteDBname']) )
-        self.savedShowDatabase.text_factory = str  # For UTF-8 compatibility
+        self.photoDatabasePath = os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName'])
+        self.savedShowDatabasePath = os.path.join(rootDir, "site", self.xmlParams['params']['websiteParams']['siteDBname'])
 
         self.fileListName = '.slideshowFileList.txt'
         if (os.path.isfile(self.fileListName) ):
@@ -104,11 +102,15 @@ class displayServer():
 
         getShowNamesQuery = '''SELECT {} FROM {}'''.format(showNameCol, showDefTableName)
 
-        c = self.savedShowDatabase.cursor()
+        savedShowDatabase = sqlite3.connect(self.savedShowDatabasePath)
+        savedShowDatabase.text_factory = str
+        c = savedShowDatabase.cursor()
         c.execute(getShowNamesQuery)
         fileResults = c.fetchall()
         # Convert the results to a list
         fileResults = [i[0] for i in fileResults]
+        
+        print fileResults
 
         requestInListOfShows = (unicode(requestedShow) in set(fileResults))
 
@@ -139,13 +141,17 @@ class displayServer():
         returnDict = {};
         errs = [];
         debug = [];
+        
+        print "__startshow__: {}".format(SQL_query)
 
         if self.display_executable != None: 
-            self.display_executable.terminate()
+            self.display_executable.kill()
             self.display_executable.wait()
 
         if SQL_query != "":
-            c = self.photoDatabase.cursor()
+            photoDatabase = sqlite3.connect( self.photoDatabasePath )
+            photoDatabase.text_factory = str  # For UTF-8 compatibility
+            c = photoDatabase.cursor()
             c.execute(SQL_query)
             fileResults = c.fetchall()
 
@@ -178,6 +184,7 @@ class displayServer():
                 assert rootKey not in rootDict.keys()
                 rootDict[rootKey] = rootPath
 
+            print "__startshow__2"
             f = open('fileListDebug.out', 'w')
             debug.append(str(len(fileResults)) + " files returned.")
             print "Found {} Files".format(len(fileResults))
@@ -205,6 +212,7 @@ class displayServer():
                 print self.display_executable
 
                 debug.append("Slideshow is launching...")
+                print "Show launching..."
 
                 print >>self.stream, debug
                 self.showRunning = True
@@ -302,8 +310,7 @@ class displayServer():
         return retVal
         
     def getShowRunningState(self):
-        print 'Getting show running state'
-        print "running name in server: {}, Is show running? {}".format(self.showRunningName, self.showRunning)
+        # print "running name in server: {}, Is show running? {}".format(self.showRunningName, self.showRunning)
         return json.dumps([self.showRunning, self.showRunningName])
 
     def run(self):
