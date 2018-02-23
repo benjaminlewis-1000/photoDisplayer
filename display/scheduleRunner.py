@@ -35,7 +35,7 @@ class showScheduler():
         self.currentRunningShowName = None
         self.dbUpdated = True
         self.clientCount = 0
-        self.client = xmlrpclib.ServerProxy('http://127.0.0.1:' + self.tparams['params']['serverParams']['displayServerPort'] + '/')
+        # self.client = xmlrpclib.ServerProxy('http://127.0.0.1:' + self.tparams['params']['serverParams']['displayServerPort'] + '/')
 
         self.endShowVar = 'End Show'
         self.loadShowVar = 'Load Show'
@@ -280,7 +280,7 @@ class showScheduler():
                 self.clientQ.put(threadNumber)
             sleep(0.5)
         currentSchedulerShowName = self.currentRunningShow()
-        showState = self.client.getShowRunningState()
+        showState = self.displayServer.getShowRunningState()
         showStateArray = json.loads(showState)
         showIsRunning = showStateArray[0]
         serverRunningShowName = showStateArray[1]
