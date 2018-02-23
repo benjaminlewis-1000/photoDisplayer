@@ -76,6 +76,7 @@ class tvStateManager():
         imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
         
         # Sleep 10 seconds if necessary
+        print "Active state: {}, Power State: {}".format(activeState, powerState)
         if activeState == 'raspi' or activeState == 'not_raspi':
             print "Have our answer"
             imshow.kill()
