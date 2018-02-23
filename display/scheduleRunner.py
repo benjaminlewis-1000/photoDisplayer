@@ -15,7 +15,7 @@ import Queue
 
 class showScheduler():
 
-    def __init__(self):
+    def __init__(self, displayServerInstance):
         # Initially, there are no shows running.
         self.showRunning = False;
 
@@ -43,6 +43,7 @@ class showScheduler():
         self.threadToServerQ = Queue.Queue()
         self.threadToServerQ.put(None)
 
+        self.displayServer = displayServerInstance
         # Start the periodic show status checker, which will call checkForSchedules
         # and run logic of what show, if any, should be running currently; it will
         # then sleep for a predetermined length of time (60sec in production) and run
@@ -221,7 +222,7 @@ class showScheduler():
         currentSchedulerShowName = self.currentRunningShow()
 
         while not threadComplete:
-            showState = self.client.getShowRunningState()
+            showState = self.displayServer.getShowRunningState()
             showStateArray = json.loads(showState)
             showIsRunning = showStateArray[0]
             serverRunningShowName = showStateArray[1]
@@ -231,7 +232,7 @@ class showScheduler():
                     self.currentRunningShow(None)
                     if showIsRunning and serverRunningShowName == currentSchedulerShowName:
                         print "ending show" + str(threadNumber)
-                        self.client.endSlideshow()
+                        self.displayServer.endSlideshow()
                         print "done ending show"
                     else:
                         # Do nothing - there's nothing to kill, and we don't want to
@@ -253,10 +254,10 @@ class showScheduler():
                             break
                         else:
                             print "requesting show {}".format(desiredShowName)
-                            self.client.startNamedSlideshow(desiredShowName, secondsInShow)
+                            self.displayServer.startNamedSlideshow(desiredShowName, secondsInShow)
                     else: # There is no show running. 
                         print "requesting show {}".format(desiredShowName)
-                        self.client.startNamedSlideshow(desiredShowName, secondsInShow)
+                        self.displayServer.startNamedSlideshow(desiredShowName, secondsInShow)
                     print "Done loading show"
                 else:
                     print "Unknown client action"
