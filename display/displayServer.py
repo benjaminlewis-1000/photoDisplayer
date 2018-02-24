@@ -91,7 +91,7 @@ class displayServer():
 
         self.showRunningName = requestedShow
 
-        self.screenManager.askForTvOn(runLength)
+        self.screenManager.askForTvOn(max(runLength - 60, 0))
 
         # Obtain all of the parameters for the database where the website defines slideshows.
         dbSchemaParams = self.xmlParams['params']['websiteParams']['siteDBschema']
