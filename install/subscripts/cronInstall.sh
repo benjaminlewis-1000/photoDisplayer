@@ -4,7 +4,7 @@
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
-PHOTO_STR='15 23 * * * /usr/bin/python $PROJECT_ROOT_DIR/pyInit/addPics.py'
+PHOTO_STR="15 23 * * * /usr/bin/python $PROJECT_ROOT_DIR/pyInit/addPics.py"
 
 CL_STR="15 1 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/clTag.sh"
 GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/googTag.sh"
