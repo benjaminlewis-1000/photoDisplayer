@@ -17,8 +17,14 @@ import re
 
 import unicodedata
 
-from geopy.geocoders import Nominatim
-geolocator = Nominatim()
+# from geopy.geocoders import Nominatim
+# geolocator = Nominatim()
+
+use_googmaps = False
+
+import googlemaps
+apikey = 'AIzaSyDN9_gjt7PDqWt8Jkwo-7AoT7Lyuz_Lsz0'
+gmaps=googlemaps.Client(key=apikey)
 
 # Restrict to a particular path.
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -39,13 +45,30 @@ server.register_introspection_functions()
 locationDict = {}
 
 def do_geocode(address):
-    # Recursive until we get an answer
-    try:
-        return geolocator.reverse(address, timeout=3)
-    except GeocoderTimedOut:
-        sleep(1)
-        print("Error: geocode timed out")
-        return -1
+    if use_googmaps:
+        try:
+            value = gmaps.reverse_geocode(address)
+            return value[0]['address_components']
+        except Exception as e:
+            print e
+            print "Error: unknown"
+            return -1
+    else:
+        ## Recursive until we get an answer
+        try:
+            return geolocator.reverse(address, timeout=3)
+        except GeocoderTimedOut:
+
+            use_googmaps = True
+            sleep(1)
+            print("Error: geocode timed out")
+            try:
+                value = gmaps.reverse_geocode(address)
+                return value[0]['address_components']
+            except Exception as e:
+                print e
+                print "Error: unknown"
+                return -1
 
 def geoLookup(lat, lon):
 
@@ -59,7 +82,11 @@ def geoLookup(lat, lon):
     # sleep(3)
     # Can't do this, it causes a timeout
 
-    location = do_geocode(str(lat) + ', ' + str(lon))
+    if use_googmaps:
+        location = do_geocode(gpsTuple)
+    else:
+        location = do_geocode(str(lat) + ', ' + str(lon))
+
     if location == -1:
         return -1
 
@@ -74,26 +101,42 @@ def geoLookup(lat, lon):
     postcode = '-'
     country = '-'
 
-    if (not 'error' in location.raw):
-        # print 'hafe'
-        addr = location.raw['address']
-        if ('house_number' in location.raw['address']):
-            house_number = addr['house_number']
-        if ('road' in addr):
-            road = unicode(addr['road']).encode('utf-8')
-        if ('city' in addr):
-            city = unicode(addr['city']).encode('utf-8')
-        if ('village' in addr):
-            city = unicode(addr['village']).encode('utf-8')
-        if ('state' in addr):
-            state = unicode(addr['state']).encode('utf-8')
-        if ('postcode' in  addr):
-            postcode = unicode(addr['postcode']).encode('utf-8')
-        if ('country' in addr):
-            country = unicode(addr['country']).encode('utf-8')
-
+    if use_googmaps:
+        for i in range(len(location)):
+            print location[i]
+            if 'street_number' in location[i]['types']:
+                house_number = location[i]['long_name']
+            if 'route' in location[i]['types']:
+                road = location[i]['long_name']
+            if 'locality' in location[i]['types']:
+                city = location[i]['long_name']
+            if 'administrative_area_level_1' in location[i]['types']:
+                state = location[i]['long_name']
+            if 'postal_code' in location[i]['types']:
+                postcode = location[i]['long_name']
+            if 'country' in location[i]['types']:
+                country = location[i]['long_name']
     else:
-        print "error!"
+        if (not 'error' in location.raw):
+            # print 'hafe'
+            addr = location.raw['address']
+            if ('house_number' in location.raw['address']):
+                house_number = addr['house_number']
+            if ('road' in addr):
+                road = unicode(addr['road']).encode('utf-8')
+            if ('city' in addr):
+                city = unicode(addr['city']).encode('utf-8')
+            if ('village' in addr):
+                city = unicode(addr['village']).encode('utf-8')
+            if ('state' in addr):
+                state = unicode(addr['state']).encode('utf-8')
+            if ('postcode' in  addr):
+                postcode = unicode(addr['postcode']).encode('utf-8')
+            if ('country' in addr):
+                country = unicode(addr['country']).encode('utf-8')
+
+        else:
+            print "error!"
 
     retDict = {}
     retDict['house_number'] = house_number
