@@ -12,7 +12,7 @@ GOOG_STR="15 4 * * * /bin/bash $PROJECT_ROOT_DIR/scripts/googTag.sh"
 GIT_PULL_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/gitpull.sh"
 RESTART_DISPLAY_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/displayRestart.sh"
 
-SCREEN_SERVER_STR="@reboot python $PROJECT_ROOT_DIR/display/screen_manager.py &"
+SCREEN_SERVER_STR="@reboot python $PROJECT_ROOT_DIR/display/screenPowerServer.py &"
 
 sudo chown $USER $PROJECT_ROOT_DIR/scripts/gitpull.sh
 

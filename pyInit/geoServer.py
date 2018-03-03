@@ -20,7 +20,7 @@ import unicodedata
 # from geopy.geocoders import Nominatim
 # geolocator = Nominatim()
 
-use_googmaps = False
+use_googmaps = True
 
 import googlemaps
 apikey = 'AIzaSyDN9_gjt7PDqWt8Jkwo-7AoT7Lyuz_Lsz0'
@@ -44,7 +44,7 @@ server.register_introspection_functions()
 
 locationDict = {}
 
-def do_geocode(address):
+def do_geocode(address, use_googmaps):
     if use_googmaps:
         try:
             value = gmaps.reverse_geocode(address)
@@ -59,7 +59,6 @@ def do_geocode(address):
             return geolocator.reverse(address, timeout=3)
         except GeocoderTimedOut:
 
-            use_googmaps = True
             sleep(1)
             print("Error: geocode timed out")
             try:
@@ -72,6 +71,8 @@ def do_geocode(address):
 
 def geoLookup(lat, lon):
 
+    use_googmaps = True
+
     gpsTuple = (lat,lon)
 
     if (gpsTuple in locationDict):
@@ -83,7 +84,7 @@ def geoLookup(lat, lon):
     # Can't do this, it causes a timeout
 
     if use_googmaps:
-        location = do_geocode(gpsTuple)
+        location = do_geocode(gpsTuple, use_googmaps)
     else:
         location = do_geocode(str(lat) + ', ' + str(lon))
 
