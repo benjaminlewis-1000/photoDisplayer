@@ -71,10 +71,13 @@ class showScheduler():
 
         # Execute the query and get the results. 
         c = conn.cursor()
-        c.execute(scheduleQuery)
-        result = c.fetchall()
+        try:
+            c.execute(scheduleQuery)
+            result = c.fetchall()
+        except sqlite3.OperationalError as sqe:
+            result = None
 
-        if len(result) > 0:
+        if result is not None and len(result) > 0:
             self.allSavedShows =  json.loads(result[0][0])
         else:
             self.allSavedShows = None
