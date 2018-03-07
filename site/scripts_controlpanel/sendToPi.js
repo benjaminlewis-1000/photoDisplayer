@@ -1,6 +1,7 @@
 
 function sendToPi(){
 
+	console.debug('SendToPi starting...')
 	criteriaJSON = criteriaToJSON();
 	optionsJSON = readShowOptions(relaunchShow=false);
 

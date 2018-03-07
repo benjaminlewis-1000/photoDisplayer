@@ -37,7 +37,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 	var mainDiv = document.getElementById(divOfFields);
 	// The currently defined valid types of criteria
-	var criteriaTypes = ["Date Range", "Person", "Year", "Month", "Special"]
+	var criteriaTypes = ["Date Range", "Person", "Year", "Month", "Special", "Location"]
 
 	console.debug("Arguments passed to constructCriteriaAfterPersonNamesLoaded are: " + isNew + " " + divNumber + " " + criteriaType + ' ' + binaryValue + ' ' + selectionValue)
 
@@ -476,7 +476,102 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			}
 
 			break;
+		case "Special":
 
+			// Copy past from the previous few; give it the options of 'is' or 'is not' a month for the first
+			// drop-down box. Fairly straightforward as above. 
+			var binarySelect = document.createElement('select')
+			binarySelect.id = 'binarySelectValues' + divNumber
+			span_qualifier.appendChild(binarySelect)
+			binarySelect.className = "binaryField"
+
+			binarySelect.options.add(new Option("Last N Years", "last n year", true, true));
+			binarySelect.options.add(new Option("Other TBD", "other", true, true));
+			possVals = ['last n year', "other"]
+			//binarySelect.options.add(new Option("Special Day", "special day", true, true));
+			if (binaryValue == null) {
+				binarySelect.selectedIndex = 0
+			}else{
+				if (possVals.indexOf(binaryValue) < 0){
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown binary switch value for Special. ")
+					binarySelect.selectedIndex = 0
+				}else{
+					binarySelect.value = binaryValue
+				}
+			}
+
+			if (binaryValue == null) {
+				binarySelect.selectedIndex = 0
+			}else{
+				if (possVals.indexOf(binaryValue) < 0){
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
+					binarySelect.selectedIndex = 0
+				}else{
+					/* VValues are numerical, so we need to choose the selected index rather than the month name. */
+					binarySelect.selectedIndex = possVals.indexOf(binaryValue)
+
+				}
+			}
+
+			binaryValue = binarySelect.value
+
+			binarySelect.addEventListener("change", function(){
+				// Get the new field, create a construct for it, and construct the selection line again. 
+				binaryValue = binarySelect.value;
+				constructOrUpdateCriteriaLine(divOfFields, 0, divNumber, "Special", binaryValue, null);
+				//console.log("Change!")
+			})
+
+			if (binaryValue == 'other'){
+				console.log("other")
+			}else if (binaryValue == 'last n year'){
+
+				var yearSelect = document.createElement("input")
+				yearSelect.setAttribute("type", "text")
+				yearSelect.id = 'selectionValue' + divNumber
+				yearSelect.className = "dropdownOptions"
+
+				// Test that, when a value is put into the year, that it consists of 
+				// all numbers; else, wipe it clean.
+				yearSelect.onchange=function(){
+					var regex = /^[0-9\.]+$/;
+					if( !regex.test(yearSelect.value) ) {
+						yearSelect.value = ""
+					}
+				}
+
+				span_filter_criteria.appendChild(yearSelect)
+			}
+
+
+			/*// Populate the second list with the months of the year, defined here. 
+			var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+			// Build the list element
+			var monthSelect = document.createElement('select')
+			monthSelect.id = 'selectionValue' + divNumber
+			span_filter_criteria.appendChild(monthSelect)
+			monthSelect.className = "dropdownOptions"
+
+			// Populate the list element
+			for (var i = 0; i < months.length; i++){
+				monthSelect.options.add(new Option(months[i], i + 1, true, true))
+			}
+
+			// Load the month list with either the saved value or the first value ("January")
+			if (selectionValue == null) {
+				monthSelect.selectedIndex = 0
+			}else{
+				if (months.indexOf(selectionValue) < 0){
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown person selected for Person field. ")
+					monthSelect.selectedIndex = 0
+				}else{
+					/* VValues are numerical, so we need to choose the selected index rather than the month name. */
+					/*monthSelect.selectedIndex = months.indexOf(selectionValue)
+				}
+			}*/
+
+			break;
 		default:
 			break;
 	}
