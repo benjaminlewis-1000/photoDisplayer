@@ -104,7 +104,6 @@ def geoLookup(lat, lon):
 
     if use_googmaps:
         for i in range(len(location)):
-            print location[i]
             if 'street_number' in location[i]['types']:
                 house_number = location[i]['long_name']
             if 'route' in location[i]['types']:

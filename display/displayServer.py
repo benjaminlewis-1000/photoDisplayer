@@ -84,7 +84,7 @@ class displayServer():
 
         self.printDebug = False
         # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
-        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 4", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
 
     def startNamedSlideshow(self, requestedShow, runLength=3600):
         print "Asked for show {}".format(requestedShow)
