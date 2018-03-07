@@ -40,11 +40,40 @@ na Image Height
 = Time zone (where applicable)
 '''
 
+''' 
+getExif is a function that retrieves, where avaliable, the following data from a JPEG image: 
+
+'ISO8601' - ISO format date/time of the photo
+'year' - the respective value from the ISO date
+'month' - the respective value from the ISO date
+'day' - the respective value from the ISO date
+'hour' - the respective value from the ISO date
+'min' - the respective value from the ISO date
+'sec' - the respective value from the ISO date
+'TimeZone' - the respective value from the ISO date
+
+'latitude' - lat of the photo, if set
+'longitude' - lon of the photo, if set
+
+'house_number' - decoded from lat/lon if doGeocode is set to "True"
+'road' - decoded from lat/lon if doGeocode is set to "True"
+'city' - decoded from lat/lon if doGeocode is set to "True"
+'state' - decoded from lat/lon if doGeocode is set to "True"
+'postcode' - decoded from lat/lon if doGeocode is set to "True"
+'country' - decoded from lat/lon if doGeocode is set to "True"
+
+'names' - a list of all names of people in the photo, de-duplicated
+'picasaTags' - tags that are user-set, from Picasa
+'autoTagsClarifai' - tags that were automatically assigned from Clarifai
+'autoTagsGoogle' - tags that were automatically assigned from Google services
+
+'''
+
 def getExifData(filename, doGeocode):
 
     if filename.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
-        # filename = os.path.join(dirpath, fname)
-        # print filename
+       
+        # Read the exiv2 metadata from the image
         metadata = pyexiv2.ImageMetadata(filename)
         try:
             metadata.read()
@@ -52,7 +81,9 @@ def getExifData(filename, doGeocode):
             print str(ioe)
             exit(1)
         dateOK = True
+
         # Preferred fields: 'Exif.Photo.DateTimeOriginal' or 'Exif.Photo.DateTimeDigitized'
+        # Retrieve the time from the EXIV
         if ('Exif.Photo.DateTimeOriginal' not in metadata) and ('Exif.Photo.DateTimeDigitized' not in metadata):
             # print "Time not found!"
             if 'Iptc.Application2.DateCreated' in metadata and 'Iptc.Application2.TimeCreated' in metadata:
@@ -101,9 +132,9 @@ def getExifData(filename, doGeocode):
         assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
         assert len(str(dateTime[1])) == 8 or len(str(dateTime[1])) == 14
 
-        # assert dateOK
+        # Date time parser - python library
         dt = parser.parse(dateIso)
-        # print dt
+
         jData = {}
         jData['ISO8601'] = dateIso
         jData['year'] = dt.year
@@ -119,6 +150,7 @@ def getExifData(filename, doGeocode):
             jData['TimeZone'] = '0'
 
         if ('Exif.GPSInfo.GPSLatitudeRef' in metadata):
+            # Get the latitude/longitude and N/S and E/W
             northSouth = metadata['Exif.GPSInfo.GPSLatitudeRef'].raw_value
             eastWest = metadata['Exif.GPSInfo.GPSLongitudeRef'].raw_value
             lat = str(metadata['Exif.GPSInfo.GPSLatitude'].raw_value)
@@ -127,6 +159,7 @@ def getExifData(filename, doGeocode):
             lonSplit = lon.split(" ")
             assert len(latSplit) == 3
             assert len(lonSplit) == 3
+            # Compute the latitude and longitude in decimal form
             latDec = 1.0 * eval(latSplit[0] + '.0') + 1.0/60.0 * eval(latSplit[1] + '.0') + 1.0/3600.0 * eval(latSplit[2] + '.0')
             lonDec = 1.0 * eval(lonSplit[0] + '.0') + 1.0/60.0 * eval(lonSplit[1] + '.0') + 1.0/3600.0 * eval(lonSplit[2] + '.0')
 
@@ -138,12 +171,8 @@ def getExifData(filename, doGeocode):
             jData['latitude'] = latDec
             jData['longitude'] = lonDec
 
-            # print "{} {} / {} {}".format(lat, lon, latDec, lonDec)
-
-
             if doGeocode:
-                # passed = False
-                # while not passed:
+                # Do a reverse geocode lookup using the geoServer.py server, which is started by addPics.py
                 proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + params['params']['serverParams']['geoServerPort'] + "/RPC2")
                 try:
                     val = proxy.geoLookup(latDec, lonDec)
@@ -157,8 +186,6 @@ def getExifData(filename, doGeocode):
                     passed = True
                 except Exception as e :
                     return str(e)
-
-
 
                 jData['house_number'] = val['house_number']
                 jData['road'] = val['road']
@@ -191,12 +218,10 @@ def getExifData(filename, doGeocode):
         metadataFields = metadata.xmp_keys
         nameList = []
         for i in range(len(metadataFields)):
-            # print metadataFields[i] + " " + str(metadata[metadataFields[i]].raw_value)
+            # Find all fields that have the word 'name' in them, regardless of case. 
             if re.search(r'Name', metadataFields[i], re.IGNORECASE):
-                # print metadataFields[i] + ": " + metadata[metadataFields[i]].raw_value
                 nameSplit = metadata[metadataFields[i]].raw_value
                 nameSplit = nameSplit.split(": ")
-                # print nameSplit
                 name = nameSplit[0]
                 bogusNames = ["Custom", "Medium Contrast"]
                 if not re.search(r'^\.', name) and not name.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])) and not name in bogusNames and not re.search(r'NIKKOR', name) and not re.search(r'NIKON', name):
@@ -210,6 +235,7 @@ def getExifData(filename, doGeocode):
             autoTags = metadata['Exif.Photo.UserComment'].raw_value
             # autoTags = re.sub(r'charset=\"Ascii\"\s+', '', autoTags)
             if re.search(r'UUUUUUUU', autoTags):
+                # Reject a tag that has been shown to have a erroneous value in these fields.
                 jData['autoTagsGoogle'] = []
                 jData['autoTagsClarifai'] = []
             else:
@@ -271,21 +297,9 @@ def getExifData(filename, doGeocode):
         # print jData
 
         jsonObj = json.dumps(jData)
-        # print jsonObj
         assert re.search(r'...............', jsonObj)
-        # assert not re.search(r'\\x\d+', jsonObj)
-        # assert not re.search(r'\\u[0=9a-f]{4}', jsonObj)
         return jsonObj
 
-
-
-# image = sys.argv[1]
-# print getExifData(image, True)
-
-
-# proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + "8040" + "/RPC2")
-
-# # val = json.loads(proxy.geoLookup("40.2338", "-111.6585").encode('utf-8'))
 
 if __name__ == '__main__':
 

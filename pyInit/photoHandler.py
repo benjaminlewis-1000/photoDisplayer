@@ -14,15 +14,13 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
 
     fullPath = os.path.join(basePath, fileRelPath)
 
-
     if not fileRelPath.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
         return
 
     c = conn.cursor()
 
+    # Find the time that the photo was modified at, according to its filesystem data.
     last_modified_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(os.path.getmtime(fullPath)))
-
-    # print fullPath + "  " + str(last_modified_date)
 
     photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
     photoCols = params['params']['photoDatabase']['tables']['photoTable']['Columns']
@@ -31,12 +29,14 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
     rootDirCol = photoCols['rootDirNum']
     photoKeyCol = photoCols['photoKey']
 
+    # Determin whether the photo is in the database already.
     photoInTableQuery = '''SELECT {}, {}, {}, {} FROM {} WHERE {} = ? AND {} = ?'''.format(photoFileCol, modDateCol, rootDirCol, photoKeyCol, photoTableName, photoFileCol, rootDirCol)
 
     c.execute(photoInTableQuery, (fileRelPath, currentRootDirNum))
 
     row = c.fetchone()
 
+    # Determine whether we have already entered this photo in the table and it's up to date.
     if row != None:
         recordedModDate = row[1]
         if recordedModDate >= last_modified_date:
@@ -48,6 +48,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
         # Something in the photo data lookup failed, so we are going 
         # to skip this for now and come back on a future update.
         return
+
     try:
         photoData = json.loads(exifData)
     except Exception as e:
@@ -96,6 +97,8 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
     phLon = photoData['longitude']
 
     if row != None:
+        # This is the case where we already have the data in the database, but 
+        # the photo has been updated since then. 
         # print '{}, {}, {}' % (str(row[0]), str(row[1]), str(row[2]))
         # Update the photo
         recordedModDate = row[1]
@@ -105,7 +108,6 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
             pass 
             # Need to do an update
             print 'Need to update ' + fullPath
-            getExifData(fullPath, False)
             clearPhotoLinks(conn, photoID, params)
 
             updatePhotoQuery = '''UPDATE {} SET {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ?, {} = ? WHERE {} = ? AND {} = ?'''.format(photoTableName, \
@@ -113,8 +115,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
                 photoFileCol, rootDirNumColumn)
 
             try:
-                c.execute(updatePhotoQuery, (phDate, last_modified_date, phYear, phMonth, phDay, phHour, phMin, phTZ, phInsertDate, phHouseNum, phRoad, phCity, phState, phPost, phCountry, phLat, phLon, \
-                    fileRelPath, currentRootDirNum))
+                c.execute(updatePhotoQuery, (phDate, last_modified_date, phYear, phMonth, phDay, phHour, phMin, phTZ, phInsertDate, phHouseNum, phRoad, phCity, phState, phPost, phCountry, phLat, phLon, fileRelPath, currentRootDirNum))
                 conn.commit()
 
             except sqlite3.OperationalError as oe:
@@ -150,16 +151,14 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
         linkTags(conn, photoID, photoData['picasaTags'], photoData['autoTagsClarifai'], photoData['autoTagsGoogle'], params)
 
 def clearPhotoLinks(conn, photoKeyID, params):
+    # Remove the links in linker tables to the photo's unique ID, so that we can then delete or update
+    # the photo's record in the photo table.
+    # Tags removed include people and tags from user, Google, and Clarifai
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
     linkerTable = params['params']['photoDatabase']['tables']['photoLinkerTable']['Name']
     linkerPhoto = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPhoto']
-
-    deletePeople = '''DELETE FROM {} WHERE {} = ?'''.format(linkerTable, linkerPhoto)
-    c.execute(deletePeople, (photoKeyID,))
-
-    # deleteTags
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
     clarifaiTagTable = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Name']
@@ -169,25 +168,31 @@ def clearPhotoLinks(conn, photoKeyID, params):
     clarifaiTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerPhoto']
     googTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerPhoto']
 
+    deletePeople = '''DELETE FROM {} WHERE {} = ?'''.format(linkerTable, linkerPhoto)
+    c.execute(deletePeople, (photoKeyID,))
+
     delTagsUser = '''DELETE FROM {} WHERE {} = ?'''.format(userTagTable, userTagPhoto)
     c.execute(delTagsUser, (photoKeyID,))
 
-    delTagsUser = '''DELETE FROM {} WHERE {} = ?'''.format(clarifaiTagTable, clarifaiTagPhoto)
-    c.execute(delTagsUser, (photoKeyID,))
+    delTagsClarifai = '''DELETE FROM {} WHERE {} = ?'''.format(clarifaiTagTable, clarifaiTagPhoto)
+    c.execute(delTagsClarifai, (photoKeyID,))
 
-    delTagsUser = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
-    c.execute(delTagsUser, (photoKeyID,))
+    delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
+    c.execute(delTagsGoogle, (photoKeyID,))
 
+    # Commit to database at the end to make change permanent
     conn.commit()
 
 def checkPhotosAtEnd(conn, params):
+
+    # Perform a check at the end that all photos in the database are still on disk. If a photo is not
+    # on disk (i.e. has been deleted) then it should be removed from the database. 
 
     # IMPORTANT! Set the row factory for the database. 
     conn.row_factory = sqlite3.Row
 
     rootKeyField = params['params']['photoDatabase']['tables']['rootTable']['Columns']['rootKey']
     rootTable = params['params']['photoDatabase']['tables']['rootTable']['Name']
-
 
     if vars.osType == vars.linuxType:
         rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']
@@ -243,6 +248,11 @@ def insertName(name, conn, photoKeyID, params, nameDict):
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
+    # Use a nameDict to speed up database lookups - if we have seen that person's name before,
+    # we get their unique ID number from the database and put it in the nameDict such that
+    # nameDict[person] = uuid. 
+
+    # Python passed nameDict by reference, so updating it here updates it in the calling function.
     if name not in nameDict:
 
         photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
@@ -260,7 +270,7 @@ def insertName(name, conn, photoKeyID, params, nameDict):
             utf_name = name
             # utf_name = unicode(str(name), "utf-8", "ignore")
         # print utf_name
-        ## Check if the person exists
+        ## Check if the person exists in the database already
         personExistsQuery = '''SELECT {} FROM {} WHERE {} = ?'''.format(personKeyCol, personTableName, personNameCol)
 
         c.execute(personExistsQuery, (utf_name,))
@@ -268,6 +278,7 @@ def insertName(name, conn, photoKeyID, params, nameDict):
         row = c.fetchone()
 
         if row != None:
+            # Person is in the database
             personID = row[0]
             # Sanity check - make sure only one person has that name in the database
             numPeopleQuery = '''SELECT COUNT(*) FROM {} WHERE {} = ?'''.format(personTableName, personNameCol)
@@ -287,8 +298,10 @@ def insertName(name, conn, photoKeyID, params, nameDict):
     linkerPerson = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPeople']
     linkerPhoto = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPhoto']
 
+    # Insert a record in the linker table, with photo_uuid tied to person_uuid.
     insertLinkInTable = '''INSERT INTO {} ({}, {}) VALUES (?, ?)'''.format(linkerTable, linkerPhoto, linkerPerson)
     c.execute(insertLinkInTable, (photoKeyID, nameDict[name]))
+    # Commit to database so that the value persists in the DB even if the program is killed. 
     conn.commit()
 
 def linkTags(conn, photoKeyID, userTags, clarifaiTags, googTags, params):

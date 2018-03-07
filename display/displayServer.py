@@ -20,7 +20,7 @@ import shlex
 import thread
 import threading
 from scheduleRunner import showScheduler
-from buildQuery import buildQueryFromJSON
+# from buildQuery import buildQueryFromJSON
 
 import queryMaker
 import screenPowerClient 
@@ -315,9 +315,7 @@ class displayServer():
 
     def run(self):
         self.server.register_function(self.startSlideshowWithQuery, 'startSlideshowWithQuery')
-        # self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
         self.server.register_function(self.setSlideshowProperties, 'setSlideshowProperties')
-        # self.server.register_function(self.buildQueryFromJSON, 'buildQueryFromJSON')
         self.server.register_function(self.startNamedSlideshow, 'startNamedSlideshow')
         self.server.register_function(self.endSlideshow, 'endSlideshow')
         self.server.register_function(self.getShowRunningState, 'getShowRunningState')
