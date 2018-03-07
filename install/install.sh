@@ -53,6 +53,8 @@ if [[ $INSTALL_DDNS ]]; then
     sudo bash $THIS_DIR/optional/ddclientInstall.sh
 fi
 
+sudo bash $THIS_DIR/subscripts/chown_files.sh
+
 sudo reboot
 #! /bin/bash
 
