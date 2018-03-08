@@ -85,8 +85,6 @@ class showScheduler():
         # Check if the last retrieval from the database matches the current retrieval; if not,
         # then something has changed on the webpage and we need to re-process the output
         # into an array of arrays describing the show. 
-        self.showSchedule = []
-
 
         if self.allSavedShows is not None and self.lastSavedShows != self.allSavedShows:
             self.showSchedule = []
@@ -145,10 +143,12 @@ class showScheduler():
         hhmm = '{:02}{:02}'.format(currentTime[3], currentTime[4])
  #       print hhmm
 
+        print "Show running: {} DB Update: {}".format(self.showRunning, self.dbUpdated)
         if not self.showRunning or self.dbUpdated:
             # Determine whether a show should be running. Takes the first
             # defined valid show. 
             # Reset flags. 
+            print "Check: {}".format(self.showSchedule)
             self.dbUpdated = False
             quitShow = True
             for schedule in self.showSchedule:

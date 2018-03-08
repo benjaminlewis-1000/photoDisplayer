@@ -151,8 +151,10 @@ class displayServer():
         print "__startshow__: {}".format(SQL_query)
 
         if self.display_executable != None: 
-            self.display_executable.kill()
+            print "Waiting to kill..."
+            self.display_executable.terminate()
             self.display_executable.wait()
+            print "Process killed!"
 
         if SQL_query != "":
             photoDatabase = sqlite3.connect( self.photoDatabasePath )
@@ -245,7 +247,9 @@ class displayServer():
         
         if self.display_executable != None: 
             self.display_executable.terminate()
+            print "end slideshow - terminated!"
             self.display_executable.wait()
+            self.display_executable = None
         pass
 
     def setSlideshowProperties(self, propertiesJSON):
