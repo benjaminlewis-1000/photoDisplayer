@@ -27,6 +27,7 @@ import screenPowerClient
 
 #### Get our root path
 rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
+thisDir = os.path.abspath(os.path.join(os.path.dirname( __file__ )))
 
 ######### Set up the actual server #####################################
 
@@ -268,7 +269,10 @@ class displayServer():
         # Sort (with parameters) | -S <param> - name, filename, mtime, width, height, pixels, size, format. 
         # Stretch small images | -s
 
-        self.commandArray = ["--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+        self.commandArray = ["--action1", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" cw"]
+        self.commandArray = ["--action2", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" ccw"]
+        self.commandArray = ["--action3", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" r180"]
+        self.commandArray = ["--action4", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" del"]
         self.commandArray.append('--auto-rotate')
 
         # self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
