@@ -85,7 +85,12 @@ class displayServer():
 
         self.printDebug = False
         # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
-        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 4", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+        self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 4", "--auto-rotate", \
+        "--action1", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" cw", \
+        "--action2", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" ccw", \
+        "--action3", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" r180", \
+        "--action4", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" del" ]
+         # "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
 
     def startNamedSlideshow(self, requestedShow, runLength=3600):
         print "Asked for show {}".format(requestedShow)
@@ -269,10 +274,18 @@ class displayServer():
         # Sort (with parameters) | -S <param> - name, filename, mtime, width, height, pixels, size, format. 
         # Stretch small images | -s
 
-        self.commandArray = ["--action1", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" cw"]
-        self.commandArray = ["--action2", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" ccw"]
-        self.commandArray = ["--action3", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" r180"]
-        self.commandArray = ["--action4", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" del"]
+        self.commandArray.append("--action1")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" cw")
+        
+        self.commandArray.append("--action2")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" ccw")
+        
+        self.commandArray.append("--action3")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" r180")
+        
+        self.commandArray.append("--action4")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" del")
+        
         self.commandArray.append('--auto-rotate')
 
         # self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
