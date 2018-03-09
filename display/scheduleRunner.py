@@ -143,7 +143,7 @@ class showScheduler():
         hhmm = '{:02}{:02}'.format(currentTime[3], currentTime[4])
  #       print hhmm
 
-        print "Show running: {} DB Update: {}".format(self.showRunning, self.dbUpdated)
+        # print "Show running: {} DB Update: {}".format(self.showRunning, self.dbUpdated)
         if not self.showRunning or self.dbUpdated:
             # Determine whether a show should be running. Takes the first
             # defined valid show. 

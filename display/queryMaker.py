@@ -79,6 +79,7 @@ class QueryMaker():
             if critType.lower() == 'all':
                 getAll = True
             if critType.lower() not in ['year', 'date range', "date%20Range", 'person', 'month', 'all']:
+                print "Error! Type {} not found.".format(critType)
                 errs.append('Criteria type {} was not found.'.format(critType) );
                 returnDict['exceptions'] = errs;
                 returnDict['debug'] = debug;
@@ -88,28 +89,30 @@ class QueryMaker():
         if getAll:
             masterQuery = '''SELECT {}, {}, {}, {} FROM {} '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName)
         else:
-            yearQuery = self.__handleYear__(selectedYears)
-            dateRangeQuery = self.__buildDateRange__(dateRangeVals)
-            orPersonQuery = self.__buildPersonQueryOR__(people)
-            monthQuery = self.__buildMonthQueryOR__(selectedMonths)
 
             masterQuery = ""
 
             ## From (Year AND Month) OR DateRange
             if len(selectedMonths) > 0:
+                monthQuery = self.__buildMonthQueryOR__(selectedMonths)
                 if masterQuery != "":
                     masterQuery += " INTERSECT "
                 masterQuery += monthQuery
+
             if len(dateRangeVals) > 0:
+                dateRangeQuery = self.__buildDateRange__(dateRangeVals)
                 if masterQuery != "":
                     masterQuery += " UNION "
                 masterQuery += dateRangeQuery
 
             if len(people) > 0: #orPersonQuery != "":
+                orPersonQuery = self.__buildPersonQueryOR__(people)
                 if masterQuery != "":
                     masterQuery += " INTERSECT "
                 masterQuery += orPersonQuery
+
             if len(selectedYears) > 0:
+                yearQuery = self.__handleYear__(selectedYears)
                 # UNION the year range with the individual years
                 # (i.e. the andYearQuery with the orYearQuery) - but only if applicable.
                 if masterQuery != "":
@@ -128,7 +131,8 @@ class QueryMaker():
         orYearQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
         andYearQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
 
-
+        if len(selectedYears) == 0:
+            return ""
         yearQueryStart = [False, False]
         andIndex = 0
         orIndex = 1
@@ -169,20 +173,22 @@ class QueryMaker():
         return returnQuery
 
     def __buildDateRange__(self, dateRangeVals):
+        print dateRangeVals
         orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenDate)
 
         for i in range(len(dateRangeVals)):
             startDate = dateRangeVals[i][0]
             endDate = dateRangeVals[i][1]
 
+            print "Start: {} End: {}".format(startDate, endDate)
             # print startDate
             # print endDate
 
             # Format the dates, if they aren't "None". 
             if startDate != "None":
-                startDate = datetime.datetime.strptime(startDate, "%Y/%m/%d").strftime("%Y-%m-%d 00:00:00") 
+                startDate = datetime.datetime.strptime(startDate, "%m/%d/%Y").strftime("%Y-%m-%d 00:00:00") 
             if endDate != "None":
-                endDate = datetime.datetime.strptime(endDate, "%Y/%m/%d").strftime("%Y-%m-%d 23:59:59")
+                endDate = datetime.datetime.strptime(endDate, "%m/%d/%Y").strftime("%Y-%m-%d 23:59:59")
 
             if ( startDate != "None" and endDate != "None" ):
                 # Get the ordering right, so we don't have mutually exclusive dates. 
@@ -203,6 +209,9 @@ class QueryMaker():
         return orDateRangeQuery
 
     def __buildPersonQueryOR__(self, orPeople):
+
+        print "build query or: "
+        print orPeople
     
         orPersonQuery = '''SELECT * FROM ( SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(self.plPhoto, self.plTableName, self.plPerson, self.ppKey, self.ppTableName, self.ppName)
 
@@ -215,6 +224,7 @@ class QueryMaker():
 
         orPersonQuery += " ) )"
 
+        print "Or query: {}".format(orPersonQuery)
         return orPersonQuery
 
 

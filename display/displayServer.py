@@ -86,10 +86,10 @@ class displayServer():
         self.printDebug = False
         # self.commandString = "-FxZ -N -z -Y -D 2 --auto-rotate --action1 'echo \"%F\" >> " + os.path.join(rootDir, "misformedFiles.txt") + "'"
         self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 4", "--auto-rotate", \
-        "--action1", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" cw", \
-        "--action2", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" ccw", \
-        "--action3", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" r180", \
-        "--action4", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" del" ]
+        "--action1", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F cw", \
+        "--action2", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F ccw", \
+        "--action3", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F r180", \
+        "--action4", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F del" ]
          # "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
 
     def startNamedSlideshow(self, requestedShow, runLength=3600):
@@ -107,6 +107,7 @@ class displayServer():
         showJsonCol = dbSchemaParams['slideshowDefTable']['jsonCol']
 
         getShowNamesQuery = '''SELECT {} FROM {}'''.format(showNameCol, showDefTableName)
+        print getShowNamesQuery
 
         savedShowDatabase = sqlite3.connect(self.savedShowDatabasePath)
         savedShowDatabase.text_factory = str
@@ -119,6 +120,7 @@ class displayServer():
         print fileResults
 
         requestInListOfShows = (unicode(requestedShow) in set(fileResults))
+        print 'Req show: {} Is in list: {}'.format(unicode(requestedShow), requestInListOfShows)
 
         if requestInListOfShows:
             # Get the corresponding JSON:
@@ -129,6 +131,7 @@ class displayServer():
             # assert 1 == 0, "Need to implement a 'get all' function."
             jsonResult = '[{"num":0, "criteriaType":"All","booleanValue":"is", "criteriaVal":"all"}]'
 
+        # print "Pre sql: {}".format(jsonResult)
         sql_query = self.queryMachine.buildQueryFromJSON(jsonResult)
         print "Starting the named show!"
         self.__startShow__(sql_query, runLength)
@@ -277,18 +280,19 @@ class displayServer():
         #### As-yet unexplored properties:
         # Sort (with parameters) | -S <param> - name, filename, mtime, width, height, pixels, size, format. 
         # Stretch small images | -s
+        self.commandArray = []
 
         self.commandArray.append("--action1")
-        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" cw")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " %F cw")
         
         self.commandArray.append("--action2")
-        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" ccw")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " %F ccw")
         
         self.commandArray.append("--action3")
-        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" r180")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " %F r180")
         
         self.commandArray.append("--action4")
-        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " \"%F\" del")
+        self.commandArray.append('python ' + os.path.join(thisDir, 'fehEffects.py') + " %F del")
         
         self.commandArray.append('--auto-rotate')
 
@@ -340,7 +344,6 @@ class displayServer():
         self.server.register_function(self.startNamedSlideshow, 'startNamedSlideshow')
         self.server.register_function(self.endSlideshow, 'endSlideshow')
         self.server.register_function(self.getShowRunningState, 'getShowRunningState')
-        print "Running"
         self.server.serve_forever()
         
         

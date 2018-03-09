@@ -11,8 +11,9 @@ alterFile = os.path.join(rootDir, 'altered_paths.out')
 assert len(sys.argv) == 3
 
 filename = sys.argv[1]
+fehNumber = sys.argv[2]
 
-assert os.path.isfile(filename), 'File input is not a file'
+# assert os.path.isfile(str(filename)), 'File {} input is not a file'.format(filename)
 
 img = Image.open(filename)
 
@@ -34,8 +35,7 @@ def rotate_180(img, filename):
 	img = img.rotate(180, expand=True)
 	img.save(filename)
 
-def mark_for_deletion(filename):
-	pass
+def mark_for_deletion(img, filename):
 	with open(deleteFile, 'a') as fh:
 		print >>fh, filename
 
@@ -59,6 +59,7 @@ def numbers_to_months(argument):
     func = switcher.get(argument, lambda: "Invalid month")
 
     # Execute the function
+    print switcher.get(argument)
     print func(img, filename)
 
 numbers_to_months(fehNumber)
