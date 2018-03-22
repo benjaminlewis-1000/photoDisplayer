@@ -15,4 +15,4 @@ FEH_PID=$(ps aux | grep feh | grep -v grep | grep -v defunct | awk '{print $2}')
 kill -9 $FEH_PID
 
 # nohup bash -c "(<ROOTDIR>/display/displayServer.py)" &
-python (<ROOTDIR>/display/displayServer.py) &
+sudo -c "(python <ROOTDIR>/display/displayServer.py) &" $USER

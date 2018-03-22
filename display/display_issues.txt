@@ -1,5 +1,7 @@
 ISSUES:
 
+
+
 - "is not" person is being treated as an "is" person.
 - Make sure to handle months properly; I'm passing them as numbers, now... (single digit 1-9)
 - launchSlideshow.php has a hard coded xml file, which breaks it on different OS's.
