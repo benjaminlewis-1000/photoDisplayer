@@ -19,10 +19,10 @@ import time
 import photoHandler
 
 import vars
-if vars.osType == vars.linuxType:
-    import psutil
-else:
-    raise OSError('This hasn''t been tested on Windows.')
+# if vars.osType == vars.linuxType:
+#     import psutil
+# else:
+#     raise OSError('This hasn''t been tested on Windows.')
 
 project_path = os.path.abspath(os.path.join(__file__,"../.."))
 script_path  = os.path.abspath(os.path.join(__file__,".."))
@@ -322,6 +322,8 @@ if __name__ == '__main__':
     modDateCol = photoCols['modifyDate']
     rootDirCol = photoCols['rootDirNum']
 
+    excludedDirectories = params['params']['excludeDirs']['dir']
+
     photoInTableQuery = '''SELECT {}, {}, {} FROM {}'''.format(photoFileCol, modDateCol, rootDirCol, photoTableName)
 
     def dict_factory(cursor, row):
@@ -367,30 +369,37 @@ if __name__ == '__main__':
         rootDirKey = rootDirRows[eachRoot]
         subdirs = sorted(rootSubdirs[eachRoot])
 
-        print subdirs
+        # print "Subdirs: " +  str(subdirs)
+        # print excludedDirectories
         for eachDirectory in subdirs:
-            files = os.listdir(os.path.join(eachRoot, eachDirectory) )
-            for eachFile in files:
-                if eachFile.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"]) ):
-                    filesProcessed += 1
-                    filepath = os.path.join(eachRoot, eachDirectory, eachFile);
-                    # print ('TODO: Check filepath in dict and stuff...')
-                    last_modified_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(os.path.getmtime(filepath)))
-                    # Using the dateDict, we try to prevent a read to the database for every single file
-                    # just to see if it's up to date. Instead, we check dateDict and see if the modification
-                    # date is acceptable. If not, or it doesn't exist, we go ahead and add the photo using
-                    # the addPhoto function. Checking whether the file is in the dict is quite a bit faster. 
-                    if filepath in dateDict and (dateDict[filepath] >= last_modified_date):
-                        pass
-                    else:
-                        # try:
-                        photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
-                        # except Exception as e:
-                        #     print "Error! " + str(e)
-                        #     raise e
-                        #     exit(1)
-                    if filesProcessed % 500 == 0 and filesProcessed > 0:
-                        print "{} files processed already.".format(filesProcessed)
+            # print eachDirectory
+            if eachDirectory in excludedDirectories:
+                print "Not doing any files inside directory {}".format(eachDirectory)
+            else:
+                print "Adding files within directory {}".format(eachDirectory)
+                files = os.listdir(os.path.join(eachRoot, eachDirectory) )
+                for eachFile in files:
+                    if eachFile.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"]) ):
+                        filesProcessed += 1
+                        filepath = os.path.join(eachRoot, eachDirectory, eachFile);
+                        # print ('TODO: Check filepath in dict and stuff...')
+                        last_modified_date = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(os.path.getmtime(filepath)))
+                        # Using the dateDict, we try to prevent a read to the database for every single file
+                        # just to see if it's up to date. Instead, we check dateDict and see if the modification
+                        # date is acceptable. If not, or it doesn't exist, we go ahead and add the photo using
+                        # the addPhoto function. Checking whether the file is in the dict is quite a bit faster. 
+                        if filepath in dateDict and (dateDict[filepath] >= last_modified_date):
+                            pass
+                        else:
+                            pass
+                            photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict)
+                            # try:
+                            # except Exception as e:
+                            #     print "Error! " + str(e)
+                            #     raise e
+                            #     exit(1)
+                        if filesProcessed % 500 == 0 and filesProcessed > 0:
+                            print "{} files processed already.".format(filesProcessed)
     
     photoHandler.checkPhotosAtEnd(conn, params)
 

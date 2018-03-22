@@ -194,6 +194,8 @@ def checkPhotosAtEnd(conn, params):
     rootKeyField = params['params']['photoDatabase']['tables']['rootTable']['Columns']['rootKey']
     rootTable = params['params']['photoDatabase']['tables']['rootTable']['Name']
 
+    excludedDirectories = params['params']['excludeDirs']['dir']
+
     if vars.osType == vars.linuxType:
         rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']
         otherRootType = params['params']['photoDatabase']['tables']['rootTable']['Columns']['windowsRootPath']
@@ -233,13 +235,25 @@ def checkPhotosAtEnd(conn, params):
         filename = row[1]
         photoKeyID = row[2]
         fullpath = os.path.join(rootDir, filename)
+        markForDeletion = False
         if not os.path.isfile(fullpath):
             print os.path.join(rootDir, filename) + " is not a file"
+            markForDeletion = True
+
+        for exDir in excludedDirectories:
+            if fullpath.startswith(exDir):
+                print "Bad start file: {} in {}".format(filename, exDir)
+                markForDeletion = True
+
+        if markForDeletion:
+            print "Deleting!"
             clearPhotoLinks(conn, photoKeyID, params)
             delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
+            print delPhotoQuery + " " + filename
             d = conn.cursor()
             d.execute(delPhotoQuery, (filename, rootDir))
             conn.commit()
+
         row = c.fetchone()
         count += 1
 

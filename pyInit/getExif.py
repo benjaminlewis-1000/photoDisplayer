@@ -314,7 +314,8 @@ if __name__ == '__main__':
                 print getExifData(fullPath, True)
     else:
         fullPath = "D:\\Pictures\\Emily's Pictures\\3-30-2009\\DSCN0456.JPG"
-        print getExifData(fullPath, True)
+        fullPath = 'D:\Pictures\\2016\Provo\july_4_parade (22).JPG'
+        print getExifData(fullPath, False)
 
 
 

@@ -172,18 +172,29 @@
 	"buffers":
 	[
 		{
-			"file": "displayServer.py",
+			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
 			"settings":
 			{
-				"buffer_size": 28950,
+				"buffer_size": 5200,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
+			"file": "queryMaker.py",
 			"settings":
 			{
-				"buffer_size": 5144,
+				"buffer_size": 11568,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "#! /usr/bin/env python"
+			}
+		},
+		{
+			"file": "displayServer.py",
+			"settings":
+			{
+				"buffer_size": 14538,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -243,11 +254,17 @@
 	],
 	"file_history":
 	[
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/displayServerOld.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/screen_manager.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/buildQuery_copy.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/buildQuery.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/scheduleRunner.py",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/cec-log.txt",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/slideshowClient.py",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/scripts_controlpanel/turnOnTV.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/css_controlpanel/modal.css",
 		"/C/PHP/php.ini",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/queryTest.out",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/mainPage.php",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/site/page2.php",
@@ -364,13 +381,7 @@
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/display/feh_args.txt",
 		"/C/Users/Benjamin/Desktop/site/Online HTML Editor.html",
 		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/params.pm",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/getFileList.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/addImages.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/threadTest.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitignore",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/loadTest.pl",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/.gitattributes",
-		"/C/Users/Benjamin/Dropbox/Perl Code/photo_displayer/params.pm"
+		"/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/getFileList.pl"
 	],
 	"find":
 	{
@@ -388,6 +399,58 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getshowrunningstat",
+			"display_executable",
+			"self.client",
+			"client",
+			"safeto",
+			"safetodeter",
+			"safeto",
+			"safetodeter",
+			"while",
+			"self.activeQueue.put",
+			"self.activeQue",
+			"computerisactiv",
+			"try, try",
+			"self.safet",
+			"safeto",
+			"time",
+			"cecQueue",
+			"state moni",
+			"startSlideshow",
+			"buildquery",
+			"threading.Time",
+			"buildque",
+			"buildquery",
+			"displaystat",
+			"tv",
+			"turnon",
+			"powerCyc",
+			"powerCycling",
+			"tparams",
+			"RequestHandler",
+			"getAll",
+			"paramType",
+			"andyearquery",
+			"andperson",
+			"orpersonq",
+			"getAll",
+			"fullscreen",
+			"intervalShowStatusChecker",
+			"60",
+			"cec-client",
+			"currentRunningShowName",
+			"self.clientAction",
+			"clientAction",
+			"getShowRunningState",
+			"showRunningName",
+			"self.masterQuery",
+			"self",
+			"i",
+			"buildQuery",
+			"loadsaved",
+			"endslidesho",
+			"loadSavedShow",
 			"is after",
 			"buildquer",
 			"loadsavedsh",
@@ -410,6 +473,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"actionType",
+			"masterQuery"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -420,16 +485,45 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "displayServer.py",
+					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 28950,
+						"buffer_size": 5200,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1268,
+								1268
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 288.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "queryMaker.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11568,
 						"regions":
 						{
 						},
@@ -443,44 +537,45 @@
 						"settings":
 						{
 							"auto_complete": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"auto_name": "#! /usr/bin/env python",
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 6228.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "/C/Users/Benjamin/Dropbox/Perl Code/photoDisplayer/config/params.xml",
+					"buffer": 2,
+					"file": "displayServer.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5144,
+						"buffer_size": 14538,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4789,
-								4801
+								11673,
+								11673
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/XML/XML.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2193.0,
+						"translation.y": 5220.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -492,7 +587,7 @@
 	},
 	"input":
 	{
-		"height": 34.0
+		"height": 38.0
 	},
 	"layout":
 	{

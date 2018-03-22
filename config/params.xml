@@ -4,6 +4,11 @@
 	  <windowsType>1</windowsType>
 	  <linuxType>2</linuxType>
 	</ostypes>
+	<excludeDirs>
+		<dir>C:\Users\Ben\Dropbox\Camera Uploads\Car</dir>
+		<dir>C:\Users\Ben\Dropbox\Camera Uploads\Gmail</dir>
+		<dir>C:\Users\Ben\Dropbox\Camera Uploads\ideas</dir>
+	</excludeDirs>
 	<photoDatabase>
 		<fileName>photos_master.db</fileName>
 		<tables>
