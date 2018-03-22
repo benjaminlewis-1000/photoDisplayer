@@ -373,7 +373,8 @@ if __name__ == '__main__':
         # print excludedDirectories
         for eachDirectory in subdirs:
             # print eachDirectory
-            if eachDirectory in excludedDirectories:
+            # if eachDirectory in excludedDirectories:
+            if any( list( eachDirectory.startswith(x) for x in excludedDirectories ) )
                 print "Not doing any files inside directory {}".format(eachDirectory)
             else:
                 print "Adding files within directory {}".format(eachDirectory)

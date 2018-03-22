@@ -240,10 +240,12 @@ def checkPhotosAtEnd(conn, params):
             print os.path.join(rootDir, filename) + " is not a file"
             markForDeletion = True
 
-        for exDir in excludedDirectories:
-            if fullpath.startswith(exDir):
-                print "Bad start file: {} in {}".format(filename, exDir)
-                markForDeletion = True
+        # for exDir in excludedDirectories:
+            
+        if any( list( fullpath.startswith(x) for x in excludedDirectories ) )
+            # if fullpath.startswith(exDir):
+            print "Bad start file: {} in {}".format(filename, exDir)
+            markForDeletion = True
 
         if markForDeletion:
             print "Deleting!"
