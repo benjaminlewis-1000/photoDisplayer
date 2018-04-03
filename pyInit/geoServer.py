@@ -92,6 +92,7 @@ def geoLookup(lat, lon):
         return -1
 
     print "Found something new"
+    print location
 
     # print location.raw['address']
 

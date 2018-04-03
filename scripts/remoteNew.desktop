@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Pi_Photo_new
+Exec=<ROOT_DIR>/scripts/remoteNewKeymap.sh
+Type=application

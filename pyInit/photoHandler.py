@@ -196,6 +196,8 @@ def checkPhotosAtEnd(conn, params):
 
     excludedDirectories = params['params']['excludeDirs']['dir']
 
+    print excludedDirectories
+
     if vars.osType == vars.linuxType:
         rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']
         otherRootType = params['params']['photoDatabase']['tables']['rootTable']['Columns']['windowsRootPath']
@@ -216,6 +218,7 @@ def checkPhotosAtEnd(conn, params):
         key = row[1]
         dir = row[0]
         rootDict[key] = dir
+#         rootDict[dir] = key
         row = c.fetchone()
 
     photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
@@ -231,7 +234,8 @@ def checkPhotosAtEnd(conn, params):
     while row != None:
         if count % 1000 == 0:
             print "Done {} files".format(count)
-        rootDir = rootDict[row[0]]
+        rootNum = row[0]
+        rootDir = rootDict[rootNum]
         filename = row[1]
         photoKeyID = row[2]
         fullpath = os.path.join(rootDir, filename)
@@ -241,19 +245,29 @@ def checkPhotosAtEnd(conn, params):
             markForDeletion = True
 
         # for exDir in excludedDirectories:
+
+        # print fullpath
+        # print excludedDirectories
+
+        # print list(fullpath.startswith(x) for x in excludedDirectories) 
             
-        if any( list( fullpath.startswith(x) for x in excludedDirectories ) )
+        # print fullpath
+        # print excludedDirectories
+        # print fullpath
+        if any( list( fullpath.startswith(x) for x in excludedDirectories ) ):
             # if fullpath.startswith(exDir):
-            print "Bad start file: {} in {}".format(filename, exDir)
+            # print filename
+            print "Deleting file that is an excluded directory: {}".format(filename.encode('utf-8') )
             markForDeletion = True
 
         if markForDeletion:
-            print "Deleting!"
+            # print "Deleting!"
             clearPhotoLinks(conn, photoKeyID, params)
             delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
-            print delPhotoQuery + " " + filename
+            # print delPhotoQuery + " " + filename
+            # print rootNum
             d = conn.cursor()
-            d.execute(delPhotoQuery, (filename, rootDir))
+            d.execute(delPhotoQuery, (filename, rootNum))
             conn.commit()
 
         row = c.fetchone()

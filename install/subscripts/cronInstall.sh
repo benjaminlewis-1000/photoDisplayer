@@ -13,6 +13,7 @@ GIT_PULL_STR="0 1 * * * $PROJECT_ROOT_DIR/scripts/gitpull.sh"
 RESTART_DISPLAY_STR="15 1 * * * sudo bash $PROJECT_ROOT_DIR/scripts/displayRestart.sh"
 
 SCREEN_SERVER_STR="@reboot python $PROJECT_ROOT_DIR/display/screenPowerServer.py &"
+REMOTE_STR="@reboot bash $PROJECT_ROOT_DIR/scripts/remoteNewKeymap.sh" 
 
 sudo chown $USER $PROJECT_ROOT_DIR/scripts/gitpull.sh
 
@@ -36,6 +37,7 @@ echo "$PHOTO_STR" >> $THIS_DIR/ccc.cron
 echo "$GIT_PULL_STR" >> $THIS_DIR/ccc.cron
 echo "$RESTART_DISPLAY_STR" >> $THIS_DIR/ccc.cron
 echo "$SCREEN_SERVER_STR" >> $THIS_DIR/ccc.cron
+echo "$REMOTE_STR" >> $THIS_DIR/ccc.cron
 
 
 cp $THIS_DIR/displayRestart.sh $PROJECT_ROOT_DIR/scripts/displayRestart.sh

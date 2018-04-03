@@ -19,10 +19,10 @@ import time
 import photoHandler
 
 import vars
-# if vars.osType == vars.linuxType:
-#     import psutil
-# else:
-#     raise OSError('This hasn''t been tested on Windows.')
+if vars.osType == vars.linuxType:
+    import psutil
+else:
+    raise OSError('This hasn''t been tested on Windows.')
 
 project_path = os.path.abspath(os.path.join(__file__,"../.."))
 script_path  = os.path.abspath(os.path.join(__file__,".."))
@@ -246,6 +246,7 @@ def getUniqueSubDirs(rootsList):
 
 if __name__ == '__main__':
 
+    os.system("kill `ps aux | grep geoServer | grep -v grep | awk '{print $2}'`")
     print "TODO! Encode all input with '.encode('utf-8')'."
     # TODO: Expand a directory passed via command line
     # sleep(3)
@@ -301,6 +302,7 @@ if __name__ == '__main__':
     rootDirRows = getRoots(conn, args, params)
 
     if args.noPhotoAdd:
+        photoHandler.checkPhotosAtEnd(conn, params)
         exit(0)
 
     # rootDirRows = {}
@@ -323,6 +325,7 @@ if __name__ == '__main__':
     rootDirCol = photoCols['rootDirNum']
 
     excludedDirectories = params['params']['excludeDirs']['dir']
+    print excludedDirectories
 
     photoInTableQuery = '''SELECT {}, {}, {} FROM {}'''.format(photoFileCol, modDateCol, rootDirCol, photoTableName)
 
@@ -374,10 +377,13 @@ if __name__ == '__main__':
         for eachDirectory in subdirs:
             # print eachDirectory
             # if eachDirectory in excludedDirectories:
-            if any( list( eachDirectory.startswith(x) for x in excludedDirectories ) )
-                print "Not doing any files inside directory {}".format(eachDirectory)
+            fullDirectory = os.path.join(eachRoot, eachDirectory)
+            if any( list( fullDirectory.startswith(x) for x in excludedDirectories ) ):
+                print "Not doing any files inside directory:"
+                print fullDirectory 
             else:
-                print "Adding files within directory {}".format(eachDirectory)
+#                 print "Adding files within directory {}".format(eachDirectory)
+                # print eachDirectory
                 files = os.listdir(os.path.join(eachRoot, eachDirectory) )
                 for eachFile in files:
                     if eachFile.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"]) ):

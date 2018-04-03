@@ -13,3 +13,11 @@ echo "Type=application" >> $PROJECT_ROOT_DIR/scripts/display.desktop
 
 cp $PROJECT_ROOT_DIR/scripts/display.desktop ~/.config/autostart
 cp $PROJECT_ROOT_DIR/scripts/remote.desktop ~/.config/autostart
+cp $PROJECT_ROOT_DIR/scripts/remoteNew.desktop ~/.config/autostart
+
+sed -i "s,<ROOT_DIR>,$PROJECT_ROOT_DIR", ~/.config/autostart/remoteNew.desktop
+sed -i "s,<ROOT_DIR>,$PROJECT_ROOT_DIR", ~/.config/autostart/remote.desktop
+
+chmod +x ~/.config/autostart/remote.desktop
+chmod +x ~/.config/autostart/display.desktop
+chmod +x ~/.config/autostart/remoteNew.desktop

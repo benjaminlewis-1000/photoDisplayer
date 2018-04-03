@@ -1,0 +1,143 @@
+5
+Warning:          Symbol map for key <TLDE> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE01> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE02> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE03> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE04> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE05> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE06> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE07> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE08> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE09> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE10> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE11> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AE12> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD01> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD02> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD03> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD04> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD05> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD06> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD07> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD08> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD09> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD10> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD11> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AD12> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC01> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC02> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC03> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC04> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC05> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC06> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC07> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC08> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC09> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC10> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AC11> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB01> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB02> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB03> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB04> redefined
+                  Using last definition for conflicting fields
+Warning:          Multiple symbols for level 1/group 1 on key <AB05>
+                  Using h, ignoring b
+Warning:          Multiple symbols for level 2/group 1 on key <AB05>
+                  Using H, ignoring B
+Warning:          Symbol map for key <AB05> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB06> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB07> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB08> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB09> redefined
+                  Using last definition for conflicting fields
+Warning:          Symbol map for key <AB10> redefined
+                  Using last definition for conflicting fields
+Warning:          Key <OUTP> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <KITG> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <KIDN> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <KIUP> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <RO> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <I192> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <I193> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <I194> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <I195> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <I196> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          Key <I255> not found in evdev+aliases(qwerty) keycodes
+                  Symbols ignored
+Warning:          No symbols defined for <AB11> (keycode 97)
+Warning:          No symbols defined for <JPCM> (keycode 103)
+Warning:          No symbols defined for <I120> (keycode 120)
+Warning:          No symbols defined for <AE13> (keycode 132)
+Warning:          No symbols defined for <I149> (keycode 149)
+Warning:          No symbols defined for <I154> (keycode 154)
+Warning:          No symbols defined for <I168> (keycode 168)
+Warning:          No symbols defined for <I178> (keycode 178)
+Warning:          No symbols defined for <I183> (keycode 183)
+Warning:          No symbols defined for <I184> (keycode 184)
+Warning:          No symbols defined for <FK19> (keycode 197)
+Warning:          No symbols defined for <FK24> (keycode 202)
+Warning:          No symbols defined for <I217> (keycode 217)
+Warning:          No symbols defined for <I219> (keycode 219)
+Warning:          No symbols defined for <I221> (keycode 221)
+Warning:          No symbols defined for <I222> (keycode 222)
+Warning:          No symbols defined for <I230> (keycode 230)
+Warning:          No symbols defined for <I247> (keycode 247)
+Warning:          No symbols defined for <I248> (keycode 248)
+Warning:          No symbols defined for <I249> (keycode 249)
+Warning:          No symbols defined for <I250> (keycode 250)
+Warning:          No symbols defined for <I251> (keycode 251)
+Warning:          No symbols defined for <I252> (keycode 252)
+Warning:          No symbols defined for <I253> (keycode 253)
