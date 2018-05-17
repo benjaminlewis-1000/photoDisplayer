@@ -71,25 +71,25 @@
 			<commentLinkerUserTable>
 				<Name>UserCommentLinker</Name>
 				<Columns>
-					<commentLinkerPhoto>photo_number</commentLinkerPhoto>
-					<commentLinkerTag>tag</commentLinkerTag>
-					<commentLinkerTagProbability>tag_probability</commentLinkerTagProbability>
+					<commentLinkerPhotoUser>photo_number</commentLinkerPhotoUser>
+					<commentLinkerTagUser>tag</commentLinkerTagUser>
+					<commentLinkerTagProbabilityUser>tag_probability</commentLinkerTagProbabilityUser>
 				</Columns>
 			</commentLinkerUserTable>
 			<commentLinkerGoogleTable>
 				<Name>GoogleCommentLinker</Name>
 				<Columns>
-					<commentLinkerPhoto>photo_number</commentLinkerPhoto>
-					<commentLinkerTag>tag</commentLinkerTag>
-					<commentLinkerTagProbability>tag_probability</commentLinkerTagProbability>
+					<commentLinkerPhotoGoogle>photo_number</commentLinkerPhotoGoogle>
+					<commentLinkerTagGoogle>tag</commentLinkerTagGoogle>
+					<commentLinkerTagProbabilityGoogle>tag_probability</commentLinkerTagProbabilityGoogle>
 				</Columns>
 			</commentLinkerGoogleTable>
 			<commentLinkerClarifaiTable>
 				<Name>ClarifaiCommentLinker</Name>
 				<Columns>
-					<commentLinkerPhoto>photo_number</commentLinkerPhoto>
-					<commentLinkerTag>tag</commentLinkerTag>
-					<commentLinkerTagProbability>tag_probability</commentLinkerTagProbability>
+					<commentLinkerPhotoClarifai>photo_number</commentLinkerPhotoClarifai>
+					<commentLinkerTagClarifai>tag</commentLinkerTagClarifai>
+					<commentLinkerTagProbabilityClarifai>tag_probability</commentLinkerTagProbabilityClarifai>
 				</Columns>
 			</commentLinkerClarifaiTable>
 		</tables>
