@@ -250,7 +250,7 @@ def update_metadata(conn):
     # (year, month, day, hour, minute, second, wday, yearday, isdst) = time.localtime()
 
     # my $dateTime = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $mon, $mday, $hour, $min, $sec);
-    dateTime = time.strftime('%Y-%M-%d %H:%M:%S', time.localtime())
+    dateTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
 
     updatedValQuery = 'INSERT INTO ' + metadataTableName + ' VALUES ("' + metadataLastEditedField + '", "' + dateTime + '")'
 
