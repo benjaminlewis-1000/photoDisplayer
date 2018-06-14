@@ -1,0 +1,869 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"rel_",
+				"rel_vecs_agg1"
+			],
+			[
+				"feat",
+				"feature_vec2"
+			],
+			[
+				"personN",
+				"personNameCol"
+			],
+			[
+				"exist",
+				"personExistsQuery"
+			],
+			[
+				"if",
+				"ifmain\tif __name__ == '__main__'"
+			],
+			[
+				"G_O",
+				"G_OPTION_ARG_NONE"
+			],
+			[
+				"pic",
+				"prevPicNum"
+			],
+			[
+				"for",
+				"forward_vel"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "visionTagging/classifyMain.py",
+			"settings":
+			{
+				"buffer_size": 14365,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pyInit/geoServer.py",
+			"settings":
+			{
+				"buffer_size": 4831,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/lewis/musicmap.py",
+			"settings":
+			{
+				"buffer_size": 4815,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "#! /usr/bin/env python"
+			}
+		},
+		{
+			"file": "/home/lewis/neighbors.py",
+			"settings":
+			{
+				"buffer_size": 4250,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "#! /usr/bin/env python"
+			}
+		},
+		{
+			"file": "/home/lewis/pytorch_notes.txt",
+			"settings":
+			{
+				"buffer_size": 1279,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": " #! /usr/bin/env python\n\nimport os\nimport sqlite3\nimport xmltodict\nimport vars\n\nproject_path = os.path.abspath(os.path.join(__file__,\"../..\"))\nscript_path  = os.path.abspath(os.path.join(__file__,\"..\"))\n\nwith open(os.path.join(project_path, 'config/params.xml') ) as stream:\n    try:\n        params = xmltodict.parse(stream.read())\n    except Exception as exc:\n        print(exc)\n        exit(1)\n\ndbName = params['params']['photoDatabase']['fileName']\n\n## Connect to the database. Also set up Ctrl-C Handling\nconn = sqlite3.connect(os.path.join(project_path, 'databases', dbName))\nconn.text_factory = lambda x: unicode(x, \"utf-8\", \"ignore\")\nif vars.osType == vars.linuxType:\n    rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']\n    otherRootType = params['params']['photoDatabase']['tables']['rootTable']['Columns']['windowsRootPath']\nelif vars.osType == vars.winType:\n    rootPathFieldName = params['params']['photoDatabase']['tables']['rootTable']['Columns']['windowsRootPath']\n    otherRootType = params['params']['photoDatabase']['tables']['rootTable']['Columns']['linuxRootPath']\nelse:\n    assert(vars.osType == vars.winType or vars.osType == vars.linuxType)\n    print \"Not a windows or Linux system; this code hasn't been tested on a mac. More work required.\"\n\n\n\ncheckPhotos(conn, params)   ",
+			"file": "pyInit/checkFiles.py",
+			"file_size": 2649,
+			"file_write_time": 131426582368314834,
+			"settings":
+			{
+				"buffer_size": 1353,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pyInit/logNoDates.out",
+			"settings":
+			{
+				"buffer_size": 261308,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pyInit/getExif.py",
+			"settings":
+			{
+				"buffer_size": 14356,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pyInit/photoHandler.py",
+			"settings":
+			{
+				"buffer_size": 14906,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pyInit/addPics.py",
+			"settings":
+			{
+				"buffer_size": 15423,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "packag",
+		"selected_items":
+		[
+			[
+				"packag",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 174.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/lewis/joy_ws/src"
+	],
+	"file_history":
+	[
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/logNoDates.out",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/getExif.py",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/photoHandler.py",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/addPics.py",
+		"/home/lewis/gitRepos/photoDisplayer/init/database_create.pl",
+		"/home/lewis/gitRepos/photoDisplayer/init/readInImages.pl",
+		"/home/lewis/gitRepos/photoDisplayer/config/params.xml",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/geoServer.py",
+		"/home/lewis/gitRepos/photoDisplayer/visionTagging/classifyMain.py",
+		"/home/lewis/gitRepos/photoDisplayer/init/addNewRoot.pl",
+		"/home/lewis/gitRepos/photoDisplayer/visionTagging/classImage.py",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/vars.py",
+		"/home/lewis/gitRepos/photoDisplayer/display/displayServer.py",
+		"/home/lewis/gitRepos/photoDisplayer/site/sendJSONtoSlideshow.py",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/getSubdirs.py",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/procKill.py",
+		"/home/lewis/gitRepos/photoDisplayer/understandPath.py",
+		"/home/lewis/gitRepos/photoDisplayer/display/display",
+		"/home/lewis/gitRepos/photoDisplayer/pyInit/insertName.py",
+		"/home/lewis/joy_ws/src/homography_calc/README.txt",
+		"/home/lewis/joy_ws/src/homography_calc/funcTesting/db_testing.cpp",
+		"/home/lewis/gitRepos/photoDisplayer/init/filesFromBaseFinder.pl",
+		"/home/lewis/gitRepos/photoDisplayer/init/out2.log",
+		"/home/lewis/gitRepos/photoDisplayer/display/display.py",
+		"/home/lewis/.remoteKeymap",
+		"/home/lewis/gitRepos/photoDisplayer/init/updateDatabase.pl",
+		"/home/lewis/gitRepos/test.pl",
+		"/home/lewis/gitRepos/photoDisplayer/init/read_xmp.pl",
+		"/home/lewis/gitRepos/photoDisplayer/config/params.yaml",
+		"/home/lewis/gitRepos/photoDisplayer/display/testfile",
+		"/home/lewis/gitRepos/photoDisplayer/init/params.pm",
+		"/home/lewis/gitRepos/viewnior/src/vnr-tools.c",
+		"/home/lewis/gitRepos/viewnior/src/vnr-file.c",
+		"/home/lewis/gitRepos/viewnior/hack_ideas.txt",
+		"/home/lewis/gitRepos/viewnior/src/main.c",
+		"/home/lewis/gitRepos/viewnior/src/vnr-window.c",
+		"/tmp/photos.txt",
+		"/home/lewis/gitRepos/viewnior/Makefile",
+		"/home/lewis/gitRepos/photoDisplayer/display/yamlTest.pl",
+		"/home/lewis/gitRepos/photoDisplayer/readInImages.pl",
+		"/home/lewis/gitRepos/photoDisplayer/display/params.yaml",
+		"/home/lewis/gitRepos/photoDisplayer/params.pm",
+		"/home/lewis/gitRepos/photoDisplayer/updateDatabase.pl",
+		"/home/lewis/gitRepos/photoDisplayer/filesFromBaseFinder.pl",
+		"/home/lewis/gitRepos/photoDisplayer/addNewRoot.pl",
+		"/home/lewis/gitRepos/photoDisplayer/read_xmp.pl",
+		"/home/lewis/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/lewis/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/database_interface/postgresql_database.h",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/database_interface/db_filters.h",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/database_interface/db_field.h",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/database_interface/db_class.h",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/database_interface/database_test_object.h",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/postgresql_interface_test.cpp",
+		"/home/lewis/joy_ws/src/homography_calc/database_interface/src/postgresql_database.cpp",
+		"/home/lewis/joy_ws/src/homography_calc/READMEtxt",
+		"/home/lewis/joy_ws/src/ueyeROS/README.txt",
+		"/home/lewis/joy_ws/src/dependencies/README.txt",
+		"/home/lewis/joy_ws/src/dependencies/test.jpg",
+		"/home/lewis/joy_ws/src/dependencies/scripts/install.sh",
+		"/home/lewis/joy_ws/src/dependencies/uninstall.sh",
+		"/home/lewis/joy_ws/src/copter_fly/README.txt",
+		"/home/lewis/joy_ws/src/copter_fly/launch/control.launch",
+		"/home/lewis/joy_ws/src/copter_fly/scripts/heightPublish.py",
+		"/home/lewis/joy_ws/src/copter_fly/src/offboard_mixer_sticks.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/offboard_control_gpsVel.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/launch/gps_offboard.launch",
+		"/home/lewis/joy_ws/src/copter_fly/CMakeLists.txt",
+		"/home/lewis/joy_ws/src/copter_fly/src/xboxControl.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/lowPassFilter.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/guidanceLPF.cpp",
+		"/home/lewis/joy_ws/src/homography_calc/CMakeLists.txt",
+		"/home/lewis/joy_ws/src/README.txt",
+		"/home/lewis/joy_ws/src/bread_launch/README.txt",
+		"/home/lewis/joy_ws/src/bread_launch/launch/flight.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/returnToHome_base.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/bag_analysis.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/accel_calib.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/usb3cam_only.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/usb2cam_only.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/compressImage.launch",
+		"/home/lewis/joy_ws/src/homography_calc/src/findFeaturesAndMatch.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/CMakeLists.txt",
+		"/home/lewis/joy_ws/src/bread_launch/src/viewBag.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/src/simulation_graphics.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/src/signal_timing.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/src/pid_test.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/src/gpsCSV.cpp",
+		"/home/lewis/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/lewis/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/lewis/joy_ws/src/bread_launch/src/ORB_test.cpp",
+		"/home/lewis/joy_ws/src/backup/README.txt",
+		"/home/lewis/Dropbox/Research/tex_documents/flight_test_feb_4.pdf",
+		"/home/lewis/Dropbox/Research/tex_documents/Thesis/chapters/results_chap (Drone's conflicted copy 2016-08-22).tex",
+		"/home/lewis/windows.sh",
+		"/home/lewis/rovio_ws/src/launch/rovio_node.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/new_sim_matlab.launch",
+		"/home/lewis/impressive/impressive.py",
+		"/home/lewis/joy_ws/src/bread_launch/launch/sim_matlab.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/xbox_only.launch",
+		"/home/lewis/joy_ws/src/homography_calc/src/pilot.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/xbox.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/scripts/plotter.py",
+		"/home/lewis/joy_ws/src/SETUP_APRIL7.txt",
+		"/home/lewis/joy_ws/src/copter_fly/src/deprecated/offboard.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/launch/joystick_offboard.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/sensors.launch",
+		"/home/lewis/Dropbox/Wedding/outBenFriends.txt",
+		"/home/lewis/test.py",
+		"/home/lewis/joy_ws/src/bread_launch/launch/offboard.launch",
+		"/home/lewis/joy_ws/src/copter_fly/src/offboard_mixer.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/navigation_switch.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/joystick_test.cpp",
+		"/home/lewis/joy_ws/src/copter_fly/src/CMakeCache.txt",
+		"/home/lewis/joy_ws/src/homography_calc/include/db_test.cpp",
+		"/home/lewis/joy_ws/src/bread_launch/launch/kalibr_datacollect.launch",
+		"/home/lewis/joy_ws/src/bread_launch/launch/rovio_laptop_usb.launch",
+		"/home/lewis/joy_ws/src/um7/src/main.cpp",
+		"/home/lewis/Downloads/outFriends.txt",
+		"/home/lewis/joy_ws/src/bread_launch/launch/viewerOnly.launch",
+		"/home/lewis/joy_ws/src/homography_calc/src/guidance.cpp",
+		"/home/lewis/joy_ws/src/homography_calc/src/cvHomog.cpp",
+		"/home/lewis/joy_ws/src/bag_analysis/launch/guidance_analysis.launch",
+		"/home/lewis/joy_ws/src/homography_calc/documentation/relevantParams.txt",
+		"/home/lewis/joy_ws/src/homography_calc/param/simulation_all.yaml",
+		"/home/lewis/joy_ws/src/homography_calc/src/homogControlLaw.cpp",
+		"/home/lewis/joy_ws/src/homography_calc/src/cv_homog_decompose.cpp",
+		"/home/lewis/joy_ws/src/homography_calc/src/cvDecompose_parse.cpp"
+	],
+	"find":
+	{
+		"height": 42.0
+	},
+	"find_in_files":
+	{
+		"height": 102.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"features",
+			"print name",
+			"unicode",
+			"rootdirreverse",
+			"rootdirrows",
+			"getroots",
+			"rootdirrow",
+			"rootpathfieldna",
+			"datetakenor",
+			"datetaken",
+			"import",
+			"sqlite3.ro",
+			"print",
+			"row",
+			"e",
+			"last_mo",
+			"result",
+			"]\n",
+			"select {}",
+			"address",
+			"params",
+			"d.comm",
+			"commit()",
+			"update",
+			"delete from ",
+			"fileName",
+			".encode",
+			"encode",
+			"do_geo",
+			"geocode time",
+			"print",
+			"subp",
+			"feh",
+			"127",
+			"getexifdat",
+			"r'/",
+			"getroots",
+			"getuniq",
+			"name",
+			"os.path",
+			"print",
+			"utf_name",
+			"name",
+			"except",
+			"endswith",
+			"end",
+			"insert into",
+			"dir",
+			"list",
+			"isdi",
+			"keys()",
+			"print ",
+			"exce",
+			"encode",
+			"unicode",
+			"issub",
+			"SELECT",
+			"SELECT ",
+			"select ",
+			"addroot",
+			"insert i",
+			"unicode",
+			"insert into",
+			"unicode",
+			"param",
+			"= ",
+			"params",
+			"insertnam",
+			"tim",
+			"unico",
+			"name",
+			"person",
+			"relpath",
+			"subdir",
+			"\"))",
+			"relpa",
+			"fullPath",
+			"lat",
+			"iso",
+			"insert int",
+			"name",
+			"rootDirPathsl",
+			"rrs",
+			"list",
+			"add new path",
+			"print",
+			"? ",
+			"?",
+			"insert into",
+			"update",
+			"insert into",
+			"?",
+			"xml",
+			"select ",
+			"assert",
+			"root",
+			"sql",
+			"^pho",
+			"?!d",
+			"^(?!Currentl)",
+			"^!Currentl",
+			"initialdir",
+			"find",
+			"addfiles",
+			"add",
+			"addfil",
+			"File",
+			"print",
+			"heights",
+			"minResY",
+			"$modifyD",
+			"$day",
+			"Day",
+			"fullscreen",
+			"allow_slide",
+			"slideshow",
+			"file_list",
+			"show",
+			"action_entries_window",
+			"vnr_window_cmd_open",
+			"vnr_window_ope",
+			"window->file_list",
+			"g_path_get_dirname",
+			"verbos",
+			"window->file",
+			"file",
+			"file is",
+			"file_list"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"relPath",
+			"um7_local::Reset",
+			"nh.",
+			"psi11"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 9,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "visionTagging/classifyMain.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14365,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13452,
+								13452
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8010.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "pyInit/geoServer.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4831,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1518,
+								1518
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1253.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/lewis/musicmap.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4815,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4491,
+								4491
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#! /usr/bin/env python",
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3954.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/home/lewis/neighbors.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4250,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								490,
+								490
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#! /usr/bin/env python",
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/home/lewis/pytorch_notes.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1279,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1271,
+								1271
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 433.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "pyInit/checkFiles.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1323,
+								1323
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 182.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "pyInit/logNoDates.out",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 261308,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "pyInit/getExif.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14356,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "pyInit/photoHandler.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14906,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "pyInit/addPics.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15423,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 42.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 166.0
+	},
+	"pinned_build_system": "",
+	"project": "laptop.sublime-project",
+	"replace":
+	{
+		"height": 78.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 235.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

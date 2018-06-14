@@ -1,0 +1,3 @@
+ docker run -it -v /home/lewis/gitRepos/photoDisplayer/:/usr/src/app -w /usr/src/app photodisplay python pyInit/addPics.py
+
+docker run -ti -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH photodisplay feh

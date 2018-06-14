@@ -24,6 +24,7 @@ use_googmaps = True
 
 import googlemaps
 apikey = 'AIzaSyDN9_gjt7PDqWt8Jkwo-7AoT7Lyuz_Lsz0'
+# apikey = 'AIzaSyBN6RKzo16vf8kMDgDw_AjmOLFU3HRZtBo'
 gmaps=googlemaps.Client(key=apikey)
 
 # Restrict to a particular path.
