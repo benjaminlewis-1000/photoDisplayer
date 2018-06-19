@@ -330,21 +330,22 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			minNumPhotos = numPhotosField.value
 
 			console.debug(personNames[Object.keys(personNames)[1]])
+			console.debug(personNames)
 
 			personSubArray = []
 
 			// Iterate through the personNames list and copy anyone who has the requisite number
 			// of photos to the personSubArray. If that minimum number of photos is 1, then
 			// I take a shortcut and copy all the keys of the list.
-			if (minNumPhotos == 1){
+			/*if (minNumPhotos == 1){
 				personSubArray = Object.keys(personNames)
-			}else{
-				i = 0;
-				while( personNames[Object.keys(personNames)[i]] >= minNumPhotos){
-					personSubArray.push( Object.keys(personNames)[i] ) 
-					i = i + 1;
-				}
+			}else{*/
+			i = 0;
+			while( personNames[Object.keys(personNames)[i]] >= minNumPhotos){
+				personSubArray.push( Object.keys(personNames)[i] ) 
+				i = i + 1;
 			}
+			//}
 
 			// Sort the list alphabetically. 
 			personSubArray = personSubArray.sort()

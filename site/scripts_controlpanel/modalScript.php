@@ -17,6 +17,7 @@ header("Content-type: application/javascript");
 			data: {'queryType': 'loadShowNames'},
 			success: function(data){
 		        decodedData = JSON.parse(data);
+		        console.log(decodedData)
 
 		        errors = decodedData['errors']
 		        for (i = 0; i < errors.length; i++){
@@ -77,9 +78,13 @@ header("Content-type: application/javascript");
 					decodedData = JSON.parse(data);
 			        jsonOfSavedShow = decodedData['savedVals'];
 
-			        exceptions = decodedData['exceptions']
-			        for (i = 0; i < exceptions.length; i++){
-			        	console.error("Error in deleting slideshow (modalScript.php): " + exceptions[i]);
+			        errors = decodedData['errors']
+			        for (i = 0; i < errors.length; i++){
+			        	console.error("Error in deleting slideshow  (modalScript.php): " + errors[i]);
+			        }
+			        warnings = decodedData['warnings']
+			        for (i = 0; i < warnings.length; i++){
+			        	console.warn("Warning in deleting slideshow  (modalScript.php): " + warnings[i]);
 			        }
 
 			        selectVals = select.options;
@@ -107,9 +112,13 @@ header("Content-type: application/javascript");
 		        decodedData = JSON.parse(data);
 		        definedSlideshows = decodedData['savedVals'];
 
-		        exceptions = decodedData['exceptions']
-		        for (i = 0; i < exceptions.length; i++){
-		        	console.error("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
+		        errors = decodedData['errors']
+		        for (i = 0; i < errors.length; i++){
+		        	console.error("Error in loading slideshow names (modalScript.php): " + errors[i]);
+		        }
+		        warnings = decodedData['warnings']
+		        for (i = 0; i < warnings.length; i++){
+		        	console.warn("Warning in loading slideshow names (modalScript.php): " + warnings[i]);
 		        }
 
 			    var select = document.getElementById("savedSlideshowSelect");
@@ -152,9 +161,13 @@ header("Content-type: application/javascript");
 		        decodedData = JSON.parse(data);
 		        jsonOfSavedShow = decodedData['savedVals'];
 
-		        exceptions = decodedData['exceptions']
-		        for (i = 0; i < exceptions.length; i++){
-		        	console.log("Error in loading slideshow (modalScript.php): " + exceptions[i]);
+		        errors = decodedData['errors']
+		        for (i = 0; i < errors.length; i++){
+		        	console.error("Error in loading slideshow  (modalScript.php): " + errors[i]);
+		        }
+		        warnings = decodedData['warnings']
+		        for (i = 0; i < warnings.length; i++){
+		        	console.warn("Warning in loading slideshow  (modalScript.php): " + warnings[i]);
 		        }
 
 		        if (exceptions.length == 0){

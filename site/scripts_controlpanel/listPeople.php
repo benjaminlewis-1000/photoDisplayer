@@ -15,13 +15,15 @@
 	$exceptions = array();
 	$debug = array();
 	$arrayOfSavedShows = array();
+	$warnings = array();
+	$errors = array();
 	
 	if (isset($_POST['minPhotos'])){
 		$minPhotos = $_POST['minPhotos'];
 	}else if (isset($_GET['minPhotos'])){
 		$minPhotos = $_GET['minPhotos'];
 	}else{
-		$exceptions[] = "minimum number of photos not passed";
+		$warnings[] = "minimum number of photos not passed -- setting to 1.";
 		$minPhotos = 1;
 	}
 
@@ -31,9 +33,18 @@
 
 	$parentDir = dirname_r(__FILE__, 3);
 
-	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file -- !" . $parentDir);
+		$xml_params = simplexml_load_file($parentDir . '/config/params.xml');
+		
+	if ( ! $xml_params) {
+		$errors[] = 'No XML params were loaded.';
+		$retArray = array('personNames' => $people, 'errors' => $errors, 'exceptions' => $exceptions, 'debug' => $debug, 'warnings' => $warnings);
+		echo json_encode($retArray);
+		exit();
+		// or die("Can't load this file!" );
+	}
 	$site_xml_params = simplexml_load_file(dirname_r(__FILE__, 2) . '/siteConfig.xml') or die("Can't load the site config file!");
 	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
+	//print_r($xml_params->photoDatabase->fileName);
 
 /*
 	$numPhotosQuery = 'WITH lotsOfPhotos AS ( SELECT person FROM photolinker GROUP BY person HAVING count(*) > '. $minPhotos. ' )
@@ -42,6 +53,9 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 	This query selects the person and the count of the person from the People table, joining that data to the 
 	photoLinker table where people_key on People = person on photoLinker.
 	*/
+
+	// WHY I DON'T INCLUDE # OF PEOPLE: I want it to be dynamic for the page and not have to hit the database every
+	// time I change the number of people.
 
 	$peopleTableName = $xml_params->photoDatabase->tables->peopleTable->Name; // "People"
 	$peopleTablePersonName = $xml_params->photoDatabase->tables->peopleTable->Columns->personName; // "person_name"
@@ -52,6 +66,8 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 	$photoLinker_person = $photoLinkerTableName . '.' . $xml_params->photoDatabase->tables->photoLinkerTable->Columns->linkerPeople; // photoLinker.person
 
 	$peoplePlusNumberQuery = 'SELECT ' . $people_personName . ', count('. $people_personName . ') FROM '. $peopleTableName . ' left join ' . $photoLinkerTableName . ' on ' . $people_personKey . ' = '. $photoLinker_person . ' GROUP BY '. $photoLinker_person . ' ORDER BY ' . $people_personName ;
+
+	//echo $peoplePlusNumberQuery;
 
 
 /* dirname_r is for compatibility in PHP 5.0 (available on Raspberry Pi) */
@@ -68,7 +84,6 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 	$excluded_xml_names = preg_split('/,/', $site_xml_params->excludedNames);
 	$excluded_xml_patterns = preg_split('/,/', $site_xml_params->excludedPatterns);
 	
-	$exceptions = array();
 	$personNames = array();
 
 	if (! file_exists($photoDBpath) ){
@@ -166,7 +181,6 @@ SELECT person_name FROM people WHERE People_key IN lotsOfPhotos';*/
 	// Sort the list by number of photos with that person.
 	arsort($people);
 
-	$retArray = array('personNames' => $people, 'exceptions' => $exceptions, 'debug' => $debug);
+	$retArray = array('personNames' => $people, 'errors' => $errors, 'exceptions' => $exceptions, 'debug' => $debug, 'warnings' => $warnings);
 	echo json_encode($retArray);
-
 ?>

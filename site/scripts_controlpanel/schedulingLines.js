@@ -315,13 +315,20 @@ function checkAllDefined(divNum){
 			data: {'queryType': "saveSchedule", 'selectedVal': schedules},
 			success: function(data){
 				data = JSON.parse(data)
-		        exceptions = data['exceptions']
-		        for (i = 0; i < exceptions.length; i++){
-		        	console.error("Error in checkAllDefined: " + exceptions[i]);
+
+		        errors = data['errors']
+		        for (i = 0; i < errors.length; i++){
+		        	console.error("Error in checkAllDefined (schedulingLines.js): " + errors[i]);
 		        }
+
+		        warnings = data['warnings']
+		        for (i = 0; i < warnings.length; i++){
+		        	console.warn("Warning in checkAllDefined (schedulingLines.js): " + warnings[i]);
+		        }
+
 		        debugMsgs = data['debug']
 		        for (i = 0; i < debugMsgs.length; i++){
-		        	console.debug("Debug message in checkAllDefined: " + debugMsgs[i]);
+		        	console.debug("Debug message in checkAllDefined (schedulingLines.js): " + debugMsgs[i]);
 		        }
 			}
 		});
@@ -337,6 +344,21 @@ function populateSlideshowTimes(){
 		success: function(data){
 			data = JSON.parse(data)
 			console.debug(data)
+
+			errors = data['errors']
+	        for (i = 0; i < errors.length; i++){
+	        	console.error("Error in checkAllDefined (schedulingLines.js): " + errors[i]);
+	        }
+
+	        warnings = data['warnings']
+	        for (i = 0; i < warnings.length; i++){
+	        	console.warn("Warning in checkAllDefined (schedulingLines.js): " + warnings[i]);
+	        }
+
+	        debugMsgs = data['debug']
+	        for (i = 0; i < debugMsgs.length; i++){
+	        	console.debug("Debug message in checkAllDefined (schedulingLines.js): " + debugMsgs[i]);
+	        }
 
 			if (data['savedVals'].length != 0 ){
 				//console.debug('Saved values for the slideshow schedule are: ' + data['savedVals'])

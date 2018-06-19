@@ -2,7 +2,6 @@
 <?php 
 /* dirname_r is for compatibility in PHP 5.0 (available on Raspberry Pi) */
 
-	$exceptions = array();
 	$errors = array();
 	$warnings = array();
 	$debug = array();
@@ -80,7 +79,6 @@
 
 
 	if (! file_exists($photoDBpath) ){
-		$exceptions[] = 'File ' . $photoDBpath . ' does not exist. It will be created unless write permissions for the directory are not set.';
 		$warnings[] = 'File ' . $photoDBpath . ' does not exist. It will be created unless write permissions for the directory are not set.';
 	}
 	function exception_error_handler($errno, $errstr, $errfile, $errline ) {
@@ -93,9 +91,8 @@
 		// Give time for the database to connect
 		$db->busyTimeout(1000);
 	}catch(Exception $e){
-		$exceptions[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'";
 		$errors[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'";
-		$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions);
+		$retArray = array('savedVals' => $arrayOfSavedShows, 'debug' => $debug, 'errors' => $errors, 'warnings' => $warnings);
 		echo json_encode($retArray);
 		exit;
 	}
@@ -119,27 +116,23 @@
 		}catch(Exception $e){
 			//echo "Exception!" . $e;
 			//print_r("console.log('The table is not well-formed and probably wasn\'t initialized.')\n");
-			//$exceptions[] = 'The table is not well-formed and probably wasn\'t initialized.';
 			$errmesg = $e->getMessage();
 			$newTable = false;
 			if (strpos($errmesg, 'Unable to execute statement: UNIQUE constraint failed') != false) {
 				// do nothing
 			}elseif (strpos($errmesg, 'no such table: ShowSchedules') != false){
 				$newTable = true;
-				$exceptions[] = $errmesg;
 				$warnings[] = $errmesg;
 				//echo "No schedule table...";
 				# Need to have a UNIQUE field for the paramName so that there will only be one copy
 				$makeTableQuery = 'CREATE TABLE ShowSchedules (  paramName TEXT UNIQUE,  savedJSON TEXT);';
 			}elseif (strpos($errmesg, 'no such table: Slideshows') != false){
 				$newTable = true;
-				$exceptions[] = $errmesg;
 				$warnings[] = $errmesg;
 				//echo "No slideshow table...";
 				$makeTableQuery = 'CREATE TABLE Slideshows (  showNames  TEXT UNIQUE,  savedJSON TEXT);';
 			}
 			else{
-				$exceptions[] = "Unknown error in getDatabase.php: " . $errmesg;
 				$errors[] = "Unknown error in getDatabase.php: " . $errmesg;
 				//echo "unknown...";
 			}
@@ -151,10 +144,10 @@
 			 		$i -= 1;  // Retry the query	
 
 				}catch(Exception $e){
-					$exceptions[] = "Insufficient permissions on the site directory; can't write a lockfile";
+					
 					$errors[] = "Insufficient permissions on the site directory; can't write a lockfile";
 
-					$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions, 'debug' => $debug, 'errors' => $errors, 'warnings' => $warnings);
+					$retArray = array('savedVals' => $arrayOfSavedShows, 'debug' => $debug, 'errors' => $errors, 'warnings' => $warnings);
 					echo json_encode($retArray);
 					throw new Exception("Insufficient permissions on $siteDir; can't write a lockfile. ", 1);
 					
@@ -170,7 +163,7 @@
 	/// At this point, we have an array of saved shows that we can pass back to javascript. 
 	//echo 'var savedShows = ' . json_encode($arrayOfSavedShows) . ';';
 
-	$retArray = array('savedVals' => $arrayOfSavedShows, 'exceptions' => $exceptions, 'debug' => $debug, 'errors' => $errors, 'warnings' => $warnings);
+	$retArray = array('savedVals' => $arrayOfSavedShows, 'errors' => $errors, 'warnings' => $warnings);
 	echo json_encode($retArray);
 
 ?>
