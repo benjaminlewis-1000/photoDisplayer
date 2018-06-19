@@ -246,7 +246,16 @@ def getUniqueSubDirs(rootsList):
 
 if __name__ == '__main__':
 
-    os.system("kill `ps aux | grep geoServer | grep -v grep | awk '{print $2}'`")
+    # geoServerIP =
+    command = "ps aux | grep geoServer | grep -v grep | awk '{print $2}'"
+    p = subprocess.Popen(command, universal_newlines=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        geoServerPID = int(p.stdout.read())
+        os.system("kill {}".format(geoServerPID))
+        noGeo = 0
+    except ValueError as ve:
+        noGeo = 1;
+
     print "TODO! Encode all input with '.encode('utf-8')'."
     # TODO: Expand a directory passed via command line
     # sleep(3)
@@ -308,7 +317,7 @@ if __name__ == '__main__':
     # rootDirRows = {}
     # rootDirRows['/mnt/NAS/Jessica Pictures'] = 2
 
-    print rootDirRows
+    print "Root dir rows: " + str(rootDirRows)
     # print rootDirRows.keys()[rootDirRows.values().index(2)] 
 
     # Reverse rootDirRows for key to dir translation
@@ -325,7 +334,7 @@ if __name__ == '__main__':
     rootDirCol = photoCols['rootDirNum']
 
     excludedDirectories = params['params']['excludeDirs']['dir']
-    print excludedDirectories
+    print "Excluded directories -- list comes from params : " + str(excludedDirectories)
 
     photoInTableQuery = '''SELECT {}, {}, {} FROM {}'''.format(photoFileCol, modDateCol, rootDirCol, photoTableName)
 
@@ -408,6 +417,7 @@ if __name__ == '__main__':
                         if filesProcessed % 500 == 0 and filesProcessed > 0:
                             print "{} files processed already.".format(filesProcessed)
     
+    print "Done adding..."
     photoHandler.checkPhotosAtEnd(conn, params)
 
     if vars.osType == vars.linuxType:

@@ -18,9 +18,13 @@ header("Content-type: application/javascript");
 			success: function(data){
 		        decodedData = JSON.parse(data);
 
-		        exceptions = decodedData['exceptions']
-		        for (i = 0; i < exceptions.length; i++){
-		        	console.log("Error in loading slideshow names (modalScript.php): " + exceptions[i]);
+		        errors = decodedData['errors']
+		        for (i = 0; i < errors.length; i++){
+		        	console.error("Error in loading slideshow names (modalScript.php): " + errors[i]);
+		        }
+		        warnings = decodedData['warnings']
+		        for (i = 0; i < warnings.length; i++){
+		        	console.warn("Warning in loading slideshow names (modalScript.php): " + warnings[i]);
 		        }
 		        
 		        definedSlideshows = decodedData['savedVals'];
@@ -75,7 +79,7 @@ header("Content-type: application/javascript");
 
 			        exceptions = decodedData['exceptions']
 			        for (i = 0; i < exceptions.length; i++){
-			        	console.log("Error in deleting slideshow (modalScript.php): " + exceptions[i]);
+			        	console.error("Error in deleting slideshow (modalScript.php): " + exceptions[i]);
 			        }
 
 			        selectVals = select.options;

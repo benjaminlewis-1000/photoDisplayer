@@ -31,7 +31,7 @@
 
 	$parentDir = dirname_r(__FILE__, 3);
 
-	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file!");
+	$xml_params = simplexml_load_file($parentDir . '/config/params.xml') or die("Can't load this file -- !" . $parentDir);
 	$site_xml_params = simplexml_load_file(dirname_r(__FILE__, 2) . '/siteConfig.xml') or die("Can't load the site config file!");
 	$photoDBpath = $parentDir . '/databases/' . $xml_params->photoDatabase->fileName;
 

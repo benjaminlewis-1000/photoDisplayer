@@ -18,6 +18,7 @@ class showScheduler():
     def __init__(self, displayServerInstance):
         # Initially, there are no shows running.
         self.showRunning = False;
+        self.showSchedule = []
 
         # Get the path to the root directory and open the XML parameter file
         self.rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))

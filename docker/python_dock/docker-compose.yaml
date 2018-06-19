@@ -1,0 +1,9 @@
+version: '2'
+services:
+   photodisplay:
+      build: .
+#      ports:
+      volumes:
+      - /home/lewis/gitRepos/photoDisplayer:/usr/src/app
+#  docker run -it -v /home/lewis/gitRepos/photoDisplayer/:/usr/src/app -w /usr/src/app photodisplay python pyInit/addPics.py
+
