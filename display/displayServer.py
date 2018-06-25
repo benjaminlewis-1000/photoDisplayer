@@ -61,7 +61,7 @@ class displayServer():
             self.currentOS = self.xmlParams['params']['ostypes']['linuxType']
 
 
-        self.server = SimpleXMLRPCServer(("127.0.0.1", int(self.xmlParams['params']['serverParams']['displayServerPort'])),
+        self.server = SimpleXMLRPCServer(("0.0.0.0", int(self.xmlParams['params']['serverParams']['displayServerPort'])),
                                     requestHandler=RequestHandler)
         self.server.register_introspection_functions()
 

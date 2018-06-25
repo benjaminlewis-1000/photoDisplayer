@@ -14,7 +14,7 @@
 	}else{
 		echo("<script>console.log(\"Invalid JSON\")</script>");
 		echo("Not ok");
-		exit;
+		exit();
 	}
 	
 	if (isset($_POST['selectedVal'])){
@@ -94,7 +94,7 @@
 		$errors[] = "Unable to create new database in " . $photoDBpath . ". You probably need to set the permissions in this directory using 'chmod 777'";
 		$retArray = array('savedVals' => $arrayOfSavedShows, 'debug' => $debug, 'errors' => $errors, 'warnings' => $warnings);
 		echo json_encode($retArray);
-		exit;
+		exit();
 	}
 
 	//echo "Reading...";
@@ -149,8 +149,7 @@
 
 					$retArray = array('savedVals' => $arrayOfSavedShows, 'debug' => $debug, 'errors' => $errors, 'warnings' => $warnings);
 					echo json_encode($retArray);
-					throw new Exception("Insufficient permissions on $siteDir; can't write a lockfile. ", 1);
-					
+					exit();
 				}
 			}
 
@@ -158,12 +157,10 @@
 		}
 	}
 
-
-
 	/// At this point, we have an array of saved shows that we can pass back to javascript. 
 	//echo 'var savedShows = ' . json_encode($arrayOfSavedShows) . ';';
 
-	$retArray = array('savedVals' => $arrayOfSavedShows, 'errors' => $errors, 'warnings' => $warnings);
+	$retArray = array('savedVals' => $arrayOfSavedShows, 'errors' => $errors, 'warnings' => $warnings, 'debug' => $debug);
 	echo json_encode($retArray);
 
 ?>

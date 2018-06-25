@@ -96,11 +96,12 @@ function timeTo24h(time){
 		return false;
 	}
 	else{
+
 		hours = parseInt(timeMatch[1]);
 		minutes = parseInt(timeMatch[2]).toString();
 		ampm = timeMatch[3].toUpperCase();
 
-		if (ampm == 'PM'){
+		if (ampm == 'PM' && hours != 12){
 			hours += 12;
 		}
 

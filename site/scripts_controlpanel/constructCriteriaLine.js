@@ -573,6 +573,88 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			}*/
 
 			break;
+		case "Location":
+
+			var binarySelect = document.createElement('input')
+			binarySelect.id = 'binarySelectValues' + divNumber
+			span_qualifier.appendChild(binarySelect)
+			binarySelect.className = "dropdownOptions"
+			binarySelect.style.textAlign = 'left'
+			binarySelect.type='url'
+
+
+			if (binaryValue == null){
+				binarySelect.value = "  <Input an address, city and state, state, or country>"
+				binarySelect.style.color = 'gray'
+			}else{
+				binarySelect.value = binaryValue
+				binarySelect.style.color = 'black'
+			}
+
+			binarySelect.onclick = function() { 
+				// Change text from gray to black, put two spaces in,
+				// and put the cursor after the spaces. When geocoding
+				// the address in Python, the two spaces will automatically 
+				// be stripped. 
+				binarySelect.style.color = 'black';
+				binarySelect.setAttribute("value", "  ")
+				binarySelect.selectionStart = binarySelect.selectionEnd = binarySelect.value.length;
+
+			};
+
+			binarySelect.onchange = function(){
+				addressValue = binarySelect.value;
+				$.ajax({
+					type: 'POST',
+					url: 'scripts_controlpanel/encodeAddress.php',
+					data: {'requestedAddress': addressValue},
+					success: function(data){
+				        decodedData = JSON.parse(data);
+				        console.debug("Address decoded data is " + data)
+
+				        errors = decodedData['errors']
+				        for (i = 0; i < errors.length; i++){
+				        	console.error("Error in loading slideshow names (modalScript.php): " + errors[i]);
+				        }
+				        
+				        warnings = decodedData['warnings']
+				        for (i = 0; i < warnings.length; i++){
+				        	console.warn("Warning in loading slideshow names (modalScript.php): " + warnings[i]);
+				        }
+				        
+				        returnedAddress = JSON.parse(decodedData['return']);
+				        if ( returnedAddress['validity'] ){
+				        	binarySelect.value = '  ' + returnedAddress['string']
+				        }else{
+				        	console.log('Desired address ' + addressValue + ' not found.')
+							binarySelect.value = "  <ERROR - address not found. Input an address, city and state, state, or country>";
+							binarySelect.style.textAlign = 'left'
+							binarySelect.style.color = 'gray'
+				        }
+
+					}
+				});
+
+			}
+
+			var distanceSelect = document.createElement("input")
+			distanceSelect.setAttribute("type", "text")
+			distanceSelect.id = 'selectionValue' + divNumber
+			distanceSelect.className = "binaryField"
+			span_filter_criteria.appendChild(distanceSelect)
+			distanceSelect.style.width = "18%"
+
+			if (selectionValue == null){
+				distanceSelect.value = ""
+			}else{
+				distanceSelect.value = selectionValue
+			}
+
+			var endLabel = document.createElement('span')
+			endLabel.innerHTML = "Miles"
+			endLabel.className = "labelText"
+			span_filter_criteria.appendChild(endLabel)
+
 		default:
 			break;
 	}

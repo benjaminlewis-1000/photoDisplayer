@@ -87,7 +87,10 @@ ENV PYTHONPATH /usr/lib/python2.7/dist-packages/
 
 # Clean up after apt-get installs 
 
-RUN apt-get update &&  apt-get install  tk-dev  -y
+RUN apt-get install  tk-dev  -y
+
+EXPOSE 8040
+RUN apt-get install nmap -y
 RUN rm -rf /var/lib/apt/lists/*
 
 # RUN apt-get remove gcc bzip2 make expect wget -y

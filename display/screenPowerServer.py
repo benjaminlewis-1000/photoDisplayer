@@ -22,7 +22,7 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 class tvStateManager():
 
     def __init__(self):
-        self.server = SimpleXMLRPCServer(("127.0.0.1", 8543),
+        self.server = SimpleXMLRPCServer(("0.0.0.0", 8543),
                                     requestHandler=RequestHandler)
         self.server.register_introspection_functions()
       

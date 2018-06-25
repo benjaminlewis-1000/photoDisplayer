@@ -3,6 +3,7 @@ function sendToPi(){
 
 	console.debug('SendToPi starting...')
 	criteriaJSON = criteriaToJSON();
+	console.debug(criteriaJSON)
 	optionsJSON = readShowOptions(relaunchShow=false);
 
 //	turnOnTV('True')

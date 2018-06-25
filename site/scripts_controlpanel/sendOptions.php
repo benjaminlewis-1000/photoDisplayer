@@ -45,6 +45,7 @@
 	}
 	set_error_handler("exception_error_handler");
 	$url = "http://127.0.0.1:" . $xml_params->serverParams->displayServerPort;
+	//$url = "http://172.17.0.4:" . $xml_params->serverParams->displayServerPort;
 
 	try{
 		$file = file_get_contents($url, false, $context);

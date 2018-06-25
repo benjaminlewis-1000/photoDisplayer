@@ -174,6 +174,7 @@
 				if (!($valid1 and $valid2)){
 					$exceptions[] = "$boolVal, $criteriaVal not valid in Person";
 					$allValid = 0;
+					break;
 				}
 
 				$nameAliasRoot = $site_params->nameAliases;
@@ -204,10 +205,10 @@
 					break;
 				}
 
-				if ( (int)$criteriaVal < 50){
+				if ( (int)$criteriaVal < 70){
 					$year += 2000;
 				}
-				if ( (int)$criteriaVal > 50 && (int)$criteriaVal < 100){
+				if ( (int)$criteriaVal > 70 && (int)$criteriaVal < 100){
 					$year += 1900;
 				}
 
@@ -225,8 +226,23 @@
 					//print_r($month);
 					$exceptions[] = "$boolVal, $criteriaVal not valid in Month";
 					$allValid = 0;
+					break;
 				}
 				$data = array("criteriaType" =>"Month", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal");
+				array_push($formedArray, $data);
+
+				break;
+			case "Location":
+				# Because we have passed to the location resolver for location, either it is valid or it starts with
+				# a '<' symbol.
+				$invalid1 = preg_match("/$</", $boolVal);
+
+				if ($invalid1){
+					$exceptions[] = "$boolVal, $criteriaVal not valid in Location";
+					$allValid = 0;
+					break;
+				}
+				$data = array("criteriaType" =>"Location", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal");
 				array_push($formedArray, $data);
 
 				break;

@@ -202,6 +202,7 @@ function standardizeTimeAMPM(inputTime){
 		return '';
 	}
 
+
 	if (milTimeMatch != null){
 		hours = parseInt(milTimeMatch[1]);
 		minutes = parseInt(milTimeMatch[2]);
@@ -265,7 +266,6 @@ function checkTime(whichField, divNum){
 	if (stopTime == false || startTime == false){
 		return
 	}
-
 	// Depending on which time was just changed and if they are backwards,
 	// get the other time and put it in the field. So yes,
 	// it's correct to get the changing time = stopTime when the start field

@@ -13,7 +13,7 @@ import json
 import psutil
 from subprocess import Popen
 import re
-
+import geoLocationFidelity as GLF
 
 import unicodedata
 
@@ -39,7 +39,9 @@ assert float(sys.argv[1]) - int(sys.argv[1]) == 0
 port = int(sys.argv[1])
 
 # Create server
-server = SimpleXMLRPCServer(("localhost", port),
+
+# 0.0.0.0 is important for networking, rather than using localhost: in particular, when in a Docker container, we need to be listening to whatever IP address the container is assigned, since it can't listen on localhost. 
+server = SimpleXMLRPCServer(("0.0.0.0", port),
                             requestHandler=RequestHandler)
 server.register_introspection_functions()
 
@@ -165,10 +167,7 @@ def geoLookup(lat, lon):
     return retJSON
 
 server.register_function(geoLookup, 'geoLookup')
-
-def test():
-	return "hello world"
-server.register_function(test)
+server.register_function(GLF.stringToStandard, 'geoStringStandardize')
 
 
 # Run the server's main loop

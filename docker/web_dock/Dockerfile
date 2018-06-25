@@ -73,10 +73,19 @@ RUN apt-get install libapache2-mod-python -y
 RUN a2enmod python
 
 # Clean up after apt-get installs 
-RUN rm -rf /var/lib/apt/lists/*
 
 ADD php.ini /usr/local/etc/php/php.ini
 
+# Add dependencies for XMLRPC
+RUN apt-get install libxml2-dev -y
+RUN docker-php-ext-install xmlrpc
+# RUN apt-get install php-xmlrpc -y
+
+RUN apt-get install iputils-ping -y
+# RUN apt-get install netstat -y
+RUN apt-get install nmap -y
+
+RUN rm -rf /var/lib/apt/lists/*
 # sudo /etc/init.d/apache2 restart
 
 # # Start the service

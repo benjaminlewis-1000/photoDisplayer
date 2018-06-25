@@ -10,29 +10,6 @@ header("Content-type: application/javascript");
 	document.head.appendChild(imported2);*/
 
 
-	function getListOfSavedSlideshows(){
-		$.ajax({
-			type: 'POST',
-			url: 'scripts_controlpanel/getDatabase.php',
-			data: {'queryType': 'loadShowNames'},
-			success: function(data){
-		        decodedData = JSON.parse(data);
-		        console.log(decodedData)
-
-		        errors = decodedData['errors']
-		        for (i = 0; i < errors.length; i++){
-		        	console.error("Error in loading slideshow names (modalScript.php): " + errors[i]);
-		        }
-		        warnings = decodedData['warnings']
-		        for (i = 0; i < warnings.length; i++){
-		        	console.warn("Warning in loading slideshow names (modalScript.php): " + warnings[i]);
-		        }
-		        
-		        definedSlideshows = decodedData['savedVals'];
-
-			}
-		});
-	}
 
 	var loadSelectIdx = 0;
 
@@ -54,6 +31,31 @@ header("Content-type: application/javascript");
 	var saveField = document.getElementById("saveNameSubmit");
 	var loadSubmit = document.getElementById("loadShowSubmit");
 	var deleteShowSubmit = document.getElementById("deleteShowSubmit");
+
+	
+	function getListOfSavedSlideshows(){
+		$.ajax({
+			type: 'POST',
+			url: 'scripts_controlpanel/getDatabase.php',
+			data: {'queryType': 'loadShowNames'},
+			success: function(data){
+		        decodedData = JSON.parse(data);
+
+		        errors = decodedData['errors']
+		        for (i = 0; i < errors.length; i++){
+		        	console.error("Error in loading slideshow names (modalScript.php): " + errors[i]);
+		        }
+		        
+		        warnings = decodedData['warnings']
+		        for (i = 0; i < warnings.length; i++){
+		        	console.warn("Warning in loading slideshow names (modalScript.php): " + warnings[i]);
+		        }
+		        
+		        definedSlideshows = decodedData['savedVals'];
+
+			}
+		});
+	}
 
 	// When the user clicks the button, open the modal 
 	savebtn.onclick = function() {
