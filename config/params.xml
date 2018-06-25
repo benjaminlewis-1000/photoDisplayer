@@ -6,6 +6,8 @@
 	</ostypes>
 	<excludeDirs>
 		<dir>/mnt/photo_drive/ben_pictures/_gsdata_</dir>
+		<dir>/mnt/photo_drive/ben_pictures/Finished/_gsdata_</dir>
+		<dir>/mnt/photo_drive/ben_pictures/In Progress/_gsdata_</dir>
 		<dir>/mnt/photo_drive/jessica/Pictures_Jessica/_gsdata_</dir>
 	</excludeDirs>
 	<photoDatabase>

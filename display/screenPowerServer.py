@@ -52,7 +52,7 @@ class tvStateManager():
         thread.start_new_thread(self.__command_reader__, (self.process,) )
         thread.start_new_thread(self.__cec_output_consumer__, (self.process,) )
         thread.start_new_thread(self.__tvRequestedThread__, () )
-        
+       
         self.__determine_unknown_state__()
       
 
@@ -239,6 +239,7 @@ class tvStateManager():
                 # Put the latest state in the queue
                 # print "Putting power on"
                 if not standby_requested:
+                    pass
                     self.__setDesiredPowerState__('on')
                 active_requested = False
               
@@ -249,22 +250,26 @@ class tvStateManager():
                 # Put the latest state in the queue
                 # print "Putting power off"
                 if not standby_requested:
+                    pass
                     self.__setDesiredPowerState__('off')
                 standby_requested = False
                 
                 self.__setPowerState__('off')
               
             elif re.match(".*?making tv.*the active source.*?", stdout):
+                pass
                 # print "raspi is not the active source"
                 # Put the latest state in the queue
                #  print "Putting not_raspi"
                 self.__setActiveState__('not_raspi')
             elif re.match(".*?making recorder.* the active source.*?", stdout):
+                pass
                 # print "raspi is the active source"
                 # Put the latest state in the queue
                 # print "Putting raspi"
                 self.__setActiveState__('raspi')
         else:
+            sleep(0.1)
             if (time.time() - lastRead) > 3.5:
                 pass   
                 
