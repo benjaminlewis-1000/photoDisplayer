@@ -217,6 +217,10 @@ def getExifData(filename, doGeocode):
         # Get the names of tagged faces
         metadataFields = metadata.xmp_keys
         nameList = []
+
+        regionlist_name_regex = re.compile('.*RegionList.*Name.*')
+        nameKeys = filter(regionlist_name_regex.match, metadata.keys())
+        names = [metadata[nk].value for nk in nameKeys]
         for i in range(len(metadataFields)):
             # Find all fields that have the word 'name' in them, regardless of case. 
             if re.search(r'Name', metadataFields[i], re.IGNORECASE):
@@ -229,7 +233,7 @@ def getExifData(filename, doGeocode):
                     name = name.rstrip()
                     name = ' '.join([s[0].upper() + s[1:] for s in name.split(' ')])
                     nameList.append(name)
-        jData['names'] = list(set(nameList))  ## De-duplicate names
+        jData['names'] = list(set(names).union(set(nameList)))  ## De-duplicate names
 
         if 'Exif.Photo.UserComment' in metadata:
             autoTags = metadata['Exif.Photo.UserComment'].raw_value
@@ -298,7 +302,11 @@ def getExifData(filename, doGeocode):
 
         jsonObj = json.dumps(jData)
         assert re.search(r'...............', jsonObj)
-        return jsonObj
+        # print __name__
+        if __name__ == "__main__":
+            return jsonObj, metadata
+        else:
+            return jsonObj
 
 
 if __name__ == '__main__':
@@ -315,7 +323,9 @@ if __name__ == '__main__':
     else:
         fullPath = "D:\\Pictures\\Emily's Pictures\\3-30-2009\\DSCN0456.JPG"
         fullPath = 'D:\Pictures\\2016\Provo\july_4_parade (22).JPG'
-        print getExifData(fullPath, False)
+        fullPath = '/home/lewis/test_imgs/DSC_9833.JPG'
+        jsonObj, metadata = getExifData(fullPath, False)
+        print jsonObj
 
 
 
