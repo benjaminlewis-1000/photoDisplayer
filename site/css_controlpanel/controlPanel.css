@@ -5,23 +5,20 @@
 
 /* Task button - CSS for buttons at top of page. */
 .taskButton{
+    background-color: #4CAF50;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    height: 50px;
+    margin: 0 2% 0 2%;
+    padding: 16px;
     position:relative;
     top: 3px;
-    height: 50px;
-    width: 200px;
-    border-radius: 15px;
-
-    background-color: #4CAF50;
     transition: 1.5s ease;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    margin-left: 2%;
-    margin-right: 2%;
-
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 15vw;
 }
 
 /* Dropdown button on hover & focus */
@@ -30,11 +27,7 @@
 }
 
 .head_div {
-    width: 90%;
-    border: none;
-    outline: none;
     display: flex;
-    height: 40px;
     justify-content: center;
     margin: 30px auto 30px auto;
 }
@@ -43,43 +36,30 @@
 .accordion, .panel {
 
     border-radius: 5px;
-
     /* Box shadows */
     box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
     margin: auto auto 8px auto;
 }
 
-
 /* Style the buttons that are used to open and close the accordion panel */
 button.accordion {
+
     background-color: #eee;
+    border: none;
     color: #444;
     cursor: pointer;
-    padding: 10 2%;
-
     /* Center the button on the page */
     display: table;
-    margin-left: auto;
-    margin-right: auto;
-
-    width: 90%;
-    border: none;
-    outline: none;
-    transition: 0.4s;
-
     /* Box shadows */
     height: 45px;
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+    padding: 10 2%;
     position: relative;
+    transition: 0.4s;
+    width: 90%;
     z-index:0;
-}
-
-.accordion {
-    position:relative;
-    width: 20%;
-    text-align: center;
-    font-size: 25px;
-    font-variant: small-caps;
-    display:flex;
 }
 
 button.accordion:after {
@@ -98,6 +78,15 @@ button.accordion.active, button.accordion:hover {
     background-color: #ddd;
 }
 
+.accordion {
+    display:flex;
+    font-size: 25px;
+    font-variant: small-caps;
+    position:relative;
+    text-align: center;
+    width: 20%;
+}
+
 
 /* Style the accordion panel. Note: hidden by default */
 div.panel {
@@ -108,28 +97,25 @@ div.panel {
     overflow: hidden;
     transition: max-height 0.5s ease-out;
     /* Center the button on the page */
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 40px;
-
+    margin: 0 auto 40px;
 /*
     background: linear-gradient(to right, white ,#f4fcff 5%, #f4fcff 95%, white); *//* Standard syntax (must be last) */
     
 }
 
 #minPhotos{
+    border-radius: 20px;
     border: 20px;
-    position:absolute;
     font-family: 'Goudy Old Style';
     height:30px;
-    border-radius: 20px;
-    width: 12%;
+    position:absolute;
     text-align: center;
+    width: 12%;
 }
 
 #delayForm{
-    text-align: center;
     font-family: 'Goudy Old Style';
+    text-align: center;
 }
 
 /* Checkbox list formatting */
@@ -139,81 +125,62 @@ form li {
 }
 
 form ul {
-    padding-left: 0px;
     margin-bottom: 20px;
+    padding-left: 0px;
 }
 
 /* Divs underneath the accordion */
 .sub-entry {
-    width: 50%;
-    float: left;
-    margin: 0 auto;
-    text-align: left;
     display:inline-block;
+    float: left;
     /* Checkbox values */
     font-size: 20px;
     font-variant: small-caps;
+    margin: 0 auto;
+    text-align: left;
+    width: 50%;
 }
 
 #optionRelaunch{
-    width: 300px;
-    border-radius: 15px;
     background-color: #eee;
-    padding: 6px;
-    font-size: 16px;
-    margin-left: 5%;
-    margin-right: 5%;
+    border-radius: 15px;
     color: green;
+    font-size: 16px;
     font-size: 20px;
     font-variant: small-caps;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 6px;
+    width: 300px;
 }
 
 .digitalClock {
-    /*font-size: 40px;
-    background: #C1D0F0;
-    color: #00FF00;
-
-    position: relative;*/
-
-    /*background-color:#333;*/
+    color:#4CAF50;
     font-family: monaco,Consolas,Lucida Console,monospace;
     font-size:40px;
-    text-shadow: 2px 2px 15px #000;
-    color:#4CAF50;
-    
+    text-shadow: 2px 2px 15px black;
 }
 
 #clockDiv{
-
-  text-align: center;
-  margin-left: auto ;
-  margin-right: auto ;
-  margin-bottom: 20px;
+    text-align: center;
+    margin: 0 auto 20px;
 }
 
 #newShowButton{
-    height: 45px;
-  background: -webkit-radial-gradient(#dffffa, #f0f0f0); /* Safari 5.1 to 6.0 */
-  background: -o-radial-gradient(#dffffa, #f0f0f0); /* For Opera 11.6 to 12.0 */
-  background: -moz-radial-gradient(#dffffa, #f0f0f0); /* For Firefox 3.6 to 15 */
-  background: radial-gradient(#dffffa, #f0f0f0); /* Standard syntax */
-
+    background: -moz-radial-gradient(#dffffa, #f0f0f0); /* For Firefox 3.6 to 15 */
+    background: -o-radial-gradient(#dffffa, #f0f0f0); /* For Opera 11.6 to 12.0 */
+    background: -webkit-radial-gradient(#dffffa, #f0f0f0); /* Safari 5.1 to 6.0 */
+    background: radial-gradient(#dffffa, #f0f0f0); /* Standard syntax */
     border: none !important;
+    cursor: pointer;
     font-size: 25px;
     font-variant: small-caps;
-    cursor: pointer;
+    height: 45px;
 }
 
 #newShowButton.active{
-  background: -webkit-radial-gradient(#dffffa, #ddd); /* Safari 5.1 to 6.0 */
-  background: -o-radial-gradient(#dffffa, #ddd); /* For Opera 11.6 to 12.0 */
   background: -moz-radial-gradient(#dffffa, #ddd); /* For Firefox 3.6 to 15 */
+  background: -o-radial-gradient(#dffffa, #ddd); /* For Opera 11.6 to 12.0 */
+  background: -webkit-radial-gradient(#dffffa, #ddd); /* Safari 5.1 to 6.0 */
   background: radial-gradient(#dffffa, #ddd); /* Standard syntax */
 }
-
-/*
-button#slideshowSchedulingAccordion:hover + button#newShowButton  {
-  background: -webkit-radial-gradient(#ccffff, #ddd);
-  background: -o-radial-gradient(#ccffff, #ddd);
-  background: -moz-radial-gradient(#ccffff, #ddd);
-  background: radial-gradient(#ccffff, #ddd); 
