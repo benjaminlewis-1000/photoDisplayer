@@ -216,24 +216,35 @@ def getExifData(filename, doGeocode):
 
         # Get the names of tagged faces
         metadataFields = metadata.xmp_keys
-        nameList = []
+        # nameList = []
+        # print metadataFields
 
+        # There are two different ways of storing names in XMP data, so I do 
+        # both of them and join them in a set list.
         regionlist_name_regex = re.compile('.*RegionList.*Name.*')
         nameKeys = filter(regionlist_name_regex.match, metadata.keys())
-        names = [metadata[nk].value for nk in nameKeys]
-        for i in range(len(metadataFields)):
-            # Find all fields that have the word 'name' in them, regardless of case. 
-            if re.search(r'Name', metadataFields[i], re.IGNORECASE):
-                nameSplit = metadata[metadataFields[i]].raw_value
-                nameSplit = nameSplit.split(": ")
-                name = nameSplit[0]
-                bogusNames = ["Custom", "Medium Contrast"]
-                if not re.search(r'^\.', name) and not name.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])) and not name in bogusNames and not re.search(r'NIKKOR', name) and not re.search(r'NIKON', name):
-                    # Not ending in JPEG because we get the filename from this list in the pitc values sometimes. 
-                    name = name.rstrip()
-                    name = ' '.join([s[0].upper() + s[1:] for s in name.split(' ')])
-                    nameList.append(name)
-        jData['names'] = list(set(names).union(set(nameList)))  ## De-duplicate names
+        nameList = [metadata[nk].value for nk in nameKeys]
+        # Take out the JPEG filenames in the 'name' list - happens sometimes apparently.
+        jpeg_regex = re.compile('.*JPE?G$', re.IGNORECASE)
+        jpeg_list = filter(jpeg_regex.search, nameList)
+        # Also takes out some bogus names...
+        nameList = set(nameList) - set(jpeg_list) - set(["Custom", "Medium Contrast"])
+        print nameList
+
+        # for i in range(len(metadataFields)):
+        #     # Find all fields that have the word 'name' in them, regardless of case. 
+        #     if re.search(r'Name', metadataFields[i], re.IGNORECASE):
+        #         nameSplit = metadata[metadataFields[i]].raw_value
+        #         nameSplit = nameSplit.split(": ")
+        #         name = nameSplit[0]
+        #         bogusNames = ["Custom", "Medium Contrast"]
+        #         if not re.search(r'^\.', name) and not name.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])) and not name in bogusNames and not re.search(r'NIKKOR', name) and not re.search(r'NIKON', name):
+        #             # Not ending in JPEG because we get the filename from this list in the pitc values sometimes. 
+        #             name = name.rstrip()
+        #             name = ' '.join([s[0].upper() + s[1:] for s in name.split(' ')])
+        #             nameList.append(name)
+        # print nameList
+        jData['names'] = list(nameList) # .union(set(nameList)))  ## De-duplicate names
 
         if 'Exif.Photo.UserComment' in metadata:
             autoTags = metadata['Exif.Photo.UserComment'].raw_value
@@ -323,9 +334,28 @@ if __name__ == '__main__':
     else:
         fullPath = "D:\\Pictures\\Emily's Pictures\\3-30-2009\\DSCN0456.JPG"
         fullPath = 'D:\Pictures\\2016\Provo\july_4_parade (22).JPG'
+        fullPath = '/home/lewis/test_imgs/test2.jpg'
         fullPath = '/home/lewis/test_imgs/DSC_9833.JPG'
+        fullPath = sys.argv[1]
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
+
+        # for i in range(len(metadata.xmp_keys)):
+        #   try:
+        #     print metadata.xmp_keys[i] + ": " + str(metadata[metadata.xmp_keys[i]].value)
+        #   except Exception:
+        #     print metadata.xmp_keys[i] + ": NA"
+
+        # aa = pyexiv2.xmp.XmpTag
+        # metadata['Xmp.mwg-rs.Regions'] 
+        # metadata.write()
+
+        # for i in range(len(metadata.xmp_keys)):
+        #   try:
+        #     print metadata.xmp_keys[i] + ": " + str(metadata[metadata.xmp_keys[i]].value)
+        #   except Exception:
+        #     print metadata.xmp_keys[i] + ": NA"
+
 
 
 

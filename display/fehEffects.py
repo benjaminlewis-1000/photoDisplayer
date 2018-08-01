@@ -3,6 +3,7 @@
 import os
 import sys
 from PIL import Image
+from subprocess import call
 
 rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
 deleteFile = os.path.join(rootDir, 'delete_these_paths.out')
@@ -15,25 +16,20 @@ fehNumber = sys.argv[2]
 
 # assert os.path.isfile(str(filename)), 'File {} input is not a file'.format(filename)
 
-img = Image.open(filename)
-
 def rotate_clockwise(img, filename):
 	with open(alterFile, 'a') as fh:
 		print >>fh, 'Image {} was rotated clockwise'.format(filename)
-	img = img.rotate(270, expand=True)
-	img.save(filename)
+        call(['exiftran', filename, '-i9']) 
 
 def rotate_counterclockwise(img, filename):
 	with open(alterFile, 'a') as fh:
 		print >>fh, 'Image {} was rotated counterclockwise'.format(filename)
-	img = img.rotate(90, expand=True)
-	img.save(filename)
+        call(['exiftran', filename, '-i2']) 
 
 def rotate_180(img, filename):
 	with open(alterFile, 'a') as fh:
 		print >>fh, 'Image {} was rotated 180 degrees'.format(filename)
-	img = img.rotate(180, expand=True)
-	img.save(filename)
+        call(['exiftran', filename, '-i1']) 
 
 def mark_for_deletion(img, filename):
 	with open(deleteFile, 'a') as fh:
