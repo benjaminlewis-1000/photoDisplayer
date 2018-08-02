@@ -16,22 +16,22 @@ fehNumber = sys.argv[2]
 
 # assert os.path.isfile(str(filename)), 'File {} input is not a file'.format(filename)
 
-def rotate_clockwise(img, filename):
+def rotate_clockwise(filename):
 	with open(alterFile, 'a') as fh:
 		print >>fh, 'Image {} was rotated clockwise'.format(filename)
-        call(['exiftran', filename, '-i9']) 
+        call(['sudo', '/usr/bin/exiftran', filename, '-i9']) 
 
-def rotate_counterclockwise(img, filename):
+def rotate_counterclockwise(filename):
 	with open(alterFile, 'a') as fh:
 		print >>fh, 'Image {} was rotated counterclockwise'.format(filename)
-        call(['exiftran', filename, '-i2']) 
+        call(['sudo', '/usr/bin/exiftran', filename, '-i2']) 
 
-def rotate_180(img, filename):
+def rotate_180(filename):
 	with open(alterFile, 'a') as fh:
 		print >>fh, 'Image {} was rotated 180 degrees'.format(filename)
-        call(['exiftran', filename, '-i1']) 
+        call(['sudo', '/usr/bin/exiftran', filename, '-i1']) 
 
-def mark_for_deletion(img, filename):
+def mark_for_deletion(filename):
 	with open(deleteFile, 'a') as fh:
 		print >>fh, filename
 
@@ -56,6 +56,6 @@ def numbers_to_months(argument):
 
     # Execute the function
     print switcher.get(argument)
-    print func(img, filename)
+    func(filename)
 
 numbers_to_months(fehNumber)
