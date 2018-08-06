@@ -48,24 +48,18 @@ RUN apt-get install imagemagick -y --no-install-recommends
 
 RUN apt-get install make -y --no-install-recommends
 
-RUN apt-get install bzip2 -y --no-install-recommends
-RUN wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O /feh.tar.bz2 && mkdir feh \
-    && tar -xjf feh.tar.bz2 -C feh --strip-components 1 && rm feh.tar.bz2
-# Maybe put this download at the beginning
+# Imlib2 for feh
+RUN apt-get install libimlib2-dev
 
-# RUN mkdir feh
-# RUN tar -xjf /feh.tar.bz2 -C feh --strip-components 1
-# RUN cd feh
-RUN sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' /feh/config.mk
-RUN make -C /feh -j9
-RUN make install -C /feh
-RUN rm -rf feh
+RUN apt-get install bzip2 -y --no-install-recommends
+
 # RUN 
 
 ENV DISPLAY :0
 
 # Build dependencies for pyexiv2
-RUN apt-get install build-essential -y --no-install-recommends
+RUN apt-get update
+RUN apt-get install build-essential -y --no-install-recommends 
 RUN apt-get install python-all-dev -y --no-install-recommends
 RUN apt-get install libexiv2-dev -y --no-install-recommends
 RUN apt-get install libboost-python-dev -y --no-install-recommends
@@ -91,7 +85,45 @@ RUN apt-get install  tk-dev  -y
 
 EXPOSE 8040
 RUN apt-get install nmap -y
-RUN rm -rf /var/lib/apt/lists/*
+# RUN rm -rf /var/lib/apt/lists/*
+
+# Install exiftran for rotations
+
+RUN apt-get install exiftran -y
+
+RUN apt-get install apt-utils -y
+
+RUN apt-get install sudo -y
+
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/developer && \
+    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+    echo "developer:x:${uid}:" >> /etc/group && \
+    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+    chmod 0440 /etc/sudoers.d/developer && \
+    chown ${uid}:${gid} -R /home/developer
+
+RUN apt-get install libimlib2
+
+RUN wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O /feh.tar.bz2 && mkdir feh \
+    && tar -xjf feh.tar.bz2 -C feh --strip-components 1 && rm feh.tar.bz2
+# Maybe put this download at the beginning
+
+# RUN mkdir feh
+# RUN tar -xjf /feh.tar.bz2 -C feh --strip-components 1
+# RUN cd feh
+RUN sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' /feh/config.mk
+RUN make -C /feh -j9
+RUN make install -C /feh
+RUN rm -rf feh
+
+#### Important for running the GUI app with no errors
+USER developer
+ENV HOME /home/developer
+
+############ sudo xhost local:root  && xhost +
+#########  https://stackoverflow.com/questions/28392949/running-chromium-inside-docker-gtk-cannot-open-display-0
+#########  http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/
 
 # RUN apt-get remove gcc bzip2 make expect wget -y
 
