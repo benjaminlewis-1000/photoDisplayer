@@ -3,3 +3,5 @@
 docker run -ti -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH photodisplay feh
 
 docker run -it  --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -e XAUTHORITY=$XAUTHORITY  -v /home/lewis/tmp_exp:/tmp      photodisplay bash
+
+ docker run -ti --rm -v /home/lewis/gitRepos/photoDisplayer:/app -v /home/lewis/tmp_exp:/tmp -v /tmp/.X11-unix:/tmp/.X11-unix -e XAUTHORITY=$XAUTHORITY -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro -e DISPLAY=$DISPLAY photodisplay bash

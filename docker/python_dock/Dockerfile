@@ -11,7 +11,7 @@ RUN apt-get install iputils-ping -y --no-install-recommends
 RUN apt-get install wget -y --no-install-recommends
     
 RUN apt-get install gcc -y
-# RUN apt-get install -y python-pip 
+#RUN apt-get install -y python-pip 
 
 RUN pip install -r requirements.txt 
 
@@ -95,13 +95,6 @@ RUN apt-get install apt-utils -y
 
 RUN apt-get install sudo -y
 
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/developer && \
-    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
-    echo "developer:x:${uid}:" >> /etc/group && \
-    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
-    chmod 0440 /etc/sudoers.d/developer && \
-    chown ${uid}:${gid} -R /home/developer
 
 RUN apt-get install libimlib2
 
@@ -117,9 +110,105 @@ RUN make -C /feh -j9
 RUN make install -C /feh
 RUN rm -rf feh
 
+RUN apt-get install vim -y
+
+# Install cron, ps
+RUN apt-get install cron procps -y
+
+# Install cron jobs
+RUN echo "15 23 * * * /usr/local/bin/python /app/pyInit/addPics.py" | crontab -
+RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+# RUN (crontab -l; echo "@reboot /usr/local/bin/python/app/display/screenPowerServer.py &") | crontab -
+# REMOTE_STR="@reboot bash $PROJECT_ROOT_DIR/scripts/remoteNewKeymap.sh"
+
+
+
 #### Important for running the GUI app with no errors
+
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/developer && \
+    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+    echo "developer:x:${uid}:" >> /etc/group && \
+    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+    chmod 0440 /etc/sudoers.d/developer && \
+    chown ${uid}:${gid} -R /home/developer
+
+
+
+# Install packages for web server
+
+RUN apt-get install apache2 -y
+RUN apt-get install php -y
+RUN apt-get install apache2-utils -y
+RUN apt-get install libapache2-mod-python -y
+RUN apt-get install php-symfony-yaml -y
+RUN apt-get install php-sqlite3 -y
+RUN apt-get install php-xmlrpc -y
+RUN apt-get install libapache2-mod-php -y
+RUN apt-get install libapache2-mod-php7.0 -y
+RUN apt-get install php7.0 -y
+RUN apt-get install php7.0-mcrypt -y
+RUN apt-get install php7.0-sqlite -y
+RUN apt-get install php-xml-rpc2 -y
+RUN apt-get install libxml2-dev -y
+RUN apt-get install iputils-ping -y
+RUN apt-get install nmap -y
+RUN apt-get install libapache2-mod-python -y
+
+RUN echo "The Web Server is Running" > /var/www/html/index.html
+EXPOSE 80
+
+ENV APACHE_CONF_VAR  \
+<Directory /var/www> \\n\
+   Options Indexes FollowSymLinks \\n\
+   AllowOverride None \\n\
+   Require all granted \\n\
+   AddHandler mod_python .py # Note the space before .py \\n\
+   PythonHandler mod_python.publisher \\n\
+   PythonDebug on \\n\
+</Directory> 
+
+RUN echo -e $APACHE_CONF_VAR
+
+RUN cp /etc/apache2/apache2.conf /etc/apache2/apache.conf.bk
+
+RUN perl -0777 -p -i -e 's|<Directory /var/www.*?</Directory>|'"$APACHE_CONF_VAR"'|gs' /etc/apache2/apache2.conf
+
+# # Change dir.conf to adapt the order of sites loaded
+
+ENV MOD_DIR_VAR \
+<IfModule mod\_dir.c> \\n\
+    DirectoryIndex controlPanel.php mainPage.php info.php mainPage.html index.html index.cgi index.pl index.php index.xhtml index.htm \\n\
+<\/IfModule>
+
+RUN cp /etc/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir.conf.bk
+
+RUN echo -e $MOD_DIR_VAR
+
+RUN perl -0777 -p -i -e 's|<IfModule mod.*?IfModule>|'"$MOD_DIR_VAR"'|gs' /etc/apache2/mods-available/dir.conf
+
+# # Install Python mod
+RUN a2enmod python
+
+# Clean up after apt-get installs 
+ADD php.ini /usr/local/etc/php/php.ini
+
+# Add dependencies for XMLRPC
+# RUN docker-php-ext-install xmlrpc
+# RUN apt-get install php-xmlrpc -y
+
 USER developer
 ENV HOME /home/developer
+
+MAINTAINER Benjamin Lewis
+
+# Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.
+ENTRYPOINT bash /app/scripts/dockerStart.sh && /bin/bash
+#RUN useradd -G sudo -u 1000 --create-home emacs
+
+#ENV HOME /home/emacs
+#WORKDIR /home/emacs
+
 
 ############ sudo xhost local:root  && xhost +
 #########  https://stackoverflow.com/questions/28392949/running-chromium-inside-docker-gtk-cannot-open-display-0

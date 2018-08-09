@@ -1,0 +1,75 @@
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]: 
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Name: asdf
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Type: Face
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Area: NA
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Area/stArea:x: 0.694315
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Area/stArea:y: 0.367375
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Area/stArea:w: 0.0887633
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Area/stArea:h: 0.15975
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Area/stArea:unit: normalized
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]: 
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Name: Alyssa Varns
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Type: Face
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Area: NA
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Area/stArea:x: 0.393783
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Area/stArea:y: 0.361875
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Area/stArea:w: 0.0874335
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Area/stArea:h: 0.15775
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[2]/mwg-rs:Area/stArea:unit: normalized
+Xmp.mwg-rs.Regions/mwg-rs:RegionList[3]: asdf
+
+
+[metadata['Xmp.mwg-rs.Regions']
+metadata['Xmp.mwg-rs.Regions']
+dir(metadata['Xmp.mwg-rs.Regions'])
+pyexiv2.xmp.XmpTag
+aa = pyexiv2.xmp.XmpTag
+aa
+aa.keys()
+dir(aa)
+aa.key
+aa.name
+aa.name.value
+dir(aa)
+aa['a'] = 3
+aa
+aa.type
+pyexiv2.xmp.register_namespace('mwg-rs')
+pyexiv2.xmp.register_namespace('mwg-rs', 'Xmp')
+pyexiv2.xmp.register_namespace('mwg-rs', 'Xmp.mwg-rs.Regions')
+pyexiv2.xmp.register_namespace('mwg-rs', 'Xmp.mwg-rs.Regions/')
+pyexiv2.xmp.register_namespace('mwg-rs/', 'Xmp')
+xmp
+pyexiv2.xmp.register_namespace('mwg-rs/', 'Xmp')
+pyexiv2.xmp('Xmp.mwg-rs')
+pyexiv2.xmp['Xmp.mwg-rs']
+cc = pyexiv2.xmp.XmpTag('a', 'b')
+cc = pyexiv2.xmp.XmpTag('Name', 'b')
+cc = pyexiv2.xmp.XmpTag('Xmp.Name', 'b')
+cc = pyexiv2.xmp.XmpTag('Xmp.mwg-rs.Regions', 'b')
+cc = pyexiv2.xmp.XmpTag('Xmp.mwg-rs.Regions')
+cc
+dir(cc)
+cc.value
+cc.key
+cc['a']=d
+cc[1]
+cc['3']
+cc['3'] = 3
+dir(cc)
+cc.description
+cc = pyexiv2.xmp.XmpTag('Xmp.mwg-rs.Regions/mwg-rs:RegionList', 'b')
+cc = pyexiv2.xmp.XmpTag('Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]', 'b') # ***
+cc
+cc.key
+cc
+ls
+dir(cc)
+cc._set_raw_value() # ***
+cc._set_raw_value('36') # ***
+cc
+cc.value
+cc.raw_value
+import readline
+for i in range(readline.get_current_history_length()):
+    print readline.get_history_item(i + 1)

@@ -1,9 +1,46 @@
+
+#  Run with:  docker-compose run --service-ports photodisplay bash
+# (service-ports will open the ports as designated here.)
 version: '2'
 services:
-   photodisplay:
-      build: .
-#      ports:
-      volumes:
-      - /home/lewis/gitRepos/photoDisplayer:/usr/src/app
+  photodisplay:
+    # build: .
+    image: photodisplay
+    # restart: always
+  #      ports:
+    ports:
+      - "80:80"     # The HTTP port
+      # - "8080:8080" # The Web UI (enabled by --api)
+      # - "443:443"
+    # command:
+    #   /bin/bash
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount the code
+      - /home/lewis/gitRepos/photoDisplayer:/app
+      # Mount the photos
+      - /home/lewis/tmp_exp:/photos
+      # Mount X11 forwarding
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # Mount timezone files
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro 
+      # Mount the directory for the site
+      - /home/lewis/gitRepos/photoDisplayer/site:/var/www/html
+      # Databases
+      - /home/lewis/gitRepos/photoDisplayer/databases:/var/www/databases
+      # Configuration xml file
+      - /home/lewis/gitRepos/photoDisplayer/config:/var/www/config
+    environment:
+      - XAUTHORITY=$XAUTHORITY
+      - DISPLAY=$DISPLAY
 #  docker run -it -v /home/lewis/gitRepos/photoDisplayer/:/usr/src/app -w /usr/src/app photodisplay python pyInit/addPics.py
 
+ #  -e XAUTHORITY=$XAUTHORITY 
+ # # docker run -ti --rm -v /home/lewis/gitRepos/photoDisplayer:/app
+ #  # -v /home/lewis/tmp_exp:/tmp 
+ #  # -v /tmp/.X11-unix:/tmp/.X11-unix
+ #  # -v /etc/timezone:/etc/timezone:ro
+ #  # -v /etc/localtime:/etc/localtime:ro 
+ #  -e DISPLAY=$DISPLAY photodisplay bash
