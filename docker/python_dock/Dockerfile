@@ -115,23 +115,9 @@ RUN apt-get install vim -y
 # Install cron, ps
 RUN apt-get install cron procps -y
 
-# Install cron jobs
-RUN echo "15 23 * * * /usr/local/bin/python /app/pyInit/addPics.py" | crontab -
-RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
 # RUN (crontab -l; echo "@reboot /usr/local/bin/python/app/display/screenPowerServer.py &") | crontab -
 # REMOTE_STR="@reboot bash $PROJECT_ROOT_DIR/scripts/remoteNewKeymap.sh"
 
-
-
-#### Important for running the GUI app with no errors
-
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/developer && \
-    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
-    echo "developer:x:${uid}:" >> /etc/group && \
-    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
-    chmod 0440 /etc/sudoers.d/developer && \
-    chown ${uid}:${gid} -R /home/developer
 
 
 
@@ -197,13 +183,48 @@ ADD php.ini /usr/local/etc/php/php.ini
 # RUN docker-php-ext-install xmlrpc
 # RUN apt-get install php-xmlrpc -y
 
+
+
+
+#### Important for running the GUI app with no errors
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/developer && \
+    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+    echo "developer:x:${uid}:" >> /etc/group && \
+    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+    chmod 0440 /etc/sudoers.d/developer && \
+    chown ${uid}:${gid} -R /home/developer
+
+RUN service cron start 
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
+# Install cron jobs
+# RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+RUN (echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+
+# Remove a few errors I was getting.
+RUN yes | pip uninstall requests
+RUN yes | pip install requests
+RUN yes | pip uninstall docopt
+RUN apt-get install rsyslog -y
+
+ADD cronjobs.txt /etc/cron.d/userCron
+RUN chmod 0644 /etc/cron.d/userCron
+RUN echo "PYTHONPATH=${PYTHONPATH}:/usr/lib/python2.7/dist-packages" >> /etc/profile
+RUN chmod +x /etc/cron.d/userCron
+
+# RUN export PYTHONPATH="${PYTHONPATH}:/usr/lib/python2.7/dist-packages"
+
 USER developer
 ENV HOME /home/developer
 
-MAINTAINER Benjamin Lewis
+# RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
 
+MAINTAINER Benjamin Lewis
 # Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.
-ENTRYPOINT bash /app/scripts/dockerStart.sh && /bin/bash
+ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
 #RUN useradd -G sudo -u 1000 --create-home emacs
 
 #ENV HOME /home/emacs

@@ -229,7 +229,7 @@ def getExifData(filename, doGeocode):
         jpeg_list = filter(jpeg_regex.search, nameList)
         # Also takes out some bogus names...
         nameList = set(nameList) - set(jpeg_list) - set(["Custom", "Medium Contrast"])
-        print nameList
+        # print nameList
 
         # for i in range(len(metadataFields)):
         #     # Find all fields that have the word 'name' in them, regardless of case. 

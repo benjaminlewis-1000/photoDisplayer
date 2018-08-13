@@ -121,7 +121,7 @@ def getRoots(conn, args, params):
 
         row = c.fetchone()
 
-    if args.addRoot or args.addRootGUI:
+    if args.addRoot or args.addRootGUI or args.addRootParams:
         finishedRoots = False
 
         newRootsList = []
@@ -164,6 +164,11 @@ def getRoots(conn, args, params):
 
         if args.addRoot:
             newRootsList.append(args.addRoot)
+
+        if args.addRootParams:
+            rootList = params['params']['mountDirs']
+            for root in rootList['dir']:
+                newRootsList.append(root)
 
         # print newRootsList
 
@@ -289,6 +294,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Python version of the photo display program.')
     parser.add_argument('--addRoot', help='Add new image root directory.')
+    parser.add_argument('--addRootParams', action='store_true', help='Add new roots from the params.xml')
     parser.add_argument('--addRootGUI', action='store_true', help='Add new image root directory using a GUI.')
     parser.add_argument('--noPhotoAdd', action='store_true', help='Don\'t add photos to the directory; simply add the root directories.')
 

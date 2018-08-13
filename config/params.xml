@@ -10,6 +10,10 @@
 		<dir>/mnt/photo_drive/ben_pictures/In Progress/_gsdata_</dir>
 		<dir>/mnt/photo_drive/jessica/Pictures_Jessica/_gsdata_</dir>
 	</excludeDirs>
+	<mountDirs>
+		<dir>/photos</dir>
+		<dir>/photos2</dir>
+	</mountDirs>
 	<photoDatabase>
 		<fileName>photos_master.db</fileName>
 		<tables>

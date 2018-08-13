@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <siteParams>
 	<excludedNames>
-		Linear,Aaaa,Other,E,18
+		Linear,Aaaa,Other,E,18,.realignore
 	</excludedNames>
 	<excludedPatterns>
 		.*.CR2,\(Canon EF 85mm F\/1.8 USM\),Canon EOS,2017 RY.*,RYA .*,Integration . Operations.*
