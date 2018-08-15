@@ -170,10 +170,10 @@ def getRoots(conn, args, params):
             for root in rootList['dir']:
                 newRootsList.append(root)
 
-        # print newRootsList
+        print newRootsList
 
         for newDirName in newRootsList:
-            # print "Adding root " + newDirName
+            print "Adding root " + newDirName
             isdir = os.path.isdir(newDirName)
             isabsdir = os.path.isabs(newDirName)
 

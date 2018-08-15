@@ -1,5 +1,6 @@
 
-FROM python:2.7-slim-stretch 
+# FROM python:2.7-slim-stretch 
+FROM resin/rpi-raspbian
 # Get a Debian stretch image with python
 
 ADD requirements.txt /
@@ -12,6 +13,9 @@ RUN apt-get install wget -y --no-install-recommends
     
 RUN apt-get install gcc -y
 #RUN apt-get install -y python-pip 
+
+RUN apt-get install python-pip -y
+RUN apt-get install python-dev python3-dev -y
 
 RUN pip install -r requirements.txt 
 
@@ -123,23 +127,22 @@ RUN apt-get install cron procps -y
 
 # Install packages for web server
 
+RUN apt-get install php5 -y
+RUN apt-get install php5-mcrypt -y
+RUN apt-get install php5-sqlite -y
 RUN apt-get install apache2 -y
-RUN apt-get install php -y
+# RUN apt-get install php -y
 RUN apt-get install apache2-utils -y
 RUN apt-get install libapache2-mod-python -y
 RUN apt-get install php-symfony-yaml -y
-RUN apt-get install php-sqlite3 -y
-RUN apt-get install php-xmlrpc -y
-RUN apt-get install libapache2-mod-php -y
-RUN apt-get install libapache2-mod-php7.0 -y
-RUN apt-get install php7.0 -y
-RUN apt-get install php7.0-mcrypt -y
-RUN apt-get install php7.0-sqlite -y
+# RUN apt-get install php-sqlite3 -y
+# RUN apt-get install php-xmlrpc -y
+# RUN apt-get install libapache2-mod-php -y
 RUN apt-get install php-xml-rpc2 -y
 RUN apt-get install libxml2-dev -y
 RUN apt-get install iputils-ping -y
 RUN apt-get install nmap -y
-RUN apt-get install libapache2-mod-python -y
+RUN apt-get install libapache2-mod-php5 -y
 
 RUN echo "The Web Server is Running" > /var/www/html/index.html
 EXPOSE 80
@@ -205,10 +208,16 @@ RUN touch /var/log/cron.log
 RUN (echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
 
 # Remove a few errors I was getting.
-RUN yes | pip uninstall requests
-RUN yes | pip install requests
-RUN yes | pip uninstall docopt
+#RUN yes | pip uninstall requests
+#RUN yes | pip install requests
+#RUN yes | pip uninstall docopt
+
+# Install syslog
 RUN apt-get install rsyslog -y
+
+RUN apt-get install build-essential git cmake libudev-dev libxrandr-dev python-dev pkg-config libraspberrypi0 -y
+RUN apt-get install  libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin -y
+RUN apt-get install python-tk
 
 ADD cronjobs.txt /etc/cron.d/userCron
 RUN chmod 0644 /etc/cron.d/userCron

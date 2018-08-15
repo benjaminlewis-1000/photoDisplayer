@@ -3,11 +3,11 @@
 # (service-ports will open the ports as designated here.)
 # source python_dock/.env; docker-compose -f python_dock/docker-compose.yaml run --service-ports photodisplay
 
-# export /home/pi/photoDisplayer=/home/lewis/gitRepos/photoDisplayer/; docker-compose -f \ 
+# export THIS_DIR=/home/lewis/gitRepos/photoDisplayer/; docker-compose -f \ 
 # ~/gitRepos/photoDisplayer/docker/python_dock/docker-compose.yaml run --service-ports photodisplay bash
 
 version: '2'
-# /home/pi/photoDisplayer="/home/lewis/gitRepos/photoDisplayer/"
+# THIS_DIR="/home/lewis/gitRepos/photoDisplayer/"
 services:
   photodisplay:
     # build: .
@@ -24,20 +24,20 @@ services:
     tty: true
     volumes:
       # Mount the code
-      - /home/pi/photoDisplayer:/app
+      - THIS_DIR:/app
       # Mount the photos
-      - /mnt/photos:/photos
+      - PHOTO_DIR:/photos
       # Mount X11 forwarding
       - /tmp/.X11-unix:/tmp/.X11-unix
       # Mount timezone files
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro 
       # Mount the directory for the site
-      - /home/pi/photoDisplayer/site:/var/www/html
+      - THIS_DIR/site:/var/www/html
       # Databases
-      - /home/pi/photoDisplayer/databases:/var/www/databases
+      - THIS_DIR/databases:/var/www/databases
       # Configuration xml file
-      - /home/pi/photoDisplayer/config:/var/www/config
+      - THIS_DIR/config:/var/www/config
     environment:
       - XAUTHORITY=$XAUTHORITY
       - DISPLAY=$DISPLAY

@@ -35,7 +35,7 @@ sudo setxkbmap -rules xorg -layout us -model pc105
 sudo bash $THIS_DIR/subscripts/fehInstall.sh
 
 # Disable screen blanking
-sudo sed -i 's/#xserver-command=X/xserver-command=X -s 0 -dpms/' /etc/lightdm/lightdm.conf
+sudo sed -i 's/#xserver-command=X/xserver-command=X -s -1 -dpms/' /etc/lightdm/lightdm.conf
 
 sudo bash $THIS_DIR/subscripts/serverInstall.sh
 
