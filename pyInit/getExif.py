@@ -78,8 +78,12 @@ def getExifData(filename, doGeocode):
         try:
             metadata.read()
         except IOError as ioe:
-            print str(ioe)
-            exit(1)
+            print "IO Error in getExif.py: " +  str(ioe)
+         #   exit(1)
+            logfile = open(script_path + '/logBadMetadata.out', 'a')
+            print >>logfile, str(ioe) + ": metadata error in " + filename 
+            logfile.close()
+            return "", ""
         dateOK = True
 
         # Preferred fields: 'Exif.Photo.DateTimeOriginal' or 'Exif.Photo.DateTimeDigitized'
@@ -337,6 +341,7 @@ if __name__ == '__main__':
         fullPath = '/home/lewis/test_imgs/test2.jpg'
         fullPath = '/home/lewis/test_imgs/DSC_9833.JPG'
         fullPath = sys.argv[1]
+        fullPath = '/photos/Photos/Pictures_finished/2017/Family Texts/2017-12-01 19.40.11-4.jpg'
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
 

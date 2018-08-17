@@ -41,6 +41,8 @@ services:
     environment:
       - XAUTHORITY=$XAUTHORITY
       - DISPLAY=$DISPLAY
+    devices:
+      - /dev/vchiq:/dev/vchiq
     privileged: true
 #  docker run -it -v /home/lewis/gitRepos/photoDisplayer/:/usr/src/app -w /usr/src/app photodisplay python pyInit/addPics.py
 

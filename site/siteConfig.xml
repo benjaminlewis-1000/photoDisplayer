@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <siteParams>
 	<excludedNames>
-		Linear,Aaaa,Other,E,18,.realignore
+		Linear,Aaaa,Other,E,18,.realignore,.jessicatodo
 	</excludedNames>
 	<excludedPatterns>
 		.*.CR2,\(Canon EF 85mm F\/1.8 USM\),Canon EOS,2017 RY.*,RYA .*,Integration . Operations.*
@@ -70,6 +70,26 @@
 		<displayName>
 			<display>Aunt Pam Aston</display>
 			<aka>Aunt Pam</aka>
+		</displayName>
+		<displayName>
+			<display>Adam Lewis</display>
+			<aka>adam Lewis</aka>
+		</displayName>
+		<displayName>
+			<display>Ben Aust</display>
+			<aka>ben aust</aka>
+		</displayName>
+		<displayName>
+			<display>Jacob Aust</display>
+			<aka>jacob aust</aka>
+		</displayName>
+		<displayName>
+			<display>Cynthia Lewis</display>
+			<aka>cynthia Lewis</aka>
+		</displayName>
+		<displayName>
+			<display>Erica Lewis</display>
+			<aka>erica Lewis</aka>
 		</displayName>
 		<!-- Copy-paste block for you to use. Copy-paste and remove the comment block. -->
 

@@ -11,7 +11,7 @@
 		<dir>/mnt/photo_drive/jessica/Pictures_Jessica/_gsdata_</dir>
 	</excludeDirs>
 	<mountDirs>
-		<dir>/photos/Photos</dir>
+		<dir>/photos/Photos/Pictures_finished</dir>
 	</mountDirs>
 	<photoDatabase>
 		<fileName>photos_master.db</fileName>
