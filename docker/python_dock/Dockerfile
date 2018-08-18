@@ -1,6 +1,5 @@
 
 # FROM python:2.7-slim-stretch 
-# FROM resin/rpi-raspbian
 FROM darwish/libcec-rpi
 # Get a Debian stretch image with python
 
@@ -13,10 +12,7 @@ RUN apt-get install iputils-ping -y --no-install-recommends
 RUN apt-get install wget -y --no-install-recommends
     
 RUN apt-get install gcc -y
-#RUN apt-get install -y python-pip 
-
-RUN apt-get install python-pip -y
-RUN apt-get install python-dev python3-dev -y
+RUN apt-get install -y python-pip 
 
 RUN pip install -r /requirements.txt 
 
@@ -28,8 +24,8 @@ RUN pip install -r /requirements.txt
 
 # Install CEC packages - these let you, in theory, control the TV from the computer.
 
-# RUN apt-get install libcec4 -y --no-install-recommends
-# RUN apt-get install cec-utils -y --no-install-recommends
+RUN apt-get install libcec4 -y --no-install-recommends
+RUN apt-get install cec-utils -y --no-install-recommends
 
 # Install Expect scripting - allows us to use GUIs automatically 
 
@@ -64,9 +60,156 @@ ENV DISPLAY :0
 
 # Build dependencies for pyexiv2
 RUN apt-get update
-RUN apt-get install  build-essential git cmake libudev-dev libxrandr-dev python-dev pkg-config libraspberrypi0 -y
-RUN apt-get install  libraspberrypi-dev libraspberrypi-doc libraspberrypi-bin -y
-RUN apt-get install python-tk
+RUN apt-get install build-essential -y --no-install-recommends 
+RUN apt-get install python-all-dev -y --no-install-recommends
+RUN apt-get install libexiv2-dev -y --no-install-recommends
+RUN apt-get install libboost-python-dev -y --no-install-recommends
+RUN apt-get install python-dev -y --no-install-recommends
+
+RUN apt-get install exiv2 -y --no-install-recommends
+RUN apt-get install python-pyexiv2 -y --no-install-recommends
+# RUN apt-get install python-psutil -y --no-install-recommends
+# RUN apt-get install python3-psutil -y --no-install-recommends
+RUN apt-get install python-dateutil -y --no-install-recommends
+
+# RUN cp /usr/lib/python2.7/dist-packages/libexiv2python.so /usr/lib/python2.7/dist-packages/pyexiv2
+# RUN cp /usr/lib/python2.7/dist-packages/* /usr/lib/python2.7/ -r
+
+# NTFS filesystem
+RUN apt-get install ntfs-3g -y --no-install-recommends
+
+ENV PYTHONPATH /usr/lib/python2.7/dist-packages/
+
+# Clean up after apt-get installs 
+
+RUN apt-get install  tk-dev  -y
+
+EXPOSE 8040
+RUN apt-get install nmap -y
+# RUN rm -rf /var/lib/apt/lists/*
+
+# Install exiftran for rotations
+
+RUN apt-get install exiftran -y
+
+RUN apt-get install apt-utils -y
+
+RUN apt-get install sudo -y
+
+
+RUN apt-get install libimlib2
+
+RUN wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O /feh.tar.bz2 && mkdir feh \
+    && tar -xjf feh.tar.bz2 -C feh --strip-components 1 && rm feh.tar.bz2
+# Maybe put this download at the beginning
+
+# RUN mkdir feh
+# RUN tar -xjf /feh.tar.bz2 -C feh --strip-components 1
+# RUN cd feh
+RUN sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' /feh/config.mk
+RUN make -C /feh -j9
+RUN make install -C /feh
+RUN rm -rf feh
+
+RUN apt-get install vim -y
+
+# Install cron, ps
+RUN apt-get install cron procps -y
+
+# RUN (crontab -l; echo "@reboot /usr/local/bin/python/app/display/screenPowerServer.py &") | crontab -
+# REMOTE_STR="@reboot bash $PROJECT_ROOT_DIR/scripts/remoteNewKeymap.sh"
+
+
+
+
+# Install packages for web server
+
+RUN apt-get install apache2 -y
+RUN apt-get install php -y
+RUN apt-get install apache2-utils -y
+RUN apt-get install libapache2-mod-python -y
+RUN apt-get install php-symfony-yaml -y
+RUN apt-get install php-sqlite3 -y
+RUN apt-get install php-xmlrpc -y
+RUN apt-get install libapache2-mod-php -y
+RUN apt-get install libapache2-mod-php7.0 -y
+RUN apt-get install php7.0 -y
+RUN apt-get install php7.0-mcrypt -y
+RUN apt-get install php7.0-sqlite -y
+RUN apt-get install php-xml-rpc2 -y
+RUN apt-get install libxml2-dev -y
+RUN apt-get install iputils-ping -y
+RUN apt-get install nmap -y
+RUN apt-get install libapache2-mod-python -y
+
+RUN echo "The Web Server is Running" > /var/www/html/index.html
+EXPOSE 80
+
+ENV APACHE_CONF_VAR  \
+<Directory /var/www> \\n\
+   Options Indexes FollowSymLinks \\n\
+   AllowOverride None \\n\
+   Require all granted \\n\
+   AddHandler mod_python .py # Note the space before .py \\n\
+   PythonHandler mod_python.publisher \\n\
+   PythonDebug on \\n\
+</Directory> 
+
+RUN echo -e $APACHE_CONF_VAR
+
+RUN cp /etc/apache2/apache2.conf /etc/apache2/apache.conf.bk
+
+RUN perl -0777 -p -i -e 's|<Directory /var/www.*?</Directory>|'"$APACHE_CONF_VAR"'|gs' /etc/apache2/apache2.conf
+
+# # Change dir.conf to adapt the order of sites loaded
+
+ENV MOD_DIR_VAR \
+<IfModule mod\_dir.c> \\n\
+    DirectoryIndex controlPanel.php mainPage.php info.php mainPage.html index.html index.cgi index.pl index.php index.xhtml index.htm \\n\
+<\/IfModule>
+
+RUN cp /etc/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir.conf.bk
+
+RUN echo -e $MOD_DIR_VAR
+
+RUN perl -0777 -p -i -e 's|<IfModule mod.*?IfModule>|'"$MOD_DIR_VAR"'|gs' /etc/apache2/mods-available/dir.conf
+
+# # Install Python mod
+RUN a2enmod python
+
+# Clean up after apt-get installs 
+ADD php.ini /usr/local/etc/php/php.ini
+
+# Add dependencies for XMLRPC
+# RUN docker-php-ext-install xmlrpc
+# RUN apt-get install php-xmlrpc -y
+
+
+
+
+#### Important for running the GUI app with no errors
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/developer && \
+    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+    echo "developer:x:${uid}:" >> /etc/group && \
+    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+    chmod 0440 /etc/sudoers.d/developer && \
+    chown ${uid}:${gid} -R /home/developer
+
+RUN service cron start 
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
+# Install cron jobs
+# RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+RUN (echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+
+# Remove a few errors I was getting.
+RUN yes | pip uninstall requests
+RUN yes | pip install requests
+RUN yes | pip uninstall docopt
+RUN apt-get install rsyslog -y
 
 ADD cronjobs.txt /etc/cron.d/userCron
 RUN chmod 0644 /etc/cron.d/userCron
@@ -74,26 +217,9 @@ RUN echo "PYTHONPATH=${PYTHONPATH}:/usr/lib/python2.7/dist-packages" >> /etc/pro
 RUN chmod +x /etc/cron.d/userCron
 
 # RUN export PYTHONPATH="${PYTHONPATH}:/usr/lib/python2.7/dist-packages"
-# RUN apt-get install liblockdev1-dev swig -y
 
-# RUN git clone https://github.com/Pulse-Eight/platform.git
-# RUN mkdir platform/build && cd platform/build
-# RUN cmake .. && make && make install
-# RUN cd ../..
-
-# RUN git clone https://github.com/Pulse-Eight/libcec.git
-# WORKDIR /libcec
-# RUN git submodule update --init
-# WORKDIR src/platform
-# RUN mkdir build && cd build && cmake .. && make -j4 && make install
-# WORKDIR /libcec 
-
-# run mkdir build && cd build && cmake cmake --DRPI_INCLUDE_DIR=/opt/vc/include -DRPI_LIB_DIR=/opt/vc/lib -DCMAKE_INSTALL_PREFIX=/opt/libcec .. && make -j4 && make install
-# ENV LD_LIBRARY_PATH="/opt/libcec/lib"
-# ENV PATH="/opt/libcec/bin:${PATH}"
-
-# USER developer
-# ENV HOME /home/developer
+USER developer
+ENV HOME /home/developer
 
 # RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
 
@@ -119,3 +245,17 @@ ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
 # RUN apt-get install libraspberrypi-dev -y
 
 
+# Install packages for web server
+
+# RUN apt-get install apache2 -y
+# RUN apt-get install apache2-utils -y
+# RUN apt-get install libapache2-mod-python -y
+# RUN apt-get install libapache2-mod-php5 -y
+# RUN apt-get install php5 -y
+# RUN apt-get install php5-mcrypt -y
+# RUN apt-get install php5-sqlite -y
+# RUN apt-get install php-symfony-yaml -y
+# RUN apt-get install php-sqlite3 -y
+# RUN apt-get install php-xmlrpc -y
+# RUN apt-get install libapache2-mod-php -y
+# RUN apt-get install php -y
