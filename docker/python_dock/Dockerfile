@@ -92,8 +92,8 @@ RUN chmod +x /etc/cron.d/userCron
 # ENV LD_LIBRARY_PATH="/opt/libcec/lib"
 # ENV PATH="/opt/libcec/bin:${PATH}"
 
-USER developer
-ENV HOME /home/developer
+# USER developer
+# ENV HOME /home/developer
 
 # RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
 

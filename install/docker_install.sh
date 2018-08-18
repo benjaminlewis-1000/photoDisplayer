@@ -69,6 +69,8 @@ sudo apt-get install docker-compose -y
 
 # Mount the filesystem
 sudo apt-get install cifs-utils
-echo "//192.168.1.15/server_share /mnt/photos cifs user=benjamin,pass=lewis,uid=1000,iocharset=utf8 0 0" | sudo tee -a /etc/fstab 
+echo "//192.168.1.15/server_share /mnt/photos cifs auto,user=benjamin,pass=lewis,uid=1000,iocharset=utf8 0 0" | sudo tee -a /etc/fstab 
+
+(sudo crontab -l; echo "@reboot sleep 10; mount -a") | sudo crontab -
 
 sudo reboot
