@@ -215,12 +215,13 @@ ADD cronjobs.txt /etc/cron.d/userCron
 RUN chmod 0644 /etc/cron.d/userCron
 RUN echo "PYTHONPATH=${PYTHONPATH}:/usr/lib/python2.7/dist-packages" >> /etc/profile
 RUN chmod +x /etc/cron.d/userCron
+RUN apt-get install python-tk -y --no-install-recommends 
 
 # RUN export PYTHONPATH="${PYTHONPATH}:/usr/lib/python2.7/dist-packages"
 
 # Need to not have this in order to use cec-client, but may need to have it for feh to work, maybe. I don't recall if that was the initial reason I put this here. 
-USER developer
-ENV HOME /home/developer
+# USER developer
+# ENV HOME /home/developer
 
 # RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
 

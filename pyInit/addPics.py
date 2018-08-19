@@ -317,7 +317,8 @@ if __name__ == '__main__':
     rootDirRows = getRoots(conn, args, params)
 
     if args.noPhotoAdd:
-        photoHandler.checkPhotosAtEnd(conn, params)
+        # Don't need to do this right now. 
+        # photoHandler.checkPhotosAtEnd(conn, params)
         exit(0)
 
     # rootDirRows = {}

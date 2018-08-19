@@ -12,6 +12,7 @@
 	</excludeDirs>
 	<mountDirs>
 		<dir>/photos/Photos/Pictures_finished</dir>
+		<dir>/photos/Photos/Pictures_Jessica</dir>
 	</mountDirs>
 	<photoDatabase>
 		<fileName>photos_master.db</fileName>
