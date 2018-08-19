@@ -11,7 +11,7 @@ version: '2'
 services:
   photodisplay:
     # build: .
-    image: photodisplay2
+    image: photodisplay
     # restart: always
   #      ports:
     ports:

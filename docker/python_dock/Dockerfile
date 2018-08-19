@@ -94,3 +94,169 @@ RUN apt-get install apt-utils -y
 
 RUN apt-get install sudo -y
 
+
+RUN apt-get install libimlib2
+
+RUN wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O /feh.tar.bz2 && mkdir /feh \
+    && tar -xjf /feh.tar.bz2 -C /feh --strip-components 1 && rm /feh.tar.bz2
+# Maybe put this download at the beginning
+
+RUN sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' /feh/config.mk
+WORKDIR /feh
+RUN make -j9
+RUN make install 
+WORKDIR /
+RUN rm -rf /feh
+
+RUN apt-get install vim -y
+
+# Install cron, ps
+RUN apt-get install cron procps -y
+
+# RUN (crontab -l; echo "@reboot /usr/local/bin/python/app/display/screenPowerServer.py &") | crontab -
+# REMOTE_STR="@reboot bash $PROJECT_ROOT_DIR/scripts/remoteNewKeymap.sh"
+
+
+
+
+# Install packages for web server
+
+RUN apt-get install apache2 -y
+RUN apt-get install php5 -y
+RUN apt-get install apache2-utils -y
+RUN apt-get install libapache2-mod-python -y
+RUN apt-get install php-symfony-yaml -y
+RUN apt-get install php5-sqlite -y
+RUN apt-get install php5-xmlrpc -y
+RUN apt-get install libapache2-mod-php5 -y
+# RUN apt-get install libapache2-mod-php7.0 -y
+#RUN apt-get install php7.0 -y
+#RUN apt-get install php7.0-mcrypt -y
+#RUN apt-get install php7.0-sqlite -y
+#RUN apt-get install php-xml-rpc2 -y
+RUN apt-get install libxml2-dev -y
+RUN apt-get install iputils-ping -y
+RUN apt-get install nmap -y
+# RUN apt-get install libapache2-mod-python -y
+
+RUN echo "The Web Server is Running" > /var/www/html/index.html
+EXPOSE 80
+
+ENV APACHE_CONF_VAR  \
+<Directory /var/www> \\n\
+   Options Indexes FollowSymLinks \\n\
+   AllowOverride None \\n\
+   Require all granted \\n\
+   AddHandler mod_python .py # Note the space before .py \\n\
+   PythonHandler mod_python.publisher \\n\
+   PythonDebug on \\n\
+</Directory> 
+
+RUN echo -e $APACHE_CONF_VAR
+
+RUN cp /etc/apache2/apache2.conf /etc/apache2/apache.conf.bk
+
+RUN perl -0777 -p -i -e 's|<Directory /var/www.*?</Directory>|'"$APACHE_CONF_VAR"'|gs' /etc/apache2/apache2.conf
+
+# # Change dir.conf to adapt the order of sites loaded
+
+ENV MOD_DIR_VAR \
+<IfModule mod\_dir.c> \\n\
+    DirectoryIndex controlPanel.php mainPage.php info.php mainPage.html index.html index.cgi index.pl index.php index.xhtml index.htm \\n\
+<\/IfModule>
+
+RUN cp /etc/apache2/mods-available/dir.conf /etc/apache2/mods-available/dir.conf.bk
+
+RUN echo -e $MOD_DIR_VAR
+
+RUN perl -0777 -p -i -e 's|<IfModule mod.*?IfModule>|'"$MOD_DIR_VAR"'|gs' /etc/apache2/mods-available/dir.conf
+
+# # Install Python mod
+RUN a2enmod python
+
+# Clean up after apt-get installs 
+ADD php.ini /usr/local/etc/php/php.ini
+
+# Add dependencies for XMLRPC
+# RUN docker-php-ext-install xmlrpc
+# RUN apt-get install php-xmlrpc -y
+
+
+
+
+#### Important for running the GUI app with no errors
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/developer && \
+    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+    echo "developer:x:${uid}:" >> /etc/group && \
+    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+    chmod 0440 /etc/sudoers.d/developer && \
+    chown ${uid}:${gid} -R /home/developer
+
+RUN service cron start 
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
+# NTFS filesystem
+# RUN apt-get install ntfs-3g -y --no-install-recommends
+
+# Install cron jobs
+# RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+RUN (echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+
+# Remove a few errors I was getting.
+RUN yes | pip uninstall requests
+RUN yes | pip install requests
+# RUN yes | pip uninstall docopt
+RUN apt-get install rsyslog -y
+
+ADD cronjobs.txt /etc/cron.d/userCron
+RUN chmod 0644 /etc/cron.d/userCron
+RUN echo "PYTHONPATH=${PYTHONPATH}:/usr/lib/python2.7/dist-packages" >> /etc/profile
+RUN chmod +x /etc/cron.d/userCron
+
+# RUN export PYTHONPATH="${PYTHONPATH}:/usr/lib/python2.7/dist-packages"
+
+# Need to not have this in order to use cec-client, but may need to have it for feh to work, maybe. I don't recall if that was the initial reason I put this here. 
+USER developer
+ENV HOME /home/developer
+
+# RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
+
+MAINTAINER Benjamin Lewis
+# Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.
+ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
+#RUN useradd -G sudo -u 1000 --create-home emacs
+
+#ENV HOME /home/emacs
+#WORKDIR /home/emacs
+
+
+############ sudo xhost local:root  && xhost +
+#########  https://stackoverflow.com/questions/28392949/running-chromium-inside-docker-gtk-cannot-open-display-0
+#########  http://fabiorehm.com/blog/2014/09/11/running-gui-apps-with-docker/
+
+# RUN apt-get remove gcc bzip2 make expect wget -y
+
+# RUN apt-get install vim -y --no-install-recommends
+# RUN apt-get install nautilus -y --no-install-recommends
+
+# RUN apt-get install aptitude -y --no-install-recommends
+# RUN apt-get install libraspberrypi-dev -y
+
+
+# Install packages for web server
+
+# RUN apt-get install apache2 -y
+# RUN apt-get install apache2-utils -y
+# RUN apt-get install libapache2-mod-python -y
+# RUN apt-get install libapache2-mod-php5 -y
+# RUN apt-get install php5 -y
+# RUN apt-get install php5-mcrypt -y
+# RUN apt-get install php5-sqlite -y
+# RUN apt-get install php-symfony-yaml -y
+# RUN apt-get install php-sqlite3 -y
+# RUN apt-get install php-xmlrpc -y
+# RUN apt-get install libapache2-mod-php -y
+# RUN apt-get install php -y
