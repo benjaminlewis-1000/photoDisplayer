@@ -28,22 +28,26 @@ services:
       # Mount the photos
       - /mnt/photos:/photos
       # Mount X11 forwarding
-      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - /home/pi/.Xauthority:/root/.Xauthority:rw
       # Mount timezone files
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro 
       # Mount the directory for the site
       - /home/pi/photoDisplayer/site:/var/www/html
       # Databases
+      - /home/pi/photoDisplayer/databases/savedSlideshows.db:/var/www/html/savedSlideshows.db
       - /home/pi/photoDisplayer/databases:/var/www/databases
       # Configuration xml file
       - /home/pi/photoDisplayer/config:/var/www/config
     environment:
-      - XAUTHORITY=$XAUTHORITY
+      - XAUTHORITY=/root/.Xauthority
       - DISPLAY=$DISPLAY
     devices: 
       - /dev/vchiq:/dev/vchiq
     privileged: true
+    network_mode: host
+    #    hostname: raspberrypi
 #  docker run -it -v /home/lewis/gitRepos/photoDisplayer/:/usr/src/app -w /usr/src/app photodisplay python pyInit/addPics.py
 
  #  -e XAUTHORITY=$XAUTHORITY 
@@ -53,3 +57,7 @@ services:
  #  # -v /etc/timezone:/etc/timezone:ro
  #  # -v /etc/localtime:/etc/localtime:ro 
  #  -e DISPLAY=$DISPLAY photodisplay bash
+ #
+ #
+ #  https://stackoverflow.com/questions/44429394/x11-forwarding-of-a-gui-app-running-in-docker
+ #  https://blog.yadutaf.fr/2017/09/10/running-a-graphical-app-in-a-docker-container-on-a-remote-server/

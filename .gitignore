@@ -2,6 +2,7 @@
 Thumbs.db
 ehthumbs.db
 *.db
+*.db.bak
 *.db-journal
 *.key
 *.swp

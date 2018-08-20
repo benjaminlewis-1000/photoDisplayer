@@ -97,16 +97,6 @@ RUN apt-get install sudo -y
 
 RUN apt-get install libimlib2
 
-RUN wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O /feh.tar.bz2 && mkdir /feh \
-    && tar -xjf /feh.tar.bz2 -C /feh --strip-components 1 && rm /feh.tar.bz2
-# Maybe put this download at the beginning
-
-RUN sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' /feh/config.mk
-WORKDIR /feh
-RUN make -j9
-RUN make install 
-WORKDIR /
-RUN rm -rf /feh
 
 RUN apt-get install vim -y
 
@@ -185,13 +175,6 @@ ADD php.ini /usr/local/etc/php/php.ini
 
 
 #### Important for running the GUI app with no errors
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/developer && \
-    echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
-    echo "developer:x:${uid}:" >> /etc/group && \
-    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
-    chmod 0440 /etc/sudoers.d/developer && \
-    chown ${uid}:${gid} -R /home/developer
 
 RUN service cron start 
 
@@ -220,10 +203,38 @@ RUN apt-get install python-tk -y --no-install-recommends
 # RUN export PYTHONPATH="${PYTHONPATH}:/usr/lib/python2.7/dist-packages"
 
 # Need to not have this in order to use cec-client, but may need to have it for feh to work, maybe. I don't recall if that was the initial reason I put this here. 
+
+RUN wget http://feh.finalrewind.org/feh-2.18.1.tar.bz2 -O /feh.tar.bz2 && mkdir /feh \
+    && tar -xjf /feh.tar.bz2 -C /feh --strip-components 1 && rm /feh.tar.bz2
+# Maybe put this download at the beginning
+
+RUN sed -i 's/exif ?= 0/exif ?= 1\nstat64 ?= 1/' /feh/config.mk
+WORKDIR /feh
+RUN make -j9
+RUN make install 
+WORKDIR /
+RUN rm -rf /feh
+# RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
 # USER developer
 # ENV HOME /home/developer
 
-# RUN echo "* * * * * python /app/pyInit/addPics.py" | crontab -
+RUN export uid=0 gid=0 && \
+    echo "root ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/root && \
+    chmod 0440 /etc/sudoers.d/root
+
+USER root
+ENV HOME /root
+#    mkdir -p /home/developer && \
+#     echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+#     echo "developer:x:${uid}:" >> /etc/group && \
+#     echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+#     chmod 0440 /etc/sudoers.d/developer && \
+#     chown ${uid}:${gid} -R /home/developer
+
+# Set the permissions on the directory to allow .db file to write
+RUN chmod 666 /var/www/html
+RUN touch /var/www/html/savedSlideshows.db
+RUN chmod 666 /var/www/html/savedSlideshows.db
 
 MAINTAINER Benjamin Lewis
 # Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.

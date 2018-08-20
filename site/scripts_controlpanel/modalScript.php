@@ -172,7 +172,7 @@ header("Content-type: application/javascript");
 		        	console.warn("Warning in loading slideshow  (modalScript.php): " + warnings[i]);
 		        }
 
-		        if (exceptions.length == 0){
+		        if (errors.length == 0){
 		        	jdata = JSON.parse(jsonOfSavedShow);
 		        	removeAllCriteria(); // Clear the criteria
 		        	for (j = 0; j < jdata.length; j++){

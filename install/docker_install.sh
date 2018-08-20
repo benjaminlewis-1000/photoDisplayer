@@ -71,6 +71,10 @@ sudo apt-get install docker-compose -y
 sudo apt-get install cifs-utils
 echo "//192.168.1.15/server_share /mnt/photos cifs auto,user=benjamin,pass=lewis,uid=1000,iocharset=utf8 0 0" | sudo tee -a /etc/fstab 
 
+# Set up a saved slideshow database
+touch $PROJECT_ROOT_DIR/databases/savedSlideshows.db
+chmod 666 $PROJECT_ROOT_DIR/databases/savedSlideshows.db
+
 (sudo crontab -l; echo "@reboot sleep 10; mount -a") | sudo crontab -
 
 sudo reboot
