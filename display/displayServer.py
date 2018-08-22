@@ -69,9 +69,9 @@ class displayServer():
         self.queryMachine = queryMaker.QueryMaker(self.xmlParams)
         ### Connect to the database
         self.photoDatabasePath = os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName'])
-        self.savedShowDatabasePath = os.path.join(rootDir, "site", self.xmlParams['params']['websiteParams']['siteDBname'])
+        self.savedShowDatabasePath = os.path.join(rootDir, "databases", self.xmlParams['params']['websiteParams']['siteDBname'])
 
-        self.fileListName = '.slideshowFileList.txt'
+        self.fileListName = os.path.join(rootDir, '.slideshowFileList.txt')
         if (os.path.isfile(self.fileListName) ):
             os.remove(self.fileListName)
 
@@ -110,6 +110,7 @@ class displayServer():
         print getShowNamesQuery
 
         savedShowDatabase = sqlite3.connect(self.savedShowDatabasePath)
+        print self.savedShowDatabasePath
         savedShowDatabase.text_factory = str
         c = savedShowDatabase.cursor()
         c.execute(getShowNamesQuery)

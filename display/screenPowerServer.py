@@ -53,6 +53,7 @@ class tvStateManager():
         thread.start_new_thread(self.__cec_output_consumer__, (self.process,) )
         thread.start_new_thread(self.__tvRequestedThread__, () )
        
+        self.displayingStartImage = False
         self.__determine_unknown_state__()
       
 
@@ -72,14 +73,17 @@ class tvStateManager():
         print "starting determine state"
         powerState = self.__getPowerState__()
         activeState = self.__getActiveState__()
-        imgname = os.path.join(self.dir_path, 'dontpanic.png')
-        imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
+        if not self.displayingStartImage: 
+            imgname = os.path.join(self.dir_path, 'dontpanic.png')
+            self.imshow = subprocess.Popen(['/usr/local/bin/feh', '-ZxF', imgname]) 
+        self.displayingStartImage = True
         
         # Sleep 10 seconds if necessary
         print "Active state: {}, Power State: {}".format(activeState, powerState)
         if activeState == 'raspi' or activeState == 'not_raspi':
             print "Have our answer"
-            imshow.kill()
+            self.imshow.kill()
+            self.displayingStartImage = False
             # imshow.terminate()
             self.turnOffScreen()
             return # We have our answer 
@@ -101,7 +105,8 @@ class tvStateManager():
     
                 if activeState == 'raspi' or activeState == 'not_raspi':
                   print "Done" 
-                  imshow.terminate()
+                  self.imshow.terminate()
+                  self.displayingStartImage = False
                   return
                 else:
                   print "Try, try again"
@@ -280,6 +285,7 @@ class tvStateManager():
         pass
       
     def turnOnScreen(self):
+        print "turning on screen..."
         self.commandQueue.put('turnOn', False)
         return True
       

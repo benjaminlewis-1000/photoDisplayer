@@ -213,8 +213,10 @@ def getUniqueSubDirs(rootsList):
     subDirsDict = dict()
     for eachRoot in rootsList:
         currentSubDirs = []
-        for root, dirs, files in os.walk(eachRoot):
+        print eachRoot
+        for root, dirs, files in os.walk( eachRoot.encode('utf8') ):
             # print root
+            print root
             root = re.sub(r'[\\/]$', '', root, re.UNICODE)
             currentSubDirs.append(root)
             # print dirs 

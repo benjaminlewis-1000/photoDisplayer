@@ -222,6 +222,13 @@ RUN export uid=0 gid=0 && \
     echo "root ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/root && \
     chmod 0440 /etc/sudoers.d/root
 
+
+# RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+# RUN (crontab -l; echo "@reboot python /app/display/screenPowerServer.py") | crontab -
+# RUN (crontab -l; echo "15 1 * * *  bash /app/scripts/displayRestart.sh") | crontab -
+RUN (crontab -l; echo "15 0 * * * python /app/pyInit/addPics.py") | crontab -
+# RUN (crontab -l; echo "@reboot python /app/pyInit/addPics.py") | crontab -
+
 USER root
 ENV HOME /root
 #    mkdir -p /home/developer && \

@@ -57,7 +57,8 @@ class showScheduler():
         # Open the database where the website stores information about specific
         # shows. 
         webDatabase = self.tparams['params']['websiteParams']['siteDBname']
-        dbPath = os.path.join(self.rootDir, 'site', webDatabase)
+        dbPath = os.path.join(self.rootDir, 'databases', webDatabase)
+#         print dbPath
         conn = sqlite3.connect(dbPath)
         conn.text_factory = str  # For UTF-8 compatibility
 

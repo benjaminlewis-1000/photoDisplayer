@@ -10,4 +10,4 @@ sudo service apache2 start
 python $PROJECT_ROOT_DIR/display/displayServer.py > /dev/null &
 
 # python /app/pyInit/addPics.py --addRootParams --noPhotoAdd
-# python $PROJECT_ROOT_DIR/display/screenPowerServer.py > /dev/null &
+python $PROJECT_ROOT_DIR/display/screenPowerServer.py > /dev/null &
