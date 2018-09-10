@@ -2,7 +2,7 @@
 
 import os
 import sys
-from PIL import Image
+# from PIL import Image
 from subprocess import call
 
 rootDir = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))

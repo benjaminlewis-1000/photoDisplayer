@@ -3,6 +3,11 @@
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
+if [ "$EUID" -eq 0 ];
+   then echo "Please don't run this command as root. Exiting so you can try again."
+   exit
+fi
+
 bash $THIS_DIR/sshEnable.sh
 
 sudo apt-get update -y
@@ -76,5 +81,11 @@ touch $PROJECT_ROOT_DIR/databases/savedSlideshows.db
 chmod 666 $PROJECT_ROOT_DIR/databases/savedSlideshows.db
 
 (sudo crontab -l; echo "@reboot sleep 10; mount -a") | sudo crontab -
+
+# Install the keymap for the remote
+mkdir -p ~/.config/autostart
+cp $PROJECT_ROOT_DIR/scripts/remoteNew.desktop ~/.config/autostart
+sed -i "s,<ROOT_DIR>,$PROJECT_ROOT_DIR", ~/.config/autostart/remoteNew.desktop
+chmod +x ~/.config/autostart/remoteNew.desktop
 
 sudo reboot
