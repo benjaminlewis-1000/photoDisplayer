@@ -17,7 +17,7 @@ function waitForPersonNames(callback){
 }
 
 
-function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaType, binaryValue, selectionValue) {
+function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaType, binaryValue, selectionValue, modAboveVal, andOrVal) {
 	/* The javascript constructor method for criteria fields. The inputs are: 
 	*    difOfFields: The base name for criteria fields; it's usually going to be 'criteriaFieldsDiv'.
 	*    isNew: is this a new line being created, or an update to a previous line.
@@ -37,7 +37,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 	var mainDiv = document.getElementById(divOfFields);
 	// The currently defined valid types of criteria
-	var criteriaTypes = ["Date Range", "Person", "Year", "Month", "Special", "Location"]
+	var criteriaTypes = ["Date Range", "Person", "Year", "Month", "Keywords", "Special", "Location"]
 
 	console.debug("Arguments passed to constructCriteriaAfterPersonNamesLoaded are: " + isNew + " " + divNumber + " " + criteriaType + ' ' + binaryValue + ' ' + selectionValue)
 
@@ -52,6 +52,45 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		lineDiv.id = 'criteriaBox' + divNumber;
 		lineDiv.className = "fieldParent";
 		mainDiv.appendChild(lineDiv);
+
+
+		//var box_modify_above = document.createElement('span')
+		//box_modify_above.id = 'modifyAbove' + divNumber
+		//lineDiv.appendChild(box_modify_above)
+
+		var boxAbove = document.createElement('label')
+		boxAbove.className = 'switch'
+		lineDiv.appendChild(boxAbove)
+		var boxAboveCheck = document.createElement("input");
+		boxAboveCheck.type = 'checkbox'
+		boxAboveCheck.id = 'chkModifyAbove' + divNumber
+		boxAbove.appendChild(boxAboveCheck);
+		switchAboveSpan = document.createElement('span')
+		switchAboveSpan.className = 'slider round'
+		boxAbove.appendChild(switchAboveSpan)
+
+		var boxAndOr = document.createElement('label')
+		//boxAndOr.className = 'switch'
+		lineDiv.appendChild(boxAndOr)
+		var boxAndOrCheck = document.createElement("button");
+		//boxAndOrCheck.type = 'checkbox'
+		boxAndOrCheck.id = 'chkAndOr' + divNumber
+		boxAndOr.appendChild(boxAndOrCheck);
+		boxAndOrCheck.className = 'andOrSwitch'
+		boxAndOrCheck.innerText = 'OR'
+		/*switchAndOrSpan = document.createElement('span')
+		switchAndOrSpan.className = 'andOrSwitch'
+		boxAndOr.appendChild(switchAndOrSpan)*/
+
+		boxAndOrCheck.onclick = function() { 
+			if (boxAndOrCheck.className == 'andOrSwitch active') {
+				boxAndOrCheck.className = 'andOrSwitch'
+				boxAndOrCheck.innerText = 'OR'
+			}else{
+				boxAndOrCheck.className = 'andOrSwitch active'
+				boxAndOrCheck.innerText = 'AND'
+			}
+		};
 
 		///// Criteria type box
 		// Create and classify the span for the criteria type box
@@ -85,7 +124,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		select_criteria_type.addEventListener("change", function(){
 			// Get the new field, create a construct for it, and construct the selection line again. 
 			classType = select_criteria_type.value;
-			constructOrUpdateCriteriaLine(divOfFields, 0, divNumber, classType, null, null);
+			constructOrUpdateCriteriaLine(divOfFields, isNew = false, divNumber = divNumber, criteriaType = classType, binaryValue = null, selectionValue = null,modAboveVal = false, andOrVal = 'OR');
 		})
 
 		// Make the binary selection field span
@@ -154,7 +193,26 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			while (span_filter_criteria.firstChild) {
 		    span_filter_criteria.removeChild(span_filter_criteria.firstChild);
 		}
+
+
+		// Reset switches if criteria type is changed.
+		// The switch types don't change; we just need to get the appropriate values. 
+		var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+		var andOrSwitch = document.getElementById('chkAndOr' + divNumber)
+
 	}
+
+	var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+	var andOrSwitch = document.getElementById('chkAndOr' + divNumber)
+	andOrSwitch.innerText = andOrVal
+	if (andOrVal == 'OR'){
+		andOrSwitch.className = 'andOrSwitch';
+	}else{
+		andOrSwitch.className = 'andOrSwitch active'
+	}
+	modifyAboveSwitch.checked = modAboveVal
+
+	// Create slider switches for modifying the line above and for and/or categorization
 
 	// OK, now everything is at a blank slate and equal whether it's a new line or an update
 	// to an existing line. I will do a switch statement based on criteria type, and add the 
@@ -179,31 +237,53 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			}
 			i1.className = "calendarBox"
 
-			i1.onchange = function(){
-				var regexYear = /^[0-9]+$/;
-				if( regexYear.test(i1.value) ) {
-					i1.value = '01/01/' + i1.value
+			i1.onclick = function() {
+				if (i1.value  == "<none>"){
+					i1.value = "";
+				}
+			}
+
+			function pad(n, width, z) {
+				z = z || '0';
+				n = n + '';
+				return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+			}
+
+			function dateRangeFieldValidate(fieldLinkID){
+				fieldLink = document.getElementById(fieldLinkID)
+
+				var regexYear = /^[0-9]{4}$/;
+				if( regexYear.test(fieldLink.value) && fieldLink.value < 2100 && fieldLink.value > 1970 ) {
+					fieldLink.value = '01/01/' + fieldLink.value
 				}
 				var regexMDY = /^([0-1]?[0-9])[-/]([0-3]?[0-9])[-/]([0-9]+)/;
-				mdyMatch = i1.value.match(regexMDY)
-				month = parseInt(mdyMatch[1]).toString()
-				day = parseInt(mdyMatch[2]).toString()
-				year = parseInt(mdyMatch[3]).toString()
+				mdyMatch = fieldLink.value.match(regexMDY)
+				if (mdyMatch == null){
+					fieldLink.value = "<none>"
+				}else{
+					month = parseInt(mdyMatch[1]).toString()
+					day = parseInt(mdyMatch[2]).toString()
+					year = parseInt(mdyMatch[3]).toString()
+					month = pad(month, 2)
+					day = pad(day, 2)
+					year = pad(year, 2)
+					console.log(month + " " + day + " " + year)
 
-				while (month.length < 2){
-					month = '0' + month
+					if (year < 100  && year > 60){
+						year = '19' + year
+					}else if (year < 100 ){
+						year = '20' + year
+					}
+					date = month + '/' + day + '/' + year
+					if (year > 2100 || year < 1900){
+						fieldLink.value = "<none>"
+					}else{
+						fieldLink.value = date
+					}
 				}
-				while (day.length < 2){
-					day = '0' + day
-				}
-				if (year < 100  && year > 60){
-					year = '19' + year
-				}else if (year < 100 ){
-					year = '20' + year
-				}
-				date = month + '/' + day + '/' + year
-				i1.value = date
 			}
+
+			i1.onchange = function() { dateRangeFieldValidate(i1.id) } 
 
 			// Create a button that can be used to open the calendar
 			var s1 = document.createElement('button'); //input element, Submit button
@@ -240,31 +320,13 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			i2.className = "calendarBox"
 			//i2.setAttribute('size','25')
 
-			i2.onchange = function(){
-				var regexYear = /^[0-9]+$/;
-				if( regexYear.test(i2.value) ) {
-					i2.value = '12/31/' + i2.value
+			i2.onclick = function() {
+				if (i2.value  == "<none>"){
+					i2.value = "";
 				}
-				var regexMDY = /^([0-1]?[0-9])[-/]([0-3]?[0-9])[-/]([0-9]+)/;
-				mdyMatch = i2.value.match(regexMDY)
-				month = parseInt(mdyMatch[1]).toString()
-				day = parseInt(mdyMatch[2]).toString()
-				year = parseInt(mdyMatch[3]).toString()
-
-				while (month.length < 2){
-					month = '0' + month
-				}
-				while (day.length < 2){
-					day = '0' + day
-				}
-				if (year < 100  && year > 60){
-					year = '19' + year
-				}else if (year < 100 ){
-					year = '20' + year
-				}
-				date = month + '/' + day + '/' + year
-				i2.value = date
 			}
+
+			i2.onchange = function() { dateRangeFieldValidate(i2.id) } 
 
 			var s2 = document.createElement('button'); //input element, Submit button
 			s2.id = "anchor2_" + divNumber
@@ -368,6 +430,61 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 				}
 			}
 
+
+			break;
+
+		case "Keywords":
+			// As in the Person case, the first field is a drop-down with binary values,
+			// although we have 'is', 'is not', 'is before', and 'is after'. 
+
+			// Standard create the element, give it an id and a class, etc. 
+			var binarySelect = document.createElement('select')
+			binarySelect.id = 'binarySelectValues' + divNumber
+			span_qualifier.appendChild(binarySelect)
+			binarySelect.className = "binaryField"
+
+			binarySelect.options.add(new Option("is", "is", true, true));
+			/*binarySelect.options.add(new Option("is not", "is not", true, true));
+			binarySelect.options.add(new Option("is before", "is before", true, true));
+			binarySelect.options.add(new Option("is after", "is after", true, true));*/
+
+			// If a selected value was passed, populate that in the list. 
+			binarySelect.selectedIndex = 0
+			if (binaryValue == null) {
+				binarySelect.selectedIndex = 0
+			}else{
+				possVals = ["is"]
+				if (possVals.indexOf(binaryValue) < 0){
+					console.log("Error in function constructOrUpdateCriteriaLine: Unknown binary switch value for Keywords. ")
+					binarySelect.selectedIndex = 0
+				}else{
+					binarySelect.value = binaryValue
+				}
+			}
+
+			// Create an 'input' element for putting in the year number.
+			var keywordSelect = document.createElement("input")
+			keywordSelect.setAttribute("type", "text")
+			keywordSelect.id = 'selectionValue' + divNumber
+			keywordSelect.className = "dropdownOptions"
+
+			/*// Test that, when a value is put into the year, that it consists of 
+			// all numbers; else, wipe it clean.
+			yearSelect.onchange=function(){
+				var regex = /^[0-9]+$/;
+				if( !regex.test(yearSelect.value) ) {
+					yearSelect.value = ""
+				}
+			}*/
+
+			// Validate a passed value in the same manner as above (all numbers, else blank)
+			if (selectionValue != null ){
+				keywordSelect.value = selectionValue
+			}else{
+				keywordSelect.value = '';
+			}
+
+			span_filter_criteria.appendChild(keywordSelect)
 
 			break;
 
@@ -597,7 +714,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 				// the address in Python, the two spaces will automatically 
 				// be stripped. 
 				binarySelect.style.color = 'black';
-				binarySelect.setAttribute("value", "  ")
+				binarySelect.value = "  ";
 				binarySelect.selectionStart = binarySelect.selectionEnd = binarySelect.value.length;
 
 			};
@@ -642,7 +759,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			distanceSelect.id = 'selectionValue' + divNumber
 			distanceSelect.className = "binaryField"
 			span_filter_criteria.appendChild(distanceSelect)
-			distanceSelect.style.width = "18%"
+			distanceSelect.style.width = "11%"
 
 			if (selectionValue == null){
 				distanceSelect.value = ""

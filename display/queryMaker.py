@@ -9,14 +9,7 @@ class QueryMaker():
     def __init__(self, xmlParamFile):#, xmlParams):
         print "Init query maker..."
         self.xmlParams = xmlParamFile
-        pass
         
-      #  with open(xmlParamFile) as stream:
-      #      try:
-      #          self.xmlParams = xmltodict.parse(stream.read())
-      #      except Exception as exc:
-      #          print(exc)
-      #          exit(1)
                 
         # Get all of the parameters for the different relevant tables and columns in tables.
         # Used to build queries.
@@ -40,6 +33,11 @@ class QueryMaker():
         self.phTakenDate   =  photosTable['Columns']['photoDate']
         self.phFile        =  photosTable['Columns']['photoFile']
         self.phRootDir     =  photosTable['Columns']['rootDirNum']
+
+        userCommentTable   = self.xmlParams['params']['photoDatabase']['tables']['commentLinkerUserTable']
+        self.usComTableName     = userCommentTable['Name']
+        self.usComTablePhotoNum = userCommentTable['Columns']['commentLinkerPhoto']
+        self.usComTableTagStr   = userCommentTable['Columns']['commentLinkerTag']
         
         print "Init done!"
 
@@ -52,6 +50,7 @@ class QueryMaker():
         selectedYears = [ ]
         selectedMonths = [ ]
         dateRangeVals = [ ]
+        keywordVals = [ ]
         getAll = False
         
         for i in range(len(slideshowParams)):
@@ -76,6 +75,8 @@ class QueryMaker():
                 people.append(critVal)
             if critType.lower() == 'month':
                 selectedMonths.append( (critVal, boolVal) )
+            if critType.lower() == 'keywords':
+                keywordVals.append( critVal )
             if critType.lower() == 'all':
                 getAll = True
             if critType.lower() not in ['year', 'date range', "date%20Range", 'person', 'month', 'all']:
@@ -118,14 +119,36 @@ class QueryMaker():
                 if masterQuery != "":
                     masterQuery += " INTERSECT "
                 masterQuery += yearQuery
-                
 
+            if len(keywordVals) > 0:
+                kwQuery = self.__handleKeyword__(keywordVals)
+                if masterQuery != "":
+                    masterQuery += " INTERSECT "
+                masterQuery += kwQuery
+                
             if masterQuery != "":
                 #### Preliminary:
                 prelimQuery = '''SELECT {}, {}, {}, {} FROM {} WHERE {} IN \n '''.format(self.phKey, self.phFile, self.phRootDir, self.phTakenDate, self.phTableName, self.phKey)
                 masterQuery = prelimQuery +  "(" +  masterQuery + ")" 
 
         return masterQuery
+
+    def __handleKeyword__(self, selectedKeyword):
+
+        # Parentheses and SELECT * to guarantee that UNION takes place before INTERSECT
+        keywordQuery = "SELECT * FROM ("
+
+        for keyIdx in range(len(selectedKeyword)):
+            eachKeyword = selectedKeyword[keyIdx]
+            partQuery = '''SELECT {} FROM {} WHERE UPPER({}) = UPPER("{}")'''.format(self.usComTablePhotoNum, self.usComTableName, self.usComTableTagStr, eachKeyword)
+            keywordQuery += partQuery
+            # If not the last keyword: 
+            if keyIdx != ( len(selectedKeyword) - 1 ):
+                keywordQuery += " UNION "
+
+        keywordQuery += ")"
+        return keywordQuery
+
 
     def __handleYear__(self, selectedYears):
         orYearQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
@@ -210,8 +233,8 @@ class QueryMaker():
 
     def __buildPersonQueryOR__(self, orPeople):
 
-        print "build query or: "
-        print orPeople
+        # print "build query or: "
+        # print orPeople
     
         orPersonQuery = '''SELECT * FROM ( SELECT {} AS c FROM {} WHERE {} = (SELECT {} FROM {} WHERE {} = '''.format(self.plPhoto, self.plTableName, self.plPerson, self.ppKey, self.ppTableName, self.ppName)
 
@@ -263,3 +286,24 @@ class QueryMaker():
             i += 1
 
         return orMonthQuery
+
+
+if __name__ == '__main__':
+    import os
+    project_path = os.path.abspath(os.path.join(__file__,"../.."))
+    script_path  = os.path.abspath(os.path.join(__file__,".."))
+
+    xmlParamFile = os.path.join(project_path, "config", 'params.xml' )
+    with open(xmlParamFile) as stream:
+        try:
+           xmlParams = xmltodict.parse(stream.read())
+        except Exception as exc:
+           print(exc)
+           exit(1)
+    qm = QueryMaker( xmlParams)
+
+            
+    criteriaJSON = '''[{"criteriaType": "year", "booleanValue": "is", "criteriaVal": "2001"} , 
+    {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Ben"}, 
+    {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Johnny boy"}]'''
+    print qm.buildQueryFromJSON(criteriaJSON)

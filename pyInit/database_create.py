@@ -40,19 +40,32 @@ metadataNameColumn = params['params']['photoDatabase']['tables']['metadataTable'
 metadataValueColumn = params['params']['photoDatabase']['tables']['metadataTable']['Columns']['metadataValue']
 metadataLastEditedField = params['params']['photoDatabase']['tables']['metadataTable']['Fields']['metadataLastEditedField']
 
-# Comment linker table parameters
+# Master table of comments/tags -- for deduplication
+masterCommentTableName = params['params']['photoDatabase']['tables']['masterComments']['Name']
+masterCommentTagIDNum = params['params']['photoDatabase']['tables']['masterComments']['Columns']['tagID']
+masterCommentTagString = params['params']['photoDatabase']['tables']['masterComments']['Columns']['tagString']
+
+# Comment linker table parameters -- user
 commentLinkerUserTableName = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
-commentLinkerGoogleTableName = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Name']
-commentLinkerClarifaiTableName = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Name']
 commentLinkerPhotoColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
-commentLinkerTagColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerTag']
+commentLinkerTagColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerTagIDlink']
 commentLinkerTagProbabilityColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerTagProbability']
-commentLinkerPhotoColumnGoogle = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerPhoto']
-commentLinkerTagColumnGoogle = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerTag']
-commentLinkerTagProbabilityColumnGoogle = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerTagProbability']
-commentLinkerPhotoColumnClarifai = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerPhoto']
-commentLinkerTagColumnClarifai = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerTag']
-commentLinkerTagProbabilityColumnClarifai = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerTagProbability']
+
+# Comment linker table parameters -- machine generated 
+commentLinkerMachineTableName = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
+commentLinkerPhotoColumnMachine = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerPhoto']
+commentLinkerTagColumnMachine = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerTagIDlink']
+commentLinkerTagProbabilityColumnMachine = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerTagProbability']
+
+# commentLinkerGoogleTableName = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Name']
+# commentLinkerPhotoColumnGoogle = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerPhoto']
+# commentLinkerTagColumnGoogle = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerTag']
+# commentLinkerTagProbabilityColumnGoogle = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerTagProbability']
+
+# commentLinkerClarifaiTableName = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Name']
+# commentLinkerPhotoColumnClarifai = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerPhoto']
+# commentLinkerTagColumnClarifai = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerTag']
+# commentLinkerTagProbabilityColumnClarifai = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerTagProbability']
 
 
 
@@ -120,11 +133,12 @@ def dropTables(conn):
     dropCommentLinker = 'DROP TABLE IF EXISTS ' + commentLinkerUserTableName
     cc.execute(dropCommentLinker)
 
-    pCommentLinker = 'DROP TABLE IF EXISTS ' + commentLinkerGoogleTableName
-    cc.execute(pCommentLinker)
+    dropCommentLinker = 'DROP TABLE IF EXISTS ' + commentLinkerMachineTableName
+    cc.execute(dropCommentLinker)
 
-    pCommentLinker = 'DROP TABLE IF EXISTS ' + commentLinkerClarifaiTableName
-    cc.execute(pCommentLinker)
+    # Must be dropped after the comment linker child tables. 
+    dropCommentLinker = 'DROP TABLE IF EXISTS ' + masterCommentTableName
+    cc.execute(dropCommentLinker)
 
     conn.commit()
 
@@ -216,34 +230,51 @@ def create_metadata_table(conn):
     conn.commit()
 
 def create_comments_table(conn):
+
+
+# # Master table of comments/tags -- for deduplication
+# masterCommentTableName = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['masterComments']['Name']
+# masterCommentTagIDNum = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['masterComments']['Columns']['tagID']
+# masterCommentTagString = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['masterComments']['Columns']['tagString']
+
+# # Comment linker table parameters -- user
+# commentLinkerUserTableName = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
+# commentLinkerPhotoColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
+# commentLinkerTagColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerTagIDlink']
+# commentLinkerTagProbabilityColumnUser = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerTagProbability']
+
+# # Comment linker table parameters -- machine generated 
+# commentLinkerMachineTableName = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
+# commentLinkerPhotoColumnMachine = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerPhoto']
+# commentLinkerTagColumnMachine = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerTagIDlink']
+# commentLinkerTagProbabilityColumnMachine = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerTagProbability']
+
+    sql_quer = 'CREATE TABLE ' + masterCommentTableName + ' (' + \
+        masterCommentTagIDNum + '  INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, ' + \
+        masterCommentTagString + ' STRING);'
+
+    c = conn.cursor()
+    c.execute(sql_quer)
+    conn.commit()
+
+
     sql_quer = 'CREATE TABLE ' + commentLinkerUserTableName + ' (' + \
         commentLinkerPhotoColumnUser + ' INTEGER REFERENCES ' + photoTableName + ' ( ' + photoKeyColumn + '), ' + \
-        commentLinkerTagColumnUser + ' STRING, ' + \
+        commentLinkerTagColumnUser + ' INTEGER REFERENCES  ' + masterCommentTableName + ' ( ' + masterCommentTagIDNum + '), ' + \
         commentLinkerTagProbabilityColumnUser + ' DOUBLE);'
     
-    c = conn.cursor()
     c.execute(sql_quer)
     conn.commit()
 
 
-    sql_quer = 'CREATE TABLE ' + commentLinkerGoogleTableName + ' (' + \
-        commentLinkerPhotoColumnGoogle + ' INTEGER REFERENCES ' + photoTableName + ' ( ' + photoKeyColumn + '), ' + \
-        commentLinkerTagColumnGoogle + ' STRING, ' + \
-        commentLinkerTagProbabilityColumnGoogle + ' DOUBLE);'
+    sql_quer = 'CREATE TABLE ' + commentLinkerMachineTableName + ' (' + \
+        commentLinkerPhotoColumnMachine + ' INTEGER REFERENCES ' + photoTableName + ' ( ' + photoKeyColumn + '), ' + \
+        commentLinkerTagColumnMachine + ' INTEGER REFERENCES  ' + masterCommentTableName + ' ( ' + masterCommentTagIDNum + '), ' + \
+        commentLinkerTagProbabilityColumnMachine + ' DOUBLE);'
     
-    c = conn.cursor()
     c.execute(sql_quer)
     conn.commit()
 
-
-    sql_quer = 'CREATE TABLE ' + commentLinkerClarifaiTableName + ' (' + \
-        commentLinkerPhotoColumnClarifai + ' INTEGER REFERENCES ' + photoTableName + ' ( ' + photoKeyColumn + '), ' + \
-        commentLinkerTagColumnClarifai + ' STRING, ' + \
-        commentLinkerTagProbabilityColumnClarifai + ' DOUBLE);'
-    
-    c = conn.cursor()
-    c.execute(sql_quer)
-    conn.commit()
 
 def update_metadata(conn):
 

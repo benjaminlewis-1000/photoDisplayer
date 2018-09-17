@@ -119,8 +119,42 @@ def getExifData(filename, doGeocode):
                 dateOK = False
             dateIso = dateTime[0].replace(":", "-") + " " +  dateTime[1]
         if not dateOK:
-            dateTime = ["1969-01-01", "00:00:01"]
-            dateIso = "1969-01-01 00:00:01"
+            print "Entering Date Taken Remediation. "
+            ## Try to find an acceptable date - at least 'last edited.'
+            dateIso = "999999"
+            for key in metadata.keys():
+                if re.search('date', key, re.IGNORECASE):
+                    rawTime = metadata[key].raw_value
+                    dt = parser.parse(rawTime)
+                    possVal = dt.isoformat().replace("T", " ")
+                    if possVal  < dateIso:
+                        dateIso = possVal
+
+            ## See if the file name is any good:
+            file_name_string = filename.split('/')[-1].split('\\')[-1]
+
+            for ending in tuple([".JPG", ".jpg", ".jpeg", ".JPEG"]):
+                file_name_string = file_name_string.replace(str(ending), "")
+
+            # Common format seems to be yyyy-mm-dd hh.mm.ss
+            file_name_string = file_name_string.replace('.', ':')
+            file_name_string = file_name_string.replace('-', ':')
+
+            try:
+                dt = parser.parse(file_name_string)
+                possVal = dt.isoformat().replace("T", " ")
+                if possVal < dateIso:
+                    dateIso = possVal
+            except ValueError as ve:
+                pass
+                # No discernible date.
+
+            # print "DateISO is " + dateIso
+
+            # print metadata
+            metadata['Exif.Photo.DateTimeOriginal'] = dateIso
+            metadata.write()
+
             logfile = open(script_path + '/logNoDates.out', 'a')
             try:
                 utf_filename = filename.encode('utf-8')
@@ -128,14 +162,17 @@ def getExifData(filename, doGeocode):
                 utf_filename = filename
                 logfile = open(script_path + '/unicodeTagErrors.out', 'a')
                 print >>logfile, "Unicode Date Error in this file: " + str(utf_filename)
-            print >>logfile, "No date/time for: " + utf_filename
+            print >>logfile, "Date/time for: " + utf_filename + " modified."
             logfile.close()
-            return -1
+
+            # if __name__ == "__main__":
+            #     return -1, -1
+            # else:
+            #     return -1
 
         assert len(dateTime) == 2  # Date and time
         assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
         assert len(str(dateTime[1])) == 8 or len(str(dateTime[1])) == 14
-
         # Date time parser - python library
         dt = parser.parse(dateIso)
 
@@ -181,7 +218,10 @@ def getExifData(filename, doGeocode):
                 try:
                     val = proxy.geoLookup(latDec, lonDec)
                     if val == -1:
-                        return -1
+                        if __name__ == "__main__":
+                            return -1, -1
+                        else:
+                            return -1
                     else:
                         try:
                             val = json.loads(val.encode('utf-8'))
@@ -313,7 +353,13 @@ def getExifData(filename, doGeocode):
         else:
             jData['picasaTags'] = []
 
-        # print jData
+        # Don't process pictures that are tagged as 'exclude'
+        picTagStrings = [val[0].lower() for val in jData['picasaTags']]
+        if set(['exclude', 'ignore', 'remove']).intersection(set(picTagStrings)) != set([]):
+            if __name__ == "__main__":
+                return -1, -1
+            else:
+                return -1
 
         jsonObj = json.dumps(jData)
         assert re.search(r'...............', jsonObj)
@@ -340,8 +386,10 @@ if __name__ == '__main__':
         fullPath = 'D:\Pictures\\2016\Provo\july_4_parade (22).JPG'
         fullPath = '/home/lewis/test_imgs/test2.jpg'
         fullPath = '/home/lewis/test_imgs/DSC_9833.JPG'
-        fullPath = sys.argv[1]
         fullPath = '/photos/Photos/Pictures_finished/2017/Family Texts/2017-12-01 19.40.11-4.jpg'
+        fullPath = 'S:\\Photos\\Pictures_Jessica\\Family Scans\\2006\\july_2006 0012.jpg'
+        fullPath = 'C:\\Users\\Benjamin\\Dropbox\\Camera Uploads\\2018-09-16 07.38.35.jpeg'
+        # print fullPath
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
 

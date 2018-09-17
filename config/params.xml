@@ -74,15 +74,38 @@
 					<metadataLastEditedField>last_edited_date</metadataLastEditedField>
 				</Fields>
 			</metadataTable>
+
+			<!-- Having duplicate copies of comments is highly wasteful; have one copy of the 
+			text and then links to it.  -->
+			<masterComments>
+				<Name>MasterCommentTable</Name>
+				<Columns>
+					<tagID>tagID</tagID>
+					<tagString>tagString</tagString>
+				</Columns>
+			</masterComments>
+
+			<!-- Linker table - link photos to Picasa comments -->
 			<commentLinkerUserTable>
 				<Name>UserCommentLinker</Name>
 				<Columns>
 					<commentLinkerPhoto>photo_number</commentLinkerPhoto>
-					<commentLinkerTag>tag</commentLinkerTag>
+					<commentLinkerTagIDlink>tag</commentLinkerTagIDlink>
 					<commentLinkerTagProbability>tag_probability</commentLinkerTagProbability>
 				</Columns>
 			</commentLinkerUserTable>
-			<commentLinkerGoogleTable>
+
+			<!-- Linker table for machine-generated comments -->
+			<machineCommentLinker>
+				<Name>machineGenCommentLinker</Name>
+				<Columns>
+					<commentLinkerPhoto>photo_number</commentLinkerPhoto>
+					<commentLinkerTagIDlink>tag</commentLinkerTagIDlink>
+					<commentLinkerTagProbability>tag_probability</commentLinkerTagProbability>
+				</Columns>
+			</machineCommentLinker>
+
+			<!-- <commentLinkerGoogleTable>
 				<Name>GoogleCommentLinker</Name>
 				<Columns>
 					<commentLinkerPhoto>photo_number</commentLinkerPhoto>
@@ -97,7 +120,7 @@
 					<commentLinkerTag>tag</commentLinkerTag>
 					<commentLinkerTagProbability>tag_probability</commentLinkerTagProbability>
 				</Columns>
-			</commentLinkerClarifaiTable>
+			</commentLinkerClarifaiTable> -->
 		</tables>
 	</photoDatabase>
 	<visionTaggingParams>

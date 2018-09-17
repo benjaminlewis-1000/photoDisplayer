@@ -44,7 +44,7 @@
     font-size: 20px;
 }
 
-.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions{
+.fieldChild, .fieldChildColorless, .calendarBox, .calSelect, .criteriaType, .binaryField, .dropdownOptions, .andOrSwitch {
     border: 20px;
     cursor: pointer;
 
@@ -66,34 +66,26 @@
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
 	display: inline-block;
+    background-color: #FFFCE0;
 }
 
 
 /* The four fields for a non-date criteria line*/
 .criteriaType{
  	width: 15%;
-    background-color: #FFFCE0;
-    color: #200954;
 }
 
 .binaryField{
-	width: 20%;
-    background-color: #FFFCE0;
-    color: #200954;
+	width: 15%;
     text-align: center;
 }
 
 .dropdownOptions{
 	width: 40%;
-    background-color: #FFFCE0;
-    color: #200954;
 }
-
 
 .fieldChild{
     width: 8%;
-    background-color: #FFFCE0;
-    color: #200954;
 }
 
 .fieldChild:hover {
@@ -119,8 +111,106 @@
 
 .calSelect{
 	box-shadow: 4px 8px 16px 0px rgba(0,0,0,0.2);
-	width: 70px;
-	width: 9%;
+	width: 7%;
     background-color: #FFFCE0;
 
+}
+/* CSS for slider from https://www.w3schools.com/howto/howto_css_switch.asp with slight modifications. */
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 4%;
+  top: 10px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+/*
+ border: 20px;
+    cursor: pointer;
+
+    font-size: 16px;
+    text-align: center;
+
+    flex: 1;
+    height: 50px;
+    border-radius: 1%;
+
+    margin-left: 1%;
+    margin-right: 1%;
+
+    transition: 1.5s ease;
+    position:relative;
+    z-index: 1;
+
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+    display: inline-block;
+    background-color: #FFFCE0;*/
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 40%;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* End of switch styling */
+
+.andOrSwitch{
+  position: relative;
+  display: inline-block;
+  width: 6%;
+  background-color: #FFFCE0;
+/*  height: 34px;
+  left: 4px;
+  bottom: 4px;*/
+}
+
+.andOrSwitch.active{
+  background-color: #b2f3f4;
 }
