@@ -13,6 +13,7 @@
 	<mountDirs>
 		<dir>/photos/Photos/Pictures_finished</dir>
 		<dir>/photos/Photos/Pictures_Jessica</dir>
+		<dir>/photos/Photos/Pictures_In_Progress</dir>
 	</mountDirs>
 	<photoDatabase>
 		<fileName>photos_master.db</fileName>
