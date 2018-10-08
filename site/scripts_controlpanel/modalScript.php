@@ -177,7 +177,10 @@ header("Content-type: application/javascript");
 		        	removeAllCriteria(); // Clear the criteria
 		        	for (j = 0; j < jdata.length; j++){
 		        		// constructOrUpdateCriteriaLine defined in constructCriteriaLine.js
-		        		constructOrUpdateCriteriaLine('criteriaFieldsDiv', "True", null, jdata[j]['criteriaType'], jdata[j]['booleanValue'], jdata[j]['criteriaVal'] )
+		        		// isNew, divNumber, criteriaType, binaryValue, selectionValue, modAboveVal, andOrVal
+		        		constructOrUpdateCriteriaLine('criteriaFieldsDiv', isNew = true, divNumber = null, criteriaType = jdata[j]['criteriaType'], 
+		        			binaryValue = jdata[j]['booleanValue'], selectionValue = jdata[j]['criteriaVal'], modAboveVal = jdata[j]['modAbove'], 
+		        			andOrVal = jdata[j]['andOr'] )
 		        	}
 		        }
 				minNumField.value = minVal

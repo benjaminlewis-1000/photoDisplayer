@@ -9,7 +9,7 @@ from getExif import getExifData
 import json
 import vars
 
-def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
+def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, tagDict):
     conn.row_factory = sqlite3.Row
 
     fullPath = os.path.join(basePath, fileRelPath)
@@ -47,6 +47,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
     if exifData == -1:
         # Something in the photo data lookup failed, so we are going 
         # to skip this for now and come back on a future update.
+        # Or this is a signal that the picture should not be added. 
         return
 
     try:
@@ -125,7 +126,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
             for name in photoData['names']:
                 insertName(name, conn, photoID, params, nameDict)
 
-            linkTags(conn, photoID, photoData['picasaTags'], photoData['autoTagsClarifai'], photoData['autoTagsGoogle'], params)
+            linkTags(conn, photoID, photoData['picasaTags'], photoData['autoTagsClarifai'], photoData['autoTagsGoogle'], params, tagDict)
         else:
             pass
             # Do nothing 
@@ -148,7 +149,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict):
         for name in photoData['names']:
             insertName(name, conn, photoID, params, nameDict)
 
-        linkTags(conn, photoID, photoData['picasaTags'], photoData['autoTagsClarifai'], photoData['autoTagsGoogle'], params)
+        linkTags(conn, photoID, photoData['picasaTags'], photoData['autoTagsClarifai'], photoData['autoTagsGoogle'], params, tagDict)
 
 def clearPhotoLinks(conn, photoKeyID, params):
     # Remove the links in linker tables to the photo's unique ID, so that we can then delete or update
@@ -240,20 +241,10 @@ def checkPhotosAtEnd(conn, params):
         photoKeyID = row[2]
         fullpath = os.path.join(rootDir, filename)
         markForDeletion = False
-        if not os.path.isfile(fullpath):
-            print os.path.join(rootDir, filename) + " is not a file"
+        if not os.path.isfile( fullpath ):
+            print fullpath + " is not a file"
             markForDeletion = True
 
-        # for exDir in excludedDirectories:
-
-        # print fullpath
-        # print excludedDirectories
-
-        # print list(fullpath.startswith(x) for x in excludedDirectories) 
-            
-        # print fullpath
-        # print excludedDirectories
-        # print fullpath
         if any( list( fullpath.startswith(x) for x in excludedDirectories ) ):
             # if fullpath.startswith(exDir):
             # print filename
@@ -334,35 +325,67 @@ def insertName(name, conn, photoKeyID, params, nameDict):
     # Commit to database so that the value persists in the DB even if the program is killed. 
     conn.commit()
 
-def linkTags(conn, photoKeyID, userTags, clarifaiTags, googTags, params):
+def linkTags(conn, photoKeyID, userTags, clarifaiTags, googTags, params, tagDict):
 
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']
-    clarifaiTagTable = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']
-    googTagTable = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']
+    machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']
+    masterTagTable = params['params']['photoDatabase']['tables']['masterComments']
 
-    tables = (userTagTable, clarifaiTagTable, googTagTable)
+    tables = (userTagTable, machineTagTable, machineTagTable)
     tags = (userTags, clarifaiTags, googTags)
 
     for i in range(len(tables)):
         tableName = tables[i]['Name']
         photoField = tables[i]['Columns']['commentLinkerPhoto']
-        linkerTagField = tables[i]['Columns']['commentLinkerTag']
+        tagIDlink = tables[i]['Columns']['commentLinkerTagIDlink']
         tagProbField = tables[i]['Columns']['commentLinkerTagProbability']
+
+        masterTagName = masterTagTable['Name']
+        masterTagID = masterTagTable['Columns']['tagID']
+        masterTagString = masterTagTable['Columns']['tagString']
 
         tagList = tags[i]
 
         for tagPair in tagList:
             tagText = tagPair[0]
             tagProb = tagPair[1]
-            # print tagText
-            # print tagPair
 
-            tagQuery = '''INSERT INTO {} ({}, {}, {}) VALUES (?, ?, ?)'''.format(tableName, photoField, linkerTagField, tagProbField)
+            if tagText not in tagDict:
+                try:
+                    utf_tag = tagText.encode('utf-8')
+                except UnicodeDecodeError as ude:
+                    utf_tag = tagText
 
-            c.execute(tagQuery, (photoKeyID, tagText, tagProb))
+                ## Check if the person exists in the database already
+                tagExistsQuery = '''SELECT {} FROM {} WHERE {} = ?'''.format(masterTagID, masterTagName, masterTagString)
+
+                c.execute(tagExistsQuery, (utf_tag,))
+
+                row = c.fetchone()
+
+                if row != None:
+                    # Person is in the database
+                    tagID = row[0]
+
+                    tagDict[tagText] = tagID
+                    
+                else:
+                    # Add the new tag to the database 
+                    newTagQuery = '''INSERT INTO {} ({}) VALUES (?)'''.format(masterTagName, masterTagString)
+                    c.execute(newTagQuery, (utf_tag,))
+                    conn.commit()
+                    tagID = c.lastrowid
+                    tagDict[tagText] = tagID
+
+            tagID = tagDict[tagText]
+
+            tagQuery = '''INSERT INTO {} ({}, {}, {}) VALUES (?, ?, ?)'''.format(tableName, photoField, tagIDlink, tagProbField)
+            print tagQuery
+
+            c.execute(tagQuery, (photoKeyID, tagID, tagProb))
 
     conn.commit()
 
@@ -391,10 +414,11 @@ if __name__ == '__main__':
     # print files
 
     personNameDict = {}
+    tagDict = {}
 
     for name in files:
         # relPath = os.path.join(subdir, name)
-        addPhoto(subdir, name, 1, params, conn, personNameDict)
+        addPhoto(subdir, name, 1, params, conn, personNameDict, tagDict)
         # try:
         #     mtime = os.path.getmtime(relPath)
         # except OSError:

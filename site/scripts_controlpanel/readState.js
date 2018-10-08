@@ -9,16 +9,18 @@ function criteriaToJSON(){
 	var criteria = []
 	var numElements = document.getElementById('divNumID').value + 1; // +1 so we have typical for loop indexing
 	var num = 0
-	for (var i = 0; i < numElements; i++){
-		criteriaTypeField = 'selectCriteriaMenu' + i
+	for (var divNumber = 0; divNumber < numElements; divNumber++){
+		criteriaTypeField = 'selectCriteriaMenu' + divNumber
 		// Need to have ajax enabled, by including the script line : 
 		// <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		if ($("#" + criteriaTypeField).length > 0){
 			criteriaType = document.getElementById(criteriaTypeField).value
-			booleanValue = document.getElementById('binarySelectValues' + i).value
-			criteriaValue = document.getElementById('selectionValue' + i).value
+			booleanValue = document.getElementById('binarySelectValues' + divNumber).value
+			criteriaValue = document.getElementById('selectionValue' + divNumber).value
+			var modAboveVal = document.getElementById('chkModifyAbove' + divNumber).checked
+			var andOrSwitchVal = document.getElementById('chkAndOr' + divNumber).innerText
 
-			criteria.push({num: num, criteriaType : criteriaType, booleanValue : booleanValue, criteriaVal : criteriaValue})
+			criteria.push({num: num, criteriaType : criteriaType, booleanValue : booleanValue, criteriaVal : criteriaValue, modAbove: modAboveVal, andOr: andOrSwitchVal})
 			num = num + 1
 		}
 	}

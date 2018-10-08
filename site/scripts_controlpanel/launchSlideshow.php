@@ -124,6 +124,8 @@
 		$type = $item['criteriaType'];
 		$boolVal = $item['booleanValue'];
 		$criteriaVal = $item['criteriaVal'];
+		$andOrVal = $item['andOr'];
+		$modAboveVal = $item['modAbove'];
 
 	//["Date Range", "Person", "Year", "Month"]
 		switch($type){
@@ -159,7 +161,7 @@
 					$end_formatted = $date_end['year'] . '/' . str_pad($date_end['month'], 2, "0", STR_PAD_LEFT) . '/' . str_pad($date_end['day'], 2, "0", STR_PAD_LEFT);
 				}
 
-				$data = array("criteriaType" =>"Date Range", "booleanValue" => "$start_formatted", "criteriaVal" => "$end_formatted");
+				$data = array("criteriaType" =>"Date Range", "booleanValue" => "$start_formatted", "criteriaVal" => "$end_formatted", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
 				array_push($formedArray, $data);
 				break;
 			case "Person":
@@ -183,13 +185,18 @@
 				   $displayName = $item->display;
 				   if ($displayName == $criteriaVal){
 				   	    foreach($item->aka as $akaPerson){
-							$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$akaPerson");
+				   	    	// Pass data to the backend: this is an alias, so and/or modifications and line above modifications are moot and should 
+				   	    	// be subsumed in the main name. The 'alias' field points to what the selected name was. 
+				   	    	// In the SQL, the aliases and the chosen name should be unioned together first, then and/or values and mod line
+				   	    	// above values should be taken into account. 
+							$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$akaPerson", "andOrCritVal" => "alias", "modAboveLineVal" => "alias", "alias" => "$criteriaVal");
 							array_push($formedArray, $data);
 				   	    }
 				   }
 				}
 
-				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal");
+				/* Push the actual name; the above foreach only pushes the aliases. */
+				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "alias" => false);
 				array_push($formedArray, $data);
 				break;
 			case "Year":
@@ -215,7 +222,7 @@
 				$year = strval($year);
 
 				//print_r($year);
-				$data = array("criteriaType" =>"Year", "booleanValue" => "$boolVal", "criteriaVal" =>"$year");
+				$data = array("criteriaType" =>"Year", "booleanValue" => "$boolVal", "criteriaVal" =>"$year", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
 				array_push($formedArray, $data);
 				break;
 			case "Month":
@@ -228,7 +235,7 @@
 					$allValid = 0;
 					break;
 				}
-				$data = array("criteriaType" =>"Month", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal");
+				$data = array("criteriaType" =>"Month", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
 				array_push($formedArray, $data);
 
 				break;
@@ -242,10 +249,18 @@
 					$allValid = 0;
 					break;
 				}
-				$data = array("criteriaType" =>"Location", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal");
+				$data = array("criteriaType" =>"Location", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
 				array_push($formedArray, $data);
 
 				break;
+
+			case "Keywords":
+				# Pass the keyword to the backend.
+				if ($criteriaVal !== ''){
+					// the string is non-empty
+					$data = array("criteriaType" =>"Keywords", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
+					array_push($formedArray, $data);
+				}
 		}
 
 	}
