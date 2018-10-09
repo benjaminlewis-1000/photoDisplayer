@@ -163,12 +163,10 @@ def clearPhotoLinks(conn, photoKeyID, params):
     linkerPhoto = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPhoto']
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
-    clarifaiTagTable = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Name']
-    googTagTable = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Name']
-
     userTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
-    clarifaiTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerPhoto']
-    googTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerPhoto']
+
+    machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
+    machineTagPhoto = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerPhoto']
 
     deletePeople = '''DELETE FROM {} WHERE {} = ?'''.format(linkerTable, linkerPhoto)
     c.execute(deletePeople, (photoKeyID,))
@@ -176,11 +174,11 @@ def clearPhotoLinks(conn, photoKeyID, params):
     delTagsUser = '''DELETE FROM {} WHERE {} = ?'''.format(userTagTable, userTagPhoto)
     c.execute(delTagsUser, (photoKeyID,))
 
-    delTagsClarifai = '''DELETE FROM {} WHERE {} = ?'''.format(clarifaiTagTable, clarifaiTagPhoto)
-    c.execute(delTagsClarifai, (photoKeyID,))
+    delTagsMachine = '''DELETE FROM {} WHERE {} = ?'''.format(machineTagTable, machineTagPhoto)
+    c.execute(delTagsMachine , (photoKeyID,))
 
-    delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
-    c.execute(delTagsGoogle, (photoKeyID,))
+#     delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
+#     c.execute(delTagsGoogle, (photoKeyID,))
 
     # Commit to database at the end to make change permanent
     conn.commit()

@@ -164,7 +164,7 @@ def getExifData(filename, doGeocode):
 
             # print metadata
             print "Changing date to: " + str(dateIso)
-            sleep(3)
+            sleep(0.3)
             metadata['Exif.Photo.DateTimeOriginal'] = dateIso
             metadata.write()
 
@@ -183,6 +183,7 @@ def getExifData(filename, doGeocode):
             # else:
             #     return -1
 
+        print dateTime
         assert len(dateTime) == 2  # Date and time
         assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
         assert len(str(dateTime[1])) == 8 or len(str(dateTime[1])) == 14
