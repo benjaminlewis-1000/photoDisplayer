@@ -85,6 +85,8 @@ def getExifData(filename, doGeocode):
             logfile.close()
             return "", ""
         dateOK = True
+        # print metadata.keys()
+        # print 'Exif.Photo.DateTimeOriginal' in metadata
 
         # Preferred fields: 'Exif.Photo.DateTimeOriginal' or 'Exif.Photo.DateTimeDigitized'
         # Retrieve the time from the EXIV
@@ -109,27 +111,36 @@ def getExifData(filename, doGeocode):
                         dateOrig = metadata['Exif.Photo.DateTimeDigitized'].raw_value
                     else:
                         dateOK = False
+                        dateOrig = '1900:01:01 01:01:01'
                     # Don't need similar in the else clause below, because in that clause we know DTO isn't there.
+                # print dateOrig
             else:
                 dateOrig = metadata['Exif.Photo.DateTimeDigitized'].raw_value
             dateTime = dateOrig.split(" ")
             # print dateOrig
             # Error case - there is a valid field, but it contains no numbers. 
-            if not re.search(r'[0-9]', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
+            if not re.search(r'[0-9]+:\d+:\d+', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
                 dateOK = False
+                dateIso = "1900:01:01 01:01:01"
+                dateTime = dateIso.split(" ")
+            # print dateTime
             dateIso = dateTime[0].replace(":", "-") + " " +  dateTime[1]
         if not dateOK:
             print "Entering Date Taken Remediation. "
             ## Try to find an acceptable date - at least 'last edited.'
-            dateIso = "999999"
+            dateIso = "1900-01-01 01:01:01"
             for key in metadata.keys():
                 if re.search('date', key, re.IGNORECASE):
                     rawTime = metadata[key].raw_value
-                    dt = parser.parse(rawTime)
-                    possVal = dt.isoformat().replace("T", " ")
-                    if possVal  < dateIso:
-                        dateIso = possVal
+                    # print rawTime
 
+                    if re.search(r'[0-9]+:\d+:\d+', rawTime):
+                        dt = parser.parse(rawTime)
+                        possVal = dt.isoformat().replace("T", " ")
+                        if possVal  < dateIso:
+                            dateIso = possVal
+
+            dateTime = dateIso.split(" ")
             ## See if the file name is any good:
             file_name_string = filename.split('/')[-1].split('\\')[-1]
 
@@ -152,6 +163,8 @@ def getExifData(filename, doGeocode):
             # print "DateISO is " + dateIso
 
             # print metadata
+            print "Changing date to: " + str(dateIso)
+            sleep(3)
             metadata['Exif.Photo.DateTimeOriginal'] = dateIso
             metadata.write()
 
@@ -389,7 +402,9 @@ if __name__ == '__main__':
         fullPath = '/photos/Photos/Pictures_finished/2017/Family Texts/2017-12-01 19.40.11-4.jpg'
         fullPath = 'S:\\Photos\\Pictures_Jessica\\Family Scans\\2006\\july_2006 0012.jpg'
         fullPath = 'C:\\Users\\Benjamin\\Dropbox\\Camera Uploads\\2018-09-16 07.38.35.jpeg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Baby Announcements/DSC_5458.JPG'
         # print fullPath
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Babymoon/Italy/Rachel Pictures/IMG_3118.jpg'
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
 

@@ -1,0 +1,131 @@
+
+FROM python:2.7-alpine
+# Get a Debian stretch image with python
+
+ADD requirements.txt /
+
+RUN apk update
+
+RUN apk add python2-dev \
+    linux-headers \
+    gcc \
+    libc-dev \
+    musl-dev \
+    g++ \
+    wget \
+    xinput
+
+RUN pip install -r /requirements.txt 
+
+
+# RUN apk add libcurl4-openssl-dev 
+#RUN apk add libx11-dev \
+#    libxt-dev \ 
+#    libxinerama-dev \
+#    libexif-dev \
+#    imagemagick \
+#    make \
+   
+
+# RUN apk add libxt-dev 
+# RUN apk add libimlib2-dev 
+# RUN apk add libxinerama-dev 
+# RUN apk add libexif-dev -y --no-install-recommends
+# RUN apk add libjpeg-progs -y --no-install-recommends
+#RUN apk add imagemagick -y --no-install-recommends
+#RUN apk add make -y --no-install-recommends
+#RUN apk add bzip2 -y --no-install-recommends
+
+# Build dependencies for pyexiv2
+# RUN apk add build-essential -y --no-install-recommends 
+# RUN apk add python-all-dev -y --no-install-recommends
+# RUN apk add exiv2-dev -y --no-install-recommends
+# RUN apk add boost-python-dev -y --no-install-recommends
+# RUN apk add python-dev -y --no-install-recommends
+
+RUN apk add py-psutil \
+    py-dateutil \ 
+    tk-dev \
+    sudo \
+    imlib2 \
+    vim \
+    apk-cron \
+    procps \
+    exiv2-dev 
+# RUN apk add exiv2 -y --no-install-recommends
+# RUN apk add py-dateutil 
+# RUN apk add gexiv2
+
+ENV PYTHONPATH /usr/lib/python2.7/dist-packages/
+
+# Clean up after apk adds 
+
+# RUN apk add  tk-dev  -y
+
+# EXPOSE 8040
+# RUN apk add nmap -y
+# RUN rm -rf /var/lib/apt/lists/*
+
+# Install exiftran for rotations
+
+# RUN apk add exiftran -y
+
+# RUN apk add apt-utils -y
+
+# RUN apk add sudo -y
+
+
+# RUN apk add imlib2
+
+
+# RUN apk add vim -y
+
+# Install cron, ps
+# RUN apk add apk-cron procps 
+
+# RUN service cron start 
+
+# Create the log file to be able to run tail
+# Install cron jobs
+
+# Remove a few errors I was getting.
+#RUN yes | pip uninstall requests
+#RUN yes | pip install requests
+# RUN yes | pip uninstall docopt
+
+# USER root
+# ENV HOME /root
+
+RUN apk add git \
+    boost-dev \
+    boost-python \
+    python2-tkinter \
+    py-psutil \
+    rsyslog
+
+RUN git clone https://github.com/escaped/pyexiv2
+
+WORKDIR pyexiv2
+RUN scons install
+
+RUN apk del boost-dev git 
+
+MAINTAINER Benjamin Lewis
+# Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.
+# ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
+#RUN useradd -G sudo -u 1000 --create-home emacs
+RUN touch /var/log/cron.log
+
+ADD cronjobs.txt /etc/cron.d/userCron
+RUN chmod 0644 /etc/cron.d/userCron
+RUN echo "PYTHONPATH=${PYTHONPATH}:/usr/lib/python2.7/dist-packages" >> /etc/profile
+RUN chmod +x /etc/cron.d/userCron
+
+# Need to not have this in order to use cec-client, but may need to have it for feh to work, maybe. I don't recall if that was the initial reason I put this here. 
+
+RUN (crontab -l; echo "15 0 * * * python /app/pyInit/addPics.py") | crontab -
+
+WORKDIR /
+CMD ['crond', '&&', 'gulp']
+
+

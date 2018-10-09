@@ -1,0 +1,81 @@
+
+#  Run with: source .env; docker-compose run --service-ports photodisplay bash
+# (service-ports will open the ports as designated here.)
+# source python_dock/.env; docker-compose -f python_dock/docker-compose.yaml run --service-ports photodisplay
+
+# export /home/pi/photoDisplayer=/home/lewis/gitRepos/photoDisplayer/; docker-compose -f \ 
+# ~/gitRepos/photoDisplayer/docker/python_dock/docker-compose.yaml run --service-ports photodisplay bash
+
+version: '3'
+# /home/pi/photoDisplayer="/home/lewis/gitRepos/photoDisplayer/"
+services:
+
+  dbupdate:
+    build: 
+      dockerfile:  DbUpdateDocker
+      context: .
+    env_file:
+      - server_vars.env
+    volumes: 
+     # - ${PHOTO_DIR}:/photos
+     # - ${BASE_DIR}:/app
+      - /mnt/data/samba_share/:/photos
+      - /home/benjamin/projects/photoDisplayer:/app
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro 
+      # Configuration xml file
+      # Only needed for web server...
+      # - $BASE_DIR/config:/var/www/config
+
+  photodisplay:
+    # build: .
+    image: photodisplay
+    # restart: always
+  #      ports:
+    ports:
+      - "80:80"     # The HTTP port
+      # - "8080:8080" # The Web UI (enabled by --api)
+      # - "443:443"
+    # command:
+    #   /bin/bash
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount the code
+      - /home/pi/photoDisplayer:/app
+      # Mount the photos
+      - /mnt/photos:/photos
+      # Mount X11 forwarding
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - /home/pi/.Xauthority:/root/.Xauthority:rw
+      # Mount timezone files
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro 
+      # Mount the directory for the site
+      - /home/pi/photoDisplayer/site:/var/www/html
+      # Databases
+      - /home/pi/photoDisplayer/databases/savedSlideshows.db:/var/www/html/savedSlideshows.db
+      - /home/pi/photoDisplayer/databases:/var/www/databases
+      # Configuration xml file
+      - /home/pi/photoDisplayer/config:/var/www/config
+    environment:
+      - XAUTHORITY=/root/.Xauthority
+      - DISPLAY=$DISPLAY
+    devices: 
+      - /dev/vchiq:/dev/vchiq
+    privileged: true
+    network_mode: host
+    #    hostname: raspberrypi
+#  docker run -it -v /home/lewis/gitRepos/photoDisplayer/:/usr/src/app -w /usr/src/app photodisplay python pyInit/addPics.py
+
+ #  -e XAUTHORITY=$XAUTHORITY 
+ # # docker run -ti --rm -v /home/lewis/gitRepos/photoDisplayer:/app
+ #  # -v /home/lewis/tmp_exp:/tmp 
+ #  # -v /tmp/.X11-unix:/tmp/.X11-unix
+ #  # -v /etc/timezone:/etc/timezone:ro
+ #  # -v /etc/localtime:/etc/localtime:ro 
+ #  -e DISPLAY=$DISPLAY photodisplay bash
+ #
+ #
+ #  https://stackoverflow.com/questions/44429394/x11-forwarding-of-a-gui-app-running-in-docker
+ #  https://blog.yadutaf.fr/2017/09/10/running-a-graphical-app-in-a-docker-container-on-a-remote-server/

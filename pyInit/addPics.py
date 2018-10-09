@@ -19,10 +19,10 @@ import time
 import photoHandler
 
 import vars
-# if vars.osType == vars.linuxType:
-#     import psutil
-# else:
-#     raise OSError('This hasn''t been tested on Windows.')
+if vars.osType == vars.linuxType:
+    import psutil
+else:
+    raise OSError('This hasn''t been tested on Windows.')
 
 project_path = os.path.abspath(os.path.join(__file__,"../.."))
 script_path  = os.path.abspath(os.path.join(__file__,".."))
@@ -417,7 +417,6 @@ if __name__ == '__main__':
                         if filepath in dateDict and (dateDict[filepath] >= last_modified_date):
                             pass
                         else:
-                            pass
                             photoHandler.addPhoto(eachRoot, os.path.join(eachDirectory, eachFile), rootDirKey, params, conn, personNameDict, tagDict)
                             # try:
                             # except Exception as e:

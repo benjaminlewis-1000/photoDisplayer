@@ -13,6 +13,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, t
     conn.row_factory = sqlite3.Row
 
     fullPath = os.path.join(basePath, fileRelPath)
+    print fullPath
 
     if not fileRelPath.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
         return
@@ -383,7 +384,7 @@ def linkTags(conn, photoKeyID, userTags, clarifaiTags, googTags, params, tagDict
             tagID = tagDict[tagText]
 
             tagQuery = '''INSERT INTO {} ({}, {}, {}) VALUES (?, ?, ?)'''.format(tableName, photoField, tagIDlink, tagProbField)
-            print tagQuery
+            # print tagQuery
 
             c.execute(tagQuery, (photoKeyID, tagID, tagProb))
 
