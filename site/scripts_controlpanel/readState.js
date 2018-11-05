@@ -18,7 +18,7 @@ function criteriaToJSON(){
 			booleanValue = document.getElementById('binarySelectValues' + divNumber).value
 			criteriaValue = document.getElementById('selectionValue' + divNumber).value
 			var modAboveVal = document.getElementById('chkModifyAbove' + divNumber).checked
-			var andOrSwitchVal = document.getElementById('chkAndOr' + divNumber).innerText
+			var andOrSwitchVal = document.getElementById('chkAndOr' + divNumber).value
 
 			criteria.push({num: num, criteriaType : criteriaType, booleanValue : booleanValue, criteriaVal : criteriaValue, modAbove: modAboveVal, andOr: andOrSwitchVal})
 			num = num + 1

@@ -48,6 +48,8 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, t
         # Something in the photo data lookup failed, so we are going 
         # to skip this for now and come back on a future update.
         # Or this is a signal that the picture should not be added. 
+        print "Removing a photo with 'exclude' tag. "
+        deletePhoto(conn, currentRootDirNum, fileRelPath, params)
         return
 
     try:
@@ -162,12 +164,10 @@ def clearPhotoLinks(conn, photoKeyID, params):
     linkerPhoto = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPhoto']
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
-    clarifaiTagTable = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Name']
-    googTagTable = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Name']
+    machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
 
     userTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
-    clarifaiTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerClarifaiTable']['Columns']['commentLinkerPhoto']
-    googTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerGoogleTable']['Columns']['commentLinkerPhoto']
+    machineTagPhoto = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerPhoto']
 
     deletePeople = '''DELETE FROM {} WHERE {} = ?'''.format(linkerTable, linkerPhoto)
     c.execute(deletePeople, (photoKeyID,))
@@ -175,11 +175,11 @@ def clearPhotoLinks(conn, photoKeyID, params):
     delTagsUser = '''DELETE FROM {} WHERE {} = ?'''.format(userTagTable, userTagPhoto)
     c.execute(delTagsUser, (photoKeyID,))
 
-    delTagsClarifai = '''DELETE FROM {} WHERE {} = ?'''.format(clarifaiTagTable, clarifaiTagPhoto)
-    c.execute(delTagsClarifai, (photoKeyID,))
+    delTagsMachine = '''DELETE FROM {} WHERE {} = ?'''.format(machineTagTable, machineTagPhoto)
+    c.execute(delTagsMachine, (photoKeyID,))
 
-    delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
-    c.execute(delTagsGoogle, (photoKeyID,))
+    # delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
+    # c.execute(delTagsGoogle, (photoKeyID,))
 
     # Commit to database at the end to make change permanent
     conn.commit()
@@ -252,17 +252,44 @@ def checkPhotosAtEnd(conn, params):
             markForDeletion = True
 
         if markForDeletion:
-            # print "Deleting!"
-            clearPhotoLinks(conn, photoKeyID, params)
-            delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
-            # print delPhotoQuery + " " + filename
-            # print rootNum
-            d = conn.cursor()
-            d.execute(delPhotoQuery, (filename, rootNum))
-            conn.commit()
+            # # print "Deleting!"
+            # clearPhotoLinks(conn, photoKeyID, params)
+            # delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
+            # # print delPhotoQuery + " " + filename
+            # # print rootNum
+            # d = conn.cursor()
+            # d.execute(delPhotoQuery, (filename, rootNum))
+            # conn.commit()
+            deletePhoto(conn, rootNum, fileName, params)
 
         row = c.fetchone()
         count += 1
+
+def deletePhoto(conn, rootDirNum, fileRelPath, params):
+    # Get the photoKeyID: 
+    photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
+    photoCols = params['params']['photoDatabase']['tables']['photoTable']['Columns']
+    photoFileCol = photoCols['photoFile']
+    rootDirCol = photoCols['rootDirNum']
+    photoKeyCol = photoCols['photoKey']
+    c = conn.cursor()
+
+    picsQuery = '''SELECT {} FROM {} WHERE {} = ? AND {} = ?'''.format(photoKeyCol, photoTableName, rootDirCol, photoFileCol)
+    c.execute(picsQuery, (rootDirNum, fileRelPath))
+    row = c.fetchone()
+    print row
+    if row is not None and len(row) > 0: 
+
+        print row[0]
+        photoID = row[0]
+
+        clearPhotoLinks(conn, photoID, params)
+
+        delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
+
+        c.execute(delPhotoQuery, (fileRelPath, rootDirNum))
+        conn.commit()
+
 
 def insertName(name, conn, photoKeyID, params, nameDict):
 

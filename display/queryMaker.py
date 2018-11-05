@@ -307,3 +307,16 @@ if __name__ == '__main__':
     {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Ben"}, 
     {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Johnny boy"}]'''
     print qm.buildQueryFromJSON(criteriaJSON)
+
+    # [{"num":0,"criteriaType":"Date Range","booleanValue":"01/31/2018","criteriaVal":"<none>","modAbove":false,"andOr":"AND"},
+    # {"num":1,"criteriaType":"Date Range","booleanValue":"<none>","criteriaVal":"11/05/2018","modAbove":false,"andOr":"AND"},
+    # {"num":2,"criteriaType":"Date Range","booleanValue":"01/30/2018","criteriaVal":"<none>","modAbove":false,"andOr":"OR"},
+    # {"num":3,"criteriaType":"Date Range","booleanValue":"<none>","criteriaVal":"11/05/2018","modAbove":false,"andOr":"OR"},
+    # {"num":4,"criteriaType":"Date Range","booleanValue":"<none>","criteriaVal":"<none>","modAbove":false,"andOr":"AND"},
+    # {"num":5,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis","modAbove":false,"andOr":"OR"},
+    # {"num":6,"criteriaType":"Year","booleanValue":"is","criteriaVal":"2016","modAbove":false,"andOr":"AND"},
+    # {"num":7,"criteriaType":"Month","booleanValue":"is","criteriaVal":"5","modAbove":false,"andOr":"AND"},
+    # {"num":8,"criteriaType":"Keywords","booleanValue":"is","criteriaVal":"ben_mission","modAbove":false,"andOr":"OR"},
+    # {"num":9,"criteriaType":"Special","booleanValue":"last n year","criteriaVal":"5","modAbove":false,"andOr":"AND"},
+    # {"num":10,"criteriaType":"Keywords","booleanValue":"is","criteriaVal":"ben_mission","modAbove":false,"andOr":"AND"},
+    # {"num":11,"criteriaType":"Person","booleanValue":"is not","criteriaVal":"Cynthia Lewis","modAbove":false,"andOr":"OR"}]

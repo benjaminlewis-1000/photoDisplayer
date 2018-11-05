@@ -77,19 +77,15 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		boxAndOrCheck.id = 'chkAndOr' + divNumber
 		boxAndOr.appendChild(boxAndOrCheck);
 		boxAndOrCheck.className = 'andOrSwitch'
-		boxAndOrCheck.innerText = 'OR'
+		boxAndOrCheck.innerText = 'GROW'
+		boxAndOrCheck.value = 'OR'
 		/*switchAndOrSpan = document.createElement('span')
 		switchAndOrSpan.className = 'andOrSwitch'
 		boxAndOr.appendChild(switchAndOrSpan)*/
 
 		boxAndOrCheck.onclick = function() { 
-			if (boxAndOrCheck.className == 'andOrSwitch active') {
-				boxAndOrCheck.className = 'andOrSwitch'
-				boxAndOrCheck.innerText = 'OR'
-			}else{
-				boxAndOrCheck.className = 'andOrSwitch active'
-				boxAndOrCheck.innerText = 'AND'
-			}
+			// andOrSet defined below
+			andOrSet()
 		};
 
 		///// Criteria type box
@@ -202,14 +198,33 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 	}
 
+	function andOrSet(setVal = null ){
+		boxAndOrCheck = document.getElementById('chkAndOr' + divNumber)
+		if (setVal == null){
+			val = boxAndOrCheck.value
+			if (val == 'OR'){
+				setVal = 'AND'
+			}else{
+				setVal = 'OR'
+			}
+		}
+
+		if (setVal == 'OR') {
+			boxAndOrCheck.className = 'andOrSwitch'
+			boxAndOrCheck.innerText = 'GROW'
+			boxAndOrCheck.value = 'OR'
+		}else{
+			boxAndOrCheck.className = 'andOrSwitch active'
+			boxAndOrCheck.innerText = 'LIMIT'
+			boxAndOrCheck.value = 'AND'
+		}
+
+	}
+
 	var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
 	var andOrSwitch = document.getElementById('chkAndOr' + divNumber)
-	andOrSwitch.innerText = andOrVal
-	if (andOrVal == 'OR'){
-		andOrSwitch.className = 'andOrSwitch';
-	}else{
-		andOrSwitch.className = 'andOrSwitch active'
-	}
+	andOrSwitch.value = andOrVal
+	andOrSet(andOrVal)
 	modifyAboveSwitch.checked = modAboveVal
 
 	// Create slider switches for modifying the line above and for and/or categorization
@@ -219,6 +234,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 	// appropriate fields and values (if selected)
 	switch(select_criteria_type.value){
 		case "Date Range":
+			andOrSet('AND')
 			/* Replace the traditional binary select with two calendars + text boxes  */
 			var startLabel = document.createElement('span')
 			startLabel.id = "spacing"
@@ -344,10 +360,12 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 				cal.select(i2,'anchor2_'+ divNumber,'MM/dd/yyyy')
 			}
 
+
 			break // Important, as in any case statement
 
 		case "Person":
-			// Create a binary selection box (i.e. 'is' or 'is not' said person) in the second span. 
+			// Create a binary selection box (i.e. 'is' or 'is not' said person) in the second span.
+			andOrSet('OR') 
 			var binarySelect = document.createElement('select')
 			binarySelect.id = 'binarySelectValues' + divNumber
 			span_qualifier.appendChild(binarySelect)
@@ -434,6 +452,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 
 		case "Keywords":
+			andOrSet('OR')
 			// As in the Person case, the first field is a drop-down with binary values,
 			// although we have 'is', 'is not', 'is before', and 'is after'. 
 
@@ -489,6 +508,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 
 		case "Year":
+			andOrSet('AND')
 			// As in the Person case, the first field is a drop-down with binary values,
 			// although we have 'is', 'is not', 'is before', and 'is after'. 
 
@@ -545,6 +565,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 
 		case "Month":
+			andOrSet('AND')
 			// Copy past from the previous few; give it the options of 'is' or 'is not' a month for the first
 			// drop-down box. Fairly straightforward as above. 
 			var binarySelect = document.createElement('select')
@@ -595,6 +616,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			break;
 		case "Special":
+			andOrSet('AND')
 
 			// Copy past from the previous few; give it the options of 'is' or 'is not' a month for the first
 			// drop-down box. Fairly straightforward as above. 
@@ -691,6 +713,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			break;
 		case "Location":
+			andOrSet('OR')
 
 			var binarySelect = document.createElement('input')
 			binarySelect.id = 'binarySelectValues' + divNumber
