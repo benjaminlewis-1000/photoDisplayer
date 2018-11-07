@@ -13,6 +13,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, t
     conn.row_factory = sqlite3.Row
 
     fullPath = os.path.join(basePath, fileRelPath)
+    print fullPath
 
     if not fileRelPath.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
         return
@@ -164,9 +165,15 @@ def clearPhotoLinks(conn, photoKeyID, params):
     linkerPhoto = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPhoto']
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
+<<<<<<< HEAD
     machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
 
     userTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
+=======
+    userTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
+
+    machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
     machineTagPhoto = params['params']['photoDatabase']['tables']['machineCommentLinker']['Columns']['commentLinkerPhoto']
 
     deletePeople = '''DELETE FROM {} WHERE {} = ?'''.format(linkerTable, linkerPhoto)
@@ -176,10 +183,17 @@ def clearPhotoLinks(conn, photoKeyID, params):
     c.execute(delTagsUser, (photoKeyID,))
 
     delTagsMachine = '''DELETE FROM {} WHERE {} = ?'''.format(machineTagTable, machineTagPhoto)
+<<<<<<< HEAD
     c.execute(delTagsMachine, (photoKeyID,))
 
     # delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
     # c.execute(delTagsGoogle, (photoKeyID,))
+=======
+    c.execute(delTagsMachine , (photoKeyID,))
+
+#     delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
+#     c.execute(delTagsGoogle, (photoKeyID,))
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
 
     # Commit to database at the end to make change permanent
     conn.commit()
@@ -410,7 +424,7 @@ def linkTags(conn, photoKeyID, userTags, clarifaiTags, googTags, params, tagDict
             tagID = tagDict[tagText]
 
             tagQuery = '''INSERT INTO {} ({}, {}, {}) VALUES (?, ?, ?)'''.format(tableName, photoField, tagIDlink, tagProbField)
-            print tagQuery
+            # print tagQuery
 
             c.execute(tagQuery, (photoKeyID, tagID, tagProb))
 

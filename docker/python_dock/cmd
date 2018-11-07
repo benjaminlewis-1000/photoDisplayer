@@ -1,0 +1,1 @@
+docker-compose run --rm --publish 80:80 photodisplay bash

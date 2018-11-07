@@ -1,26 +1,20 @@
 #! /usr/bin/env python
 
-import sys
 import xmlrpclib
-import datetime
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
-import yaml
 import sqlite3
 import os
 import sys
 import re
-import random
-import subprocess
 from time import sleep
 import json
-import calendar
 import xmltodict
-import shlex
-import thread
+# import thread
 import threading
 from scheduleRunner import showScheduler
 # from buildQuery import buildQueryFromJSON
+from fehManager import fehManager 
 
 import queryMaker
 import screenPowerClient 
@@ -66,6 +60,7 @@ class displayServer():
         self.server.register_introspection_functions()
 
         self.screenManager = screenPowerClient.screenClient()
+        self.fehManager = fehManager()
         self.queryMachine = queryMaker.QueryMaker(self.xmlParams)
         ### Connect to the database
         self.photoDatabasePath = os.path.join(rootDir, "databases", self.xmlParams['params']['photoDatabase']['fileName'])
@@ -74,8 +69,6 @@ class displayServer():
         self.fileListName = os.path.join(rootDir, '.slideshowFileList.txt')
         if (os.path.isfile(self.fileListName) ):
             os.remove(self.fileListName)
-
-        self.display_executable = None
 
         self.showRunning = False
         self.showRunningName = None
@@ -90,7 +83,8 @@ class displayServer():
         "--action2", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F ccw &", \
         "--action3", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F r180 &", \
         "--action4", 'python ' + os.path.join(thisDir, 'fehEffects.py') + " %F del &" ]
-         # "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
+
+        self.fehManager.setParams(self.commandArray)
 
     def startNamedSlideshow(self, requestedShow, runLength=3600):
         print "Asked for show {}".format(requestedShow)
@@ -154,11 +148,12 @@ class displayServer():
         
         print "__startshow__: {}".format(SQL_query)
 
-        if self.display_executable != None: 
-            print "Waiting to kill..."
-            self.display_executable.terminate()
-            self.display_executable.wait()
-            print "Process killed!"
+#        if self.display_executable != None: 
+#            print "Waiting to kill..."
+#            self.display_executable.terminate()
+#            self.display_executable.wait()
+#            print "Process killed!"
+        self.fehManager.stop()
 
         if SQL_query != "":
             photoDatabase = sqlite3.connect( self.photoDatabasePath )
@@ -220,8 +215,11 @@ class displayServer():
                 
                 print >>self.stream, "Done turning on TV, starting slideshow"
                  
-                self.display_executable = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
-                print self.display_executable
+#                self.display_executable = subprocess.Popen(["/usr/local/bin/feh"] + self.commandArray + ["-f", self.fileListName])
+                self.fehManager.setFile(self.fileListName)
+                print "File set..."
+                self.fehManager.start()
+#                print self.display_executable
 
                 debug.append("Slideshow is launching...")
                 print "Show launching..."
@@ -248,13 +246,15 @@ class displayServer():
         self.showRunningName = None
         self.showRunning = False
         self.screenManager.turnOffScreen()
+
+        self.fehManager.stop()
         
-        if self.display_executable != None: 
-            self.display_executable.terminate()
-            print "end slideshow - terminated!"
-            self.display_executable.wait()
-            self.display_executable = None
-        pass
+#        if self.display_executable != None: 
+#            self.display_executable.terminate()
+#            print "end slideshow - terminated!"
+#            self.display_executable.wait()
+#            self.display_executable = None
+#        pass
 
     def setSlideshowProperties(self, propertiesJSON):
 
@@ -297,6 +297,7 @@ class displayServer():
         
         self.commandArray.append('--auto-rotate')
 
+
         # self.commandArray = ["-FxZ", "-N", "-z", "-Y", "-D 2", "--auto-rotate", "--action1", "\'echo \"%F\" >> "  + os.path.join(rootDir, "misformedFiles.txt") +  "\'" ]
 
         if properties['Fullscreen']:
@@ -322,9 +323,11 @@ class displayServer():
             self.commandArray.append("-D 1")
 
         debug.append("Command array: " + str(self.commandArray) )
+        self.fehManager.setParams(self.commandArray)
 
         if properties["Relaunch"]:
-            rDict = self.startSlideshow();
+        #    rDict = self.startSlideshow();
+            self.fehManager.start()
             errs += rDict['exceptions']
             debug += rDict['debug']
 

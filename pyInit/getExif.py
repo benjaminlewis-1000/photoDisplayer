@@ -86,8 +86,13 @@ def getExifData(filename, doGeocode):
             logfile.close()
             return "", ""
         dateOK = True
+<<<<<<< HEAD
         jData = {}
 
+=======
+        # print metadata.keys()
+        # print 'Exif.Photo.DateTimeOriginal' in metadata
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
 
         # Preferred fields: 'Exif.Photo.DateTimeOriginal' or 'Exif.Photo.DateTimeDigitized'
         # Retrieve the time from the EXIV
@@ -113,24 +118,33 @@ def getExifData(filename, doGeocode):
                         dateOrig = metadata['Exif.Photo.DateTimeDigitized'].raw_value
                     else:
                         dateOK = False
+                        dateOrig = '1900:01:01 01:01:01'
                     # Don't need similar in the else clause below, because in that clause we know DTO isn't there.
+                # print dateOrig
             else:
                 dateOrig = metadata['Exif.Photo.DateTimeDigitized'].raw_value
             dateTime = dateOrig.split(" ")
             # print dateOrig
             # Error case - there is a valid field, but it contains no numbers. 
-            if not re.search(r'[0-9]', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
+            if not re.search(r'[0-9]+:\d+:\d+', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
                 dateOK = False
+<<<<<<< HEAD
             print dateOrig
+=======
+                dateIso = "1900:01:01 01:01:01"
+                dateTime = dateIso.split(" ")
+            # print dateTime
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
             dateIso = dateTime[0].replace(":", "-") + " " +  dateTime[1]
 
         if not dateOK:
             print "Entering Date Taken Remediation. "
             ## Try to find an acceptable date - at least 'last edited.'
-            dateIso = "999999"
+            dateIso = "1900-01-01 01:01:01"
             for key in metadata.keys():
                 if re.search('date', key, re.IGNORECASE):
                     rawTime = metadata[key].raw_value
+<<<<<<< HEAD
                     print rawTime
                     try:
                         dt = parser.parse(rawTime)
@@ -139,7 +153,17 @@ def getExifData(filename, doGeocode):
                             dateIso = possVal
                     except Exception as e:
                         pass
+=======
+                    # print rawTime
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
 
+                    if re.search(r'[0-9]+:\d+:\d+', rawTime):
+                        dt = parser.parse(rawTime)
+                        possVal = dt.isoformat().replace("T", " ")
+                        if possVal  < dateIso:
+                            dateIso = possVal
+
+            dateTime = dateIso.split(" ")
             ## See if the file name is any good:
             file_name_string = filename.split('/')[-1].split('\\')[-1]
 
@@ -160,6 +184,7 @@ def getExifData(filename, doGeocode):
                 # No discernible date.
 
             # print "DateISO is " + dateIso
+<<<<<<< HEAD
             print "Date iso is : " + dateIso
             if dateIso == '999999':
                 dateIso = "1960:01:01 01:00:00"
@@ -172,6 +197,14 @@ def getExifData(filename, doGeocode):
             #### # print metadata
             #### metadata['Exif.Photo.DateTimeOriginal'] = dateIso
             #### metadata.write()
+=======
+
+            # print metadata
+            print "Changing date to: " + str(dateIso)
+            sleep(0.3)
+            metadata['Exif.Photo.DateTimeOriginal'] = dateIso
+            metadata.write()
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
 
             logfile = open(script_path + '/logNoDates.out', 'a')
             try:
@@ -191,7 +224,10 @@ def getExifData(filename, doGeocode):
             #     return -1
 
         print dateTime
+<<<<<<< HEAD
 
+=======
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
         assert len(dateTime) == 2  # Date and time
         assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
         assert len(str(dateTime[1])) == 8 or len(str(dateTime[1])) == 14
@@ -414,10 +450,16 @@ if __name__ == '__main__':
         fullPath = '/home/lewis/test_imgs/DSC_9833.JPG'
         fullPath = '/photos/Photos/Pictures_finished/2017/Family Texts/2017-12-01 19.40.11-4.jpg'
         fullPath = 'C:\\Users\\Benjamin\\Dropbox\\Camera Uploads\\2018-09-16 07.38.35.jpeg'
+<<<<<<< HEAD
         fullPath = 'S:\\Photos\\Pictures_Jessica\\Family Scans\\2006\\july_2006 0012.jpg'
         fullPath = 'S:\\Photos\\Pictures_In_Progress\\2018\\Babymoon\\England\\DSC_7136-2.jpg'
 
         print fullPath
+=======
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Baby Announcements/DSC_5458.JPG'
+        # print fullPath
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Babymoon/Italy/Rachel Pictures/IMG_3118.jpg'
+>>>>>>> 23abf3917064e6ff27f6654d5fdbf9db138c27bb
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
 
