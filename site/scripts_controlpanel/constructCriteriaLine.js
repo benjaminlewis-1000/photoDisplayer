@@ -61,10 +61,10 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		var boxAbove = document.createElement('label')
 		boxAbove.className = 'switch'
 		lineDiv.appendChild(boxAbove)
-		var boxAboveCheck = document.createElement("input");
-		boxAboveCheck.type = 'checkbox'
-		boxAboveCheck.id = 'chkModifyAbove' + divNumber
-		boxAbove.appendChild(boxAboveCheck);
+		var modifyAboveSwitch = document.createElement("input");
+		modifyAboveSwitch.type = 'checkbox'
+		modifyAboveSwitch.id = 'chkModifyAbove' + divNumber
+		boxAbove.appendChild(modifyAboveSwitch);
 		switchAboveSpan = document.createElement('span')
 		switchAboveSpan.className = 'slider round'
 		boxAbove.appendChild(switchAboveSpan)
@@ -120,7 +120,10 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		select_criteria_type.addEventListener("change", function(){
 			// Get the new field, create a construct for it, and construct the selection line again. 
 			classType = select_criteria_type.value;
-			constructOrUpdateCriteriaLine(divOfFields, isNew = false, divNumber = divNumber, criteriaType = classType, binaryValue = null, selectionValue = null,modAboveVal = false, andOrVal = 'OR');
+			var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+			modAboveVal = modifyAboveSwitch.checked
+			console.debug("Mod above: " + modAboveVal)
+			constructOrUpdateCriteriaLine(divOfFields, isNew = false, divNumber = divNumber, criteriaType = classType, binaryValue = null, selectionValue = null,modAboveVal = modAboveVal, andOrVal = 'OR');
 		})
 
 		// Make the binary selection field span
@@ -199,7 +202,9 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 	}
 
 	function andOrSet(setVal = null ){
-		boxAndOrCheck = document.getElementById('chkAndOr' + divNumber)
+		var boxAndOrCheck = document.getElementById('chkAndOr' + divNumber)
+		var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+		console.debug("Desired set val is: " + setVal)
 		if (setVal == null){
 			val = boxAndOrCheck.value
 			if (val == 'OR'){
@@ -209,14 +214,17 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			}
 		}
 
-		if (setVal == 'OR') {
-			boxAndOrCheck.className = 'andOrSwitch'
-			boxAndOrCheck.innerText = 'GROW'
-			boxAndOrCheck.value = 'OR'
-		}else{
-			boxAndOrCheck.className = 'andOrSwitch active'
-			boxAndOrCheck.innerText = 'LIMIT'
-			boxAndOrCheck.value = 'AND'
+		// Set the value regardless of whether it should manifest in the GUI
+		boxAndOrCheck.value = setVal
+
+		if (! modifyAboveSwitch.checked){
+			if (setVal == 'OR') {
+				boxAndOrCheck.className = 'andOrSwitch'
+				boxAndOrCheck.innerText = 'GROW'
+			}else{
+				boxAndOrCheck.className = 'andOrSwitch active'
+				boxAndOrCheck.innerText = 'LIMIT'
+			}
 		}
 
 	}
@@ -224,8 +232,33 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 	var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
 	var andOrSwitch = document.getElementById('chkAndOr' + divNumber)
 	andOrSwitch.value = andOrVal
-	andOrSet(andOrVal)
+	//andOrSet(andOrVal)
 	modifyAboveSwitch.checked = modAboveVal
+
+	modifyAboveSwitch.onclick = function() { 
+		var boxAndOrCheck = document.getElementById('chkAndOr' + divNumber)
+		var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+		console.debug("Mod switch done. Value to set is " + boxAndOrCheck.value)
+		if (modifyAboveSwitch.checked){
+			andOrSwitch.disabled = true;
+			modifyAboveSwitch.value = boxAndOrCheck.value
+			boxAndOrCheck.className = 'andOrSwitch disabled'
+			boxAndOrCheck.innerText = 'N/A'
+		}else{
+			andOrSwitch.disabled = false;
+			boxAndOrCheck.className = 'andOrSwitch'
+			if (boxAndOrCheck.value == 'OR') {
+				boxAndOrCheck.className = 'andOrSwitch'
+				boxAndOrCheck.innerText = 'GROW'
+				boxAndOrCheck.value = 'OR'
+			}else{
+				boxAndOrCheck.className = 'andOrSwitch active'
+				boxAndOrCheck.innerText = 'LIMIT'
+				boxAndOrCheck.value = 'AND'
+			}
+		}
+		// andOrSet()
+	};
 
 	// Create slider switches for modifying the line above and for and/or categorization
 
@@ -658,7 +691,8 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			binarySelect.addEventListener("change", function(){
 				// Get the new field, create a construct for it, and construct the selection line again. 
 				binaryValue = binarySelect.value;
-				constructOrUpdateCriteriaLine(divOfFields, 0, divNumber, "Special", binaryValue, null);
+				//divOfFields, isNew, divNumber, criteriaType, binaryValue, selectionValue, modAboveVal, andOrVal
+				constructOrUpdateCriteriaLine(divOfFields = divOfFields, isNew = 0, divNumber = divNumber, criteriaType = "Special", binaryValue = binaryValue, selectionValue = null );
 				//console.log("Change!")
 			})
 

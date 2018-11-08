@@ -102,7 +102,8 @@
 		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="addCriteriaLine('criteriaFieldsDiv')"> -->
 		<button id="newCriteria" class="taskButton" title="Add a new filtering option to the slideshow" onclick="/*constructOrUpdateCriteriaLine('criteriaFieldsDiv', 'true', null, 'Person', null, null)*/
 
-			waitForPersonNames(function() {constructOrUpdateCriteriaLine( divOfFields = 'criteriaFieldsDiv', isNew = 'true', divNumber = null, 
+			waitForPersonNames(function() {
+				constructOrUpdateCriteriaLine( divOfFields = 'criteriaFieldsDiv', isNew = 'true', divNumber = null, 
 				criteriaType = 'Person', binaryValue = null, selectionValue = null, modAboveVal = false, andOrVal = 'OR')})">
 			<!-- Button title: New Criteria -->
 			New Criteria
