@@ -1,0 +1,66 @@
+
+FROM python:2.7-alpine
+# Get a Debian stretch image with python
+
+ADD requirements.txt /
+
+RUN apk update
+
+RUN apk add python2-dev \
+    linux-headers \
+    gcc \
+    libc-dev \
+    musl-dev \
+    g++ \
+    wget \
+    xinput
+
+RUN pip install -r /requirements.txt 
+
+RUN apk add py-psutil \
+    py-dateutil \ 
+    tk-dev \
+    sudo \
+    imlib2 \
+    vim \
+    apk-cron \
+    procps \
+    exiv2-dev 
+
+ENV PYTHONPATH /usr/lib/python2.7/dist-packages/
+
+RUN apk add git \
+    boost-dev \
+    boost-python \
+    python2-tkinter \
+    py-psutil \
+    rsyslog
+
+RUN git clone https://github.com/escaped/pyexiv2
+
+WORKDIR pyexiv2
+RUN scons install
+
+RUN apk del boost-dev git 
+
+MAINTAINER Benjamin Lewis
+# Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.
+# ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
+#RUN useradd -G sudo -u 1000 --create-home emacs
+RUN touch /var/log/cron.log
+
+ADD cronjobs.txt /etc/cron.d/userCron
+RUN chmod 0644 /etc/cron.d/userCron
+RUN echo "PYTHONPATH=${PYTHONPATH}:/usr/lib/python2.7/dist-packages" >> /etc/profile
+RUN chmod +x /etc/cron.d/userCron
+
+# Need to not have this in order to use cec-client, but may need to have it for feh to work, maybe. I don't recall if that was the initial reason I put this here. 
+
+RUN (crontab -l; echo "15 0 * * * python /app/pyInit/addPics.py") | crontab -
+
+# RUN apk add cron procps 
+
+WORKDIR /
+# CMD ['crond', '&&', 'gulp']
+
+

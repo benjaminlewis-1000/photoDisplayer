@@ -1,0 +1,26 @@
+
+#  Run with: source .env; docker-compose run --service-ports photodisplay bash
+# (service-ports will open the ports as designated here.)
+# source python_dock/.env; docker-compose -f python_dock/docker-compose.yaml run --service-ports photodisplay
+
+# export /home/pi/photoDisplayer=/home/lewis/gitRepos/photoDisplayer/; docker-compose -f \ 
+# ~/gitRepos/photoDisplayer/docker/python_dock/docker-compose.yaml run --service-ports photodisplay bash
+
+version: '2'
+# /home/pi/photoDisplayer="/home/lewis/gitRepos/photoDisplayer/"
+services:
+
+  display_backend:
+    build: 
+      dockerfile: DbUpdateDocker
+      context: .
+    env_file:
+      - server_vars.env
+    volumes: 
+     # - ${PHOTO_DIR}:/photos
+     # - ${BASE_DIR}:/app
+      - /mnt/data/samba_share/:/photos
+      - /home/benjamin/projects/photoDisplayer:/app
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro 
+      # Configuration xml file

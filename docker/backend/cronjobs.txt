@@ -1,0 +1,7 @@
+
+# Export pythonpath for the proper packages 
+# * * * * * root export PYTHONPATH=/usr/lib/python2.7/dist-packages/ && python /app/pyInit/addPics.py
+* * * * * developer "export PYTHONPATH=/usr/lib/python2.7/dist-packages/ && python /app/pyInit/addPics.py"
+* * * * * root /usr/bin/env > /home/developer/cron-env
+
+# Newline before EOF required
