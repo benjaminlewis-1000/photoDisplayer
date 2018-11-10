@@ -6,7 +6,7 @@
 # export /home/pi/photoDisplayer=/home/lewis/gitRepos/photoDisplayer/; docker-compose -f \ 
 # ~/gitRepos/photoDisplayer/docker/python_dock/docker-compose.yaml run --service-ports photodisplay bash
 
-version: '3'
+version: '2'
 # /home/pi/photoDisplayer="/home/lewis/gitRepos/photoDisplayer/"
 services:
 

@@ -1,0 +1,8 @@
+python-dateutil
+configparser 
+future 
+jsonschema
+functools32
+enum
+psutil
+xmltodict==0.11.0
