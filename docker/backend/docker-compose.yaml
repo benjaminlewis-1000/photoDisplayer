@@ -24,3 +24,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro 
       # Configuration xml file
+    #command: python /app/pyInit/addPics.py
+    command: crond -f -d 8 &
+    restart: always

@@ -48,7 +48,7 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, t
         # Something in the photo data lookup failed, so we are going 
         # to skip this for now and come back on a future update.
         # Or this is a signal that the picture should not be added. 
-        print "Removing a photo with 'exclude' tag. "
+        print "Removing a photo ({}) with 'exclude' tag. ".format(fullPath)
         deletePhoto(conn, currentRootDirNum, fileRelPath, params)
         return
 
