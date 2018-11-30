@@ -80,147 +80,107 @@ def getExifData(filename, doGeocode):
             metadata.read()
         except IOError as ioe:
             print "IO Error in getExif.py: " +  str(ioe)
-         #   exit(1)
             logfile = open(script_path + '/logBadMetadata.out', 'a')
             print >>logfile, str(ioe) + ": metadata error in " + filename 
             logfile.close()
+            # Return null values
             return "", ""
         dateOK = True
         jData = {}
 
-        # print metadata.keys()
-        # print 'Exif.Photo.DateTimeOriginal' in metadata
-
         # Preferred fields: 'Exif.Photo.DateTimeOriginal' or 'Exif.Photo.DateTimeDigitized'
         # Retrieve the time from the EXIV
-        # print metadata.keys()
-        if ('Exif.Photo.DateTimeOriginal' not in metadata) and ('Exif.Photo.DateTimeDigitized' not in metadata):
-            # print "Time not found!"
-            if 'Iptc.Application2.DateCreated' in metadata and 'Iptc.Application2.TimeCreated' in metadata:
-                # Backup case - there is no dateTimeOriginal field, but we do have application2 fields to that effect.
-                date = metadata['Iptc.Application2.DateCreated'].raw_value[0]
-                time = metadata['Iptc.Application2.TimeCreated'].raw_value[0]
-                dateTime = [date, time]
-                dateIso = str(date) + " " + str(time)
-                logfile = open(script_path + '/logNoDates.out', 'a')
-                print >>logfile, "Question the time for: " + filename + " : " + dateIso
-                logfile.close()
-            else:
+
+        dateIso = 'n/a'
+        dateOK = False
+        def extract_date(date_string):
+
+            print date_string
+            if " " in date_string:
+                date, time = date_string.split(" ")
+            if len(date_string) > 9 and "T" in date_string[10] and '-' in date_string:
+                date, time = date_string.split("T")
+            date = date.replace(':', '-')
+            date_string = date + " " + time
+            #print "Date string: " +  date_string
+            try:
+                dateTime = parser.parse(date_string)
+                dateTime = dateTime.strftime("%Y-%m-%d %H:%M:%S")
+                dateOK = True
+            except ValueError:
+                dateTime = 'n/a'
                 dateOK = False
-        else:
-            if 'Exif.Photo.DateTimeOriginal' in metadata: # Preferred, I think? 
-                dateOrig = metadata["Exif.Photo.DateTimeOriginal"].raw_value
-                if not re.search(r'[0-9]', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
-                    if 'Exif.Photo.DateTimeDigitized' in metadata:
-                        dateOrig = metadata['Exif.Photo.DateTimeDigitized'].raw_value
-                    else:
-                        dateOK = False
-                        dateOrig = '1900:01:01 01:01:01'
-                    # Don't need similar in the else clause below, because in that clause we know DTO isn't there.
-                # print dateOrig
-            else:
-                dateOrig = metadata['Exif.Photo.DateTimeDigitized'].raw_value
-            dateTime = dateOrig.split(" ")
-            # print dateOrig
-            # Error case - there is a valid field, but it contains no numbers. 
-            if not re.search(r'[0-9]+:\d+:\d+', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
-                dateOK = False
-                # print dateOrig
-                dateIso = "1900:01:01 01:01:01"
-                dateTime = dateIso.split(" ")
-            # print dateTime
-            dateIso = dateTime[0].replace(":", "-") + " " +  dateTime[1]
+
+            #print dateTime
+            return dateTime, dateOK
+
+        # Area 1: 'Exif.Photo.DateTimeOriginal'
+        if 'Exif.Photo.DateTimeOriginal' in metadata:
+            metadata_date = metadata["Exif.Photo.DateTimeOriginal"].raw_value
+            dateIso, dateOK = extract_date(metadata_date)
+
+        if not dateOK and 'Exif.Photo.DateTimeDigitized' in metadata:
+            metadata_date = metadata["Exif.Photo.DateTimeDigitized"].raw_value
+            dateIso, dateOK = extract_date(metadata_date)
+
+        if not dateOK and 'Iptc.Application2.DateCreated' in metadata and 'Iptc.Application2.TimeCreated' in metadata:
+            date = metadata['Iptc.Application2.DateCreated'].raw_value[0]
+            time = metadata['Iptc.Application2.TimeCreated'].raw_value[0]
+            metadata_date = str(date) + " " + str(time)
+            dateIso, dateOK = extract_date(metadata_date)
+
+        if not dateOK:
+            dateIso = 'a'
+            logfile = open(script_path + '/logNoDates.out', 'a')
+            print >>logfile, "Question the time for: " + filename 
+            logfile.close()
+
+#        print dateIso
+        ## See if the file name is any good:
+        file_name_string = filename.split('/')[-1].split('\\')[-1]
+
+        for ending in tuple([".JPG", ".jpg", ".jpeg", ".JPEG"]):
+            file_name_string = file_name_string.replace(str(ending), "")
+
+        # Common format seems to be yyyy-mm-dd hh.mm.ss
+        if re.search('\d{4}.\d{2}.\d{2}.\d{2}.\d{2}.\d{2}', file_name_string):
+            file_name_string = file_name_string.replace('.', ':')
+            file_name_string = file_name_string.replace('-', ':')
+            file_name_string = file_name_string[:19]
+            try:
+                fileDateIso, fileDateOK = extract_date(file_name_string)
+            except UnboundLocalError as ule:
+                fileDateOK = False
+            if fileDateOK and fileDateIso < dateIso:
+                dateIso = fileDateIso
+                dateOK = fileDateOK
+
 
         if not dateOK:
             print "Entering Date Taken Remediation. "
-            ## Try to find an acceptable date - at least 'last edited.'
+            print ""
+            print ""
+            ## Try to find an acceptable date. Start with a non-date value that all numbers
+            ## will be less than so that we get the earliest date. 
             dateIso = "a"
             for key in metadata.keys():
                 if re.search('date', key, re.IGNORECASE):
                     rawTime = metadata[key].raw_value
+                    # print "raw time: " + str(rawTime)
 
-                    print "raw time: " + str(rawTime)
-                    try:
-                        dt = parser.parse(rawTime)
-                        possVal = dt.isoformat().replace("T", " ")
-                        if possVal < dateIso:
-                            dateIso = possVal
-                    except Exception as e:
-                        pass
-
-                    if re.search(r'[0-9]+:\d+:\d+', rawTime):
-                        dt = parser.parse(rawTime)
-                        possVal = dt.isoformat().replace("T", " ")
-                        if possVal  < dateIso:
-                            dateIso = possVal
+                    possVal, isOK = extract_date(rawTime)
+                    if isOK and possVal < dateIso:
+                        dateIso = possVal
 
             if dateIso == 'a':
-                # Last resort failsafe.
+                # Last resort failsafe -- none of the above worked. 
                 dateIso = '1900:01:01 00:00:01'
-            dateTime = dateIso.split(" ")
-            ## See if the file name is any good:
-            file_name_string = filename.split('/')[-1].split('\\')[-1]
 
-            for ending in tuple([".JPG", ".jpg", ".jpeg", ".JPEG"]):
-                file_name_string = file_name_string.replace(str(ending), "")
 
-            # Common format seems to be yyyy-mm-dd hh.mm.ss
-            file_name_string = file_name_string.replace('.', ':')
-            file_name_string = file_name_string.replace('-', ':')
-
-            try:
-                dt = parser.parse(file_name_string)
-                possVal = dt.isoformat().replace("T", " ")
-                if possVal < dateIso:
-                    dateIso = possVal
-            except ValueError as ve:
-                pass
-                # No discernible date.
 
             # print "DateISO is " + dateIs
-            print "Date iso is : " + dateIso
-            if dateIso == '999999':
-                dateIso = "1900:01:01 01:00:00"
-                ### # print metadata.keys()
-                ### # if __name__ == "__main__":
-                ### #     return -1, -1
-                ### # else:
-                ### #     return -1
-            #### DON'T WRITE METADATA!
-            #### # print metadata
-            #### metadata['Exif.Photo.DateTimeOriginal'] = dateIso
-            #### metadata.write()
+        print "Date iso is : " + str(dateIso) + " on file: " + filename
 
-            # print metadata
-            # DON'T WRITE METADATA
-###          print "Changing date to: " + str(dateIso)
-###          sleep(0.3)
-###          metadata['Exif.Photo.DateTimeOriginal'] = dateIso
-###          metadata.write()
-
-            logfile = open(script_path + '/logNoDates.out', 'a')
-            try:
-                utf_filename = filename.encode('utf-8')
-            except UnicodeDecodeError as ude:
-                utf_filename = filename
-                logfile = open(script_path + '/unicodeTagErrors.out', 'a')
-                print >>logfile, "Unicode Date Error in this file: " + str(utf_filename)
-            print >>logfile, "Date/time for: " + utf_filename + " modified."
-            logfile.close()
-
-            dateTime = dateIso.split(" ")
-
-            # if __name__ == "__main__":
-            #     return -1, -1
-            # else:
-            #     return -1
-
-        print dateTime
-
-        assert len(dateTime) == 2  # Date and time
-        assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
-        assert len(str(dateTime[1])) == 8 or len(str(dateTime[1])) == 14
-        # Date time parser - python library
         dt = parser.parse(dateIso)
 
         jData['ISO8601'] = dateIso
@@ -236,9 +196,8 @@ def getExifData(filename, doGeocode):
         else:
             jData['TimeZone'] = '0'
 
-
         # Get the names of tagged faces
-        metadataFields = metadata.xmp_keys
+        etadataFields = metadata.xmp_keys
         # nameList = []
         # print metadataFields
 
@@ -270,7 +229,6 @@ def getExifData(filename, doGeocode):
         jData['names'] = list(nameList) # .union(set(nameList)))  ## De-duplicate names
 
 
-        
         if 'Exif.Photo.UserComment' in metadata:
             autoTags = metadata['Exif.Photo.UserComment'].raw_value
             # autoTags = re.sub(r'charset=\"Ascii\"\s+', '', autoTags)
@@ -342,6 +300,14 @@ def getExifData(filename, doGeocode):
             else:
                 return -1
 
+        jData['latitude'] = "-"
+        jData['longitude'] = "-"
+        jData['house_number'] = "-"
+        jData['road'] = "-"
+        jData['city'] = "-"
+        jData['state'] = "-"
+        jData['postcode'] = "-"
+        jData['country'] = "-"
 
         if ('Exif.GPSInfo.GPSLatitudeRef' in metadata):
             # Get the latitude/longitude and N/S and E/W
@@ -367,49 +333,34 @@ def getExifData(filename, doGeocode):
 
             if doGeocode:
                 # Do a reverse geocode lookup using the geoServer.py server, which is started by addPics.py
+                passed = False
                 proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + params['params']['serverParams']['geoServerPort'] + "/RPC2")
                 try:
                     val = proxy.geoLookup(latDec, lonDec)
-                    if val == -1:
-                        if __name__ == "__main__":
-                            return -1, -1
-                        else:
-                            return -1
-                    else:
+                    if val != -1:
+                    #    if __name__ == "__main__":
+                    #        return -1, -1
+                    #    else:
+                    #        return -1
+                    #else:
                         try:
                             val = json.loads(val.encode('utf-8'))
                         except Exception as e :
                             print "No JSON Object..."
-                    passed = True
+                        passed = True
                 except Exception as e :
                     return str(e)
 
-                jData['house_number'] = val['house_number']
-                jData['road'] = val['road']
-                jData['city'] = val['city']
-                jData['state'] = val['state']
-                jData['postcode'] = val['postcode']
-                jData['country'] = val['country']
+                if passed:
+
+                    jData['house_number'] = val['house_number']
+                    jData['road'] = val['road']
+                    jData['city'] = val['city']
+                    jData['state'] = val['state']
+                    jData['postcode'] = val['postcode']
+                    jData['country'] = val['country']
                     # $jsonData->{'postcode'} =~ m/(\d+)/g;
                     # my $postcode = $1;
-            else:
-                jData['latitude'] = "-"
-                jData['longitude'] = "-"
-                jData['house_number'] = "-"
-                jData['road'] = "-"
-                jData['city'] = "-"
-                jData['state'] = "-"
-                jData['postcode'] = "-"
-                jData['country'] = "-"
-        else:
-            jData['latitude'] = "-"
-            jData['longitude'] = "-"
-            jData['house_number'] = "-"
-            jData['road'] = "-"
-            jData['city'] = "-"
-            jData['state'] = "-"
-            jData['postcode'] = "-"
-            jData['country'] = "-"
 
 
         jsonObj = json.dumps(jData)
@@ -442,24 +393,17 @@ if __name__ == '__main__':
         # print fullPath
         fullPath = '/photos/Photos/Pictures_In_Progress/2018/Babymoon/Italy/Rachel Pictures/IMG_3118.jpg'
         fullPath = '/photos/Photos/Pictures_In_Progress/2018/Family Texts/mom branson/2018-11-04 07.09.36-1-1.jpeg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Williams Family Pictures/P16.jpg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/Picture Slides from 1980s/DSC00075.JPG'
+        fullPath = '/photos/Photos/Pictures_In_Progress/preprocess/Scanned Pictures/Wilson Visit Summer 2001/Wilson Visit Summer 2001_00007A.jpg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Babymoon/England/DSC_7359.JPG'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Family Texts/2018-08-19 00.16.52-1.jpeg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Family Texts/2018-07-05 06.13.38-2.jpeg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Family Texts/2018-08-08 09.29.28-5.jpeg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Family Texts/2018-09-21 21.32.30-4.jpeg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Nathaniel Baby Blessing/IMG_5881.JPG'
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
-
-        # for i in range(len(metadata.xmp_keys)):
-        #   try:
-        #     print metadata.xmp_keys[i] + ": " + str(metadata[metadata.xmp_keys[i]].value)
-        #   except Exception:
-        #     print metadata.xmp_keys[i] + ": NA"
-
-        # aa = pyexiv2.xmp.XmpTag
-        # metadata['Xmp.mwg-rs.Regions'] 
-        # metadata.write()
-
-        # for i in range(len(metadata.xmp_keys)):
-        #   try:
-        #     print metadata.xmp_keys[i] + ": " + str(metadata[metadata.xmp_keys[i]].value)
-        #   except Exception:
-        #     print metadata.xmp_keys[i] + ": NA"
 
 
 

@@ -394,7 +394,8 @@ if __name__ == '__main__':
         # print "Subdirs: " +  str(subdirs)
         # print excludedDirectories
         for eachDirectory in subdirs:
-            # print eachDirectory
+            print eachDirectory
+            eachDirectory = eachDirectory.decode('utf-8')
             # if eachDirectory in excludedDirectories:
             fullDirectory = os.path.join(eachRoot, eachDirectory)
             if any( list( fullDirectory.startswith(x) for x in excludedDirectories ) ):

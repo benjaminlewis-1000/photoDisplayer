@@ -54,7 +54,7 @@ def do_geocode(address, use_googmaps):
             return value[0]['address_components']
         except Exception as e:
             print e
-            print "Error: unknown"
+            print "Error: unknown address from lat/lon"
             return -1
     else:
         ## Recursive until we get an answer
@@ -69,7 +69,7 @@ def do_geocode(address, use_googmaps):
                 return value[0]['address_components']
             except Exception as e:
                 print e
-                print "Error: unknown"
+                print "Error: unknown address from lat/lon"
                 return -1
 
 def geoLookup(lat, lon):

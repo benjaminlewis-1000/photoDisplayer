@@ -21,6 +21,7 @@ services:
      # - ${BASE_DIR}:/app
       - /mnt/data/samba_share/:/photos
       - /home/benjamin/projects/photoDisplayer:/app
+      - /mnt/data/appdata/photoDisplayer/databases:/app/databases
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro 
       # Configuration xml file
