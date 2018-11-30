@@ -13,7 +13,6 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, t
     conn.row_factory = sqlite3.Row
 
     fullPath = os.path.join(basePath, fileRelPath)
-    print fullPath
 
     if not fileRelPath.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
         return
@@ -49,6 +48,8 @@ def addPhoto(basePath, fileRelPath, currentRootDirNum, params, conn, nameDict, t
         # Something in the photo data lookup failed, so we are going 
         # to skip this for now and come back on a future update.
         # Or this is a signal that the picture should not be added. 
+        print "Removing a photo ({}) with 'exclude' tag. ".format(fullPath)
+        deletePhoto(conn, currentRootDirNum, fileRelPath, params)
         return
 
     try:
@@ -163,6 +164,8 @@ def clearPhotoLinks(conn, photoKeyID, params):
     linkerPhoto = params['params']['photoDatabase']['tables']['photoLinkerTable']['Columns']['linkerPhoto']
 
     userTagTable = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Name']
+    machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
+
     userTagPhoto = params['params']['photoDatabase']['tables']['commentLinkerUserTable']['Columns']['commentLinkerPhoto']
 
     machineTagTable = params['params']['photoDatabase']['tables']['machineCommentLinker']['Name']
@@ -175,10 +178,10 @@ def clearPhotoLinks(conn, photoKeyID, params):
     c.execute(delTagsUser, (photoKeyID,))
 
     delTagsMachine = '''DELETE FROM {} WHERE {} = ?'''.format(machineTagTable, machineTagPhoto)
-    c.execute(delTagsMachine , (photoKeyID,))
+    c.execute(delTagsMachine, (photoKeyID,))
 
-#     delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
-#     c.execute(delTagsGoogle, (photoKeyID,))
+    # delTagsGoogle = '''DELETE FROM {} WHERE {} = ?'''.format(googTagTable, googTagPhoto)
+    # c.execute(delTagsGoogle, (photoKeyID,))
 
     # Commit to database at the end to make change permanent
     conn.commit()
@@ -251,17 +254,44 @@ def checkPhotosAtEnd(conn, params):
             markForDeletion = True
 
         if markForDeletion:
-            # print "Deleting!"
-            clearPhotoLinks(conn, photoKeyID, params)
-            delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
-            # print delPhotoQuery + " " + filename
-            # print rootNum
-            d = conn.cursor()
-            d.execute(delPhotoQuery, (filename, rootNum))
-            conn.commit()
+            # # print "Deleting!"
+            # clearPhotoLinks(conn, photoKeyID, params)
+            # delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
+            # # print delPhotoQuery + " " + filename
+            # # print rootNum
+            # d = conn.cursor()
+            # d.execute(delPhotoQuery, (filename, rootNum))
+            # conn.commit()
+            deletePhoto(conn, rootNum, fileName, params)
 
         row = c.fetchone()
         count += 1
+
+def deletePhoto(conn, rootDirNum, fileRelPath, params):
+    # Get the photoKeyID: 
+    photoTableName = params['params']['photoDatabase']['tables']['photoTable']['Name']
+    photoCols = params['params']['photoDatabase']['tables']['photoTable']['Columns']
+    photoFileCol = photoCols['photoFile']
+    rootDirCol = photoCols['rootDirNum']
+    photoKeyCol = photoCols['photoKey']
+    c = conn.cursor()
+
+    picsQuery = '''SELECT {} FROM {} WHERE {} = ? AND {} = ?'''.format(photoKeyCol, photoTableName, rootDirCol, photoFileCol)
+    c.execute(picsQuery, (rootDirNum, fileRelPath))
+    row = c.fetchone()
+    print row
+    if row is not None and len(row) > 0: 
+
+        print row[0]
+        photoID = row[0]
+
+        clearPhotoLinks(conn, photoID, params)
+
+        delPhotoQuery = '''DELETE FROM {} WHERE {} = ? AND {} = ?'''.format(photoTableName, photoFileCol, rootDirCol)
+
+        c.execute(delPhotoQuery, (fileRelPath, rootDirNum))
+        conn.commit()
+
 
 def insertName(name, conn, photoKeyID, params, nameDict):
 

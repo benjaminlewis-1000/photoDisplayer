@@ -13,6 +13,7 @@ function sendToPi(){
 		url: 'scripts_controlpanel/launchSlideshow.php',
 		data: {'json': criteriaJSON, 'options': optionsJSON},
 		success: function(data){
+			console.log("Data is: " + data)
 			data = JSON.parse(data)
 	        exceptions = data['exceptions']
 	        for (i = 0; i < exceptions.length; i++){

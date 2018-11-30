@@ -3,6 +3,7 @@
 import json
 import xmltodict
 import datetime
+from dateutil.relativedelta import relativedelta
 
 class QueryMaker():
 
@@ -37,7 +38,9 @@ class QueryMaker():
         userCommentTable   = self.xmlParams['params']['photoDatabase']['tables']['commentLinkerUserTable']
         self.usComTableName     = userCommentTable['Name']
         self.usComTablePhotoNum = userCommentTable['Columns']['commentLinkerPhoto']
-        self.usComTableTagStr   = userCommentTable['Columns']['commentLinkerTag']
+        self.usComTableTagStr   = userCommentTable['Columns']['commentLinkerTagIDlink']
+
+        self.noneTag = "None"
         
         print "Init done!"
 
@@ -51,7 +54,12 @@ class QueryMaker():
         selectedMonths = [ ]
         dateRangeVals = [ ]
         keywordVals = [ ]
+        specialVals = [ ]
         getAll = False
+
+        errs = []
+        debug = []
+        returnDict = {}
         
         for i in range(len(slideshowParams)):
             # Parse out the json for each parameter. Get the type of criteria,
@@ -65,21 +73,31 @@ class QueryMaker():
             boolVal = slideshowParams[i]['booleanValue']
             critVal = slideshowParams[i]['criteriaVal']
 
+            andOrVal = slideshowParams[i]['andOrCritVal']
+            modAboveLineVal = bool( slideshowParams[i]['modAboveLineVal'] )
+            # print(slideshowParams[i])
+
             if critType.lower() == 'year':
                 assert unicode(critVal).isnumeric()
                 selectedYears.append( (critVal, boolVal) )
             if str(critType) == 'Date Range' or str(critType) == "Date%20Range":
-                if not (boolVal == "None" and critVal == "None"):
+                # print("Date range: ")
+                # print(boolVal)
+                # print(critVal)
+                if not (boolVal == self.noneTag and critVal == self.noneTag):
                     dateRangeVals.append( (boolVal, critVal) )
+                    # TODO: Get a query for when one end is <none>
             if critType.lower() == 'person':
                 people.append(critVal)
             if critType.lower() == 'month':
                 selectedMonths.append( (critVal, boolVal) )
             if critType.lower() == 'keywords':
                 keywordVals.append( critVal )
+            if critType.lower() == 'special':
+                specialVals.append( (critVal, boolVal) )
             if critType.lower() == 'all':
                 getAll = True
-            if critType.lower() not in ['year', 'date range', "date%20Range", 'person', 'month', 'all']:
+            if critType.lower() not in ['year', 'date range', "date%20Range", 'person', 'month', 'keywords', 'special', 'all']:
                 print "Error! Type {} not found.".format(critType)
                 errs.append('Criteria type {} was not found.'.format(critType) );
                 returnDict['exceptions'] = errs;
@@ -125,6 +143,12 @@ class QueryMaker():
                 if masterQuery != "":
                     masterQuery += " INTERSECT "
                 masterQuery += kwQuery
+
+            if len(specialVals) > 0:
+                specialQuery = self.__handleSpecial__(specialVals)
+                if masterQuery != "":
+                    masterQuery += " INTERSECT "
+                masterQuery += specialQuery
                 
             if masterQuery != "":
                 #### Preliminary:
@@ -132,6 +156,28 @@ class QueryMaker():
                 masterQuery = prelimQuery +  "(" +  masterQuery + ")" 
 
         return masterQuery
+
+    def __handleSpecial__(self, specialVal):
+
+        specialQuery = "SELECT * FROM ("
+
+        for keyIdx in range(len(specialVal)):
+            eachSpecial = specialVal[keyIdx]
+            critVal = eachSpecial[0]
+            boolVal = eachSpecial[1]
+            if boolVal == 'last n year':
+                limitDate = datetime.datetime.now() - relativedelta(years = int(critVal) )
+                selectDate = limitDate.strftime("%Y-%m-%d 00:00:00")
+                # print(selectDate) 
+                dateAfterQuery = '''SELECT {} FROM {} WHERE {}  >= "{}"'''.format(self.phKey, self.phTableName, self.phTakenDate, selectDate)
+                specialQuery += dateAfterQuery
+
+            if keyIdx != ( len(specialVal) - 1 ):
+                specialQuery += " UNION "
+
+        specialQuery += ")"
+        return specialQuery
+
 
     def __handleKeyword__(self, selectedKeyword):
 
@@ -151,8 +197,8 @@ class QueryMaker():
 
 
     def __handleYear__(self, selectedYears):
-        orYearQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
-        andYearQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
+        orYearQuery = '''SELECT * FROM ( SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
+        andYearQuery = '''SELECT * FROM ( SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenYear)
 
         if len(selectedYears) == 0:
             return ""
@@ -193,11 +239,11 @@ class QueryMaker():
             if yearQueryStart[orIndex]:
                 returnQuery = orYearQuery
 
-        return returnQuery
+        return returnQuery + ")"
 
     def __buildDateRange__(self, dateRangeVals):
         print dateRangeVals
-        orDateRangeQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenDate)
+        orDateRangeQuery = '''SELECT * FROM ( SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenDate)
 
         for i in range(len(dateRangeVals)):
             startDate = dateRangeVals[i][0]
@@ -208,12 +254,12 @@ class QueryMaker():
             # print endDate
 
             # Format the dates, if they aren't "None". 
-            if startDate != "None":
-                startDate = datetime.datetime.strptime(startDate, "%m/%d/%Y").strftime("%Y-%m-%d 00:00:00") 
-            if endDate != "None":
-                endDate = datetime.datetime.strptime(endDate, "%m/%d/%Y").strftime("%Y-%m-%d 23:59:59")
+            if startDate != self.noneTag:
+                startDate = datetime.datetime.strptime(startDate, "%Y/%m/%d").strftime("%Y-%m-%d 00:00:00") 
+            if endDate != self.noneTag:
+                endDate = datetime.datetime.strptime(endDate, "%Y/%m/%d").strftime("%Y-%m-%d 23:59:59")
 
-            if ( startDate != "None" and endDate != "None" ):
+            if ( startDate != self.noneTag and endDate != self.noneTag ):
                 # Get the ordering right, so we don't have mutually exclusive dates. 
                 if endDate < startDate:
                     tmp = startDate
@@ -221,7 +267,7 @@ class QueryMaker():
                     endDate = tmp
                 orDateRangeQuery += " > \"" + startDate + "\" AND {} < \"".format(self.phTakenDate) + endDate + "\""
             else:
-                if ( startDate != "None" ):
+                if ( startDate != self.noneTag ):
                     orDateRangeQuery += " > \"" + startDate + "\""
                 else:
                     orDateRangeQuery += " < \"" + endDate + "\""
@@ -229,7 +275,7 @@ class QueryMaker():
             if i != len(dateRangeVals) - 1:
                 orDateRangeQuery += " OR {} ".format(self.phTakenDate)
 
-        return orDateRangeQuery
+        return orDateRangeQuery + ")"
 
     def __buildPersonQueryOR__(self, orPeople):
 
@@ -253,7 +299,7 @@ class QueryMaker():
 
     def __buildPersonQueryAND__(self, andPeople):
 
-        andPersonQuery = '''SELECT {} FROM {} AS photo_key_and_var JOIN (SELECT {} AS {} FROM {} WHERE {} = '''.format(self.phKey, self.phTableName, self.plPhoto, self.phKey, self.plTableName, self.plPerson)
+        andPersonQuery = '''SELECT * FROM ( SELECT {} FROM {} AS photo_key_and_var JOIN (SELECT {} AS {} FROM {} WHERE {} = '''.format(self.phKey, self.phTableName, self.plPhoto, self.phKey, self.plTableName, self.plPerson)
 
         for i in range(len(andPeople)):
             ## personIntermediateQuery = '''(SELECT people_key FROM people WHERE person_name = "'''  + people[i]  + "\" )"
@@ -265,12 +311,12 @@ class QueryMaker():
 
         andPersonQuery += " ) AS linker_tmp_var ON photo_key_and_var.{} = linker_tmp_var.{}".format(self.phKey, self.phKey)
 
-        return andPersonQuery
+        return andPersonQuery + ")"
 
 
     def __buildMonthQueryOR__(self, selectedMonths):
 
-        orMonthQuery = '''SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenMonth)
+        orMonthQuery = '''SELECT * FROM ( SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenMonth)
         months = {"January" : 1, "February" : 2, "March" : 3, "April" : 4, "May" : 5, "June" : 6, "July" : 7, "August" : 8, "September" : 9, "October" : 10, "November" : 11, "December" : 12}
         i = 0
         for i in range(len(selectedMonths)):
@@ -285,11 +331,12 @@ class QueryMaker():
                 orMonthQuery += " OR {} ".format(phTakenMonth)
             i += 1
 
-        return orMonthQuery
+        return orMonthQuery + ")"
 
 
 if __name__ == '__main__':
     import os
+    import sqlite3
     project_path = os.path.abspath(os.path.join(__file__,"../.."))
     script_path  = os.path.abspath(os.path.join(__file__,".."))
 
@@ -302,8 +349,49 @@ if __name__ == '__main__':
            exit(1)
     qm = QueryMaker( xmlParams)
 
+    db_path = os.path.join(project_path, 'databases', 'photos_master.db')
+    print db_path
+    photoDatabase = sqlite3.connect( db_path )
+    photoDatabase.text_factory = str  # For UTF-8 compatibility
+    c = photoDatabase.cursor()
+
             
-    criteriaJSON = '''[{"criteriaType": "year", "booleanValue": "is", "criteriaVal": "2001"} , 
-    {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Ben"}, 
-    {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Johnny boy"}]'''
-    print qm.buildQueryFromJSON(criteriaJSON)
+    # criteriaJSON = '''[{"criteriaType": "year", "booleanValue": "is", "criteriaVal": "2001"} , 
+    # {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Ben"}, 
+    # {"criteriaType": "person", "booleanValue": "is", "criteriaVal": "Johnny boy"}]'''
+    # print qm.buildQueryFromJSON(criteriaJSON)
+
+    json_string = '{"favorited": false, "contributors": null}'
+    value = json.loads(json_string)
+
+    def testQuery(string):
+        SQL_query = qm.buildQueryFromJSON( string )
+        print SQL_query
+        c.execute(SQL_query)
+        fileResults = c.fetchall()
+        print len(fileResults)
+
+
+    # print qm.buildQueryFromJSON( t1)
+    queries = []
+    # queries.append( ''' [{"num":1,"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"2018/11/05","modAboveLineVal":"false","andOrCritVal":"AND"}] ''' )
+    # queries.append( ''' [{"num":2,"criteriaType":"Date Range","booleanValue":"2018/01/30","criteriaVal":"None","modAboveLineVal":"false","andOrCritVal":"OR"}] ''' )
+    # queries.append( ''' [{"num":3,"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"2018/11/05","modAboveLineVal":"false","andOrCritVal":"OR"}] ''' )
+    # queries.append( ''' [{"num":4,"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"None","modAboveLineVal":"false","andOrCritVal":"AND"}] ''' )
+    # queries.append( ''' [{"num":5,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis","modAboveLineVal":"false","andOrCritVal":"OR"}] ''' )
+    # queries.append( ''' [{"num":6,"criteriaType":"Year","booleanValue":"is","criteriaVal":"2016","modAboveLineVal":"false","andOrCritVal":"AND"}] ''' )
+    # queries.append( ''' [{"num":7,"criteriaType":"Month","booleanValue":"is","criteriaVal":"5","modAboveLineVal":"false","andOrCritVal":"AND"}] ''' )
+    # queries.append( ''' [{"num":8,"criteriaType":"Keywords","booleanValue":"is","criteriaVal":"ben_mission","modAboveLineVal":"false","andOrCritVal":"OR"}] ''' )
+    # queries.append( ''' [{"num":9,"criteriaType":"Special","booleanValue":"last n year","criteriaVal":"5","modAboveLineVal":"false","andOrCritVal":"AND"}] '''  )
+    # queries.append( ''' [{"num":10,"criteriaType":"Keywords","booleanValue":"is","criteriaVal":"ben_mission","modAboveLineVal":"false","andOrCritVal":"AND"}] '''  )
+    # queries.append( ''' [{"num":11,"criteriaType":"Person","booleanValue":"is not","criteriaVal":"Cynthia Lewis","modAboveLineVal":"false","andOrCritVal":"OR"}] '''  )
+
+    queries.append( ''' [{"num":1,"criteriaType":"Person","booleanValue":"is","criteriaVal":"Benjamin Lewis","modAboveLineVal":"false","andOrCritVal":"OR"}, 
+        {"num":2,"criteriaType":"Date Range","booleanValue":"2018/01/30","criteriaVal":"None","modAboveLineVal":"false","andOrCritVal":"OR"}] ''' )
+    queries.append(''' [{"criteriaType":"Person","booleanValue":"is","criteriaVal":"adam Lewis","andOrCritVal":"alias","modAboveLineVal":"alias","alias":"Adam Lewis","num":0},
+                        {"criteriaType":"Person","booleanValue":"is","criteriaVal":"Adam Lewis","andOrCritVal":"OR","modAboveLineVal":false,"alias":false,"num":0},
+                        {"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"2018/01/01","andOrCritVal":"AND","modAboveLineVal":true,"num":1},
+                        {"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alyssa Varns","andOrCritVal":"OR","modAboveLineVal":false,"alias":false,"num":2},
+                        {"criteriaType":"Year","booleanValue":"is","criteriaVal":"2016","andOrCritVal":"AND","modAboveLineVal":true,"num":3}]''')
+    for eachQuery in queries:
+        testQuery(eachQuery)

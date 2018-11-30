@@ -126,6 +126,7 @@
 		$criteriaVal = $item['criteriaVal'];
 		$andOrVal = $item['andOr'];
 		$modAboveVal = $item['modAbove'];
+		$num = $item['num'];
 
 	//["Date Range", "Person", "Year", "Month"]
 		switch($type){
@@ -161,7 +162,7 @@
 					$end_formatted = $date_end['year'] . '/' . str_pad($date_end['month'], 2, "0", STR_PAD_LEFT) . '/' . str_pad($date_end['day'], 2, "0", STR_PAD_LEFT);
 				}
 
-				$data = array("criteriaType" =>"Date Range", "booleanValue" => "$start_formatted", "criteriaVal" => "$end_formatted", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
+				$data = array("criteriaType" =>"Date Range", "booleanValue" => "$start_formatted", "criteriaVal" => "$end_formatted", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "num" => $num);
 				array_push($formedArray, $data);
 				break;
 			case "Person":
@@ -189,14 +190,14 @@
 				   	    	// be subsumed in the main name. The 'alias' field points to what the selected name was. 
 				   	    	// In the SQL, the aliases and the chosen name should be unioned together first, then and/or values and mod line
 				   	    	// above values should be taken into account. 
-							$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$akaPerson", "andOrCritVal" => "alias", "modAboveLineVal" => "alias", "alias" => "$criteriaVal");
+							$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$akaPerson", "andOrCritVal" => "alias", "modAboveLineVal" => "alias", "alias" => "$criteriaVal", "num" => $num);
 							array_push($formedArray, $data);
 				   	    }
 				   }
 				}
 
 				/* Push the actual name; the above foreach only pushes the aliases. */
-				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "alias" => false);
+				$data = array("criteriaType" =>"Person", "booleanValue" => "$boolVal", "criteriaVal" => "$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "alias" => false, "num" => $num);
 				array_push($formedArray, $data);
 				break;
 			case "Year":
@@ -222,7 +223,7 @@
 				$year = strval($year);
 
 				//print_r($year);
-				$data = array("criteriaType" =>"Year", "booleanValue" => "$boolVal", "criteriaVal" =>"$year", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
+				$data = array("criteriaType" =>"Year", "booleanValue" => "$boolVal", "criteriaVal" =>"$year", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "num" => $num);
 				array_push($formedArray, $data);
 				break;
 			case "Month":
@@ -235,7 +236,7 @@
 					$allValid = 0;
 					break;
 				}
-				$data = array("criteriaType" =>"Month", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
+				$data = array("criteriaType" =>"Month", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "num" => $num);
 				array_push($formedArray, $data);
 
 				break;
@@ -249,7 +250,7 @@
 					$allValid = 0;
 					break;
 				}
-				$data = array("criteriaType" =>"Location", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
+				$data = array("criteriaType" =>"Location", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "num" => $num);
 				array_push($formedArray, $data);
 
 				break;
@@ -258,7 +259,7 @@
 				# Pass the keyword to the backend.
 				if ($criteriaVal !== ''){
 					// the string is non-empty
-					$data = array("criteriaType" =>"Keywords", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal);
+					$data = array("criteriaType" =>"Keywords", "booleanValue" => "$boolVal", "criteriaVal" =>"$criteriaVal", "andOrCritVal" => $andOrVal, "modAboveLineVal" => $modAboveVal, "num" => $num);
 					array_push($formedArray, $data);
 				}
 		}

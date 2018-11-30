@@ -72,6 +72,7 @@ getExif is a function that retrieves, where avaliable, the following data from a
 def getExifData(filename, doGeocode):
 
     if filename.endswith(tuple([".JPG", ".jpg", ".jpeg", ".JPEG"])):
+        # print filename
        
         # Read the exiv2 metadata from the image
         metadata = pyexiv2.ImageMetadata(filename)
@@ -85,11 +86,14 @@ def getExifData(filename, doGeocode):
             logfile.close()
             return "", ""
         dateOK = True
+        jData = {}
+
         # print metadata.keys()
         # print 'Exif.Photo.DateTimeOriginal' in metadata
 
         # Preferred fields: 'Exif.Photo.DateTimeOriginal' or 'Exif.Photo.DateTimeDigitized'
         # Retrieve the time from the EXIV
+        # print metadata.keys()
         if ('Exif.Photo.DateTimeOriginal' not in metadata) and ('Exif.Photo.DateTimeDigitized' not in metadata):
             # print "Time not found!"
             if 'Iptc.Application2.DateCreated' in metadata and 'Iptc.Application2.TimeCreated' in metadata:
@@ -121,18 +125,28 @@ def getExifData(filename, doGeocode):
             # Error case - there is a valid field, but it contains no numbers. 
             if not re.search(r'[0-9]+:\d+:\d+', dateOrig) or re.search(r'0000:00:00 00:00:00', dateOrig):
                 dateOK = False
+                # print dateOrig
                 dateIso = "1900:01:01 01:01:01"
                 dateTime = dateIso.split(" ")
             # print dateTime
             dateIso = dateTime[0].replace(":", "-") + " " +  dateTime[1]
+
         if not dateOK:
             print "Entering Date Taken Remediation. "
             ## Try to find an acceptable date - at least 'last edited.'
-            dateIso = "1900-01-01 01:01:01"
+            dateIso = "a"
             for key in metadata.keys():
                 if re.search('date', key, re.IGNORECASE):
                     rawTime = metadata[key].raw_value
-                    # print rawTime
+
+                    print "raw time: " + str(rawTime)
+                    try:
+                        dt = parser.parse(rawTime)
+                        possVal = dt.isoformat().replace("T", " ")
+                        if possVal < dateIso:
+                            dateIso = possVal
+                    except Exception as e:
+                        pass
 
                     if re.search(r'[0-9]+:\d+:\d+', rawTime):
                         dt = parser.parse(rawTime)
@@ -140,6 +154,9 @@ def getExifData(filename, doGeocode):
                         if possVal  < dateIso:
                             dateIso = possVal
 
+            if dateIso == 'a':
+                # Last resort failsafe.
+                dateIso = '1900:01:01 00:00:01'
             dateTime = dateIso.split(" ")
             ## See if the file name is any good:
             file_name_string = filename.split('/')[-1].split('\\')[-1]
@@ -160,13 +177,26 @@ def getExifData(filename, doGeocode):
                 pass
                 # No discernible date.
 
-            # print "DateISO is " + dateIso
+            # print "DateISO is " + dateIs
+            print "Date iso is : " + dateIso
+            if dateIso == '999999':
+                dateIso = "1900:01:01 01:00:00"
+                ### # print metadata.keys()
+                ### # if __name__ == "__main__":
+                ### #     return -1, -1
+                ### # else:
+                ### #     return -1
+            #### DON'T WRITE METADATA!
+            #### # print metadata
+            #### metadata['Exif.Photo.DateTimeOriginal'] = dateIso
+            #### metadata.write()
 
             # print metadata
-            print "Changing date to: " + str(dateIso)
-            sleep(0.3)
-            metadata['Exif.Photo.DateTimeOriginal'] = dateIso
-            metadata.write()
+            # DON'T WRITE METADATA
+###          print "Changing date to: " + str(dateIso)
+###          sleep(0.3)
+###          metadata['Exif.Photo.DateTimeOriginal'] = dateIso
+###          metadata.write()
 
             logfile = open(script_path + '/logNoDates.out', 'a')
             try:
@@ -178,19 +208,21 @@ def getExifData(filename, doGeocode):
             print >>logfile, "Date/time for: " + utf_filename + " modified."
             logfile.close()
 
+            dateTime = dateIso.split(" ")
+
             # if __name__ == "__main__":
             #     return -1, -1
             # else:
             #     return -1
 
         print dateTime
+
         assert len(dateTime) == 2  # Date and time
         assert len(dateTime[0]) == 10 # Date is of format YYYY:MM:DD
         assert len(str(dateTime[1])) == 8 or len(str(dateTime[1])) == 14
         # Date time parser - python library
         dt = parser.parse(dateIso)
 
-        jData = {}
         jData['ISO8601'] = dateIso
         jData['year'] = dt.year
         jData['month'] = dt.month
@@ -204,73 +236,6 @@ def getExifData(filename, doGeocode):
         else:
             jData['TimeZone'] = '0'
 
-        if ('Exif.GPSInfo.GPSLatitudeRef' in metadata):
-            # Get the latitude/longitude and N/S and E/W
-            northSouth = metadata['Exif.GPSInfo.GPSLatitudeRef'].raw_value
-            eastWest = metadata['Exif.GPSInfo.GPSLongitudeRef'].raw_value
-            lat = str(metadata['Exif.GPSInfo.GPSLatitude'].raw_value)
-            lon = str(metadata['Exif.GPSInfo.GPSLongitude'].raw_value)
-            latSplit = lat.split(" ")
-            lonSplit = lon.split(" ")
-            assert len(latSplit) == 3
-            assert len(lonSplit) == 3
-            # Compute the latitude and longitude in decimal form
-            latDec = 1.0 * eval(latSplit[0] + '.0') + 1.0/60.0 * eval(latSplit[1] + '.0') + 1.0/3600.0 * eval(latSplit[2] + '.0')
-            lonDec = 1.0 * eval(lonSplit[0] + '.0') + 1.0/60.0 * eval(lonSplit[1] + '.0') + 1.0/3600.0 * eval(lonSplit[2] + '.0')
-
-            if (northSouth != "N"):
-                latDec *= -1.0
-            if (eastWest != "E"):
-                lonDec *= -1.0
-
-            jData['latitude'] = latDec
-            jData['longitude'] = lonDec
-
-            if doGeocode:
-                # Do a reverse geocode lookup using the geoServer.py server, which is started by addPics.py
-                proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + params['params']['serverParams']['geoServerPort'] + "/RPC2")
-                try:
-                    val = proxy.geoLookup(latDec, lonDec)
-                    if val == -1:
-                        if __name__ == "__main__":
-                            return -1, -1
-                        else:
-                            return -1
-                    else:
-                        try:
-                            val = json.loads(val.encode('utf-8'))
-                        except Exception as e :
-                            print "No JSON Object..."
-                    passed = True
-                except Exception as e :
-                    return str(e)
-
-                jData['house_number'] = val['house_number']
-                jData['road'] = val['road']
-                jData['city'] = val['city']
-                jData['state'] = val['state']
-                jData['postcode'] = val['postcode']
-                jData['country'] = val['country']
-                    # $jsonData->{'postcode'} =~ m/(\d+)/g;
-                    # my $postcode = $1;
-            else:
-                jData['latitude'] = "-"
-                jData['longitude'] = "-"
-                jData['house_number'] = "-"
-                jData['road'] = "-"
-                jData['city'] = "-"
-                jData['state'] = "-"
-                jData['postcode'] = "-"
-                jData['country'] = "-"
-        else:
-            jData['latitude'] = "-"
-            jData['longitude'] = "-"
-            jData['house_number'] = "-"
-            jData['road'] = "-"
-            jData['city'] = "-"
-            jData['state'] = "-"
-            jData['postcode'] = "-"
-            jData['country'] = "-"
 
         # Get the names of tagged faces
         metadataFields = metadata.xmp_keys
@@ -304,6 +269,8 @@ def getExifData(filename, doGeocode):
         # print nameList
         jData['names'] = list(nameList) # .union(set(nameList)))  ## De-duplicate names
 
+
+        
         if 'Exif.Photo.UserComment' in metadata:
             autoTags = metadata['Exif.Photo.UserComment'].raw_value
             # autoTags = re.sub(r'charset=\"Ascii\"\s+', '', autoTags)
@@ -375,6 +342,76 @@ def getExifData(filename, doGeocode):
             else:
                 return -1
 
+
+        if ('Exif.GPSInfo.GPSLatitudeRef' in metadata):
+            # Get the latitude/longitude and N/S and E/W
+            northSouth = metadata['Exif.GPSInfo.GPSLatitudeRef'].raw_value
+            eastWest = metadata['Exif.GPSInfo.GPSLongitudeRef'].raw_value
+            lat = str(metadata['Exif.GPSInfo.GPSLatitude'].raw_value)
+            lon = str(metadata['Exif.GPSInfo.GPSLongitude'].raw_value)
+            latSplit = lat.split(" ")
+            lonSplit = lon.split(" ")
+            assert len(latSplit) == 3
+            assert len(lonSplit) == 3
+            # Compute the latitude and longitude in decimal form
+            latDec = 1.0 * eval(latSplit[0] + '.0') + 1.0/60.0 * eval(latSplit[1] + '.0') + 1.0/3600.0 * eval(latSplit[2] + '.0')
+            lonDec = 1.0 * eval(lonSplit[0] + '.0') + 1.0/60.0 * eval(lonSplit[1] + '.0') + 1.0/3600.0 * eval(lonSplit[2] + '.0')
+
+            if (northSouth != "N"):
+                latDec *= -1.0
+            if (eastWest != "E"):
+                lonDec *= -1.0
+
+            jData['latitude'] = latDec
+            jData['longitude'] = lonDec
+
+            if doGeocode:
+                # Do a reverse geocode lookup using the geoServer.py server, which is started by addPics.py
+                proxy = xmlrpclib.ServerProxy("http://127.0.0.1:" + params['params']['serverParams']['geoServerPort'] + "/RPC2")
+                try:
+                    val = proxy.geoLookup(latDec, lonDec)
+                    if val == -1:
+                        if __name__ == "__main__":
+                            return -1, -1
+                        else:
+                            return -1
+                    else:
+                        try:
+                            val = json.loads(val.encode('utf-8'))
+                        except Exception as e :
+                            print "No JSON Object..."
+                    passed = True
+                except Exception as e :
+                    return str(e)
+
+                jData['house_number'] = val['house_number']
+                jData['road'] = val['road']
+                jData['city'] = val['city']
+                jData['state'] = val['state']
+                jData['postcode'] = val['postcode']
+                jData['country'] = val['country']
+                    # $jsonData->{'postcode'} =~ m/(\d+)/g;
+                    # my $postcode = $1;
+            else:
+                jData['latitude'] = "-"
+                jData['longitude'] = "-"
+                jData['house_number'] = "-"
+                jData['road'] = "-"
+                jData['city'] = "-"
+                jData['state'] = "-"
+                jData['postcode'] = "-"
+                jData['country'] = "-"
+        else:
+            jData['latitude'] = "-"
+            jData['longitude'] = "-"
+            jData['house_number'] = "-"
+            jData['road'] = "-"
+            jData['city'] = "-"
+            jData['state'] = "-"
+            jData['postcode'] = "-"
+            jData['country'] = "-"
+
+
         jsonObj = json.dumps(jData)
         assert re.search(r'...............', jsonObj)
         # print __name__
@@ -401,11 +438,10 @@ if __name__ == '__main__':
         fullPath = '/home/lewis/test_imgs/test2.jpg'
         fullPath = '/home/lewis/test_imgs/DSC_9833.JPG'
         fullPath = '/photos/Photos/Pictures_finished/2017/Family Texts/2017-12-01 19.40.11-4.jpg'
-        fullPath = 'S:\\Photos\\Pictures_Jessica\\Family Scans\\2006\\july_2006 0012.jpg'
         fullPath = 'C:\\Users\\Benjamin\\Dropbox\\Camera Uploads\\2018-09-16 07.38.35.jpeg'
-        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Baby Announcements/DSC_5458.JPG'
         # print fullPath
         fullPath = '/photos/Photos/Pictures_In_Progress/2018/Babymoon/Italy/Rachel Pictures/IMG_3118.jpg'
+        fullPath = '/photos/Photos/Pictures_In_Progress/2018/Family Texts/mom branson/2018-11-04 07.09.36-1-1.jpeg'
         jsonObj, metadata = getExifData(fullPath, False)
         print jsonObj
 

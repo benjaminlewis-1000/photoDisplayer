@@ -214,3 +214,7 @@ input:checked + .slider:before {
 .andOrSwitch.active{
   background-color: #b2f3f4;
 }
+
+.andOrSwitch.disabled{
+  background-color: #f0f0f0;
+}

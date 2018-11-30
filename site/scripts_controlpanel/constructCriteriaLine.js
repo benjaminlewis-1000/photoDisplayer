@@ -61,10 +61,10 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		var boxAbove = document.createElement('label')
 		boxAbove.className = 'switch'
 		lineDiv.appendChild(boxAbove)
-		var boxAboveCheck = document.createElement("input");
-		boxAboveCheck.type = 'checkbox'
-		boxAboveCheck.id = 'chkModifyAbove' + divNumber
-		boxAbove.appendChild(boxAboveCheck);
+		var modifyAboveSwitch = document.createElement("input");
+		modifyAboveSwitch.type = 'checkbox'
+		modifyAboveSwitch.id = 'chkModifyAbove' + divNumber
+		boxAbove.appendChild(modifyAboveSwitch);
 		switchAboveSpan = document.createElement('span')
 		switchAboveSpan.className = 'slider round'
 		boxAbove.appendChild(switchAboveSpan)
@@ -77,19 +77,15 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		boxAndOrCheck.id = 'chkAndOr' + divNumber
 		boxAndOr.appendChild(boxAndOrCheck);
 		boxAndOrCheck.className = 'andOrSwitch'
-		boxAndOrCheck.innerText = 'OR'
+		boxAndOrCheck.innerText = 'GROW'
+		boxAndOrCheck.value = 'OR'
 		/*switchAndOrSpan = document.createElement('span')
 		switchAndOrSpan.className = 'andOrSwitch'
 		boxAndOr.appendChild(switchAndOrSpan)*/
 
 		boxAndOrCheck.onclick = function() { 
-			if (boxAndOrCheck.className == 'andOrSwitch active') {
-				boxAndOrCheck.className = 'andOrSwitch'
-				boxAndOrCheck.innerText = 'OR'
-			}else{
-				boxAndOrCheck.className = 'andOrSwitch active'
-				boxAndOrCheck.innerText = 'AND'
-			}
+			// andOrSet defined below
+			andOrSet()
 		};
 
 		///// Criteria type box
@@ -124,7 +120,10 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 		select_criteria_type.addEventListener("change", function(){
 			// Get the new field, create a construct for it, and construct the selection line again. 
 			classType = select_criteria_type.value;
-			constructOrUpdateCriteriaLine(divOfFields, isNew = false, divNumber = divNumber, criteriaType = classType, binaryValue = null, selectionValue = null,modAboveVal = false, andOrVal = 'OR');
+			var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+			modAboveVal = modifyAboveSwitch.checked
+			console.debug("Mod above: " + modAboveVal)
+			constructOrUpdateCriteriaLine(divOfFields, isNew = false, divNumber = divNumber, criteriaType = classType, binaryValue = null, selectionValue = null,modAboveVal = modAboveVal, andOrVal = 'OR');
 		})
 
 		// Make the binary selection field span
@@ -202,15 +201,64 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 	}
 
+	function andOrSet(setVal = null ){
+		var boxAndOrCheck = document.getElementById('chkAndOr' + divNumber)
+		var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+		console.debug("Desired set val is: " + setVal)
+		if (setVal == null){
+			val = boxAndOrCheck.value
+			if (val == 'OR'){
+				setVal = 'AND'
+			}else{
+				setVal = 'OR'
+			}
+		}
+
+		// Set the value regardless of whether it should manifest in the GUI
+		boxAndOrCheck.value = setVal
+
+		if (! modifyAboveSwitch.checked){
+			if (setVal == 'OR') {
+				boxAndOrCheck.className = 'andOrSwitch'
+				boxAndOrCheck.innerText = 'GROW'
+			}else{
+				boxAndOrCheck.className = 'andOrSwitch active'
+				boxAndOrCheck.innerText = 'LIMIT'
+			}
+		}
+
+	}
+
 	var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
 	var andOrSwitch = document.getElementById('chkAndOr' + divNumber)
-	andOrSwitch.innerText = andOrVal
-	if (andOrVal == 'OR'){
-		andOrSwitch.className = 'andOrSwitch';
-	}else{
-		andOrSwitch.className = 'andOrSwitch active'
-	}
+	andOrSwitch.value = andOrVal
+	//andOrSet(andOrVal)
 	modifyAboveSwitch.checked = modAboveVal
+
+	modifyAboveSwitch.onclick = function() { 
+		var boxAndOrCheck = document.getElementById('chkAndOr' + divNumber)
+		var modifyAboveSwitch = document.getElementById('chkModifyAbove' + divNumber)
+		console.debug("Mod switch done. Value to set is " + boxAndOrCheck.value)
+		if (modifyAboveSwitch.checked){
+			andOrSwitch.disabled = true;
+			modifyAboveSwitch.value = boxAndOrCheck.value
+			boxAndOrCheck.className = 'andOrSwitch disabled'
+			boxAndOrCheck.innerText = 'N/A'
+		}else{
+			andOrSwitch.disabled = false;
+			boxAndOrCheck.className = 'andOrSwitch'
+			if (boxAndOrCheck.value == 'OR') {
+				boxAndOrCheck.className = 'andOrSwitch'
+				boxAndOrCheck.innerText = 'GROW'
+				boxAndOrCheck.value = 'OR'
+			}else{
+				boxAndOrCheck.className = 'andOrSwitch active'
+				boxAndOrCheck.innerText = 'LIMIT'
+				boxAndOrCheck.value = 'AND'
+			}
+		}
+		// andOrSet()
+	};
 
 	// Create slider switches for modifying the line above and for and/or categorization
 
@@ -219,6 +267,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 	// appropriate fields and values (if selected)
 	switch(select_criteria_type.value){
 		case "Date Range":
+			andOrSet('AND')
 			/* Replace the traditional binary select with two calendars + text boxes  */
 			var startLabel = document.createElement('span')
 			startLabel.id = "spacing"
@@ -344,10 +393,12 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 				cal.select(i2,'anchor2_'+ divNumber,'MM/dd/yyyy')
 			}
 
+
 			break // Important, as in any case statement
 
 		case "Person":
-			// Create a binary selection box (i.e. 'is' or 'is not' said person) in the second span. 
+			// Create a binary selection box (i.e. 'is' or 'is not' said person) in the second span.
+			andOrSet('OR') 
 			var binarySelect = document.createElement('select')
 			binarySelect.id = 'binarySelectValues' + divNumber
 			span_qualifier.appendChild(binarySelect)
@@ -434,6 +485,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 
 		case "Keywords":
+			andOrSet('OR')
 			// As in the Person case, the first field is a drop-down with binary values,
 			// although we have 'is', 'is not', 'is before', and 'is after'. 
 
@@ -489,6 +541,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 
 		case "Year":
+			andOrSet('AND')
 			// As in the Person case, the first field is a drop-down with binary values,
 			// although we have 'is', 'is not', 'is before', and 'is after'. 
 
@@ -545,6 +598,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			break;
 
 		case "Month":
+			andOrSet('AND')
 			// Copy past from the previous few; give it the options of 'is' or 'is not' a month for the first
 			// drop-down box. Fairly straightforward as above. 
 			var binarySelect = document.createElement('select')
@@ -595,6 +649,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			break;
 		case "Special":
+			andOrSet('AND')
 
 			// Copy past from the previous few; give it the options of 'is' or 'is not' a month for the first
 			// drop-down box. Fairly straightforward as above. 
@@ -636,7 +691,8 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 			binarySelect.addEventListener("change", function(){
 				// Get the new field, create a construct for it, and construct the selection line again. 
 				binaryValue = binarySelect.value;
-				constructOrUpdateCriteriaLine(divOfFields, 0, divNumber, "Special", binaryValue, null);
+				//divOfFields, isNew, divNumber, criteriaType, binaryValue, selectionValue, modAboveVal, andOrVal
+				constructOrUpdateCriteriaLine(divOfFields = divOfFields, isNew = 0, divNumber = divNumber, criteriaType = "Special", binaryValue = binaryValue, selectionValue = null );
 				//console.log("Change!")
 			})
 
@@ -691,6 +747,7 @@ function constructOrUpdateCriteriaLine(divOfFields, isNew, divNumber, criteriaTy
 
 			break;
 		case "Location":
+			andOrSet('OR')
 
 			var binarySelect = document.createElement('input')
 			binarySelect.id = 'binarySelectValues' + divNumber

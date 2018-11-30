@@ -59,6 +59,6 @@ RUN chmod +x /etc/cron.d/userCron
 RUN (crontab -l; echo "15 0 * * * python /app/pyInit/addPics.py") | crontab -
 
 WORKDIR /
-CMD ['crond', '&&', 'gulp']
+# CMD ['crond', '&&', 'gulp']
 
 
