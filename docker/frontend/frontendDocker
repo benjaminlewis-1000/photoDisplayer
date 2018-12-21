@@ -194,7 +194,7 @@ RUN chmod 666 /var/www/html/savedSlideshows.db
 
 MAINTAINER Benjamin Lewis
 # Need to put the ENTRYPOINT in shell mode, so that it will open in a shell.
-ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
+# ENTRYPOINT  bash /app/scripts/dockerStart.sh && /bin/bash
 #RUN useradd -G sudo -u 1000 --create-home emacs
 
 #ENV HOME /home/emacs

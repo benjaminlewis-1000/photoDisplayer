@@ -112,7 +112,7 @@ class displayServer():
         # Convert the results to a list
         fileResults = [i[0] for i in fileResults]
         
-        print fileResults
+        # print fileResults
 
         requestInListOfShows = (unicode(requestedShow) in set(fileResults))
         print 'Req show: {} Is in list: {}'.format(unicode(requestedShow), requestInListOfShows)
@@ -126,7 +126,7 @@ class displayServer():
             # assert 1 == 0, "Need to implement a 'get all' function."
             jsonResult = '[{"num":0, "criteriaType":"All","booleanValue":"is", "criteriaVal":"all"}]'
 
-        # print "Pre sql: {}".format(jsonResult)
+        print "Pre sql: {}".format(jsonResult)
         sql_query = self.queryMachine.buildQueryFromJSON(jsonResult)
         print "Starting the named show!"
         self.__startShow__(sql_query, runLength)
@@ -141,6 +141,7 @@ class displayServer():
         self.__startShow__(sql_query, runLength)
 
     def __startShow__(self, SQL_query, runLength):
+        print SQL_query + " Start show!"
 
         returnDict = {};
         errs = [];
@@ -161,6 +162,8 @@ class displayServer():
             c = photoDatabase.cursor()
             c.execute(SQL_query)
             fileResults = c.fetchall()
+            print "SQL executed"
+            # print fileResults
 
             rootTable =  self.xmlParams['params']['photoDatabase']['tables']['rootTable']
             rtName    =  rootTable['Name']

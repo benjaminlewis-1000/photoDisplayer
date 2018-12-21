@@ -39,7 +39,7 @@ services:
     # command:
     #   /bin/bash
     stdin_open: true
-    tty: true
+    # tty: true
     volumes:
       # Mount the code
       - /home/pi/photoDisplayer:/app

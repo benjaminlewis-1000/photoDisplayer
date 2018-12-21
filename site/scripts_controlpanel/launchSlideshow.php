@@ -71,7 +71,8 @@
 	    }
 	}
 
-	$parentDir = dirname_r(__FILE__, 3);
+// //	$parentDir = dirname_r(__FILE__, 3);
+        $parentDir = "/app";
 
 	try{
 		$xml_params = simplexml_load_file($parentDir . '/config/params.xml');

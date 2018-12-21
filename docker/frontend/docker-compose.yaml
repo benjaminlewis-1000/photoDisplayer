@@ -18,15 +18,17 @@ services:
     # restart: always
     ports:
       - "80:80"     # The HTTP port
-    # command:
-    #   /bin/bash
+    command:
+      - /bin/bash -c "python /app/display/displayServer.py > /dev/null & && python /app/display/screenPowerServer.py > /dev/null & "
     stdin_open: true
-    tty: true
+#    tty: true
     volumes:
       # Mount the code
       - /home/pi/photoDisplayer:/app
       # Mount the photos
       - /mnt/photos:/photos
+      # Mount database
+      - /mnt/server_appdata/photoDisplayer/databases:/app/databases
       # Mount X11 forwarding
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - /home/pi/.Xauthority:/root/.Xauthority:rw
@@ -37,7 +39,8 @@ services:
       - /home/pi/photoDisplayer/site:/var/www/html
       # Databases
       - /home/pi/photoDisplayer/databases/savedSlideshows.db:/var/www/html/savedSlideshows.db
-      - /home/pi/photoDisplayer/databases:/var/www/databases
+      - /home/pi/photoDisplayer/databases/savedSlideshows.db:/app/databases/savedSlideshows.db
+#       - /home/pi/photoDisplayer/databases:/var/www/databases
       # Configuration xml file
       - /home/pi/photoDisplayer/config:/var/www/config
     environment:

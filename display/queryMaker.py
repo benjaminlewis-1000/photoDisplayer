@@ -48,6 +48,7 @@ class QueryMaker():
 
         # Load the json into a dictionary 
         slideshowParams = json.loads(str(criteriaJSON))
+        print slideshowParams
 
         people = [ ]
         selectedYears = [ ]
@@ -73,9 +74,11 @@ class QueryMaker():
             boolVal = slideshowParams[i]['booleanValue']
             critVal = slideshowParams[i]['criteriaVal']
 
-            andOrVal = slideshowParams[i]['andOrCritVal']
-            modAboveLineVal = bool( slideshowParams[i]['modAboveLineVal'] )
-            # print(slideshowParams[i])
+            if 'andOrCritVal' in slideshowParams[i]:
+                andOrVal = slideshowParams[i]['andOrCritVal']
+            if 'modAboveLineVal' in slideshowParams[i]:
+                modAboveLineVal = bool( slideshowParams[i]['modAboveLineVal'] )
+            print(slideshowParams[i])
 
             if critType.lower() == 'year':
                 assert unicode(critVal).isnumeric()
@@ -105,6 +108,7 @@ class QueryMaker():
                 return json.dumps(returnDict);
                 raise TypeError
 
+        print "Got here!"
         if getAll:
             masterQuery = '''SELECT {}, {}, {}, {} FROM {} '''.format(phKey, phFile, phRootDir, phTakenDate, phTableName)
         else:
@@ -255,10 +259,17 @@ class QueryMaker():
 
             # Format the dates, if they aren't "None". 
             if startDate != self.noneTag:
-                startDate = datetime.datetime.strptime(startDate, "%Y/%m/%d").strftime("%Y-%m-%d 00:00:00") 
-            if endDate != self.noneTag:
-                endDate = datetime.datetime.strptime(endDate, "%Y/%m/%d").strftime("%Y-%m-%d 23:59:59")
+                try:
+                    startDate = datetime.datetime.strptime(startDate, "%Y/%m/%d").strftime("%Y-%m-%d 00:00:00") 
+                except Exception as e:
+                    startDate = datetime.datetime.strptime(startDate, "%m/%d/%Y").strftime("%Y-%m-%d 00:00:00")
 
+            if endDate != self.noneTag:
+                try:
+                    endDate = datetime.datetime.strptime(endDate, "%Y/%m/%d").strftime("%Y-%m-%d 23:59:59")
+                except Exception as e:
+                    endDate = datetime.datetime.strptime(endDate, "%m/%d/%Y").strftime("%Y-%m-%d 23:59:59")
+ 
             if ( startDate != self.noneTag and endDate != self.noneTag ):
                 # Get the ordering right, so we don't have mutually exclusive dates. 
                 if endDate < startDate:
@@ -275,6 +286,7 @@ class QueryMaker():
             if i != len(dateRangeVals) - 1:
                 orDateRangeQuery += " OR {} ".format(self.phTakenDate)
 
+        print orDateRangeQuery
         return orDateRangeQuery + ")"
 
     def __buildPersonQueryOR__(self, orPeople):
