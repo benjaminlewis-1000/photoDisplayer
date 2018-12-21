@@ -43,6 +43,12 @@ class QueryMaker():
         self.usComTablePhotoNum = userCommentTable['Columns']['commentLinkerPhoto']
         self.usComTableTagStr   = userCommentTable['Columns']['commentLinkerTagIDlink']
 
+
+        masterCommentTable = self.xmlParams['params']['photoDatabase']['tables']['masterComments']
+        self.masterCommentName = masterCommentTable['Name']
+        self.masterTagID = masterCommentTable['Columns']['tagID']
+        self.masterTagString = masterCommentTable['Columns']['tagString']
+
         self.noneTag = "None"
         
         print "Init done!"
@@ -193,8 +199,9 @@ class QueryMaker():
 
         for keyIdx in range(len(selectedKeyword)):
             eachKeyword = selectedKeyword[keyIdx]
-            partQuery = '''SELECT {} FROM {} WHERE UPPER({}) = UPPER("{}")'''.format(self.usComTablePhotoNum, self.usComTableName, self.usComTableTagStr, eachKeyword)
-            keywordQuery += partQuery
+            tagIDpart = '''( SELECT {} FROM {} WHERE UPPER({}) = UPPER("{}") )'''.format(self.masterTagID, self.masterCommentName, self.masterTagString, eachKeyword)
+            photosFromIDQuery = '''SELECT {} FROM {} WHERE UPPER({}) = UPPER({})'''.format(self.usComTablePhotoNum, self.usComTableName, self.usComTableTagStr, tagIDpart)
+            keywordQuery += photosFromIDQuery
             # If not the last keyword: 
             if keyIdx != ( len(selectedKeyword) - 1 ):
                 keywordQuery += " UNION "
@@ -433,9 +440,6 @@ if __name__ == '__main__':
                         {"criteriaType":"Date Range","booleanValue":"None","criteriaVal":"2018/01/01","andOrCritVal":"AND","modAboveLineVal":true,"num":1},
                         {"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alyssa Varns","andOrCritVal":"OR","modAboveLineVal":false,"alias":false,"num":2},
                         {"criteriaType":"Year","booleanValue":"is","criteriaVal":"2016","andOrCritVal":"AND","modAboveLineVal":true,"num":3}]''')
-    for eachQuery in queries:
-        pass
-        testQuery(eachQuery)
 
     xmlParamFile = '/app/config/params.xml'
     with open(xmlParamFile) as stream:
@@ -464,6 +468,10 @@ if __name__ == '__main__':
     # Convert the results to a list
     fileResults = [i[0] for i in fileResults]
     print fileResults
+
+    for eachQuery in queries:
+        pass
+        testQuery(eachQuery)
 
     for requestedShow in fileResults:
         print requestedShow
