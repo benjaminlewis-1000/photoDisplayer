@@ -4,6 +4,9 @@ import json
 import xmltodict
 import datetime
 from dateutil.relativedelta import relativedelta
+import calendar
+import os
+import re
 
 class QueryMaker():
 
@@ -249,6 +252,37 @@ class QueryMaker():
         print dateRangeVals
         orDateRangeQuery = '''SELECT * FROM ( SELECT {} FROM {} WHERE {} '''.format(self.phKey, self.phTableName, self.phTakenDate)
 
+        def saneDate(dateString):
+            assert re.match('\d+\/\d+\/\d+', dateString)
+            dates = dateString.split('/')
+            dates = [int(x) for x in dates]
+            print dates
+            try:
+                if dates[0] > 100:
+                    dt = datetime.datetime(dates[0], dates[1], dates[2])
+                else:
+                    dt = datetime.datetime(dates[2], dates[0], dates[1])
+
+            except ValueError as e:
+                if 'day is out of range for month' in e:
+                    if dates[0] > 100:
+                        year = dates[0]
+                        month = dates[1]
+                        day = dates[2]
+                    else:
+                        year = dates[2]
+                        month = dates[0]
+                        day = dates[1]
+
+                    dayRange = calendar.monthrange(year, month)
+                    if day < dayRange[0]:
+                        day = dayRange[0]
+                    else:
+                        day = dayRange[1]
+                    dt = datetime.datetime(year, month, day)
+            return dt.strftime('%Y-%m-%d')
+            
+
         for i in range(len(dateRangeVals)):
             startDate = dateRangeVals[i][0]
             endDate = dateRangeVals[i][1]
@@ -259,16 +293,10 @@ class QueryMaker():
 
             # Format the dates, if they aren't "None". 
             if startDate != self.noneTag:
-                try:
-                    startDate = datetime.datetime.strptime(startDate, "%Y/%m/%d").strftime("%Y-%m-%d 00:00:00") 
-                except Exception as e:
-                    startDate = datetime.datetime.strptime(startDate, "%m/%d/%Y").strftime("%Y-%m-%d 00:00:00")
+                startDate = saneDate(startDate)
 
             if endDate != self.noneTag:
-                try:
-                    endDate = datetime.datetime.strptime(endDate, "%Y/%m/%d").strftime("%Y-%m-%d 23:59:59")
-                except Exception as e:
-                    endDate = datetime.datetime.strptime(endDate, "%m/%d/%Y").strftime("%Y-%m-%d 23:59:59")
+                endDate = saneDate(endDate)
  
             if ( startDate != self.noneTag and endDate != self.noneTag ):
                 # Get the ordering right, so we don't have mutually exclusive dates. 
@@ -406,4 +434,45 @@ if __name__ == '__main__':
                         {"criteriaType":"Person","booleanValue":"is","criteriaVal":"Alyssa Varns","andOrCritVal":"OR","modAboveLineVal":false,"alias":false,"num":2},
                         {"criteriaType":"Year","booleanValue":"is","criteriaVal":"2016","andOrCritVal":"AND","modAboveLineVal":true,"num":3}]''')
     for eachQuery in queries:
+        pass
         testQuery(eachQuery)
+
+    xmlParamFile = '/app/config/params.xml'
+    with open(xmlParamFile) as stream:
+        try:
+            xmlParams = xmltodict.parse(stream.read())
+        except Exception as exc:
+            print(exc)
+            exit(1)
+
+    dbSchemaParams = xmlParams['params']['websiteParams']['siteDBschema']
+
+    showDefTableName = dbSchemaParams['slideshowDefTable']['name']
+    showNameCol = dbSchemaParams['slideshowDefTable']['showNameCol']
+    showJsonCol = dbSchemaParams['slideshowDefTable']['jsonCol']
+    
+    getShowNamesQuery = '''SELECT {} FROM {}'''.format(showNameCol, showDefTableName)
+    print getShowNamesQuery
+
+    savedShowDatabasePath = os.path.join('/var/www/html', xmlParams['params']['websiteParams']['siteDBname'])
+    savedShowDatabase = sqlite3.connect(savedShowDatabasePath)
+    print savedShowDatabasePath
+    savedShowDatabase.text_factory = str
+    ss = savedShowDatabase.cursor()
+    ss.execute(getShowNamesQuery)
+    fileResults = ss.fetchall()
+    # Convert the results to a list
+    fileResults = [i[0] for i in fileResults]
+    print fileResults
+
+    for requestedShow in fileResults:
+        print requestedShow
+        getShowJSON = '''SELECT {} FROM {} WHERE {} = "{}"'''.format(showJsonCol, showDefTableName, showNameCol, unicode(requestedShow))
+        ss.execute(getShowJSON)
+        jsonResult = ss.fetchall()[0][0]
+        print jsonResult
+        testQuery(jsonResult)
+
+
+
+
